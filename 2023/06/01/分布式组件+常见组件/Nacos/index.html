@@ -1,0 +1,759 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Nacos(10条消息) Nacos学习之初识Nacos_nacos和nameserver区别_Willing卡卡的博客-CSDN博客 官方文档 （详细介绍地址 – 语雀） Nacos 一致性协议 (yuque.com) 一致性协议选择服务注册非持久化 ：最终一致性共识算法  Distro &#x3D; Goosip + Eurake同步策略  – AP 服务注册持久化 + 配置信息同步 ： 强一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nacos">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Nacos/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Nacos(10条消息) Nacos学习之初识Nacos_nacos和nameserver区别_Willing卡卡的博客-CSDN博客 官方文档 （详细介绍地址 – 语雀） Nacos 一致性协议 (yuque.com) 一致性协议选择服务注册非持久化 ：最终一致性共识算法  Distro &#x3D; Goosip + Eurake同步策略  – AP 服务注册持久化 + 配置信息同步 ： 强一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/333972/1638333831256-55ae4e8b-f999-4519-be14-b497ed9f6ed1.png">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:01:41.211Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/333972/1638333831256-55ae4e8b-f999-4519-be14-b497ed9f6ed1.png">
+  
+  
+  
+  <title>Nacos - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Nacos"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Nacos</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42601136/article/details/121761177">(10条消息) Nacos学习之初识Nacos_nacos和nameserver区别_Willing卡卡的博客-CSDN博客</a></p>
+<p>官方文档 （详细介绍地址 – 语雀）</p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/nacos/ebook/agxdnq">Nacos 一致性协议 (yuque.com)</a></p>
+<h2 id="一致性协议选择"><a href="#一致性协议选择" class="headerlink" title="一致性协议选择"></a>一致性协议选择</h2><p>服务注册非持久化 ：最终一致性共识算法 </p>
+<p>Distro &#x3D; Goosip + Eurake同步策略  – AP</p>
+<p>服务注册持久化 + 配置信息同步 ： 强一致性共识算法  </p>
+<p>JRaft  –  CP </p>
+<p>一致性架构：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/333972/1638333831256-55ae4e8b-f999-4519-be14-b497ed9f6ed1.png" srcset="/img/loading.gif" lazyload alt="截屏2021-12-01 下午12.43.47.png"></p>
+<h1 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h1><h2 id="异地多活"><a href="#异地多活" class="headerlink" title="异地多活"></a>异地多活</h2><p>异地多活（Geo-Replication，也称为跨区域副本、区域副本等）是一种分布式系统架构，可以将数据实时同步到多个地理区域的服务器集群中，以实现高可用性和容错性。它可以保证在出现故障或自然灾害等情况下，分布在不同地理位置的用户仍然可以访问和更新数据，从而提高系统的可靠性和稳定性。</p>
+<p>异地多活通常需要使用复杂的技术和算法来实现数据同步和一致性，例如使用主从复制或分布式事务协议。在异地多活中，数据通常被分配到多个地理位置的数据中心或云服务提供商的不同区域，这些区域之间可能存在网络延迟、带宽限制以及数据中心之间的额外通信成本等挑战。</p>
+<p>异地多活的实现主要是为了解决以下几种情况：</p>
+<ol>
+<li><p>防止单个数据中心故障带来的业务中断。</p>
+</li>
+<li><p>支持全球用户和业务扩展，满足数据本地化存储和处理的要求。</p>
+</li>
+<li><p>提供对多个数据中心的连接，加速数据的响应和传输速度，提高网络带宽的利用率。</p>
+</li>
+<li><p>满足业务需求多副本、备份以及流量分析、跨地域数据处理等多种应用需求。</p>
+</li>
+</ol>
+<p>总之，异地多活可以使分布式系统在各种情况下保持高可用性和稳定性，从而提高数据处理的效率和业务的成果。然而，由于其需要协调多个数据中心之间的复杂关系，并需要处理网络带宽、时延等方面的困难，因此它通常需要专业人员进行设计和优化，以最大程度地实现</p>
+<h2 id="CMDB-Configuration-Management-Database"><a href="#CMDB-Configuration-Management-Database" class="headerlink" title="CMDB(Configuration Management Database)"></a>CMDB(Configuration Management Database)</h2><p>CMDB 是 Configuration Management Database（配置管理数据库）的缩写，是一种用于 IT 管理的数据库类型，主要用于收集、存储、管理和跟踪组织中的 IT 资产和设备配置信息。CMDB 可以帮助组织管理和优化 IT 管理流程，提高 IT 服务的可靠性和透明度。</p>
+<p>CMDB 可以收集各种 IT 资产和配置信息，包括硬件设备、软件、系统配置、网络拓扑关系、用户访问权限、服务支持等信息。通过对这些信息进行管理和跟踪，CMDB 可以为 IT 管理提供价值，包括：</p>
+<ol>
+<li><p>IT 资产管理：通过 CMDB，组织可以追踪和识别其固有 IT 资产、应用程序、硬件和其他资源，可以更精确地管理 IT 资产，优化资源分配，减少不必要的 IT 资产购置。</p>
+</li>
+<li><p>配置项管理：通过配置项关系和状态的跟踪和管理，CMDB 可以确保 IT 环境的透明、稳定和安全性，减少错误配置和意外中断。</p>
+</li>
+<li><p>服务支持：CMDB 可以为 IT 支持过程提供关键信息，包括如何更快地恢复服务中断、如何减少机器故障，并确定最优技术支持的最佳方法等。</p>
+</li>
+<li><p>变更管理：CMDB 可以追踪 IT 环境的变化，包括更改、更新、故障修复、软件安装等，并协助 IT 团队进行变更信息的跟踪和管理，提高变更管理的效率和精确度。</p>
+</li>
+</ol>
+<p>CMDB 的应用场景非常广泛，尤其适用于需要管理大量 IT 资产和配置信息的组织，如数据中心、云服务提供商、IT咨询公司等。下面是 CMDB 的一些具体应用场景：</p>
+<ol>
+<li><p>数据中心管理：CMDB 可以帮助数据中心管理人员追踪数据中心中的各种设备、机房布局、供电&#x2F;制冷基础设施等信息，并确保设备的配置和拓扑关系的准确性和完整性。</p>
+</li>
+<li><p>云服务管理：CMDB 可以帮助云服务提供商追踪其云平台的整个 IT 环境，包括云虚拟化环境、虚拟机配置、网络拓扑等信息，优化虚拟机性能和资源分配。</p>
+</li>
+<li><p>ITIL 实践：CMDB 是 ITIL（Information Technology Infrastructure Library，信息技术基础设施库）框架中的重要组成部分，用于支持 ITIL 中的配置管理、问题管理、变更管理等实践。</p>
+</li>
+</ol>
+<p>总之，CMDB 是支持 IT 管理的一个强大工具，可以帮助 IT 团队实现更好的 IT 资产和配置管理、提高 IT 支持效率和减少 IT 服务故障，为 IT 环境的可靠性和稳定性提供支持。</p>
+<h2 id="LDAP-Lightweight-Directory-Access-Protocol"><a href="#LDAP-Lightweight-Directory-Access-Protocol" class="headerlink" title="LDAP(Lightweight Directory Access Protocol)"></a>LDAP(Lightweight Directory Access Protocol)</h2><p>LDAP（Lightweight Directory Access Protocol，轻量级目录访问协议）是一种应用层协议，它用于访问和管理分层目录信息。LDAP 协议通常用于企业、组织、电子邮件和其他 Web 应用程序中的身份验证、授权和用户管理等方面。下面将详细介绍 LDAP 协议的一些核心概念、操作和实现方法，以及如何进行 LDAP 压力测试和性能监测。</p>
+<h3 id="LDAP-的核心概念和操作"><a href="#LDAP-的核心概念和操作" class="headerlink" title="LDAP 的核心概念和操作"></a>LDAP 的核心概念和操作</h3><p>LDAP 使用树状结构组织目录数据，这样的结构通被称为目录信息树（DIT）。DIT 中的数据层次结构反映了对象之间的关系，每个对象都由一些属性值组成。LDAP 的基本操作包括以下四种：</p>
+<ol>
+<li><p>查询（Search）：在 LDAP 目录中搜索对象或属性。</p>
+</li>
+<li><p>增加（Add）：向 LDAP 目录中添加对象或属性。</p>
+</li>
+<li><p>修改（Modify）：修改目录中的对象或属性。</p>
+</li>
+<li><p>删除（Delete）：从 LDAP 目录中删除对象或属性。</p>
+</li>
+</ol>
+<p>这些操作都是通过与 LDAP 服务器的通信来完成的，并且通常是使用 TCP&#x2F;IP 协议进行通信。</p>
+<h3 id="LDAP-的压力测试方法和测试思路"><a href="#LDAP-的压力测试方法和测试思路" class="headerlink" title="LDAP 的压力测试方法和测试思路"></a>LDAP 的压力测试方法和测试思路</h3><p>LDAP 压力测试可以评估 LDAP 服务器的性能、可伸缩性和鲁棒性。在进行 LDAP 压力测试之前，需要准备好以下内容：</p>
+<ol>
+<li><p>LDAP 服务器</p>
+</li>
+<li><p>LDAP 压力测试工具</p>
+</li>
+<li><p>测试用例</p>
+</li>
+</ol>
+<p>LDAP 压力测试可以使用 OpenLDAP、Apache Directory Server 等工具来搭建测试环境，常用的 LDAP 压力测试工具包括 JMeter、LDAPBench、LDAP Load Balancer 等。这些工具可以模拟许多并发请求对 LDAP 服务器的访问行为，以测试 LDAP 服务器的性能。</p>
+<p>关于 LDAP 压力测试的思路，可以参考以下步骤：</p>
+<ol>
+<li><p>确定测试项目和需求。包括测试的范围、目标等。</p>
+</li>
+<li><p>设计测试用例。针对不同的测试需求，设计合适的测试用例，如查询、添加、修改、删除等操作。</p>
+</li>
+<li><p>配置 LDAP 测试环境。搭建 LDAP 服务器和客户端，注意配置参数、安全策略等。</p>
+</li>
+<li><p>执行测试用例。运行测试工具执行测试用例，观察测试结果和性能指标。</p>
+</li>
+<li><p>分析测试结果。对测试结果进行统计分析，得出结论和优化建议。</p>
+</li>
+</ol>
+<p>在进行 LDAP 压力测试时，可以关注以下性能指标：</p>
+<ol>
+<li><p>延迟（Latency）：LDAP 服务器处理每个请求所需的时间。</p>
+</li>
+<li><p>吞吐量（Throughput）：LDAP 服务器在单位时间内处理的请求数量。</p>
+</li>
+</ol>
+<p>3.并发连接数（Concurrent Connections）：LDAP 服务器同时处理的连接数量。</p>
+<ol start="4">
+<li><p>使用率（Utilization）：LDAP 服务器的资源利用率，如 CPU、内存、磁盘 I&#x2F;O 等。</p>
+</li>
+<li><p>错误率（Error Rate）：LDAP 服务器处理请求时发生的错误率。</p>
+</li>
+</ol>
+<p>对于以上指标，可以通过测试工具和系统监控工具进行收集和观测。在测试过程中，需要注意的是要尽可能模拟真实的应用场景，不断调整测试参数和负载，以得到最精确的测试结果。同时，为了评估 LDAP 服务器的稳定性和可靠性，可以进行长时间的压力测试，如 24 小时以上。</p>
+<p>总之，LDAP 是一种非关键的网络协议之一，在实际应用中需要进行压力测试和性能监测，以确保 LDAP 服务器的性能和可靠性，并为后续的性能优化提供指导。</p>
+<h1 id="粗略"><a href="#粗略" class="headerlink" title="粗略"></a>粗略</h1><h2 id="Nacos协议"><a href="#Nacos协议" class="headerlink" title="Nacos协议"></a>Nacos协议</h2><p><a href="../%E5%88%86%E5%B8%83%E5%BC%8F.md">一致性协议</a></p>
+<h2 id="Nacos主要的四大特性"><a href="#Nacos主要的四大特性" class="headerlink" title="Nacos主要的四大特性"></a>Nacos主要的四大特性</h2><p>服务发现与服务健康监测<br>Nacos使服务更容易注册自己并通过DNS或HTTP接口发现其他服务。Nacos还提供服务的实时健康检查，以防止向不健康的主机或服务实例发送请求。</p>
+<p>动态配置服务<br>动态配置服务允许您在所有环境中以集中和动态的方式管理所有服务的配置。Nacos消除了在更新配置时重新部署应用程序和服务的需要，这使配置更改更加高效和灵活。</p>
+<p>动态DNS服务<br>Nacos支持加权路由，使您可以更轻松地在数据中心的生产环境中实施中间层负载平衡，灵活的路由策略，流量控制和简单的DNS解析服务。它可以帮助您轻松实现基于DNS的服务发现，并防止应用程序耦合到特定于供应商的服务发现API。</p>
+<p>服务和元数据管理<br>Nacos 能让您从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略、服务的 SLA 以及最首要的 metrics 统计数据。</p>
+<p>1.3、组件介绍</p>
+<blockquote>
+<p>组件简介</p>
+<p>服务管理：实现服务CRUD，域名CRUD，服务健康状态检查，服务权重管理等功能<br>配置管理：实现配置管CRUD，版本管理，灰度管理，监听管理，推送轨迹，聚合数据等功能<br>元数据管理：提供元数据CURD 和打标能力<br>插件机制：实现三个模块可分可合能力，实现扩展点SPI机制<br>事件机制：实现异步化事件通知，sdk数据变化异步通知等逻辑<br>日志模块：管理日志分类，日志级别，日志可移植性（尤其避免冲突），日志格式，异常码+帮助文档<br>回调机制：sdk通知数据，通过统一的模式回调用户处理。接口和数据结构需要具备可扩展性<br>寻址模式：解决ip，域名，nameserver、广播等多种寻址模式，需要可扩展<br>推送通道：解决server与存储、server间、server与sdk间推送性能问题<br>容量管理：管理每个租户，分组下的容量，防止存储被写爆，影响服务可用性<br>流量管理：按照租户，分组等多个维度对请求频率，长链接个数，报文大小，请求流控进行控制<br>缓存机制：容灾目录，本地缓存，server缓存机制。容灾目录使用需要工具<br>启动模式：按照单机模式，配置模式，服务模式，dns模式，或者all模式，启动不同的程序+UI<br>一致性协议：解决不同数据，不同一致性要求情况下，不同一致性机制<br>存储模块：解决数据持久化、非持久化存储，解决数据分片问题<br>Nameserver：解决namespace到clusterid的路由问题，解决用户环境与nacos物理环境映射问题<br>CMDB：解决元数据存储，与三方cmdb系统对接问题，解决应用，人，资源关系<br>Metrics：暴露标准metrics数据，方便与三方监控系统打通<br>Trace：暴露标准trace，方便与SLA系统打通，日志白平化，推送轨迹等能力，并且可以和计量计费系统打通<br>接入管理：相当于阿里云开通服务，分配身份、容量、权限过程<br>用户管理：解决用户管理，登录，sso等问题<br>权限管理：解决身份识别，访问控制，角色管理等问题<br>审计系统：扩展接口方便与不同公司审计系统打通<br>通知系统：核心数据变更，或者操作，方便通过SMS系统打通，通知到对应人数据变更<br>OpenAPI：暴露标准Rest风格HTTP接口，简单易用，方便多语言集成<br>Console：易用控制台，做服务管理、配置管理等操作<br>SDK：多语言sdk<br>Agent：dns-f类似模式，或者与mesh等方案集成<br>CLI：命令行对产品进行轻量化管理，像git一样好用</p>
+</blockquote>
+<hr>
+<h2 id="问："><a href="#问：" class="headerlink" title="问："></a>问：</h2><p>RocketMQ的服务注册中心NameServer和Nacos有什么区别，Nacos的CP和AP两种模式的区别和协议Distro和Raft对比</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">RocketMQ的服务注册中心NameServer和Nacos的主要区别是它们的设计目标不同。NameServer专注于提供低延迟、高可用性的消息路由服务，而Nacos则专注于提供更全面的服务注册、配置和发现功能。<br><br>在Nacos中，CP和AP两种模式分别指一致性协议和可用性协议。CP模式下，系统保证数据一致性，即当某个节点写入数据后，所有节点都能读到相同的值；而在AP模式下，系统只保证尽最大努力让各节点之间保持一致，但可能存在数据不一致的情况。选择哪种模式取决于具体业务场景和应用需求。<br><br>至于协议Distro和Raft的对比，Distro采用<span class="hljs-literal">master</span>-<span class="hljs-literal">slave</span>架构，在<span class="hljs-literal">master</span>节点上处理数据的写入请求，在<span class="hljs-literal">slave</span>节点上处理数据的读取请求，可以有效地提高系统的可靠性和健壮性，但它的性能可能不如Raft。而Raft采用leader-follower架构，仅有一个节点处于激活状态，负责处理所有的读写请求，这种架构可以保证高性能和可用性，但也带来了单点故障的风险。选择采用何种协议需要考虑到具体应用场景，并综合权衡它们的优劣势。<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Nacos</div>
+      <div>http://example.com/2023/06/01/分布式组件+常见组件/Nacos/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/MySQL/" title="MySQL">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MySQL</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Mybatis%E4%B8%9A%E5%8A%A1/" title="MyBatis-业务">
+                        <span class="hidden-mobile">MyBatis-业务</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,814 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Netty架构  BUG(4条消息) 一文整理常见Java后端面试题系列——Netty篇（2022最新版）_java面试netty_程序猿周周的博客-CSDN博客 如何解决 JDK epoll 空轮询问题？这个 BUG 是指 Java 的 NIO 在 Linux 下进行 selector.select() 时，本来如果轮询的结果为空并且不调用 wakeup 方法的话，这个 selector.sel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty-自己">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Netty/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Netty架构  BUG(4条消息) 一文整理常见Java后端面试题系列——Netty篇（2022最新版）_java面试netty_程序猿周周的博客-CSDN博客 如何解决 JDK epoll 空轮询问题？这个 BUG 是指 Java 的 NIO 在 Linux 下进行 selector.select() 时，本来如果轮询的结果为空并且不调用 wakeup 方法的话，这个 selector.sel">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-7eefba893a65706eb6bbe4115cbd0b83_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-dd3a866c356ee7bd24d23319d08116ef_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412170507846.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171619112.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171955676.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171744654.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171815095.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210227123754270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4Njg1NTAz,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230329211714507.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230329211634741.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330224533777.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230021915.png">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-f74de0a1d853d01fc46f717d4706a7af_r.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230741880.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230611517.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230906964.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230722582.png">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-2737481fee9a7dd0236f1cb61e823293_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231418573.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231521492.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231434637.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231539310.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/666.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/220.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/660.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/670.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/640.png">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-3d826a5a72e611c31b30c10ee10a7bbb_1440w.webp">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.714Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic4.zhimg.com/80/v2-7eefba893a65706eb6bbe4115cbd0b83_1440w.webp">
+  
+  
+  
+  <title>Netty-自己 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Netty-自己"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          96 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Netty-自己</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Netty"><a href="#Netty" class="headerlink" title="Netty"></a>Netty</h1><h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="https://pic4.zhimg.com/80/v2-7eefba893a65706eb6bbe4115cbd0b83_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-dd3a866c356ee7bd24d23319d08116ef_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="BUG"><a href="#BUG" class="headerlink" title="BUG"></a>BUG</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/adminpd/article/details/123564362">(4条消息) 一文整理常见Java后端面试题系列——Netty篇（2022最新版）_java面试netty_程序猿周周的博客-CSDN博客</a></p>
+<p>如何解决 JDK epoll 空轮询问题？<br>这个 BUG 是指 Java 的 NIO 在 Linux 下进行 selector.select() 时，本来如果轮询的结果为空并且不调用 wakeup 方法的话，这个 selector.select() 应该是一直阻塞的，但是 Java 却会打破阻塞，继续执行，导致程序无限空转，造成 CPU 使用率 100%。（这个问题只存在 Linux 是因为 Linux 的 NIO 是基于 epoll 实现的，而 Java 实现的 epoll 存在 BUG，windows 下 NIO 基于 poll 就不存在此问题）</p>
+<p>Netty 的解决方案：</p>
+<p>为 Selector 的 select 操作设置超时时间，同时定义可以跳出阻塞的四种情况</p>
+<p>有事件发生<br>wakeup<br>超时<br>空轮询 BUG<br>而前两种返回值不为 0，可以跳出循环，超时有时间戳记录，所以每次空轮询，有专门的计数器进行 +1，如果空轮询的次数超过了 512 次（默认），就认为其触发了空轮询 BUG。</p>
+<h2 id="当触发-BUG-后，Netty-直接重建一个-Selector，将原来的-Channel-重新注册到新的-Selector-上，并将旧的-Selector-关掉。"><a href="#当触发-BUG-后，Netty-直接重建一个-Selector，将原来的-Channel-重新注册到新的-Selector-上，并将旧的-Selector-关掉。" class="headerlink" title="当触发 BUG 后，Netty 直接重建一个 Selector，将原来的 Channel 重新注册到新的 Selector 上，并将旧的 Selector 关掉。"></a>当触发 BUG 后，Netty 直接重建一个 Selector，将原来的 Channel 重新注册到新的 Selector 上，并将旧的 Selector 关掉。</h2><h1 id="流程一："><a href="#流程一：" class="headerlink" title="流程一："></a>流程一：</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf4j</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ChannelDemo6</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-keyword">try</span> (<span class="hljs-type">ServerSocketChannel</span> <span class="hljs-variable">channel</span> <span class="hljs-operator">=</span> ServerSocketChannel.open()) &#123;<br>            channel.bind(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InetSocketAddress</span>(<span class="hljs-number">8080</span>));<br>            System.out.println(channel);<br>            <span class="hljs-type">Selector</span> <span class="hljs-variable">selector</span> <span class="hljs-operator">=</span> Selector.open();<br>            channel.configureBlocking(<span class="hljs-literal">false</span>);<br>            channel.register(selector, SelectionKey.OP_ACCEPT);<br><br>            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>                <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> selector.select();<br><span class="hljs-comment">//                int count = selector.selectNow();</span><br>                log.debug(<span class="hljs-string">&quot;select count: &#123;&#125;&quot;</span>, count);<br><span class="hljs-comment">//                if(count &lt;= 0) &#123;</span><br><span class="hljs-comment">//                    continue;</span><br><span class="hljs-comment">//                &#125;</span><br><br>                <span class="hljs-comment">// 获取所有事件</span><br>                Set&lt;SelectionKey&gt; keys = selector.selectedKeys();<br><br>                <span class="hljs-comment">// 遍历所有事件，逐一处理</span><br>                Iterator&lt;SelectionKey&gt; iter = keys.iterator();<br>                <span class="hljs-keyword">while</span> (iter.hasNext()) &#123;<br>                    <span class="hljs-type">SelectionKey</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> iter.next();<br>                    <span class="hljs-comment">// 判断事件类型</span><br>                    <span class="hljs-keyword">if</span> (key.isAcceptable()) &#123;<br>                        <span class="hljs-type">ServerSocketChannel</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> (ServerSocketChannel) key.channel();<br>                        <span class="hljs-comment">// 必须处理</span><br>                        <span class="hljs-type">SocketChannel</span> <span class="hljs-variable">sc</span> <span class="hljs-operator">=</span> c.accept();<br>                        log.debug(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, sc);<br>                    &#125;<br>                    <span class="hljs-comment">// 处理完毕，必须将事件移除</span><br>                    iter.remove();<br>                &#125;<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Selector</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Closeable</span> &#123;<br><br>    <span class="hljs-keyword">protected</span> <span class="hljs-title function_">Selector</span><span class="hljs-params">()</span> &#123; &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Selector <span class="hljs-title function_">open</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-keyword">return</span> SelectorProvider.provider().openSelector();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isOpen</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> SelectorProvider <span class="hljs-title function_">provider</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> Set&lt;SelectionKey&gt; <span class="hljs-title function_">keys</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> Set&lt;SelectionKey&gt; <span class="hljs-title function_">selectedKeys</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-type">int</span> <span class="hljs-title function_">selectNow</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-type">int</span> <span class="hljs-title function_">select</span><span class="hljs-params">(<span class="hljs-type">long</span> timeout)</span><br>        <span class="hljs-keyword">throws</span> IOException;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-type">int</span> <span class="hljs-title function_">select</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> Selector <span class="hljs-title function_">wakeup</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="SelectImpl"><a href="#SelectImpl" class="headerlink" title="SelectImpl"></a>SelectImpl</h3><p>方法的流程具体实现</p>
+<h3 id="WindowsSelectImpl"><a href="#WindowsSelectImpl" class="headerlink" title="WindowsSelectImpl"></a>WindowsSelectImpl</h3><p>调用系统的本地方法实现，select - poll - epoll的功能</p>
+<h3 id="SelectSelectionKeySetSelector"><a href="#SelectSelectionKeySetSelector" class="headerlink" title="SelectSelectionKeySetSelector"></a>SelectSelectionKeySetSelector</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> io.netty.channel.nio;<br><br><span class="hljs-comment">// 位于一个netty自己的实现类（selector）</span><br><span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SelectedSelectionKeySetSelector</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Selector</span> &#123;<br> 	维护selectKeys集合<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> SelectedSelectionKeySet selectionKeys;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Selector delegate;<br>&#125;<br><span class="hljs-keyword">package</span> io.netty.channel.nio;<br><span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SelectedSelectionKeySet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractSet</span>&lt;SelectionKey&gt; &#123;<br>    SelectionKey[] keys = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SelectionKey</span>[<span class="hljs-number">1024</span>];<br>    <span class="hljs-type">int</span> size;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SelectionKey</span> &#123;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">OP_READ</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">OP_WRITE</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">2</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">OP_CONNECT</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">3</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">OP_ACCEPT</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">4</span>;<br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Returns the selector for which this key was created.  This method will</span><br><span class="hljs-comment">     * continue to return the selector even after the key is cancelled.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span>  This key&#x27;s selector</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> Selector <span class="hljs-title function_">selector</span><span class="hljs-params">()</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412170507846.png" srcset="/img/loading.gif" lazyload alt="image-20230412170507846"></p>
+<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Channel</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Closeable</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isOpen</span><span class="hljs-params">()</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171619112.png" srcset="/img/loading.gif" lazyload alt="image-20230412171619112"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171955676.png" srcset="/img/loading.gif" lazyload alt="image-20230412171955676"></p>
+<h3 id="SocketChannle"><a href="#SocketChannle" class="headerlink" title="SocketChannle"></a>SocketChannle</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171744654.png" srcset="/img/loading.gif" lazyload alt="image-20230412171744654"></p>
+<h3 id="ServerSocketChannel"><a href="#ServerSocketChannel" class="headerlink" title="ServerSocketChannel"></a>ServerSocketChannel</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230412171815095.png" srcset="/img/loading.gif" lazyload alt="image-20230412171815095"></p>
+<h1 id="流程二："><a href="#流程二：" class="headerlink" title="流程二："></a>流程二：</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38685503/article/details/114168722">(10条消息) netty全过程图解（最详细清晰版）_netty工作流程_”PANDA的博客-CSDN博客</a></p>
+<p><img src="https://img-blog.csdnimg.cn/20210227123754270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4Njg1NTAz,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Server</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-comment">//创建两个线程组 boosGroup、workerGroup</span><br>        <span class="hljs-type">EventLoopGroup</span> <span class="hljs-variable">bossGroup</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NioEventLoopGroup</span>();<br>        <span class="hljs-type">EventLoopGroup</span> <span class="hljs-variable">workerGroup</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NioEventLoopGroup</span>();<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//创建服务端的启动对象，设置参数</span><br>            <span class="hljs-type">ServerBootstrap</span> <span class="hljs-variable">bootstrap</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerBootstrap</span>();<br>            <span class="hljs-comment">//设置两个线程组boosGroup和workerGroup</span><br>            bootstrap.group(bossGroup, workerGroup)<br>                    <span class="hljs-comment">//设置服务端通道实现类型</span><br>                    .channel(NioServerSocketChannel.class)<br>                    <span class="hljs-comment">//设置线程队列得到连接个数</span><br>                    .option(ChannelOption.SO_BACKLOG, <span class="hljs-number">128</span>)<br>                    <span class="hljs-comment">//设置保持活动连接状态</span><br>                    .childOption(ChannelOption.SO_KEEPALIVE, <span class="hljs-literal">true</span>)<br>                    <span class="hljs-comment">//使用匿名内部类的形式初始化通道对象</span><br>                    .childHandler(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ChannelInitializer</span>&lt;SocketChannel&gt;() &#123;<br>                        <span class="hljs-meta">@Override</span><br>                        <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initChannel</span><span class="hljs-params">(SocketChannel socketChannel)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>                            <span class="hljs-comment">//给pipeline管道设置处理器</span><br>                            socketChannel.pipeline().addLast(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerHandler</span>());<br>                        &#125;<br>                    &#125;);<span class="hljs-comment">//给workerGroup的EventLoop对应的管道设置处理器</span><br>            System.out.println(<span class="hljs-string">&quot;java技术爱好者的服务端已经准备就绪...&quot;</span>);<br>            <span class="hljs-comment">//绑定端口号，启动服务端</span><br>            <span class="hljs-type">ChannelFuture</span> <span class="hljs-variable">channelFuture</span> <span class="hljs-operator">=</span> bootstrap.bind(<span class="hljs-number">6666</span>).sync();<br>            <span class="hljs-comment">//对关闭通道进行监听</span><br>            channelFuture.channel().closeFuture().sync();<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            bossGroup.shutdownGracefully();<br>            workerGroup.shutdownGracefully();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Client</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">NioEventLoopGroup</span> <span class="hljs-variable">eventExecutors</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NioEventLoopGroup</span>();<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//创建bootstrap对象，配置参数</span><br>            <span class="hljs-type">Bootstrap</span> <span class="hljs-variable">bootstrap</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Bootstrap</span>();<br>            <span class="hljs-comment">//设置线程组</span><br>            bootstrap.group(eventExecutors)<br>                    <span class="hljs-comment">//设置客户端的通道实现类型</span><br>                    .channel(NioSocketChannel.class)<br>                    <span class="hljs-comment">//使用匿名内部类初始化通道</span><br>                    .handler(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ChannelInitializer</span>&lt;SocketChannel&gt;() &#123;<br>                        <span class="hljs-meta">@Override</span><br>                        <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initChannel</span><span class="hljs-params">(SocketChannel ch)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>                            <span class="hljs-comment">//添加客户端通道的处理器</span><br>                            ch.pipeline().addLast(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ClientHandler</span>());<br>                        &#125;<br>                    &#125;);<br>            System.out.println(<span class="hljs-string">&quot;客户端准备就绪，随时可以起飞~&quot;</span>);<br>            <span class="hljs-comment">//连接服务端</span><br>            <span class="hljs-type">ChannelFuture</span> <span class="hljs-variable">channelFuture</span> <span class="hljs-operator">=</span> bootstrap.connect(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">6666</span>).sync();<br>            <span class="hljs-comment">//对通道关闭进行监听</span><br>            channelFuture.channel().closeFuture().sync();<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-comment">//关闭线程组</span><br>            eventExecutors.shutdownGracefully();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="EventLoopGroup"><a href="#EventLoopGroup" class="headerlink" title="EventLoopGroup"></a>EventLoopGroup</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230329211714507.png" srcset="/img/loading.gif" lazyload alt="image-20230329211714507"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230329211634741.png" srcset="/img/loading.gif" lazyload alt="image-20230329211634741"></p>
+<h3 id="NioEventLoop"><a href="#NioEventLoop" class="headerlink" title="NioEventLoop"></a>NioEventLoop</h3><p>&#x3D;&#x3D; select + TaskQueue</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> Selector selector;<br><span class="hljs-keyword">private</span> Selector unwrappedSelector;<br><span class="hljs-comment">// SelectKey </span><br><span class="hljs-keyword">private</span> SelectedSelectionKeySet selectedKeys; 	<br><span class="hljs-comment">// ServerSocketChannel##open() 调用执行 SelectorProvider##openServerSocketChannel()</span><br><span class="hljs-comment">// Selector##open() 调用执行 SelectorProvider##openSelector() -》WindowsSelectorProvider##openSelector()</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> SelectorProvider provider;		<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> <span class="hljs-variable">AWAKE</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1L</span>;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> <span class="hljs-variable">NONE</span> <span class="hljs-operator">=</span> <span class="hljs-number">9223372036854775807L</span>;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">AtomicLong</span> <span class="hljs-variable">nextWakeupNanos</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicLong</span>(-<span class="hljs-number">1L</span>);<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> SelectStrategy selectStrategy;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330224533777.png" srcset="/img/loading.gif" lazyload alt="image-20230330224533777"></p>
+<h4 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//1 netty 中使用 NioEventLoopGroup （简称 nio boss 线程）来封装线程和 selector</span><br><span class="hljs-type">Selector</span> <span class="hljs-variable">selector</span> <span class="hljs-operator">=</span> Selector.open(); <br><br><span class="hljs-comment">//2 创建 NioServerSocketChannel，同时会初始化它关联的 handler，以及为原生 ssc 存储 config</span><br><span class="hljs-type">NioServerSocketChannel</span> <span class="hljs-variable">attachment</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NioServerSocketChannel</span>();<br><br><span class="hljs-comment">//3 创建 NioServerSocketChannel 时，创建了 java 原生的 ServerSocketChannel</span><br><span class="hljs-type">ServerSocketChannel</span> <span class="hljs-variable">serverSocketChannel</span> <span class="hljs-operator">=</span> ServerSocketChannel.open(); <br>serverSocketChannel.configureBlocking(<span class="hljs-literal">false</span>);<br><br><span class="hljs-comment">//4 启动 nio boss 线程执行接下来的操作</span><br><br><span class="hljs-comment">//5 注册（仅关联 selector 和 NioServerSocketChannel），未关注事件</span><br><span class="hljs-type">SelectionKey</span> <span class="hljs-variable">selectionKey</span> <span class="hljs-operator">=</span> serverSocketChannel.register(selector, <span class="hljs-number">0</span>, attachment);<br><br><span class="hljs-comment">//6 head -&gt; 初始化器 -&gt; ServerBootstrapAcceptor -&gt; tail，初始化器是一次性的，只为添加 acceptor</span><br><br><span class="hljs-comment">//7 绑定端口</span><br>serverSocketChannel.bind(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InetSocketAddress</span>(<span class="hljs-number">8080</span>));<br><br><span class="hljs-comment">//8 触发 channel active 事件，在 head 中关注 op_accept 事件</span><br>selectionKey.interestOps(SelectionKey.OP_ACCEPT);<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Selector-1"><a href="#Selector-1" class="headerlink" title="Selector"></a>Selector</h3><h3 id="TaskQueue"><a href="#TaskQueue" class="headerlink" title="TaskQueue"></a>TaskQueue</h3><h2 id="Channel-1"><a href="#Channel-1" class="headerlink" title="Channel"></a>Channel</h2><p><strong>NioSocketChannel</strong>： 异步非阻塞的客户端 TCP Socket 连接。</p>
+<p><strong>NioServerSocketChannel</strong>： 异步非阻塞的服务器端 TCP Socket 连接。</p>
+<blockquote>
+<p>常用的就是这两个通道类型，因为是异步非阻塞的。所以是首选。</p>
+</blockquote>
+<p>OioSocketChannel： 同步阻塞的客户端 TCP Socket 连接。</p>
+<p>OioServerSocketChannel： 同步阻塞的服务器端 TCP Socket 连接。</p>
+<blockquote>
+<p>稍微在本地调试过，用起来和Nio有一些不同，是阻塞的，所以API调用也不一样。因为是阻塞的IO，几乎没什么人会选择使用Oio，所以也很难找到例子。我稍微琢磨了一下，经过几次报错之后，总算调通了。代码如下：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//server端代码，跟上面几乎一样，只需改三个地方</span><br><span class="hljs-comment">//这个地方使用的是OioEventLoopGroup</span><br><span class="hljs-type">EventLoopGroup</span> <span class="hljs-variable">bossGroup</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OioEventLoopGroup</span>();<br><span class="hljs-type">ServerBootstrap</span> <span class="hljs-variable">bootstrap</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerBootstrap</span>();<br>bootstrap.group(bossGroup)<span class="hljs-comment">//只需要设置一个线程组boosGroup</span><br>        .channel(OioServerSocketChannel.class)<span class="hljs-comment">//设置服务端通道实现类型</span><br><br><span class="hljs-comment">//client端代码，只需改两个地方</span><br><span class="hljs-comment">//使用的是OioEventLoopGroup</span><br><span class="hljs-type">EventLoopGroup</span> <span class="hljs-variable">eventExecutors</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OioEventLoopGroup</span>();<br><span class="hljs-comment">//通道类型设置为OioSocketChannel</span><br>bootstrap.group(eventExecutors)<span class="hljs-comment">//设置线程组</span><br>        .channel(OioSocketChannel.class)<span class="hljs-comment">//设置客户端的通道实现类型</span><br></code></pre></td></tr></table></figure>
+
+<p>NioSctpChannel： 异步的客户端 Sctp（Stream Control Transmission Protocol，流控制传输协议）连接。</p>
+<p>NioSctpServerChannel： 异步的 Sctp 服务器端连接。</p>
+<blockquote>
+<p>本地没启动成功，网上看了一些网友的评论，说是只能在linux环境下才可以启动。从报错信息看：SCTP not supported on this platform，不支持这个平台。因为我电脑是window系统，所以网友说的有点道理。</p>
+</blockquote>
+<h2 id="ChannelOption"><a href="#ChannelOption" class="headerlink" title="ChannelOption"></a>ChannelOption</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs stylus">下面简单的总结一下ChannelOption的含义已及使用的场景<br>　　<span class="hljs-number">1</span>、ChannelOption<span class="hljs-selector-class">.SO_BACKLOG</span><br>　　<br>　　　　ChannelOption.SO_BACKLOG对应的是tcp/ip协议listen函数中的backlog参数，函数<span class="hljs-built_in">listen</span>(int socketfd,int backlog)用来初始化服务端可连接队列，<br>　　　　服务端处理客户端连接请求是顺序处理的，所以同一时间只能处理一个客户端连接，多个客户端来的时候，服务端将不能处理的客户端连接请求放在队列中等待处理，backlog参数指定了队列的大小<br>　　　　<br>　　<span class="hljs-number">2</span>、ChannelOption<span class="hljs-selector-class">.SO_REUSEADDR</span><br>　　<br>　　　　ChanneOption.SO_REUSEADDR对应于套接字选项中的SO_REUSEADDR，这个参数表示允许重复使用本地地址和端口，<br>　　　　比如，某个服务器进程占用了TCP的<span class="hljs-number">80</span>端口进行监听，此时再次监听该端口就会返回错误，使用该参数就可以解决问题，该参数允许共用该端口，这个在服务器程序中比较常使用，<br>　　　　比如某个进程非正常退出，该程序占用的端口可能要被占用一段时间才能允许其他进程使用，而且程序死掉以后，内核一需要一定的时间才能够释放此端口，不设置SO_REUSEADDR就无法正常使用该端口。<br>　　　　<br>　　<span class="hljs-number">3</span>、ChannelOption<span class="hljs-selector-class">.SO_KEEPALIVE</span><br><br>　　　　Channeloption.SO_KEEPALIVE参数对应于套接字选项中的SO_KEEPALIVE，该参数用于设置TCP连接，当设置该选项以后，连接会测试链接的状态，这个选项用于可能长时间没有数据交流的连接。当设置该选项以后，如果在两小时内没有数据的通信时，TCP会自动发送一个活动探测数据报文。<br><br>　　<span class="hljs-number">4</span>、ChannelOption.SO_SNDBUF和ChannelOption<span class="hljs-selector-class">.SO_RCVBUF</span><br><br>　　　　ChannelOption.SO_SNDBUF参数对应于套接字选项中的SO_SNDBUF，ChannelOption.SO_RCVBUF参数对应于套接字选项中的SO_RCVBUF这两个参数用于操作接收缓冲区和发送缓冲区的大小，接收缓冲区用于保存网络协议站内收到的数据，直到应用程序读取成功，发送缓冲区用于保存发送数据，直到发送成功。<br><br>　　<span class="hljs-number">5</span>、ChannelOption<span class="hljs-selector-class">.SO_LINGER</span><br><br>　　　　ChannelOption.SO_LINGER参数对应于套接字选项中的SO_LINGER,Linux内核默认的处理方式是当用户调用close（）方法的时候，函数返回，在可能的情况下，尽量发送数据，不一定保证会发生剩余的数据，造成了数据的不确定性，使用SO_LINGER可以阻塞<span class="hljs-built_in">close</span>()的调用时间，直到数据完全发送<br><br>　　<span class="hljs-number">6</span>、ChannelOption<span class="hljs-selector-class">.TCP_NODELAY</span><br><br>　　　　ChannelOption.TCP_NODELAY参数对应于套接字选项中的TCP_NODELAY,该参数的使用与Nagle算法有关,Nagle算法是将小的数据包组装为更大的帧然后进行发送，而不是输入一次发送一次,因此在数据包不足的时候会等待其他数据的到了，组装成大的数据包进行发送，虽然该方式有效提高网络的有效负载，但是却造成了延时，而该参数的作用就是禁止使用Nagle算法，使用于小数据即时传输，于TCP_NODELAY相对应的是TCP_CORK，该选项是需要等到发送的数据量最大的时候，一次性发送<br>数据，适用于文件传输。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="ChannelPipeline"><a href="#ChannelPipeline" class="headerlink" title="ChannelPipeline"></a>ChannelPipeline</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230021915.png" srcset="/img/loading.gif" lazyload alt="image-20230330230021915"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> AbstractChannelHandlerContext head;<br><span class="hljs-keyword">final</span> AbstractChannelHandlerContext tail;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Channel channel;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ChannelFuture succeededFuture;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> VoidChannelPromise voidPromise;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">touch</span> <span class="hljs-operator">=</span> ResourceLeakDetector.isEnabled();<br><span class="hljs-keyword">private</span> Map&lt;EventExecutorGroup, EventExecutor&gt; childExecutors;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> Handle estimatorHandle;<br><span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">firstRegistration</span> <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;<br><span class="hljs-keyword">private</span> DefaultChannelPipeline.PendingHandlerCallback pendingHandlerCallbackHead;<br><span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> registered;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="context"><a href="#context" class="headerlink" title="context"></a>context</h3><p><img src="https://pic4.zhimg.com/v2-f74de0a1d853d01fc46f717d4706a7af_r.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="DefaultChannelHandlerContext"><a href="#DefaultChannelHandlerContext" class="headerlink" title="DefaultChannelHandlerContext"></a><strong>DefaultChannelHandlerContext</strong></h4><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230741880.png" srcset="/img/loading.gif" lazyload alt="image-20230330230741880"></p>
+<h4 id="HeadContext-—-TailContext"><a href="#HeadContext-—-TailContext" class="headerlink" title="HeadContext — TailContext"></a><strong>HeadContext</strong> — <strong>TailContext</strong></h4><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230611517.png" srcset="/img/loading.gif" lazyload alt="image-20230330230611517"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230906964.png" srcset="/img/loading.gif" lazyload alt="image-20230330230906964"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330230722582.png" srcset="/img/loading.gif" lazyload alt="image-20230330230722582"></p>
+<h3 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h3><p><img src="https://pic4.zhimg.com/80/v2-2737481fee9a7dd0236f1cb61e823293_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>处理器Handler主要分为两种：</p>
+<blockquote>
+<p>ChannelInboundHandlerAdapter(入站处理器)、ChannelOutboundHandler(出站处理器)</p>
+</blockquote>
+<p>入站指的是数据从底层java NIO Channel到Netty的Channel。</p>
+<p>出站指的是通过Netty的Channel来操作底层的java NIO Channel。</p>
+<p><strong>ChannelInboundHandlerAdapter处理器常用的事件有</strong>：</p>
+<ol>
+<li>注册事件 fireChannelRegistered。</li>
+<li>连接建立事件 fireChannelActive。</li>
+<li>读事件和读完成事件 fireChannelRead、fireChannelReadComplete。</li>
+<li>异常通知事件 fireExceptionCaught。</li>
+<li>用户自定义事件 fireUserEventTriggered。</li>
+<li>Channel 可写状态变化事件 fireChannelWritabilityChanged。</li>
+<li>连接关闭事件 fireChannelInactive。</li>
+</ol>
+<p><strong>ChannelOutboundHandler处理器常用的事件有</strong>：</p>
+<ol>
+<li>端口绑定 bind。</li>
+<li>连接服务端 connect。</li>
+<li>写事件 write。</li>
+<li>刷新时间 flush。</li>
+<li>读事件 read。</li>
+<li>主动断开连接 disconnect。</li>
+<li>关闭 channel 事件 close。</li>
+</ol>
+<blockquote>
+<p>还有一个类似的handler()，主要用于装配parent通道，也就是bossGroup线程。一般情况下，都用不上这个方法。</p>
+</blockquote>
+<h4 id="ChannelOutboundHandlerAdpater"><a href="#ChannelOutboundHandlerAdpater" class="headerlink" title="ChannelOutboundHandlerAdpater"></a><strong>ChannelOutboundHandlerAdpater</strong></h4><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231418573.png" srcset="/img/loading.gif" lazyload alt="image-20230330231418573"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231521492.png" srcset="/img/loading.gif" lazyload alt="image-20230330231521492"></p>
+<h4 id="ChannelInboundHandlerAdpater"><a href="#ChannelInboundHandlerAdpater" class="headerlink" title="ChannelInboundHandlerAdpater"></a><strong>ChannelInboundHandlerAdpater</strong></h4><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231434637.png" srcset="/img/loading.gif" lazyload alt="image-20230330231434637"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330231539310.png" srcset="/img/loading.gif" lazyload alt="image-20230330231539310"></p>
+<h2 id="Read"><a href="#Read" class="headerlink" title="Read()"></a>Read()</h2><h2 id="Write"><a href="#Write" class="headerlink" title="Write()"></a>Write()</h2><h2 id="5种IO模型"><a href="#5种IO模型" class="headerlink" title="5种IO模型"></a>5种IO模型</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAwMDczMjMwOQ==&mid=2247484159&idx=1&sn=62a1626a748547ad837f9c6ccc10b11a&chksm=9ae53f05ad92b613e4c2c7b878d841dea9739168697d074ff9b8705617a4b08223a5a21d79d0&scene=178&cur_album_id=1527950448094216193#rd">大白话详解5种网络IO模型 (qq.com)</a></p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs scss">关键指令：<br>等待数据 - 数据内核到用户进程， 内核 - 用户进程<br><br>阻塞IO：Recvfrom<br>非阻塞IO：Ewouldb lock，Recvfrom<br>IO多路复用：<span class="hljs-built_in">select</span>()、<span class="hljs-built_in">poll</span>(链表)、<span class="hljs-built_in">epoll</span>(红黑树) -- op_connect, op_accept, op_read, op_write，Recvfrom<br>信号量：SIG IO，Recvfrom<br>AIO：aio_read<br><br>本质上：Recvfrom都是阻塞<br></code></pre></td></tr></table></figure>
+
+<h3 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/666.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/220.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/660.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="信号量机制"><a href="#信号量机制" class="headerlink" title="信号量机制"></a>信号量机制</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/670.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="AIO异步非阻塞"><a href="#AIO异步非阻塞" class="headerlink" title="AIO异步非阻塞"></a>AIO异步非阻塞</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/640.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="Reactor和Proactor"><a href="#Reactor和Proactor" class="headerlink" title="Reactor和Proactor"></a>Reactor和Proactor</h3><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/26943938/answer/1856426252">(5 封私信) 如何深刻理解Reactor和Proactor？ - 知乎 (zhihu.com)</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java">NIO模型<br>同步非阻塞<br>NIO有同步阻塞和同步非阻塞两种模式，一般讲的是同步非阻塞，服务器实现模式为一个请求一个线程，但客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理。<br>AIO模型<br>异步非阻塞<br>服务器实现模式为一个有效请求一个线程，客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理，<br>注：AIO又称为NIO2<span class="hljs-number">.0</span>，在JDK7才开始支持。<br><br>为什么Netty使用NIO而不是AIO？<br><br>Netty不看重Windows上的使用，在Linux系统上，AIO的底层实现仍使用EPOLL，没有很好实现AIO，因此在性能上没有明显的优势，而且被JDK封装了一层不容易深度优化<br>Netty整体架构是reactor模型, 而AIO是proactor模型, 混合在一起会非常混乱,把AIO也改造成reactor模型看起来是把epoll绕个弯又绕回来<br>AIO还有个缺点是接收数据需要预先分配缓存, 而不是NIO那种需要接收时才需要分配缓存, 所以对连接数量非常大但流量小的情况, 内存浪费很多<br>Linux上AIO不够成熟，处理回调结果速度跟不到处理需求，比如外卖员太少，顾客太多，供不应求，造成处理速度有瓶颈（待验证）<br></code></pre></td></tr></table></figure>
+
+<p>阻塞IO：数据处理、数据拷贝都会阻塞</p>
+<p>非阻塞IO ：数据处理<strong>轮询</strong>，数据拷贝<strong>阻塞</strong></p>
+<p>异步IO：数据处理和数据拷贝 <strong>都不阻塞</strong></p>
+<h2 id="EventLoopGroup-1"><a href="#EventLoopGroup-1" class="headerlink" title="EventLoopGroup"></a>EventLoopGroup</h2><p>我们先看一下EventLoopGroup的类图：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-3d826a5a72e611c31b30c10ee10a7bbb_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>其中包括了常用的实现类NioEventLoopGroup。OioEventLoopGroup在前面的例子中也有使用过。</p>
+<p>从Netty的架构图中，可以知道服务器是需要两个线程组进行配合工作的，而这个线程组的接口就是EventLoopGroup。</p>
+<p>每个EventLoopGroup里包括一个或多个EventLoop，每个EventLoop中维护一个Selector实例。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Netty-自己</div>
+      <div>http://example.com/2023/06/01/分布式组件+常见组件/Netty/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/MyRocketReadme-%E5%B0%9A/" title="RocketMQ-尚硅谷">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">RocketMQ-尚硅谷</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Nginx/" title="Nginx">
+                        <span class="hidden-mobile">Nginx</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

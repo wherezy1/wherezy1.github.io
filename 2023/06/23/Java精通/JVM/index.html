@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="JVMJDK命令jvm调优监控工具jps、jstack、jmap、jhat、jstat使用详解 - 好奇成传奇 - 博客园 (cnblogs.com)    名称 主要功能    jps JVM Process Status Tool，显示指定系统内所有HotSpot虚拟机进程   jstat JVM Statistics Minitoring Tool，用于收集HotSpot虚拟机各方面的运行数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM">
+<meta property="og:url" content="http://example.com/2023/06/23/Java%E7%B2%BE%E9%80%9A/JVM/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="JVMJDK命令jvm调优监控工具jps、jstack、jmap、jhat、jstat使用详解 - 好奇成传奇 - 博客园 (cnblogs.com)    名称 主要功能    jps JVM Process Status Tool，显示指定系统内所有HotSpot虚拟机进程   jstat JVM Statistics Minitoring Tool，用于收集HotSpot虚拟机各方面的运行数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-ac2a8ea5a4d6da53a25317de508b93a5_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-bdf6009b56dd2d913ccf3c0dc31fc4a8_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-b386be8c8b6c4d54c8a518228683e254_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-ce5c3d249d897651b2f61a8cfd085dfa_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-f0259fe8ddd9da625e78b508ac6f3cef_1440w.webp">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/1360293/201909/1360293-20190904152532848-1066941965.png">
+<meta property="article:published_time" content="2023-06-23T09:20:01.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:40.703Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-ac2a8ea5a4d6da53a25317de508b93a5_1440w.webp">
+  
+  
+  
+  <title>JVM - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JVM"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-23 17:20" pubdate>
+          2023年6月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JVM</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JDK命令"><a href="#JDK命令" class="headerlink" title="JDK命令"></a>JDK命令</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jimoliunian/p/12975201.html">jvm调优监控工具jps、jstack、jmap、jhat、jstat使用详解 - 好奇成传奇 - 博客园 (cnblogs.com)</a></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>主要功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>jps</td>
+<td>JVM Process Status Tool，显示指定系统内所有HotSpot虚拟机进程</td>
+</tr>
+<tr>
+<td>jstat</td>
+<td>JVM Statistics Minitoring Tool，用于收集HotSpot虚拟机各方面的运行数据</td>
+</tr>
+<tr>
+<td>jinfo</td>
+<td>Configuration Info for Java，显示虚拟机配置信息</td>
+</tr>
+<tr>
+<td>jmap</td>
+<td>Memory Map for Java，生成虚拟机的内存转储快照（heapdump）文件</td>
+</tr>
+<tr>
+<td>jhat</td>
+<td>(Java Heap Analysis Tool) &#x2F; JVM Heap Dump Browser，用于分析heapdump文件，它会建立一个HTTP&#x2F;HTML服务器，让用户可以在浏览器上查看分析结果</td>
+</tr>
+<tr>
+<td>jstack</td>
+<td>Stack Trace for Java，显示虚拟机的线程快照</td>
+</tr>
+</tbody></table>
+<p>jstack, jstat, jps, jinfo, jmap jhat</p>
+<h2 id="JVM内存模型（JMM）"><a href="#JVM内存模型（JMM）" class="headerlink" title="JVM内存模型（JMM）"></a>JVM内存模型（JMM）</h2><p>工作内存（高速缓存，寄存器）和主内存 </p>
+<p>工作内存（虚拟机栈，本地方法栈）和主内存（堆和方法区）</p>
+<p><img src="https://pic2.zhimg.com/80/v2-ac2a8ea5a4d6da53a25317de508b93a5_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="MESI协议"><a href="#MESI协议" class="headerlink" title="MESI协议"></a>MESI协议</h2><p>MESI是一种比较常用的缓存一致性协议，MESI表示缓存行的四种状态，分别是：<br>1、M(Modify) 表示共享数据只缓存在当前 CPU 缓存中，并且是被修改状态，也就是缓存的数据和主内存中的数据不一致<br>2、E(Exclusive) 表示缓存的独占状态，数据只缓存在当前CPU缓存中，并且没有被修改<br>3、S(Shared) 表示数据可能被多个 CPU 缓存，并且各个缓存中的数据和主内存数据一致<br>4、I(Invalid) 表示缓存已经失效<br>在 MESI 协议中，每个缓存的缓存控制器不仅知道自己的读写操作，而且也监听(snoop)其它CPU的读写操作。<br>对于 MESI 协议，从 CPU 读写角度来说会遵循以下原则：<br><strong>CPU读请求</strong>：缓存处于 M、E、S 状态都可以被读取，I 状态CPU 只能从主存中读取数据<br><strong>CPU写请求</strong>：缓存处于 M、E 状态才可以被写。对于S状态的写，需要将其他CPU中缓存行置为无效才行。</p>
+<h2 id="JVM-–-专栏"><a href="#JVM-–-专栏" class="headerlink" title="JVM – 专栏"></a>JVM – 专栏</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35925558/category_11010855.html?spm=1001.2014.3001.5515">(13条消息) JVM从入门到精通_VectorUx的博客-CSDN博客</a></p>
+<h2 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h2><h3 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h3><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7023935314703941663">终于把CMS垃圾收集器搞懂了~ - 掘金 (juejin.cn)</a></p>
+<h3 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h3><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7025212933428740110">看完这篇G1垃圾收集器的总结就足以吊打面试官了~ - 掘金 (juejin.cn)</a></p>
+<h2 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a>日志分析</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7029130033268555807">https://juejin.cn/post/7029130033268555807</a></p>
+<h1 id="调优"><a href="#调优" class="headerlink" title="调优"></a>调优</h1><h2 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h2><p>-★ 响应时间（Response Time: RT）</p>
+<p>响应时间指用户从客户端发起一个请求开始，到客户端接收到从服务器端返回的响<br>应结束，整个过程所耗费的时间。<br>HPS（Hits Per Second） ：每秒点击次数，单位是次&#x2F;秒。<br>★TPS（Transaction per Second）：系统每秒处理交易数，单位是笔&#x2F;秒。<br>★QPS（Query per Second）：系统每秒处理查询次数，单位是次&#x2F;秒。</p>
+<p>对于互联网业务中，如果某些业务有且仅有一个请求连接，那么 TPS&#x3D;QPS&#x3D;HPS，一<br>般情况下用 TPS 来衡量整个业务流程，用 QPS 来衡量接口查询次数，用 HPS 来表<br>示对服务器单击请求。</p>
+<p>无论 TPS、QPS、HPS,此指标是衡量系统处理能力非常重要的指标，越大越好，根据经<br>验，一般情况下：<br>金融行业：1000TPS<del>50000TPS，不包括互联网化的活动（秒杀等）<br>保险行业：100TPS</del>100000TPS，不包括互联网化的活动<br>制造行业：10TPS<del>5000TPS<br>互联网电子商务：10000TPS</del>1000000TPS<br>互联网中型网站：1000TPS<del>50000TPS<br>互联网小型网站：500TPS</del>10000TPS<br>最大响应时间（Max Response Time） 指用户发出请求或者指令到系统做出反应（响应）<br>的最大时间。<br>最少响应时间（Mininum ResponseTime） 指用户发出请求或者指令到系统做出反应（响<br>应）的最少时间。<br>90%响应时间（90% Response Time） 是指所有用户的响应时间进行排序，第 90%的响应时间。<br>从外部看，性能测试主要关注如下三个指标<br>吞吐量可以理解为TPS或QPS：每秒钟系统能够处理的请求数、任务数。<br>响应时间：服务处理一个请求或一个任务的耗时。<br>错误率：一批请求中结果出错的请求所占比例。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35925558/article/details/116429595">(13条消息) ＜JVM下篇：性能监控与调优篇＞03-JVM监控及诊断工具-GUI篇_VectorUx的博客-CSDN博客</a></p>
+<h1 id="火焰图"><a href="#火焰图" class="headerlink" title="火焰图"></a>火焰图</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/96245085">火焰图实践 - 知乎 (zhihu.com)</a></p>
+<h2 id="1-场景描述："><a href="#1-场景描述：" class="headerlink" title="1. 场景描述："></a>1. 场景描述：</h2><p>因为生产环境组件服务进程执行缓慢导致部分资源无法释放，进而引起了各种任务超时。研究源码发现，部分执行过长的是操作都是在单线程中串行 。这就意味着，单个过程的执行效率会影响到整个流程的调度周期。为此，我们需要对部分组件源码进行改造，串行改并行。<br>串行改并行，我们要小心流程执行顺序之间的依赖关系和各个线程对共享变量的读写。这里的前提是我们得知道改哪里。其实我们的需求很明确，执行过程耗时长的我们优先改造,也就是我们需要找到组件的性能瓶颈。但是如何确认呢?最终，我是通过火焰图观察，找出了耗时比较长的过程。下面记录一下这个过程，以便日后需要的时候可以有所帮助。</p>
+<h2 id="2-火焰图"><a href="#2-火焰图" class="headerlink" title="2. 火焰图"></a>2. 火焰图</h2><blockquote>
+<p>火焰图是通过可交互的图片反映出程序执行过程中的调用栈和大致的CPU占用百分比。在火焰图中，顺着Y轴从下往上看表示的是调用顺序，高度表示的就是调用栈的深度。顺着X轴看，一个方法的长度表示的就是这个方法的被抽到的样本数，被抽到的次数越多，占用的CPU时间就越长。当把鼠标放在一个方法上时，会显示一段说明，例如<code>(5222 samples, 7.6%)</code>,这个表示的就是，这个方法在采样期间被采样了5222次，占用总样本的7.6%。注意X轴不表示时间，不是说左边的方法一定在右边之前执行。火焰图应该是高低起伏的，如果都是很宽的平顶，那程序性能就需要重新评测了。另外，火焰图的颜色没有任何含义。</p>
+</blockquote>
+<p><img src="https://pic1.zhimg.com/80/v2-bdf6009b56dd2d913ccf3c0dc31fc4a8_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>火焰图是可交互的，在浏览器中我们打开火焰图之后可以直接<code>CTRL+F</code>进行搜索。输入完整的方法名或者正则表达式之后，所有匹配到的方法都是高亮显示出来。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-b386be8c8b6c4d54c8a518228683e254_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>单击这些高亮部分就会放大这一部分，显示选中方法的子方法(被调用的方法)。这样就可以在这张图中搜索自己想要确认的模块，然后找到比较宽的部分，定位到代码，确定是否可以修改。</p>
+<h2 id="3-生成火焰图"><a href="#3-生成火焰图" class="headerlink" title="3. 生成火焰图"></a>3. 生成火焰图</h2><h3 id="3-1-工具"><a href="#3-1-工具" class="headerlink" title="3.1 工具"></a>3.1 工具</h3><p>火焰图生成工具：<a href="https://link.zhihu.com/?target=https://pan.baidu.com/s/1EuIauy4rFNxaIwXhMAXW5Q">javaPfro.zip</a> 提取码：<code>76o9</code><br>这个工具包解压之后会用两个文件夹：<br><code>async-profiler-master</code> <code>FlameGraph-master</code><br>文件夹下部分可执行文件，可能需要755权限。这里不做一一声明，直接更改文件夹下所有文件的权限。<br><code>chmod -R 755 async-profiler-master/*</code><br><code>chmod -R 755 FlameGraph-master/*</code></p>
+<h3 id="3-2-操作步骤"><a href="#3-2-操作步骤" class="headerlink" title="3.2 操作步骤"></a>3.2 操作步骤</h3><blockquote>
+<p>火焰图只是以图片形式展示出了CPU中的调用栈，实际的数据还是需要从CPU中采集。所以生成火焰图共分为两步：采样和生成svg图。</p>
+</blockquote>
+<h3 id="3-2-1-采样"><a href="#3-2-1-采样" class="headerlink" title="3.2.1 采样"></a>3.2.1 采样</h3><p>采样使用<code>async-profiler-master</code>工具，具体命令如下：<br><code>./async-profiler-master/profiler.sh -d 10 -o collapsed -f /tmp/collapsed.txt 1234</code><br>以上命令表示的意思是，采样时间为10秒，采样得到的数据重定向到<code>/tmp/collapsed.txt</code>，被采样进程id为1234。</p>
+<h3 id="3-2-2-生成svg图"><a href="#3-2-2-生成svg图" class="headerlink" title="3.2.2 生成svg图"></a>3.2.2 生成svg图</h3><p>根据采样数据生成svg图，使用的是<code>FlameGraph-master</code>,具体命令如下:<br><code>./FlameGraph-master/flamegraph.pl --colors=java /tmp/collapsed.txt &gt; flamegraph.svg</code><br>命令表示的意思是把<code>/tmp/collapsed.txt</code>这个文件转换svg火焰图，文件名为<code>flamegraph.svg</code>。<br>然后,把这个文件拉到window环境下，用浏览器就可以打开了。这里我用的是chrome浏览器。</p>
+<h2 id="4-分析火焰图"><a href="#4-分析火焰图" class="headerlink" title="4. 分析火焰图"></a>4. 分析火焰图</h2><p>分析火焰图一般需要先确定需要分析的类或方法名，或者代码入口方法，或者入口类。这样我们可以先定位到一个方法调用，再分析其调用栈。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-ce5c3d249d897651b2f61a8cfd085dfa_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>例如，在这张图片中，我确定的方法是定义在<code>CoordinatorRunnable</code>类中的，就可以直接搜索这个类。定位到这个类我们可以明显地看到有三个方法占用了大部分的时间。再继续追踪调用栈。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-f0259fe8ddd9da625e78b508ac6f3cef_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>可以看出，耗时大部分都花费在集合元素的比较上。这里我们如果需要优化的话，可以考虑一下比较器的逻辑或者可以根据场景判断一下是否可以选择其他的集合等等。火焰图实践</p>
+<p><img src="https://img2018.cnblogs.com/blog/1360293/201909/1360293-20190904152532848-1066941965.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/java/" class="category-chain-item">java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/">#java</a>
+      
+        <a href="/tags/JVM/">#JVM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JVM</div>
+      <div>http://example.com/2023/06/23/Java精通/JVM/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/23/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/MyRaftReadme/" title="Raft-摘录">
+                        <span class="hidden-mobile">Raft-摘录</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

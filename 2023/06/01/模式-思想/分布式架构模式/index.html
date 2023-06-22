@@ -1,0 +1,732 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式架构设计模式限流12345678910111213141516171819分布式情况下的限流可以进行整体限流和局部限流的结合，根据具体情况进行选择。1. 整体限流整体限流是对整个应用程序进行限流控制，通常是根据应用程序的压力、负载以及所需的资源进行限流控制。整体限流可以通过多种方式来实现，比如使用熔断器、队列长度（MQ）控制，或者通过分布式限流工具来控制。2. 局部限流局部限流则是根据实际使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式架构设计模式">
+<meta property="og:url" content="http://example.com/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="分布式架构设计模式限流12345678910111213141516171819分布式情况下的限流可以进行整体限流和局部限流的结合，根据具体情况进行选择。1. 整体限流整体限流是对整个应用程序进行限流控制，通常是根据应用程序的压力、负载以及所需的资源进行限流控制。整体限流可以通过多种方式来实现，比如使用熔断器、队列长度（MQ）控制，或者通过分布式限流工具来控制。2. 局部限流局部限流则是根据实际使">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.851Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="模式">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>分布式架构设计模式 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式架构设计模式"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          51 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式架构设计模式</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="分布式架构设计模式"><a href="#分布式架构设计模式" class="headerlink" title="分布式架构设计模式"></a>分布式架构设计模式</h1><h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs markdown">分布式情况下的限流可以进行整体限流和局部限流的结合，根据具体情况进行选择。<br><br><span class="hljs-bullet">1.</span> 整体限流<br><br>整体限流是对整个应用程序进行限流控制，通常是根据应用程序的压力、负载以及所需的资源进行限流控制。整体限流可以通过多种方式来实现，比如使用熔断器、队列长度（MQ）控制，或者通过分布式限流工具来控制。<br><br><span class="hljs-bullet">2.</span> 局部限流<br><br>局部限流则是根据实际使用情况，对不同的服务、接口或者方法进行独立的限流控制。通常是针对不同的服务或者接口，根据实际的业务需求和资源使用情况，进行不同的限流策略和算法，以达到最佳的限流效果。<br><br>微服务、容器模式、服务栅格都可以使用合适的分布式限流工具来实现整体限流和局部限流的需求。<br><br><span class="hljs-bullet">1.</span> 对于微服务，可以使用Sentinel、Resilience4j等分布式限流、熔断工具来满足限流需求。这些工具都可以独立运行，也可以与SpringCloud等微服务框架或者服务注册中心进行集成，提供更方便的分布式限流控制。<br><br><span class="hljs-bullet">2.</span> 在容器环境中，可以使用Kubernetes提供的限流策略限流控制。Kubernetes提供了CPU、内存、网络等多种资源的限流策略，可根据不同的资源需求和限制条件，针对不同的容器进行限流。<br><br><span class="hljs-bullet">3.</span> 服务栅格提供了更多的限流控制策略和算法，包括服务端限流、客户端限流、基于令牌桶算法的限流等，可根据实际应用场景和需求进行选择。<br><br>综上所述，分布式情况下的限流可以进行整体限流和局部限流的结合，根据实际需求和场景选择合适的分布式限流工具来实现。Sentinel、Resilience4j等工具适用于微服务环境，Kubernetes适用于容器模式下，服务栅格提供了更多的限流控制策略和算法，可根据实际情况进行选择。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="断路器和熔断器-–-容错"><a href="#断路器和熔断器-–-容错" class="headerlink" title="断路器和熔断器 – 容错"></a>断路器和熔断器 – 容错</h2><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs gcode">断路器模式和熔断器模式都是用于实现容错机制的设计模式，但它们的作用、用途和实现方式有所不同。<br><br>断路器模式是一种应对于外部服务调用的错误保护机制，在分布式系统中，往往多个微服务之间存在复杂的依赖关系，这些服务之间调用发生错误时，可能会产生级联错误的情况。为避免这种情况的发生，断路器模式通过在容器中放置断路器，当触发错误的次数达到一定数值后，自动切断访问，自身直接返回一个错误，并且会在触发断路器的过程中记录请求次数、错误次数等指标，在达到一定的时间后快速进行恢复。通过这种方式，可以保护整个系统不被错误请求拖垮。熔断器模式是一种限流保护机制，通过降级处理请求，如直接返回默认值、调用缓存值等方式来保护系统。当系统中出现请求量过载，资源紧张或交互故障等情况时，熔断器会宋体自动熔断，将请求转向熔断器自身，通过熔断器防止请求持续调用，降低应用层次出现异常的几率。<br><br>总的来说，断路器模式是一个容错机制，主要是为了保护整个系统不被错误请求拖垮；而熔断器模式则是一个限流保护机制，主要是为了保护服务本身不受过载而导致瘫痪。当服务出现问题时，断路器模式可以通过短路来解决问题；而熔断器模式则是通过限制服务流量来进行保护服务的目的同时，断路器模式和熔断器模式都可以通过实时监控请求情况、响应时间、错误率等指标来帮助监控服务质量，并判断是否需要进行熔断或者关闭断路。<br><br>在实际应用中，断路器和熔断器通常会结合起来使用，以提高应用程序的稳定性和可靠性。其中，熔断器可以用于限制请求访问流量，并抛弃不必要的请求，从而减轻应用程序的负载，保护应用程序免受过载的影响。如果服务器出现故障或错误，断路器可以快速切断服务访问，防止错误循环引起系统瘫痪，保护整个系统的稳定性。<br><br>断路器和熔断器的实现方式也有所不同。在实际应用中，通常使用熔断器框架（如Hystrix、Resilie<span class="hljs-symbol">nce4</span>j等）来实现断路器和熔断器的功能，这些框架提供了响应式的API和管理控制插件，可为应用程序提供可靠的容错和限流保护机制，在支持高并发、分布式部署和云计算等方面具有重要意义。<br><br>综上所述，断路器模式和熔器模式都是容错机制，但它们的作用、用途和实现方式有所不同。断路器模式主要针对于外部服务调用的错误保护机制，通过实现对请求次数、错误次数的监控，快速切断访问，保护整个系统不被错误请求拖垮。熔断器模式则主要是限流保护机制，通过限制请求流量，保护服务本身不受过载而导致瘫痪。在实际应用中，断路器和熔断器通常结合使用，以提高应用程序的稳定性和可靠性。<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p>以下是基于Hystrix实现断路器和熔断器的示例代码：</p>
+<ol>
+<li>断路器</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 注解方式</span><br><span class="hljs-meta">@HystrixCommand(fallbackMethod = &quot;fallbackMethod&quot;)</span><br><span class="hljs-meta">@GetMapping(&quot;/message&quot;)</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">getMessage</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String name)</span> &#123;<br>    <span class="hljs-keyword">return</span> restTemplate.getForObject(<span class="hljs-string">&quot;http://producer/hello?name=&quot;</span> + name, String.class);<br>&#125;<br><br><span class="hljs-comment">// 方法调用方式</span><br>HystrixCommand.<span class="hljs-type">Setter</span> <span class="hljs-variable">commandSetter</span> <span class="hljs-operator">=</span> HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">&quot;group_key&quot;</span>))<br>        .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="hljs-string">&quot;command_key&quot;</span>))<br>        .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(<span class="hljs-string">&quot;thread_pool_key&quot;</span>))<br>        .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withCircuitEnabled(<span class="hljs-literal">true</span>))<br><span class="hljs-type">rixCommand</span> <span class="hljs-variable">helloServiceCommand</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HystrixCommand</span>(commandSetter) &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> String <span class="hljs-title function_">getFallback</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;fallbackMethod&quot;</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> String <span class="hljs-title function_">run</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">return</span> restTemplate.getForObject(<span class="hljs-string">&quot;http://producer/hello?name=&quot;</span> + name, String.class);<br>    &#125;<br>&#125;;<br><span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> helloServiceCommand.execute();<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>熔断器</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 注解方式：</span><br><span class="hljs-meta">@HystrixCommand(fallbackMethod = &quot;fallbackMethod&quot;,commandProperties = &#123;</span><br><span class="hljs-meta">        @HystrixProperty(name = &quot;execution.isolation.thread.timeoutInMilliseconds&quot;, value = &quot;1000&quot;)</span><br><span class="hljs-meta">&#125;)</span><br><span class="hljs-meta">@GetMapping(&quot;/message&quot;)</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">getMessage</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String name)</span> &#123;<br>    <span class="hljs-keyword">return</span> restTemplate.getForObject(<span class="hljs-string">&quot;http://producer/hello?name=&quot;</span> + name, String.class);<br>&#125;<br><br><span class="hljs-comment">// 命令方式</span><br>HystrixCommand.<span class="hljs-type">Setter</span> <span class="hljs-variable">commandSetter</span> <span class="hljs-operator">=</span> HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="hljs-string">&quot;group_key&quot;</span>))<br>            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="hljs-string">&quot;command_key&quot;</span>))<br>            .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(<span class="hljs-string">&quot;thread_pool_key&quot;</span>))<br>            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()<br>                  .withCircuitBreakerEnabled(<span class="hljs-literal">true</span>)<br>                  .withCircuitBreakerRequestVolumeThreshold(<span class="hljs-number">5</span>)<br>                  .withCircuitBreakerErrorThresholdPercentage(<span class="hljs-number">50</span>)<br>                  .withCircuitBreakerSleepWindowInMilliseconds(<span class="hljs-number">5000</span>)<br>            );<br><span class="hljs-type">HystrixCommand</span> <span class="hljs-variable">helloServiceCommand</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HystrixCommand</span>(commandSetter) &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">protected</span> String <span class="hljs-title function_">getFallback</span><span class="hljs-params">()</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;fallbackMethod&quot;</span>;<br>        &#125;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">protected</span> String <span class="hljs-title function_">run</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>            List&lt;String&gt; result = restTemplate.getForObject(<span class="hljs-string">&quot;http://producer/hello?q=&quot;</span> + query, List.class);<br>            <span class="hljs-keyword">return</span> result.toString();<br>        &#125;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">protected</span> String <span class="hljs-title function_">getCacheKey</span><span class="hljs-params">()</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;cache_key&quot;</span>;<br>        &#125;<br>&#125;;<br><br><span class="hljs-keyword">try</span> &#123;<br>    helloServiceCommand.execute();<br>&#125; <span class="hljs-keyword">catch</span> (HystrixRuntimeException e) &#123;<br>    log.error(<span class="hljs-string">&quot;Hystrix command error: &#123;&#125;&quot;</span>, e.getMessage(), e);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在断路器和熔断器的示例代码中，断路器使用 <code>HystrixCommand</code> 实现，熔断器使用 <code>HystrixObservableCommand</code> 实现。其中，断路器和熔断器在 <code>fallbackMethod</code> 方法中，通常是返回异常信息或者预先设定的备选结果。在实现过程中，我们可以通过各种属性的设置来控制断路器和熔断器的行为，以满足不同的需求。</p>
+<h2 id="选举算法"><a href="#选举算法" class="headerlink" title="选举算法"></a>选举算法</h2><p>选举策略算法主要用于分布式系统中，处理节点失效问题，从而保障系统的高可用性。常见的选举策略算法有Bully算法、环算法、Paxos算法等，下面将逐一介绍这些算法的工作原理、优缺点。</p>
+<h3 id="Bully算法"><a href="#Bully算法" class="headerlink" title="Bully算法"></a>Bully算法</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/237710254">分布式基础-谁来当老大（Bully算法） - 知乎 (zhihu.com)</a></p>
+<p>Bully算法是一种基于选举的故障恢复机制，在分布式系统中，当某个节点失败时，其他节点可以通过选举机制，选出一个新的主节点来取代失效的节点。Bully算法的工作原理如下：</p>
+<ul>
+<li>所有节点按照ID大小进行排序，ID最大的节点被选举为主节点。</li>
+<li>如果当前主节点失效，各个节点开始进行选举，比当前节点ID值大的节点先启动选举过。</li>
+<li>其他节点向ID比它大的节点发出选举请求。</li>
+<li>如果没有节点响应，则该节点成为新主节点。</li>
+<li>如果有节点响应，则节点中ID最大的节点成为新主节点。</li>
+</ul>
+<p>Bully算法的优点在于：</p>
+<ul>
+<li>发现故障节点并快速进行选举，可以保证分布式系统的高可用性。</li>
+<li>算法简单易懂，易于实现。</li>
+</ul>
+<p>Bully算法的缺点在于：</p>
+<ul>
+<li>在选举过程中，可能存在多次SELECT的过程，造成效率低下，不适合大规模分布式系统。</li>
+<li>需要维护节点ID的大小关系，增加了节点数量限制，不适合无限制扩展的系统。</li>
+</ul>
+<h3 id="环算法"><a href="#环算法" class="headerlink" title="环算法"></a>环算法</h3><p>环算法是一种不需要进行主节点选举的故障恢复机制，在分布式系统中，每个节点都拥有一个唯一的ID，在一个环上进行排列。环算法的工作原理如下：</p>
+<ul>
+<li>当一个节点失效时，开始一个寻找下一个可用节点的过程。</li>
+<li>当当前节点发现下一个节点失效后，继续向“成功节点”发送请求。</li>
+<li>如果沿着环找到了一个节点，该节点可以被视为“成功节点”（假设该节点一直存活）。</li>
+<li>新的节点将发送请求到“成功节点”，要求获取之前由断开连接的节点控制的所有资源。</li>
+</ul>
+<p>环算法的优点在于：</p>
+<ul>
+<li>算法简单，不需要进行主节点选举过程。</li>
+<li>可以适用于较大的分布式系统，易于扩展。</li>
+</ul>
+<p>环算法的缺点在于：</p>
+<ul>
+<li>当节点在环形上相距较远时，消息转发的路径可能会过长，影响效率。</li>
+<li>节点加入或退出时，需要重新构建整个环，影响系统效率。</li>
+</ul>
+<h3 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h3><p>Paxos算法是一种经典的一致性算法，适用于分布式系统中的故障恢复、主节点选举等问题。Paxos算法包括议员选取阶段、提交提案阶段和批准提案阶段等三个阶段，工作原理如下：</p>
+<ul>
+<li>提案者P向提案集传输一个包含值的提案。</li>
+<li>如果协调者C没有收到提案，它就会指定P为提案者，并允许P提交它的提案。</li>
+<li>如果一个协调者收到了提案，它可能会批准它或者阻止这个提案，由此决定是否向提案集传送提案。如果该提案已经被批准，它会开始第三阶段，否则它需要重新开始第二阶段。</li>
+<li>如果协调者C批准了一个提案，那么该提案就会被提议参议员进行处理。</li>
+<li>如果超过一半的参议员接受了提案，那么该提案就会被通过，否则该提案将无法通过。</li>
+<li>如果另一个提案与当前提案冲突，则该提案会在协调者C的帮助下开始一个两两提案达成决定的过程。</li>
+</ul>
+<p>Paxos算法的优点在于：</p>
+<ul>
+<li>通过多个提案者提交提案的方式，避免了单点故障的发生。</li>
+<li>可以保证系统的一致性，即使发生网络分区和其他异常情况。</li>
+</ul>
+<p>Paxos算法的缺点在于：</p>
+<ul>
+<li>算法较为复杂，实现困难。</li>
+<li>执行效率较低，在处理大量的提案时容易造成系统负载过大。</li>
+</ul>
+<p>综上所述，Bully算法、环算法和Paxos算法都是常用的选举策略算法。Bully算法和环算法都具有简单易懂、易于实现的优点，同时也存在效率低下、可扩展性差等缺点，不适合大规模分布式系统。Paxos算法则具有分布式系统一致性、可靠性等优势，但实现难度较，执行效率较低。因此，在实际应用中，需要根据不同的业务需求和系统规模来选择合适的选举策略算法。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E6%A8%A1%E5%BC%8F/" class="category-chain-item">模式</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%A8%A1%E5%BC%8F/">#模式</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式架构设计模式</div>
+      <div>http://example.com/2023/06/01/模式-思想/分布式架构模式/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA/" title="分布式理论">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式理论</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" title="编程思想">
+                        <span class="hidden-mobile">编程思想</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

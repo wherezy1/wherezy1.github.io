@@ -1,0 +1,1057 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux-docker使用Linux查看cpu使用情况在 Linux 中，可以使用多种命令来查看 CPU 占用情况。以下是几个常用的命令：  top 命令  top 命令可以显示系统中所有活动进程的实时 CPU 使用情况，反复显示进程列表以及有关进程的 CPU 使用情况信息。 命令示例： 1top  该命令将会显示实时的进程列表和 CPU 使用率2. htop 命令 htop 命令是 top 命">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux-docker使用">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%B7%A5%E5%85%B7/Linux-docker%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Linux-docker使用Linux查看cpu使用情况在 Linux 中，可以使用多种命令来查看 CPU 占用情况。以下是几个常用的命令：  top 命令  top 命令可以显示系统中所有活动进程的实时 CPU 使用情况，反复显示进程列表以及有关进程的 CPU 使用情况信息。 命令示例： 1top  该命令将会显示实时的进程列表和 CPU 使用率2. htop 命令 htop 命令是 top 命">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:01:41.072Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="容器">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Linux-docker使用 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux-docker使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          114 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux-docker使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Linux-docker使用"><a href="#Linux-docker使用" class="headerlink" title="Linux-docker使用"></a>Linux-docker使用</h1><h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="查看cpu使用情况"><a href="#查看cpu使用情况" class="headerlink" title="查看cpu使用情况"></a>查看cpu使用情况</h2><p>在 Linux 中，可以使用多种命令来查看 CPU 占用情况。以下是几个常用的命令：</p>
+<ol>
+<li>top 命令</li>
+</ol>
+<p>top 命令可以显示系统中所有活动进程的实时 CPU 使用情况，反复显示进程列表以及有关进程的 CPU 使用情况信息。</p>
+<p>命令示例：</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq"><span class="hljs-built_in">top</span><br></code></pre></td></tr></table></figure>
+
+<p>该命令将会显示实时的进程列表和 CPU 使用率2. htop 命令</p>
+<p>htop 命令是 top 命令的增强版，它提供了一个更直观的用户界面，可以查看所有进程的所有信息，包括 CPU 使用情况、内存使用情况、进程列表等。</p>
+<p>命令示例：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">htop</span><br></code></pre></td></tr></table></figure>
+
+<p>该命令将会打开 htop 界面，其中显示当前系统中的进程和 CPU 使用情况。</p>
+<ol start="3">
+<li>mpstat 命令</li>
+</ol>
+<p>mpstat 命令可以显示每个逻辑 CPU 的详细信息，以及系统的 CPU 统计信息。</p>
+<p>命令示例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">mpstat -<span class="hljs-selector-tag">P</span> <span class="hljs-attribute">ALL</span><br></code></pre></td></tr></table></figure>
+
+<p>该命令将会显示每个逻辑 CPU 的详细信息，以及每个 CPU 的使用情况。</p>
+<ol start="4">
+<li>sar 命令</li>
+</ol>
+<p>sar 命令可以记录系统资源使用情况，包括 CPU、内存、磁盘等方面。可以使用 sar 命令来定期记录系统的资源使用情况，以便观察长时间的使用情况。</p>
+<p>命令示例：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">sar -u</span><br></code></pre></td></tr></table></figure>
+
+<p>该命令将显示系统 CPU 的使用情况，包括用户、内核和空闲时间。</p>
+<p>以上是几个常用于查看 Linux CPU 使用率的命令。您可以根据自己的需求和喜好选择适合自己的命令。</p>
+<h2 id="查看内存使用情况"><a href="#查看内存使用情况" class="headerlink" title="查看内存使用情况"></a>查看内存使用情况</h2><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">free -h</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="查看硬盘使用情况"><a href="#查看硬盘使用情况" class="headerlink" title="查看硬盘使用情况"></a>查看硬盘使用情况</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">df</span> -h<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="查找文件位置"><a href="#查找文件位置" class="headerlink" title="查找文件位置"></a>查找文件位置</h2><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sqf">which docker-compose<br>whereis docker-compose<br><span class="hljs-built_in">find</span> / -<span class="hljs-built_in">name</span> <span class="hljs-string">&quot;docker-compose&quot;</span> -<span class="hljs-built_in">type</span> f<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用curl下载文件"><a href="#使用curl下载文件" class="headerlink" title="使用curl下载文件"></a>使用curl下载文件</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl -L https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/docker/</span>compose<span class="hljs-regexp">/releases/</span>download<span class="hljs-regexp">/1.29.1/</span>docker-compose-Linux-x86_64 -o <span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/bin/</span>docker-compose<br><br>以下是使用 `curl` 下载 Docker Compose <span class="hljs-number">3</span>.x 版本的文件的示例：<br><br>```<br>sudo curl -L https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/docker/</span>compose<span class="hljs-regexp">/releases/</span>download<span class="hljs-regexp">/1.29.1/</span>docker-compose-Linux-x86_64 -o <span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/bin/</span>docker-compose<br>```<br><br>该命令从 Docker Compose 的 GitHub 仓库中下载 Docker Compose <span class="hljs-number">3</span>.x 版本的二进制文件，并将它保存为 `<span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/bin/</span>docker-compose`，这是 Docker Compose 的默认安装路径。<br><br>解释一下上述命令的各部分：<br><br>- `sudo`：使用 `sudo` 命令以超级用户权限下载文件。<br>- `-L`：跟随重定向。由于 Docker Compose 的文件下载页面可能会重定向到其他页面，因此需要使用 `-L` 参数。<br>- `https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/docker/</span>compose<span class="hljs-regexp">/releases/</span>download<span class="hljs-regexp">/1.29.1/</span>docker-compose-Linux-x86_64`：要下载文件的 URL。<br>- `-o <span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/bin/</span>docker-compose`：输出位置，即要保存下载文件的路径和文件名。<br><br>注意，由于 `<span class="hljs-regexp">/usr/</span>local/bin` 目录可能受到限制，需要以超级用户身份运行 `curl` 命令，才有权限将下载的文件写入该目录。另外，如果下载失败可以通过 `-v` 参数查看详细的调试信息。<br><br>下载完成后，需要将文件设置为可执行权限。可以使用以下命令：<br><br>```<br>sudo chmod +x <span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/bin/</span>docker-compose<br>```<br><br>这样，就成功下载安装了 Docker Compose <span class="hljs-number">3</span>.x 版本的文件。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h2><p>在 Linux 系统上安装和配置 git 环境可以参照以下步骤：</p>
+<ol>
+<li><p>安装 Git</p>
+<ul>
+<li><p>在 Ubuntu 系统上，可以使用以下命令安装 Git：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> update<br>sudo apt-<span class="hljs-built_in">get</span> install git<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>在 CentOS&#x2F;RedHat 系统上，可以使用以下命令安装 Git：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">sudo yum <span class="hljs-keyword">install</span> git<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>在 Fedora 系统上，可以使用以下命令安装 Git：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">sudo dnf <span class="hljs-keyword">install</span> git<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>配置 Git</p>
+<ul>
+<li><p>设置用户信息，包括用户名和邮箱：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.name</span> <span class="hljs-string">&quot;Your Name&quot;</span><br>git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.email</span> <span class="hljs-string">&quot;youremail@example.com&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>注意，其中的 “Your Name” 和 “<a href="mailto:&#x79;&#111;&#117;&#114;&#x65;&#x6d;&#97;&#x69;&#x6c;&#64;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;">&#x79;&#111;&#117;&#114;&#x65;&#x6d;&#97;&#x69;&#x6c;&#64;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;</a>” 需要替换为您自己的名字和邮箱。</p>
+</li>
+<li><p>设置 Git 的编辑器，在提交代码时会用到：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">git <span class="hljs-built_in">config</span> <span class="hljs-comment">--global core.editor nano</span><br></code></pre></td></tr></table></figure>
+
+<p>注意，nano 是一个编辑器的名称，可以根据个人喜好选择其他编辑器。</p>
+</li>
+<li><p>设置颜色，以区分 Git 的不同输出：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">git config --global color.ui <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>验证 Git 环境</p>
+<p>在终端中输入以下命令：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">git <span class="hljs-comment">--version</span><br></code></pre></td></tr></table></figure>
+
+<p>如果 Git 版本号显示出来，则说明 Git 环境已经安装配置好了。</p>
+</li>
+</ol>
+<p>至此，您已经完成了 Git 环境的安装和配置，可以使用 Git 进行代码管理和版本控制了。</p>
+<h2 id="检索"><a href="#检索" class="headerlink" title="检索"></a>检索</h2><p>三个命令<code>where</code>，<code>whereis</code>和<code>which</code>都是用于定位命令或可执行文件的位置，但具体用法和结果不同。</p>
+<ol>
+<li><strong>where</strong></li>
+</ol>
+<p><code>where</code>命令通常是用于查找Shell命令，它会在所有可能的目录中查找命令，并在屏幕上显示其路径。即：在环境变量PATH指定的路径中查找指定文件名，并返回所有匹配的结果。因此，可以用<code>where</code>命令查看某个命令在哪个目录中。</p>
+<p>语法：<code>where filename</code></p>
+<p>示例：<code>where python</code></p>
+<ol start="2">
+<li><strong>whereis</strong></li>
+</ol>
+<p><code>whereis</code>命令类似于<code>where</code>，但它只搜索二进制文件和帮助文档的系统文件，并忽略所有其他类型的文件。因此，可以用<code>whereis</code>命令用于在系统中查找指定的文件或目录所在的位置。</p>
+<p>语法：<code>whereis filename</code></p>
+<p>示例：<code>whereis python</code></p>
+<ol start="3">
+<li><strong>which</strong></li>
+</ol>
+<p><code>which</code>命令通常用于在PATH环境变量定义的所有目录中查找指定命令的位置，返回第一个与之匹配的结果。因此，可以用<code>which</code>命令来确定当前默认使用哪个命令。</p>
+<p>语法：<code>which filename</code></p>
+<p>示例：<code>which python</code></p>
+<p>其他常用的搜索命令包括以下几个：</p>
+<ul>
+<li><p><strong>find</strong>：可以查找指定目录或文件下的文件或目录。可使用通配符、正则表达式等进行高级搜索。</p>
+</li>
+<li><p><strong>grep</strong>：可查找指定目录或文件中包含某个字符串的行。它也支持各种高级选项，如模式匹配、正则表达式等。</p>
+</li>
+<li><p><strong>locate</strong>: 它比find命令更快，而且更强大，它不是真正的搜索，它使用一个数据库来定位文件，并且现代的操作系统会自动更新该数据库。</p>
+</li>
+<li><p><strong>file</strong>: 可以识别文件类型。给定一个文件，它可以确定该文件是否是二进制文件、文本文件或其他类型的文件。</p>
+</li>
+</ul>
+<p>这些命令可以根据不同的需求和场景来使用，可以通过<code>man</code>命令来查看这些命令的详细使用说明。</p>
+<h2 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h2><p>在 Linux 系统中，可以以下命令来删除文件和文件夹，以及递归地删除所有文件和文件夹：</p>
+<ol>
+<li><p>删除文件</p>
+<p>可以使用&#96; 命令来删除文件，：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">rm</span> <span class="hljs-keyword">file</span>.txt<br></code></pre></td></tr></table></figure>
+
+<p>这个命令将删除当前目录下的 <code>file.txt</code> 文件。</p>
+</li>
+<li><p>删除空文件夹</p>
+<p>可以使用 <code>rmdir</code> 命令来删除一个或多个空文件夹，例如：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">rmdir folder<br></code></pre></td></tr></table></figure>
+
+<p>这个命令将删除当前目录下的名为 <code>folder</code> 的空文件夹。</p>
+</li>
+<li><p>删除文件夹及其内容</p>
+<p>可以使用 <code>rm -r</code> 命令来删除一个文件夹及其内容，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">rm</span> -r folder<br></code></pre></td></tr></table></figure>
+
+<p>这个递归地删除当前目录下的名为 <code>folder</code> 的文件夹及其所有内容。</p>
+</li>
+<li><p>删除文件夹和文件夹中的指定文件</p>
+<p>可以使用 <code>find</code> 命令和 <code>rm</code> 命令配合使用来删除文件夹和其中特定扩展名的文件，例如：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">find . -<span class="hljs-type">name</span> &quot;*.txt&quot; -<span class="hljs-keyword">type</span> f -<span class="hljs-keyword">delete</span><br></code></pre></td></tr></table></figure>
+
+<p>这个命令将在从当前文件夹开始的目录结构中查找所有扩展名为 <code>.txt</code> 的文件，然后将其全部删除。</p>
+</li>
+<li><p>递归删除所有</p>
+</li>
+</ol>
+<p> 可使用 <code>rm -r</code> 命令和 <code>*</code> 通配符配合使用来递归地删除当前目录下的所有文件夹和文件例如：</p>
+   <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">   -</span> *<br>   这命令将递归地删除当前目录下的所有文件和文件夹。使用此命令时需要十分小心，以免误删重要文件。<br><br>总之，以上是几个在 Linux 系统中删除文件和文件夹的命令，每个命令都适用于不同场景。需要根据具体的情况选择并小心使用适当的命令。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="SSH远程连接"><a href="#SSH远程连接" class="headerlink" title="SSH远程连接"></a>SSH远程连接</h2><p>使用 SSH 远程连接到服务器需要使用 <code>ssh</code> 命令，具体命令语法如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">ssh <span class="hljs-selector-attr">[user@]</span>hostname <span class="hljs-selector-attr">[command]</span><br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>user</code> 是登录服务器使用的用户名，如果不指定，默认使用当前本地用户的用户名；<code>hostname</code> 是远程服务器的 IP 地址或主机名；<code>command</code> 是要在远程服务器上执行的命令，如果不指定，则会以登录 Shell 的方式进入远程服务器。</p>
+<p>比如，要远程连接到名为 <code>example.com</code> 的服务器，登录用户名为 <code>user1</code>，可以使用以下命令：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">ssh</span> user1<span class="hljs-variable">@example</span>.com<br></code></pre></td></tr></table></figure>
+
+<p>执行该命令后，如果连接成功，就会要求输入登录用户的密码。如果第一次登录该服务器，还需要确认服务器的指纹信息。在输入密码后，就能成功登录到远程服务器了。</p>
+<p>除了基本的远程登录功能，SSH 还提供了一些其他的高级功能，例如远程端口转发、用户认证、数据加密等。如果需要使用这些功能，可以使用 SSH 的其他选项和配置文件进行配置和使用。</p>
+<h2 id="tree-–-查看文件结构"><a href="#tree-–-查看文件结构" class="headerlink" title="tree – 查看文件结构"></a>tree – 查看文件结构</h2><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>tree 命令是一个用于列出目录树的小工具，它可以将指定目录下的所有文件夹和文件都列出来，并以树形结构展示在终端中，方便用户查看目录结构。tree 命令常用于系统管理员或应用程序开发人员等场景中。</p>
+<p>tree 命令的语法如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">tree <span class="hljs-selector-attr">[选项]</span> <span class="hljs-selector-attr">[目录路径]</span><br></code></pre></td></tr></table></figure>
+
+<p>常用选项：</p>
+<ul>
+<li>-a：显示所有文件和目录（包括隐藏文件）。</li>
+<li>-d：仅显示目录，忽略文件。</li>
+<li>-L：表示只显示多少层目录结构。例如，-L 2 表示只显示两层目录结构。</li>
+<li>-f：在每个文件和目录之前显示完整路径信息。</li>
+<li>-o：把结果输出到一个文件当中。</li>
+</ul>
+<p>例如，如果要列出当前目录下所有文件和文件夹，可以在终端中执行以下命令：</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">tree</span><br></code></pre></td></tr></table></figure>
+
+<p>如果要指定某个目录路径，可以在命令后指定目录路径：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">tree <span class="hljs-regexp">/path/</span>to/directory<br></code></pre></td></tr></table></figure>
+
+<p>如果需要将结果导出到一个文件中，可以使用 -o 选项，例如：</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">tree</span> -o output.txt<br></code></pre></td></tr></table></figure>
+
+<p>这将把目录结构写入 output.txt 文件中。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p><strong>mac:</strong><br>在 macOS 上，你可以使用 Homebrew 包管理器来安装 tree 命令。下面是安装步骤：</p>
+<ol>
+<li><p>打开终端应用程序。你可以在应用程序文件夹下找到它，或者使用 Spotlight 搜索。</p>
+</li>
+<li><p>在终端中输入以下命令来安装 Homebrew：</p>
+</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/bin/</span>bash -c <span class="hljs-string">&quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装完 Homebrew 后，在终端中输入以下命令来安装 tree：</li>
+</ol>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">brew </span><span class="hljs-keyword">install </span>tree<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>安装完成后，在终端中输入以下命令来测试 tree 命令是否安装成功：</li>
+</ol>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">tree <span class="hljs-comment">--version</span><br></code></pre></td></tr></table></figure>
+
+<p>如果 tree 命令已经成功安装，你应该能够看到 tree 命令的版本信息。</p>
+<p>注意：如果你不愿意使用 Homebrew，你还可以使用 MacPorts 或 Fink 等包管理器来安装 tree 命令。这些包管理器可以从它们的官方网站上获取。</p>
+<p><strong>win &#x2F; linux :</strong><br> Windows 上，可以通过以下两种方式安装 tree 命令：</p>
+<ol>
+<li><p>安装 Git for Windows：Git for Windows 是一个运行在 Windows 平台上的 Git 工具集，其中包括了常用的命令行工具，如 tree、ls、grep 等等。安装 Git for Windows 后，你就可以使用 tree 命令了。</p>
+</li>
+<li><p>使用 Chocolatey 包管理器：Chocolatey 是一个 Windows 平台上的包管理器，可以方便地安装常见的命令行工具和程序。打开一个已安装 Chocolatey 的 PowerShell 窗口，然后输入以下命令以安装 tree：</p>
+</li>
+</ol>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">choco <span class="hljs-keyword">install</span> tree<br></code></pre></td></tr></table></figure>
+
+<p>在 Linux 上，大部分基于 Debian 或 Ubuntu 的 Linux 发行版都包含了 tree 命令。你可以直接在终端中输入以下命令进行安装：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> update<br>sudo apt-<span class="hljs-built_in">get</span> install tree<br></code></pre></td></tr></table></figure>
+
+<p>如果你使用的是 Fedora 或 Red Hat 系统，可以使用以下命令进行安装：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake">sudo yum update<br>sudo yum <span class="hljs-keyword">install</span> tree<br></code></pre></td></tr></table></figure>
+
+<p>在其他 Linux 发行版上，你可以通过相应的包管理器来安装 tree 命令。</p>
+<h2 id="sz-x2F-rz-远程-下载-x2F-上传-文件"><a href="#sz-x2F-rz-远程-下载-x2F-上传-文件" class="headerlink" title="sz&#x2F;rz 远程 下载&#x2F;上传 文件"></a>sz&#x2F;rz 远程 下载&#x2F;上传 文件</h2><p><code>sz</code>和<code>rz</code>是Linux和Unix系统中用于文件传输的工具。<code>sz</code>用于从本地主机向远程主机上传文件，<code>rz</code>用于从远程主机向本地主机下载文件。</p>
+<p>在使用<code>sz</code>和<code>rz</code>上传或下载文件之前，需要先在目标主机上安装并启用Zmodem协议。常见的安装方式包括在目标主机上安装<code>lrzsz</code>软件包，通过以下命令进行安装：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cmake">sudo apt-get <span class="hljs-keyword">install</span> lrzsz （Debian, Ubuntu）<br>sudo yum <span class="hljs-keyword">install</span> lrzsz （CentOS, Red Hat, Fedora）<br></code></pre></td></tr></table></figure>
+
+<p>一旦安装完成，就可以在终端中使用<code>sz</code>和<code>rz</code>命令进行文件传输。以下是使用<code>sz</code>和<code>rz</code>上传和下载文件的命令示例：</p>
+<ul>
+<li><p>上传本地文件到远程主机：在本地主机上，使用命令<code>sz &lt;file-name&gt;</code>选择要上传到远程主机的文件，然后在SSH连接的远程主机上输入<code>rz</code>命令，选择要下载文件的路径即可。</p>
+</li>
+<li><p>从远程主机下载文件到本地主机：在SSH连接的远程主机上，使用命令<code>sz &lt;file-name&gt;</code>选择要下载到本地主机的文件，然后在本地主机上输入<code>rz</code>命令，选择要保存文件的路径即可。</p>
+</li>
+</ul>
+<p>需要注意的是，这些命令都是通过串口终端连接到目标主机进行操作的，通常不适用于在图形界面下进行文件传输。如果在GUI环境下进行文件传输，可以考虑其他文件传输工具，如FileZilla等。</p>
+<h3 id="使用事例"><a href="#使用事例" class="headerlink" title="使用事例"></a>使用事例</h3><p>以下是一个使用<code>rz</code>和<code>sz</code>命令在Linux服务器上进行文件传输的示例：</p>
+<ol>
+<li>在远程Linux服务器上安装lrzsz软件包：</li>
+</ol>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install lrzsz<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>在本地电脑上安装支持zmodem协议的终端控制程序，如SecureCRT、PuTTY等。</p>
+</li>
+<li><p>开启终端控制程序，并SSH登录到远程Linux服务器。</p>
+</li>
+<li><p>在终端中使用<code>rz</code>命令，弹出文件选择对话框，选择待上传的本地文件。</p>
+</li>
+</ol>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">rz</span><br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>在终端中使用<code>sz</code>命令，弹出保存对话框，选择待下载的远程文件。</li>
+</ol>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs delphi">sz &lt;<span class="hljs-keyword">file</span>-<span class="hljs-keyword">name</span>&gt;<br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是，在使用<code>rz</code>和<code>sz</code>命令时，需要先在目标主机上启用zmodem协议并安装lrzsz软件包，否则这些命令可能无法正常工作。</p>
+<h3 id="配置tar进行-文件夹下载"><a href="#配置tar进行-文件夹下载" class="headerlink" title="配置tar进行 文件夹下载"></a>配置tar进行 文件夹下载</h3><p>在Linux系统中，<code>sz</code>和<code>rz</code>命令一般是用于从远程主机下载或上传单个文件，不支持直接下载整个文件夹。但您可以借助<code>tar</code>命令将整个文件夹打包为tar压缩文件，然后再使用<code>sz</code>命令将打包的文件传输到本地主机。</p>
+<p>以下是将整个文件夹打包，并使用<code>sz</code>命令将其传输到本地主机的步骤：</p>
+<ol>
+<li>进入待传输的文件夹所在的目录，使用<code>tar</code>命令对整个文件夹进行打包，例如：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar -czf folder.tar.gz folder/<br></code></pre></td></tr></table></figure>
+
+<p>其中，需要传输的文件夹名为<code>folder</code>，而<code>folder.tar.gz</code>则是将该文件夹打包后的压缩文件名。</p>
+<ol start="2">
+<li>在终端中输入以下命令，使用<code>sz</code>命令将压缩文件传输到本地主机，例如：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sz folder.tar.gz<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>在弹出的保存文件对话框中，选择要保存压缩文件的路径并开始下载。</p>
+</li>
+<li><p>下载完成后，在本地主机上解压打包文件，例如：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar -xzvf folder.tar.gz<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>-x</code>表示解压，<code>-z</code>表示使用gzip方式解压缩，<code>-v</code>表示在终端上打印解压过程的详细信息，<code>-f</code>表示指定需要解压缩的文件名。解压完成之后，您就可以在本地主机上使用解压后的文件夹了。</p>
+<p>需要注意的是，<code>tar</code>命令和<code>sz</code>命令均是在Linux系统中常用的命令，您需要安装相应的Linux发行版并配置好相应的环境才能使用它们。另外，如果待传输的文件夹较大，需要较长时间才能完成压缩和传输。在传输过程中，建议您保持稳定的网络连接以确保文件的完整性。</p>
+<p>如果您需要对文件夹进行跨平台的传输（例如，从Linux系统向Windows系统传输），可以考虑使用其他文件传输工具，如FileZilla、WinSCP等。这些工具可以支持跨平台传输，并能够在传输过程中自动进行文件夹的压缩和解压缩。</p>
+<h1 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h1><p>如何查看镜像&#x2F;容器的 <code>文件结构</code> 信息</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle">docker <span class="hljs-keyword">inspect</span><br>docker <span class="hljs-keyword">inspect</span> 镜像id<br>docker <span class="hljs-keyword">inspect</span> 容器name<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="关于dockerfile"><a href="#关于dockerfile" class="headerlink" title="关于dockerfile"></a>关于dockerfile</h2><p>如何获取 <code>dockerfile信息(镜像image构成信息)</code> 以及 <code>镜像文件结构形成原理</code></p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gcode">docker histroy mysql  <span class="hljs-comment">(镜像名)</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>要查看镜像是如何通过 Dockerfile 构建的，可以使用 <code>docker history</code> 命令。这个命令会输出关于镜像历史的一些信息，包括每个构建步骤的命令、该步骤负责的文件、创建的中间层等。</p>
+<p>例如，要查看 MySQL 镜像的 Dockerfile 信息，可以运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">history</span> mysql<br></code></pre></td></tr></table></figure>
+
+<p>这个命令将会列出 MySQL 镜像的构建历史。输出可能会比较长，具体可能取决于镜像构建所涉及的构建步骤和文件。</p>
+<p>如果想自己通过 Dockerfile 构建一个镜像，请按照以下步骤进行：</p>
+<ol>
+<li><p>创建一个 Dockerfile 文件，指定该文件的文件结构和镜像的构建需求。以 MySQL 镜像为例，一个简单的 Dockerfile 文件可能如下所示：∂</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> mysql:latest<br><span class="hljs-keyword">LABEL</span><span class="language-bash"> maintainer=<span class="hljs-string">&quot;Your Name &lt;@example.com&gt;&quot;</span></span><br><span class="hljs-keyword">ENV</span> MYSQL_ROOT_PASSWORD=my-secret-pw<br><span class="hljs-keyword">ADD</span><span class="language-bash"> ./mysql.conf /etc/mysql/conf.d/</span><br></code></pre></td></tr></table></figure>
+
+<p>在上面的 Dockerfile 中，我们从最新的 MySQL 镜像开始构建、指定了维护者信息以及设置了MYSQL_ROOT_PASSWORD<code>环境变量。在文件添加中，将将本地</code>mysql.conf<code>文件添加到 MySQL 镜像中的</code>&#x2F;etc&#x2F;mysql&#x2F;conf.d&#x2F;&#96; 目录中。</p>
+</li>
+<li><p>在 Dockerfile 所在的目录中，运行以下命令构建镜像：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">docker build -t <span class="hljs-keyword">my</span>-mysql-image .<br></code></pre></td></tr></table></figure>
+
+<p>在此命令中，<code>-t</code> 用于指定镜像的名称和标签，<code>.</code> 表示当前目录是 Dockerfile 所在的目录，也是构建上下文的根目录。</p>
+</li>
+<li><p>构建完成后，使用以下命令列出构建的镜像：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker images</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>上面的步骤是一个简单的构建 MySQL 镜像的示例。如果你更详细地了解如何编写 Dockerfile 文件，可以在其中包括更复杂的构建步骤，例如配置环境变量、复制文件、安装软件包等。同时我们也可以借助官方文档以及 Docker Hub 官网中关于镜像的信息，来了解其构建方式和实现原理。</p>
+<h2 id="来自docker文件结构的迷茫"><a href="#来自docker文件结构的迷茫" class="headerlink" title="来自docker文件结构的迷茫"></a>来自docker文件结构的迷茫</h2><p>docker容器文件路径，镜像文件路径，以及docker文件路径的关系是什么，请基于docker、image、container三者的关系进行分析，以及文件结构进行分析</p>
+<p><code>docker文件系统与宿主机文件系统的关系，docker文件系统与容器文件系统的关系</code></p>
+<p>Docker 的文件系统是通过将宿主机文件系统与容器文件系统进行联合挂载（Union Mount）的方式实现的。</p>
+<p>宿主机文件系统是指 Docker 宿主机上的实际文件系统，即宿主机的硬盘或者云存储等。当 Docker 容器启动时，Docker 引擎会在宿主机文件系统中寻找指定的镜像文件。如果找到指定的镜像文件，则 Docker 引擎会将<code>镜像文件加载到宿主机的内存中，并将其作为容器的文件系统</code>。这个容器文件系统是一个独立的、可写的文件系统，所有的修改都以容器为单位保存，它不会影响宿主机文件系统或其他容器的文件系统。</p>
+<p>Docker 利用 Dockerfile 描述容器的运行环境，包括所需软件组件、配置文件等信息。执行 Dockerfile 时，Docker 引擎会根据 Dockerfile 中的指令创建一个新的镜像。这个<code>镜像包含了所有需要的文件和配置项，它被视为一个独立的文件系统</code>。当通过镜像启动一个容器时，Docker 引擎会将<code>容器文件系统联合挂载到这个镜像的文件系统之</code>上。这种联合挂载的方式实现了对容器文件系统的修改，并且确保这些修改不会影响其他容器或宿主机文件系统。</p>
+<p>总的来说，容器文件系统是基于 Docker 镜像文件系统构建的，它自成一体，与宿主机文件系统相独立，但是又与宿主机文件系统通过联合挂载实现了交互。这种机制让 Docker 成为了一个比虚拟机更为轻量级和高效的容器化解决方案。</p>
+<p>请举出具体实例进行具体说明，包括镜像文件系统的结构组成，容器文件系统的结构组成 ::</p>
+<h2 id="docker-文件三层结构"><a href="#docker-文件三层结构" class="headerlink" title="docker 文件三层结构"></a>docker 文件三层结构</h2><p>以 Nginx 镜像为例，对于该镜像来说，它的文件系统结构主要由以下部分组成：</p>
+<ol>
+<li><p>基础镜像文件系统结构：Nginx 镜像基于官方的 Debian 操作系统镜像制作而成，因此其<code>文件系统结构主要由 Debian 操作系统镜像中的文件系统结构组成</code>。</p>
+</li>
+<li><p>Nginx 镜像的定制部分：Nginx 镜像还包含了一些特定于 Nginx 服务器的文件，如 nginx.conf 配置文件、启动脚本等等。</p>
+</li>
+<li><p>可选的应用程序：Nginx 镜像可以通过 <code>apt-get</code> 等命令安装一些可选的应用程序，例如 SSL 证书、PHP 解释器等。</p>
+</li>
+</ol>
+<p>由于 Docker 容器每次启动时都会创建一个新的容器文件系统，因此容器文件系统结构是动态的。以 Nginx 容器为例，它的文件系统结构主要包括以下部分：</p>
+<ol>
+<li><p><code>可写层</code>（Writeable Layer）：这是容器文件系统最重要的一部分，它是容器特定的一层，所以在容器启动时需要向其提供该层的存储位置。 容器运行的应用程序、配置文件等都保存在可写层中，对可写层的任何修改都不会影响到其他任何容器或镜像，也不会影响宿主机文件系统。</p>
+</li>
+<li><p><code>镜像层</code>（Image Layer）：容器在启动时会将指定的镜像加载到内存中，并挂载到可写层之上。因此，容器文件系统中的镜像层实际上是指在运行时被挂载到可写层之上的镜像文件系统。容器可以同时挂载多个镜像文件系统层，也可以重复挂载一个文件系统层。</p>
+</li>
+<li><p><code>只读层</code>（Read-only Layer）：每个镜像文件系统层都是一个只读的文件系统层，它包含了该层定义的文件和目录。只读层不允许修改，而只能被访问。由于镜像文件系统层是不可修改的，因此对于一个容器来说，只读层基本上都是不变的。</p>
+</li>
+</ol>
+<p>综上所述，镜像文件系统结构主要由镜像所基于的操作系统镜像、定制文件和软件等组成；容器文件系统结构则是动态的，主要由可写层、镜像层和只读层组成。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>Docker 容器是一种轻量级的虚拟化技术，它利用 Linux 命名空间和控制组技术将宿主机的系统资源隔离为一个单独的进程空间，从而提供一种可移植、可重复使用的应用打包和发布机制。容器的三层结构主要包括：</p>
+<ol>
+<li>可写层（Writeable Layer）：容器中最顶部的一层，也是容器最重要的一部分，它允许在容器内对文件系统进行读写操作。这一层在每次启动容器时都会被创建，并且容器中的所有文件操作都会在该层上执行。容器应用程序运行时所需要的所有文件、数据和配置等都保存在该层中。该层主要位于容器内存储区域，对于具体路径可能因为容器运行而异。</li>
+</ol>
+<p>下面是一个具体 CentOS 容器的可写层文件目录：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/docker/</span>overlay2<span class="hljs-regexp">/8692ef2b0f4e9280377d9fb89d7ba9f17c87e4ccf50a8e62dd5a8f53176fef0d/</span>diff<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>镜像层（Image Layer）：该层是用于构建容器文件系统的静态文件层，它由多个只读层组成，每个只读层都是一个 Docker 镜像。这些只读层构成了容器所有文件系统内容的事实参照，它们通常是从 Docker Hub 或私有仓库中获取的。这些只读层不能修改，因为它们用于确定容器的结构和内容。该层通常位于宿主机文件系统的镜像仓库中，其中包含了容器相关的镜像和元数据。如下面是一个 CentOS 容器的镜像层文件目录：</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/docker/im</span>age<span class="hljs-regexp">/overlay2/</span>&lt;SHA256_HASH&gt;/diff<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>只读层（Read-only Layer）：只读层是由 Docker 引擎在宿主机中预先创建的一层只读文件系统，包含了基础操作系统的文件和目录结构，例如 CentOS、Ubuntu 等操作系统。每当运行一个新的容器时，只读层会通过联合挂载的方式与其他的镜像层一起构成完整的容器文件系统。只读层通常位于宿主机文件系统的镜像仓库中，不允许修改。如下面是一个 CentOS 容器的只读层文件目录：</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/docker/</span>overlay2<span class="hljs-regexp">/l/</span>HA256_HASH/merged<br></code></pre></td></tr></table></figure>
+
+<p>在实际应用中，以上三个层构成了容器文件系统的完整结构，容器文件系统结合起来以提供一个干净、封闭的应用程序环境。其中每个读写层是轻量的，只有在需要时才会被创建，这可以显著降低每个容器的存储需求，并保证容器启动和停止非常快速。加上 Docker 的镜像和容器部署机制，使 Docker 成为容器化解决方案的一个先锋。</p>
+<h2 id="Linux下docker路径"><a href="#Linux下docker路径" class="headerlink" title="Linux下docker路径"></a>Linux下docker路径</h2><p><code>docker文件系统中的/var/lib/docker/overlay2路径下保存到是哪些文件，请具体说明</code></p>
+<p>在 Docker 文件系统中，<code>/var/lib/docker/overlay2</code> 目录是 Docker 容器的可写层和镜像层的默认路径，它主要包含以下文件：</p>
+<ol>
+<li><p>diff&#x2F;：该目录包含了容器的可写层，也就是所有容器操作时新增的文件和修改的文件，例如容器中运行的应用程序和配置文件等。当容器启动时，Docker 引擎会将可写层挂载在只读层的顶部，因此该目录会作为容器根目录被挂载。可以通过该目录来查看容器中具体的文件和目录结构。</p>
+</li>
+<li><p>lowerdir&#x2F; 和 upperdir&#x2F;：这两个目录是镜像层的存储路径。<code>lowerdir/</code> 目录中保存的是底层镜像层，它通常是容器所基于的操作系统镜像；而 <code>upperdir/</code> 目录中保存的是顶层镜像层，它包含了容器在运行时新增和修改的所有文件。在容器启动时，Docker 引擎会将镜像层挂载在可写层的顶部，从而构成一个完整的文件系统。</p>
+</li>
+<li><p>work&#x2F;：该目录主要用于 OverlayFS 储存驱动程序的工作区域，用于合并镜像层和可写层。它与 <code>lowerdir/</code> 和 <code>upperdir/</code> 目录一样是 OverlayFS 的一部分。</p>
+</li>
+</ol>
+<p>总的来说，<code>/var/lib/docker/2/</code> 目录是 Docker 容器的默认存储路径，其中 <code>diff/</code> 目录存储的是容器中产生的所有修改、新增的文件，<code>lowerdir/</code> 和 <code>upperdir/</code> 目录存储的则是容器的镜像层，<code>work/</code> 目录是 OverlayFS 的工作区域。这些目录反映了 Docker 容器文件系统的挂载机制，通过这种 OverlayFS 文件系统层次结构的设计，Docker 能够实现轻量级的文件系统，从而提供高效的容器化应用环境。</p>
+<h2 id="查看docker镜像文件结构"><a href="#查看docker镜像文件结构" class="headerlink" title="查看docker镜像文件结构"></a>查看docker镜像文件结构</h2><p>要查看官方制作的 Docker 镜像的文件结构，可以使用 Docker CLI 提供的命令 docker export。此命令允许用户将 Docker 镜像打包为一个 tar 文件，并将其导出到主机文件系统上。您可以解压该 tar 文件，然后查看其中的内容。下面是具体的步骤：</p>
+<ol>
+<li><p>找到要下载的官方制作的 Docker 镜像的名称。可以在 Docker Hub 上搜索镜像，例如 nginx、mysql、redis。</p>
+</li>
+<li><p>在终端中使用以下命令下载并保存 Docker 镜像为一个 tar 文件：</p>
+</li>
+</ol>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">docker save image:<span class="hljs-keyword">tag</span> <span class="hljs-title">&gt; image</span>.tar<br></code></pre></td></tr></table></figure>
+
+<p>将 image:tag 替换为您要下载的 Docker 镜像的名称和标签，例如 nginx:alpine。</p>
+<ol start="3">
+<li>解压 tar 文件，使用如下命令：</li>
+</ol>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">tar -tvf image.tar<br></code></pre></td></tr></table></figure>
+
+<p>此命令会列出 Docker 镜像中的所有内容。您可以使用以下命令将 Docker 镜像导出到一个目录中：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkdir <span class="hljs-regexp">/path/</span>to/export<br>docker run --rm -v <span class="hljs-regexp">/path/</span>to<span class="hljs-regexp">/export:/</span>temp image:tag tar -cC <span class="hljs-regexp">/ -f - . | tar -xC /</span>path<span class="hljs-regexp">/to/</span>export<br></code></pre></td></tr></table></figure>
+
+<p>将 image:tag 替换为您要导出的 Docker 镜像的名称和标签，例如 nginx:alpine。这将导出 Docker 镜像至指定路径的 &#x2F;path&#x2F;to&#x2F;export 目录中。</p>
+<ol start="4">
+<li>浏览导出的目录以查看 Docker 镜像中的文件和目录。</li>
+</ol>
+<p>这样就可以轻松地查看 Docker 镜像中的文件结构。需要注意的是，Docker 镜像的结构可能因其操作系统的类型和版本而异。</p>
+<p>Docker 镜像的文件结构包含多个部分，例如在以 nginx:alpine 镜像为例，其文件结构示例如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">2</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> bin<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">5</span> root     root           <span class="hljs-number">360</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> dev<br><span class="hljs-attribute">drwxr</span>-xr-x   <span class="hljs-number">27</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> etc<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">2</span> nobody   nobody        <span class="hljs-number">4096</span> Feb  <span class="hljs-number">1</span> <span class="hljs-number">19</span>:<span class="hljs-number">02</span> home<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">8</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> lib<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">5</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">06</span> media<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">2</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">06</span> mnt<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">4</span> root     root          <span class="hljs-number">4096</span> Apr13 <span class="hljs-number">22</span>:<span class="hljs-number">54</span> opt<br><span class="hljs-attribute">dr</span>-xr-xr-x  <span class="hljs-number">283</span> root     root             <span class="hljs-number">0</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> proc<br><span class="hljs-attribute">drwx</span>------   <span class="hljs-number">2</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> root<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">3</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> run<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">2</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> sbin<br><span class="hljs-attribute">drwxr</span>-xr-x    <span class="hljs-number">4</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">06</span> srv<br><span class="hljs-attribute">dr</span>-xr-xr-x   <span class="hljs-number">12</span> root     root             <span class="hljs-number">0</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> sys<br><span class="hljs-attribute">drwxrwxrwt</span>    <span class="hljs-number">2</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">54</span> tmp<br><span class="hljs-attribute">drwxr</span>-xr-x   <span class="hljs-number">14</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">06</span> usr<br><span class="hljs-attribute">drwxr</span>-xr-x   <span class="hljs-number">19</span> root     root          <span class="hljs-number">4096</span> Apr <span class="hljs-number">13</span> <span class="hljs-number">22</span>:<span class="hljs-number">06</span> var<br></code></pre></td></tr></table></figure>
+
+<p>其中，bin、dev、etc、home、lib、media、mnt、opt、root、run、sbin、srv、usr、var 是 Linux 系统中常用的目录，用于存放各种文件和目录，其具体含义可以在 Linux 系统的文档中进行了解。注意到 alpine 是一个轻量级的 Docker 镜像，因此与传统的Linux发行版相比，其文件结构更为简洁。</p>
+<p>需要注意的是，Docker 镜像的文件结构可能因其基础镜像和应用程序类型而异。用户可以通过下载、解压、查看命令获取特定 Docker 镜像的文件结构信息。	</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>Docker 官方对于每个镜像都有对应的文档，其中包括了该镜像的文件结构信息，以及如何挂载数据卷。用户只需在 Docker Hub 上找到所需的官方镜像，即可查看其对应的文档。以下是以官方 Nginx 镜像为例的文件结构和数据卷挂载的介绍：</p>
+<ol>
+<li>文件结构：</li>
+</ol>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs stylus">/<br>├── bin<br>│   ├── sh<br>│   └── sleep<br>├── dev<br>├── etc<br>│   ├── nginx<br>│   │   ├── conf<span class="hljs-selector-class">.d</span><br>│   │   │   └── default<span class="hljs-selector-class">.conf</span><br>│   │   ├── fastcgi_params<br>│   │   ├── koi-utf<br>│   │   ├── koi-win<br>│   │   ├── mime<span class="hljs-selector-class">.types</span><br>│   │   ├── nginx<span class="hljs-selector-class">.conf</span><br>│   │   ├── scgi_params<br>│   │   ├── uwsgi_params<br>│   │   └── win-utf<br>│   ├── ssl<br>│   │   ├── cert<span class="hljs-selector-class">.pem</span><br>│   │   └── key<span class="hljs-selector-class">.pem</span><br>│   └── passwd<br>├── usr<br>│   └── share<br>│       ├── nginx<br>│       │   ├── <span class="hljs-number">50</span>x<span class="hljs-selector-class">.html</span><br>│       │   └── index<span class="hljs-selector-class">.html</span><br>│       └── zoneinfo<br>└── <span class="hljs-selector-tag">var</span><br>    └── cache<br>        └── nginx<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>挂载数据卷：</li>
+</ol>
+<p>Nginx 官方镜像提供了 &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;* 目录来挂载自定义的 Nginx 配置文件。用户可以使用 -v 参数挂载主机的文件或目录到此处，例如：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">docker run -v <span class="hljs-regexp">/path/</span>to<span class="hljs-regexp">/custom.conf:/</span>etc<span class="hljs-regexp">/nginx/</span>conf.d/custom.conf -p <span class="hljs-number">80</span>:<span class="hljs-number">80</span> nginx<br></code></pre></td></tr></table></figure>
+
+<p>此命令将 &#x2F;path&#x2F;to&#x2F;custom.conf 主机上的 Nginx 配置文件挂载到容器内的 &#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;custom.conf 中，而容器的 80 端口将映射到主机上的 80 端口。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-chain-item">工具</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%AE%B9%E5%99%A8/">#容器</a>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
+      
+        <a href="/tags/Linux/">#Linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux-docker使用</div>
+      <div>http://example.com/2023/06/01/工具/Linux-docker场景/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%B7%A5%E5%85%B7/JVM%E8%B0%83%E4%BC%98/" title="JVM调优">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JVM调优</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%B7%A5%E5%85%B7/git/" title="git">
+                        <span class="hidden-mobile">git</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

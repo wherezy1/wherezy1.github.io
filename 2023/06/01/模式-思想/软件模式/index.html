@@ -1,0 +1,771 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="软件模式概述简介软件模式并非仅限于设计模式，还包括许多其他类型的软件模式，其中包括以下三种常见类型：  架构模式（Architectural Patterns）：架构模式是用于设计系统架构的技术模式。它们是在特定应用场景中识别出的常见架构模式，可用于解决一系列相关的问题。例如，MVC（Model-View-Controller）是一种常见的架构模式，用于在 Web 应用程序中隔离表示层、控制层和数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件模式">
+<meta property="og:url" content="http://example.com/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E8%BD%AF%E4%BB%B6%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="软件模式概述简介软件模式并非仅限于设计模式，还包括许多其他类型的软件模式，其中包括以下三种常见类型：  架构模式（Architectural Patterns）：架构模式是用于设计系统架构的技术模式。它们是在特定应用场景中识别出的常见架构模式，可用于解决一系列相关的问题。例如，MVC（Model-View-Controller）是一种常见的架构模式，用于在 Web 应用程序中隔离表示层、控制层和数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/a3/0e/a3c2c7fc60377f9a26fbb02f5f82b90e.jpg">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.853Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="模式">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/a3/0e/a3c2c7fc60377f9a26fbb02f5f82b90e.jpg">
+  
+  
+  
+  <title>软件模式 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="软件模式"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">软件模式</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="软件模式"><a href="#软件模式" class="headerlink" title="软件模式"></a>软件模式</h1><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>软件模式并非仅限于设计模式，还包括许多其他类型的软件模式，其中包括以下三种常见类型：</p>
+<ol>
+<li><p>架构模式（Architectural Patterns）：架构模式是用于设计系统架构的技术模式。它们是在特定应用场景中识别出的常见架构模式，可用于解决一系列相关的问题。例如，MVC（Model-View-Controller）是一种常见的架构模式，用于在 Web 应用程序中隔离表示层、控制层和数据层。</p>
+</li>
+<li><p>分析模式（Analysis Patterns）：分析模式是一种用于识别和描述业务问题的模式。它们是一些常见的业务模型，用于分析问题域中的概念、关系和业务规则。例如，订单、客户和产品等常见的业务模型就是分析模式。</p>
+</li>
+<li><p>过程模式（Process Patterns）：过程模式用于描述和设计处理流程或流程的程序或系统。例如，汇编线路、报告生产和流程控制等都是常见的过程模式，在类似生产、物流等领域中广泛应用。</p>
+</li>
+</ol>
+<p>这些不同类型的模式都可以用来指导软件的设计和开发，提高软件开发效率和质量，确保系统的可重用性和可扩展性。这些模式不仅限于面向对象的软件开发模式，也适用于其他形式和范式的软件开发和设计。</p>
+<h2 id="学习导航"><a href="#学习导航" class="headerlink" title="学习导航"></a>学习导航</h2><ol>
+<li>架构模式 （Architectural Patterns）<br>架构模式通常用于设计和构建大型、复杂的软件系统。它们是在实践中解决大型系统特定问题的技术模式，通常包括以下内容：分层模式、微服务架构、事件驱动架构、客户端-服务器模式等。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《软件架构模式》（Software Architecture Patterns） </li>
+<li>《软件架构设计：模式与实践》（Software Architecture Design Patterns in Java）</li>
+</ul>
+<p>学习资料：</p>
+<ul>
+<li>《架构模式简介》（Introduction to Architectural Patterns）：作者为 Eric Freeman 和 Elisabeth Freeman，是一个快速入门指南。</li>
+<li>Architecture Patterns with Python，包含从多个角度考虑架构的示例，以及如何使用 Python 实现模式。</li>
+</ul>
+<p>网站：</p>
+<ul>
+<li>dev.to&#x2F;ramoscarlos&#x2F;5-architecture-patterns-for-scalable-network-apps-22md</li>
+<li>dzone.com&#x2F;articles&#x2F;top-10-software-architecture-patterns</li>
+<li><a target="_blank" rel="noopener" href="http://www.oreilly.com/library/view/software-architecture-patterns/9781491971437/">www.oreilly.com/library/view/software-architecture-patterns/9781491971437/</a></li>
+</ul>
+<ol start="2">
+<li>分析模式（Analysis Patterns）<br>分析模式用于描述业务问题中的通用或常见的建模和架构，可以使用它们来准确描述和解决业务问题。此外，分析模式还可以确保代码和设计可以准确地反映业务领域本身，而不是系统它本身。常见的分析模式包括：货运、客户、订单等。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《信息、业务以及模型》（Information, Business, and Cycle Models） </li>
+<li>《燃料分析 - 以孤独症和物联网为例的实践经验》（Fuel Analysis - Practical Experience with Autism and IoT）</li>
+</ul>
+<p>学习资料：</p>
+<ul>
+<li>《识别和适用模型集》（Identifying and Applying Model Sets）：这是一系列有关分析模式的在线课程，旨在让读者了解如何识别和应用这些模式的一般方法和技巧。</li>
+<li>《使用分析模式思考》（Thinking with Analysis Patterns）：该系列文章旨在向设计师介绍常见的分析模式并教授如何将它们应用于实际问题。</li>
+</ul>
+<p>网站：</p>
+<ul>
+<li>Martin Fowler 的网站 <a target="_blank" rel="noopener" href="http://www.martinfowler.com/articles/analysisPatterns.html">www.martinfowler.com/articles/analysisPatterns.html</a></li>
+<li>JavaEESupport.com 上的领域分析模式</li>
+</ul>
+<ol start="3">
+<li>过程模式（Process Patterns）<br>过程模式用于描述和设计处理流程或流程的程序系统。在生产、物流等领域广泛应用。常见的过程模式包括：报告准备、随机代码调用、流程控制以及事务处理等。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《过程模式：提高自动化生产线的质量和工作流程》（Process Patterns: Building Large-Scale Systems Using Coherent）</li>
+</ul>
+<p>学习资料：</p>
+<ul>
+<li><p>《过程模式 - 快速说明》（Process Patterns - Quick Intro）：该文章介绍了过程模式的基本原则和概念，以及如何应用过程模式来提高生产效率和流程控制。</p>
+</li>
+<li><p>《测试驱动的过程模式》（Test-Driven Process Patterns）：这是一组有关过程模式的博客文章，旨在向读者介绍如何使用测试驱动方法设计和实现过程模式。</p>
+</li>
+</ul>
+<p>网站：</p>
+<ul>
+<li>objc中国上的设计模式</li>
+<li><a target="_blank" rel="noopener" href="http://www.processpatterns.com/">www.processpatterns.com</a> </li>
+<li><a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/library/patterns.html">www.ibm.com/developerworks/library/patterns.html</a></li>
+</ul>
+<ol start="4">
+<li>设计模式 (Design Patterns)<br>设计模式是软件工程中常见的模式，可用于解决特定的貌似无法解决的软件设计问题，目的是提供通用的解决方案。常见的设计模式包括以下三种：创建模式、结构模式、行为模式。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《设计模式：可复用面向对象软件的基础》（Design Patterns: Elements of Reusable Object-Oriented Software）</li>
+<li>《Head First 设计模式》（Head First Design Patterns）</li>
+</ul>
+<p>学习资料：</p>
+<ul>
+<li>Refactoring.Guru (refactoring.guru&#x2F;design-patterns)：提供各种设计模式的详细介绍，以及可操作的编码示例和 UML 图表。</li>
+<li>《什么是设计模式》（What are Design Patterns）：作者为 Michael L. Perry，提供了简要说明，利用 12 个图表，介绍了每种设计模式的主要思想和UML图。</li>
+<li>《设计模式简介》（Introduction to Design Patterns）：从不同的角度全面介绍了不同的设计模式。</li>
+</ul>
+<p>网站：</p>
+<ul>
+<li>JavaTpoint 上的设计模式 <a target="_blank" rel="noopener" href="https://www.javatpoint.com/design-patterns-in-java">https://www.javatpoint.com/design-patterns-in-java</a> </li>
+<li>FreeCodeCamp的设计模式课程 <a target="_blank" rel="noopener" href="https://www.freecodecamp.org/news/design-patterns-for-coding-in-4-minutes/">https://www.freecodecamp.org/news/design-patterns-for-coding-in-4-minutes/</a></li>
+<li>Github 上的设计模式示例 <a target="_blank" rel="noopener" href="https://github.com/iluwatar/java-design-patterns">https://github.com/iluwatar/java-design-patterns</a></li>
+</ul>
+<p>总之，以上介绍的不同类型的模式在软件工程中都有重要的应用，可以帮助开发人员更好地理解和解决复杂的软件问题，提高软件设计和开发的效率和质量。</p>
+<h2 id="其他模式"><a href="#其他模式" class="headerlink" title="其他模式"></a>其他模式</h2><p>在软件开发领域，还有很多其他的相关模式，以下是一些主要的模式：</p>
+<ol>
+<li>领域驱动设计模式（Domain Driven Design Patterns）<br>领域驱动设计（DDD）是一套软件开发方法论，该方法论以解决业务领域的问题为中心，是面向对象设计的一个应用。DDD 通过工具和模式为软件开发提供指引，并帮助软件开发人员更好地理解问题的本质和业务逻辑。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《领域驱动设计：软件核心复杂性应对之道》（Domain-Driven Design: Tackling Complexity in the Heart of Software） </li>
+<li>《实现领域驱动设计》（Implementing Domain-Driven Design）</li>
+</ul>
+<ol start="2">
+<li>数据访问对象模式（Data Access Object Pattern）<br>数据访问对象模式是一个为了协调不同系统间的数据访问而设计的设计模式，它提供了一种标准化的方法来从源获取数据，这样就可以轻松地在不同的数据源之间进行交换了。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《使用 Java 数据访问对象模式》（Using the Java Data Access Object Pattern）</li>
+</ul>
+<ol start="3">
+<li>MVC 模式<br>MVC（Model-View-Controller）模式是一种经典的体系结构模式，将设计模式应用于 web 应用程序当中，配合前端框架，使之成为一种精美的交互体验。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《精通 Spring MVC 4》（Mastering Spring MVC 4）</li>
+</ul>
+<ol start="4">
+<li>测试驱动开发模式（Test-Driven Development Patterns）<br>测试驱动开发是一种敏捷软件开发方法，强调在编写代码之前编写测试用例。它是通过 TDD 模式来实现的，它通过测试来驱动设计和编写代码。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《测试驱动开发 By Example》（Test Driven Development: By Example）</li>
+</ul>
+<ol start="5">
+<li>事件驱动模<br>事件驱动模式是一种异步编程模式，基于事件-观察者的设计模式。它可以通过事件的发生和监听机制来实现应用程序之间的沟通和消息传递。</li>
+</ol>
+<p>相关书籍：</p>
+<ul>
+<li>《事件驱动：如何构建可靠的系统》（Event Driven: How to Build Reliable Systems）</li>
+</ul>
+<p>总之，以上是关于一些与软件开发相关的模式，它们可以提高软件开发的效率和质量，并为设计师和开发人员提供一些设计和开发可重用的通用解决方案。</p>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><p><a href="My%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8Freadme-%E9%BB%91.md">GOF设计模式</a></p>
+<h1 id="分布式系统设计模式"><a href="#分布式系统设计模式" class="headerlink" title="分布式系统设计模式"></a>分布式系统设计模式</h1><p><img src="https://static001.geekbang.org/resource/image/a3/0e/a3c2c7fc60377f9a26fbb02f5f82b90e.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h1 id="架构模式"><a href="#架构模式" class="headerlink" title="架构模式"></a>架构模式</h1><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/99-software-pattern">《99+种软件模式》 | Laravel China 社区 (learnku.com)</a></p>
+<h1 id="分析模式"><a href="#分析模式" class="headerlink" title="分析模式"></a>分析模式</h1><h1 id="过程模式"><a href="#过程模式" class="headerlink" title="过程模式"></a>过程模式</h1>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%A8%A1%E5%BC%8F/" class="category-chain-item">模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%A8%A1%E5%BC%8F/">#模式</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>软件模式</div>
+      <div>http://example.com/2023/06/01/模式-思想/软件模式/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" title="编程思想">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">编程思想</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

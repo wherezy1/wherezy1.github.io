@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Spring FrameworkJNDIJava 命名与目录接口（Java Naming and Directory Interface） JMXJava 管理扩展（Java Management Extensions，JMX） SPI SPI (Service Provider Interface) AOTAOT（ahead-of-time） 12345678910111213141516171">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Framework">
+<meta property="og:url" content="http://example.com/2023/06/01/Spring%E5%AE%B6%E6%97%8F/Spring%20framework/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Spring FrameworkJNDIJava 命名与目录接口（Java Naming and Directory Interface） JMXJava 管理扩展（Java Management Extensions，JMX） SPI SPI (Service Provider Interface) AOTAOT（ahead-of-time） 12345678910111213141516171">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.050Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Spring Framework - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Spring Framework"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          62 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Spring Framework</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Spring-Framework"><a href="#Spring-Framework" class="headerlink" title="Spring Framework"></a>Spring Framework</h1><h2 id="JNDI"><a href="#JNDI" class="headerlink" title="JNDI"></a>JNDI</h2><p>Java 命名与目录接口（Java Naming and Directory Interface）</p>
+<h2 id="JMX"><a href="#JMX" class="headerlink" title="JMX"></a>JMX</h2><p>Java 管理扩展（Java Management Extensions，JMX）</p>
+<h2 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h2><p> SPI (Service Provider Interface)</p>
+<h2 id="AOT"><a href="#AOT" class="headerlink" title="AOT"></a>AOT</h2><p>AOT（ahead-of-time）</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">AOT（Ahead-Of-Time Compilation）指的是提前编译技术，是一种将<span class="hljs-keyword">Java应用程序编译成机器代码的技术。传统上，Java应用程序都是在运行时通过JIT（Just-In-Time </span>Compilation）技术将<span class="hljs-keyword">Java字节码转换为机器代码的。但是，这种过程需要消耗大量的CPU和内存资源，会导致应用程序启动时间较长，同时也可能会出现JIT的性能问题。</span><br><span class="hljs-keyword"></span><br>为了解决这些问题，AOT技术被定义并广泛使用。使用AOT技术，可以将<span class="hljs-keyword">Java源代码或者字节码编译成机器代码，在应用程序运行之前就已经编译完成并保存在磁盘上，应用程序在运行时直接加载和执行已经编译好的机器代码，从而提高应用程序的性能和响应速度。</span><br><span class="hljs-keyword"></span><br>AOT技术通常有两种实现方式：<br><br><span class="hljs-number">1</span>. Native Image<br><br>Native Image是一种快速、小巧、可独立运行的二进制文件格式，它包含了一个应用程序的机器代码、依赖项和垃圾收集器等信息。Native Image是使用GraalVM（高效、低内存的<span class="hljs-keyword">Java虚拟机）中的Substrate </span>VM生成的，并已成为GraalVM的核心功能和优势之一。<br><br>使用Native Image，可以将<span class="hljs-keyword">Java应用程序编译成具有更快启动速度、更低内存使用和高执行性能的本机映像。此外，Native </span>Image还可以帮助应用程序更好地融入Docker等云原生部署环境中。<br><br><span class="hljs-number">2</span>. Excelsior <span class="hljs-keyword">JET</span><br><span class="hljs-keyword"></span><br>Excelsior <span class="hljs-keyword">JET是一款基于AOT技术的Java应用程序编译器。它可以将Java字节码编译成本机应用程序，以提高应用程序的性能和响应速度。Excelsior </span><span class="hljs-keyword">JET还可以使用预编译的Java类库来进一步提高性能和缩减文件大小。</span><br><span class="hljs-keyword"></span><br>使用Excelsior <span class="hljs-keyword">JET，可以将Java应用程序编译为本机可执行文件或者动态链接库，以便将应用程序部署到客户机器上。此外，Excelsior </span><span class="hljs-keyword">JET还提供了许多优化技术，例如自适应性预热、代码生成和内存管理等，以实现更好的性能和可靠性。</span><br><span class="hljs-keyword"></span><br>总的来说，AOT技术可以在应用程序启动之前将<span class="hljs-keyword">Java应用程序编译成机器代码，从而提高应用程序的性能、响应速度和可靠性。Native </span>Image和Excelsior <span class="hljs-keyword">JET是两种常用的AOT技术实现方式，它们都可以帮助开发人员更好地优化和部署Java应用程序。</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h2><p>JMS （Java Message Service）JMS是Java Message Service的缩写，是Java Enterprise Edition的消息传递的规范，提供了一种在多个应用程序之间发送消息的方法。JMS可以将消息发送到消息队列或者主题中，通过异步的方式让接收者获取消息。基于JMS规范，可以使用Spring提供的JMS模板来发送和接收消息。</p>
+<h2 id="JMH"><a href="#JMH" class="headerlink" title="JMH **"></a>JMH **</h2><p>JMH是Java微基准测试 (Java Microbenchmark Harness)</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/WeiPeng2K/article/details/119865998">(4条消息) 使用JMH做Java微基准测试_微基准测试 jmh 初始化数据_WeiPeng2K的博客-CSDN博客</a></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-number">1</span>. <span class="hljs-keyword">Benchmark </span>for <span class="hljs-keyword">bean </span>annotation processing with various annotations<br><br>这段语句的意思是要对不同的注解进行<span class="hljs-keyword">bean注解处理的性能进行基准测试。在Spring框架中，有很多注解可以用于标记Bean，例如@Component、@Service、@Repository等等，这些注解标记的Bean会被Spring容器扫描，并注册为Bean。这样做可以让开发人员更加方便地管理应用程序中的Bean。但是，不同的注解可能会产生不同的影响，例如注解的数量、注解的复杂度、注解的扫描范围等等，都可能会影响注解处理的性能。因此，基准测试可以帮助开发人员比较不同注解处理性能的差异，以便更好的选择注解。</span><br><span class="hljs-keyword"></span><br><span class="hljs-number">2</span>. Spring的<span class="hljs-built_in">context</span>模块中的<span class="hljs-keyword">jmh中的类注解是什么意思</span><br><span class="hljs-keyword"></span><br>在Spring的<span class="hljs-built_in">context</span>模块中，<span class="hljs-keyword">JMH是Java微基准测试的缩写。JMH的作用是用来做Java程序的性能分析和瓶颈分析。JMH的测试结果是与其他基准测试框架相比非常准确的。其中，类注解可能指的是JUnit中的@RunWith和@SuiteClasses注解，它们可以用于运行基准测试类或测试套件。</span><br><span class="hljs-keyword"></span><br><span class="hljs-number">3</span>. Spring Framework的<span class="hljs-keyword">JMH包是干嘛的</span><br><span class="hljs-keyword"></span><br>Spring Framework的<span class="hljs-keyword">JMH包是用于集成JMH和Spring框架的一种方式。它可以帮助开发人员更方便地编写和运行Java基准测试，并提供了一些与Spring框架结合使用的工具类和方法。使用Spring </span>Framework的<span class="hljs-keyword">JMH包，可以更方便地对Spring框架和相关应用程序的性能进行测试和分析。此外，Spring </span>Framework的<span class="hljs-keyword">JMH包还可以与其他基准测试框架一起使用，以更好地评估不同框架的性能差异，并优化应用程序的性能和性能瓶颈。</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Kotlin"><a href="#Kotlin" class="headerlink" title="Kotlin"></a>Kotlin</h2><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">Kotlin是<span class="hljs-keyword">JetBrains公司开发的基于JVM（Java </span>Virtual Machine）的一种静态类型编程语言，因其具有简洁、安全、易学易写等特点，在<span class="hljs-keyword">Java开发领域中获得了广泛的关注和应用。Kotlin提供了许多高级特性，例如扩展函数/属性、可空类型、集合操作符、lambda表达式等等，可以加快应用程序的开发速度，同时又可以确保代码的安全性和可读性。</span><br><span class="hljs-keyword"></span><br>在Spring Framework中，Kotlin作为一种新型的编程语言，已被广泛地应用。Kotlin和<span class="hljs-keyword">Java可以混合使用，因此开发人员可以在Spring </span>Framework中使用Kotlin来开发应用程序。Spring Framework集成了Kotlin，可以轻松使用Kotlin开发Spring应用程序。<br><br>Kotlin在Spring Framework中的作用主要有以下几个方面：<br><br><span class="hljs-number">1</span> 提高开发效率和代码质量<br><br>Kotlin提供了简洁、易读、易维护的编程语法，可以加快应用程序的开发速度，并且可以提高代码质量。因此，在Spring Framework中使用Kotlin可以更快地编写组件和代码，减少繁琐的代码。<br><br><span class="hljs-number">2</span>. 更好的与<span class="hljs-keyword">Java互操作性</span><br><span class="hljs-keyword"></span><br>Kotlin和<span class="hljs-keyword">Java可以无缝互操作，开发人员可以在Java项目中混用Kotlin代码，或者在Kotlin项目中混用Java代码。在Spring </span>Framework中，使用Kotlin可以在不改变Spring框架的核心代码的情况下创建基于Kotlin的Spring应用程序。<br><br><span class="hljs-number">3</span>. 支持函数式编程<br><br>Kotlin提供了函数类型、lambda表达式等高级特性，支持函数式编程的编写方式。这些特性可以提高代码的可读性和代码质量，提高应用程序的性能和可维护性。在Spring Framework中，使用Kotlin可以更好地进行函数式编程和并发编程。<br><br><span class="hljs-number">4</span>. 强大的类型和空安全性<br><br>Kotlin提供了强大的类型安全、空安全性和可空类型等特性，可以在编译期间检测类型错误和空指针异常等问题。在Spring Framework中，使用Kotlin可以更好地保证应用程序的安全性和稳定性。<br><br>总的来说，在Spring Framework中使用Kotlin可以提高开发效率、代码质量和安全性，并提供更好的与<span class="hljs-keyword">Java的互操作[DONE]</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs stylus">在Spring Framework中，META-INF目录下有许多重要的配置文件，这些文件定义了框架中的组件和扩展点。以下是这些配置文件的详细说明：<br><br><span class="hljs-number">1</span>. spring<span class="hljs-selector-class">.factories</span><br><br>spring.factories是Spring框架中一个非常重要的配置文件，其中包含了所有可扩展的应用程序上下文类（ApplicationContext）或BeanFactory后置处理器（BeanFactoryPostProcessor）的类名列表。在应用程序启动时，Spring框架会加载这个配置文件，并自动装配应用程序上下文或BeanFactory后置处理器。<br><br>spring.factories文件集中了Spring框架各个模块中的所有扩展点，应用程序可以通过增加或修改这个文件，自定义BeanFactory后置处理器或应用程序上下文类。这个文件在org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.core</span><span class="hljs-selector-class">.io</span>.support包中的SpringFactoriesLoader类中进行解析。<br><br><span class="hljs-number">2</span>. spring<span class="hljs-selector-class">.schemas</span><br><br>spring.schemas用于指定Spring XML文件的XML Schema文件（XSD）位置，Spring框架会自动加载指定的XSD文件，并用于检查XML配置文件的正确性和合法性。这个文件在org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.beans</span><span class="hljs-selector-class">.factory</span>.xml包中的PluggSchemaResolver类中进行解析。<br><br><span class="hljs-number">3</span>. spring<span class="hljs-selector-class">.handlers</span><br><br>spring.handlers用于指定Spring XML文件中元素的解析器，Spring框架会根据元素的名称，在spring.handlers文件中查找指定的解析器，并将XML元素转换为对应的Java对象。这个文件在org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.beans</span><span class="hljs-selector-class">.factory</span>.xml包中的NamespaceHandlerResolver类中进行解析。<br><br><span class="hljs-number">4</span>. spring<span class="hljs-selector-class">.tooling</span><br><br>spring.tooling用于Spring Tool Suite集成开发环境（IDE）中的Spring工具。这个文件指定了用于支持Spring工具的类和插件，以提供更好的开发体验和工具支持。这个文件在org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.ide</span><span class="hljs-selector-class">.eclipse</span>.metadata中被解析。<br><br><span class="hljs-number">5</span>. aot<span class="hljs-selector-class">.factories</span><br><br>aot.factories是基于AOT（Ahead-Of-Time）编译的Spring应用程序中的一个配置文件，其中包含了所有可扩展的应用程序上下文类或BeanFactory后置处理器的类名列表。这个文件在org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.aot</span>.context包中的AotPathOrderingContextDefinitionParser类中进行解析。<br><br><span class="hljs-number">6</span>. spring-devtools<span class="hljs-selector-class">.properties</span><br><br>spring-devtools.properties是Spring开发者工具的配置文件，它定义了开发者工具的各个属性和默认值。这个文件在org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.boot</span>.devtools包中的DevToolsProperties类中进行解析。<br><br>以上是Spring Framework中常用的META-INF配置文件的说明，这些文件在Spring Framework的各个模块中发挥了不同的作用，通过合理配置这些文件，可以生成高效、灵活和可扩展的应用程序。<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">除了上述配置文件之外，还有以下几个在Spring Framework中比较重要的配置文件：<br><br><span class="hljs-number">1</span>. web.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">web</span>.xml是一个标准的Java EE配置文件，用于配置Web应用程序。在Spring MVC应用程序中，web.xml中至少要定义DispatcherServlet的名称和映射路径，以便Servlet容器正确地将请求转发到Spring MVC框架中。<br><br><span class="hljs-number">2</span>. applicationContext.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">applicationContext</span>.xml是Spring应用程序上下文的配置文件。它通常被用于配置Bean、控制反转（IoC）、依赖注入（DI）、AOP等等。在这个文件中，可以定义Bean并指定它们的作用域、属性、方法等等。<br><br><span class="hljs-number">3</span>. log4j.properties/log4j.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">这是一个用于配置Apache</span> Log4j日志框架的文件。可以通过指定日志记录器，选择输出目标，控制志级别等等。在Spring应用程序中，可以使用log4j.properties或log4j.xml文件来配置Log4j日志框架。<br><br><span class="hljs-number">4</span>. quartz.properties<br><br>当使用Quartz调度框架时，需要配置quartz.properties文件。这个文件包含了Quartz的配置项，例如工厂类、调度器实现类、线程池等等。通过配置这个文件，可以控制Quartz框架的行为和性能。<br><br><span class="hljs-number">5</span>. mvc-dispatcher-servlet.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">在使用Spring</span> MVC框架时，需要配置mvc-dispatcher-servlet.xml文件。这个文件通常用于配置控制器、拦截器、格式化程序等等。可以通过配置这个文件，定制化Spring MVC框架的行为和输出，以达到更好的性能和用户体验。<br><br>这些配置文件在Spring Framework应用中非常重要，它们帮助应用程序开发人员控制框架的行为，自定义及样化应用程序，从而实现更好的性能和可读性。<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">除了上述配置文件之外，还有以下几个在Spring Framework中常用的配置文件：<br><br><span class="hljs-number">1</span>. security.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">security</span>.xml是Spring Security框架的配置文件。这个文件通常用于配置安全校验的相关设置，如授权、认证、访问控制等等。在这个文件中，可以配置Spring Security的每个子模块，例如表单校验、JWT认证、OAuth2验证等等。<br><br><span class="hljs-number">2</span>. servlet-context.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">servlet-context</span>.xml是Spring Web应用程序中的一个配置文件。在这个文件中配置的Bean都是与Servlet容器和Web应用程序相关的，包括视图解析器、Multipart解析器、拦截器、过滤器等等。这文件通常被用于定义与Web有关的Bean。<br><br><span class="hljs-number">3</span>. hibernate.properties/hibernate.cfg.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">这些文件是Hibernate</span>框架的配置文件。在Spring应用程序中使用Hibernate时，需要指定相关的配置项，例如数据源、连接池、映射文件等等。通过配置这些文件，可以控制Hibernate的行为和性能。<br><br><span class="hljs-number">4</span>. mybatis-config.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">mybatis-config</span>.xml是MyBatis框架的配置文件。在Spring应用程序中使用MyBatis进行数据持久化时，需要指定相关的配置项，例如数据源、事务管理器、映射器等等。通过配置这个文件，可以控制MyBatis的行为和性能。<br><br><span class="hljs-number">5</span>. static-resources.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">static-resources</span>.xml是一个用于定义静态资源的Spring MVC配置文件。在这个文件中，可以配置静态的Web资源（如HTML文件、CSS文件、JS文件等等），这些资源不需要经过Spring MVC框架的处理。<br><br>这些配置文件在Spring应用程序的开发和部署过程中，起着各自重要的作用。它们不仅可以控制框架的行为，还可以配置更为细致的选项，以最大程度地满足开发人员和用户的需求。<br><br><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">除上述配置文件之外，还有以下几个在Spring Framework应用中常用的配置文件：<br><br><span class="hljs-number">1</span>. redis.properties/redisson.yaml<br><br>Redis是一种高性能的缓存和消息队列技术。在Spring Framework应用中使用Redis时，需要配置redis.properties或redisson.yaml文件。通过这些文件，可以指定Redis的连接信息、缓存策略、过期时间等等。这些文件通常被用于定义与Redis有关的Bean。<br><br><span class="hljs-number">2</span>. rocketmq.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">RocketMQ</span>是一个可靠、快速、可扩展的分布式消息传递平台。在Spring Framework应用中使用RocketMQ时，需要配置rocketmq.xml文件。通过这个文件，可以指定RocketMQ的连接信息、消息队列、消费者组等等。这个文件通常被用于定义与RocketMQ有关的Bean。<br><br><span class="hljs-number">3</span>. dubbo.properties/dubbo.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">Dubbo</span>是一个高性能的Java RPC框架。在Spring Framework应用中使用Dubbo时，需要配置dubbo.properties或dubbo.xml文件。通过这些文件，可以指定Dubbo的通信协议、服务发现机制、调用超时时间等等。这些文件通常被用于定义与Dubbo有关的Bean。<br><br><span class="hljs-number">4</span>. application-context-shiro.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">Shiro</span>是一个强大、易用的Java安全框架。在Spring Framework应用中使用Shiro时，需要配置application-context-shiro.xml文件。在这个文件中，可以定义Shiro的Realm、会话管理器、过滤器链等等。通过这些配置，可以实现安全认证、访问控制等等功能。<br><br><span class="hljs-number">5</span>. cat-client.<span class="hljs-keyword">xml</span><br><br><span class="hljs-title">Cat</span>是一个开源的大型分布式系统监控和容量分析系统。在Spring Framework应用中使用Cat时，需要配置cat-client.xml文件。在这个文件中，可以指定Cat服务器的地址和端口、消息发送的规则等等。这个文件通常被用于定义与Cat有关的Bean。<br><br>通过合理配置和使用这些配置文件，可以大大提高Spring Framework应用程序的性能、可扩展性和易维护性，进一步降低应用程序的开发成<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Spring/" class="category-chain-item">Spring</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Spring/">#Spring</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Spring Framework</div>
+      <div>http://example.com/2023/06/01/Spring家族/Spring framework/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/Spring%E5%AE%B6%E6%97%8F/Spring%20Boot/" title="Spring Boot">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Spring Boot</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/Spring%E5%AE%B6%E6%97%8F/Spring-Project-ChatGPT/" title="Spring-Project-ChatGTP">
+                        <span class="hidden-mobile">Spring-Project-ChatGTP</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

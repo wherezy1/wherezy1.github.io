@@ -1,0 +1,823 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式事务分布式事务 - 随笔分类 - 天宇轩-王 - 博客园 (cnblogs.com) 分布式事务理论：介绍：分布式事务理论 - 天宇轩-王 - 博客园 (cnblogs.com) 本地事务一个服务-一个数据源 1234567891011回顾一下数据库事务的四大特性 ACID：A（Atomic）：原子性，构成事务的所有操作，要么都执行完成，要么全部不执行，不可能出现部分成功部分失败的情况。C（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="分布式事务分布式事务 - 随笔分类 - 天宇轩-王 - 博客园 (cnblogs.com) 分布式事务理论：介绍：分布式事务理论 - 天宇轩-王 - 博客园 (cnblogs.com) 本地事务一个服务-一个数据源 1234567891011回顾一下数据库事务的四大特性 ACID：A（Atomic）：原子性，构成事务的所有操作，要么都执行完成，要么全部不执行，不可能出现部分成功部分失败的情况。C（">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200311170851784-1191939965.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200312185849106-1102915487.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200312190007716-131503439.png">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-1065851/674qlvezxp.png?imageView2/2/w/2560/h/7000">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-1065851/fhmrlvulle.png?imageView2/2/w/2560/h/7000">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-8077228/984665855c8821a13713222d8ad3d86b.png?imageView2/2/w/2560/h/7000">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-8077228/dd85f114067d47462d1c3cc41172bc45.png?imageView2/2/w/2560/h/7000">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-8077228/84a3442ca7e539f3ed6ef78d8873220a.png?imageView2/2/w/2560/h/7000">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-8077228/3eab37bde45c631df88db821b57354b6.png?imageView2/2/w/2560/h/7000">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.704Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式事务">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200311170851784-1191939965.png">
+  
+  
+  
+  <title>分布式事务 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式事务"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          12k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          103 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式事务</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dalianpai/category/1591258.html">分布式事务 - 随笔分类 - 天宇轩-王 - 博客园 (cnblogs.com)</a></p>
+<h1 id="分布式事务理论："><a href="#分布式事务理论：" class="headerlink" title="分布式事务理论："></a>分布式事务理论：</h1><p>介绍：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dalianpai/p/12436933.html">分布式事务理论 - 天宇轩-王 - 博客园 (cnblogs.com)</a></p>
+<h2 id="本地事务"><a href="#本地事务" class="headerlink" title="本地事务"></a>本地事务</h2><p>一个服务-一个数据源</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs css">回顾一下数据库事务的四大特性 ACID：<br><span class="hljs-selector-tag">A</span>（Atomic）：原子性，构成事务的所有操作，要么都执行完成，要么全部不执行，不可能出现部分成功部分失<br>败的情况。<br>C（Consistency）：一致性，在事务执行前后，数据库的一致性约束没有被破坏。比如：张三向李四转<span class="hljs-number">100</span>元，<br>转账前和转账后的数据是正确状态这叫一致性，如果出现张三转出<span class="hljs-number">100</span>元，李四账户没有增加<span class="hljs-number">100</span>元这就出现了数<br>据错误，就没有达到一致性。<br><span class="hljs-selector-tag">I</span>（<span class="hljs-attribute">Isolation</span>）：隔离性，数据库中的事务一般都是并发的，隔离性是指并发的两个事务的执行互不干扰，一个事<br>务不能看到其他事务运行过程的中间状态。通过配置事务隔离级别可以避脏读、重复读等问题。<br>D（Durability）：持久性，事务完成之后，该事务对数据的更改会被持久化到数据库，且不会被回滚。<br>数据库事务在实现时会将一次事务涉及的所有操作全部纳入到一个不可分割的执行单元，该执行单元中的所有操作<br>要么都成功，要么都失败，只要其中任一操作执行失败，都将导致整个事务的回滚。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="全局事务"><a href="#全局事务" class="headerlink" title="全局事务"></a>全局事务</h2><p>单个服务-多个数据源</p>
+<h2 id="共享事务"><a href="#共享事务" class="headerlink" title="共享事务"></a>共享事务</h2><p>多个服务-单个数据源</p>
+<h2 id="分布式事务-1"><a href="#分布式事务-1" class="headerlink" title="分布式事务"></a>分布式事务</h2><p>多个服务-多个数据源</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">2</span>.<span class="hljs-number">1</span>CAP理论<br><span class="hljs-attribute">CAP</span>是 Consistency、Availability、Partition tolerance三个词语的缩写，分别表示一致性、可用性、分区容忍<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">Base理论介绍</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">BASE </span>是 <span class="hljs-keyword">Basically </span>Available(基本可用)、Soft state(软状态)和 Eventually consistent (最终一致性)三个短语的缩写。<span class="hljs-keyword">BASE理论是对CAP中AP的一个扩展，通过牺牲强一致性来获得可用性，当出现故障允许部分不可用但要保证</span><br><span class="hljs-keyword"></span>核心功能可用，允许数据在一段时间内是不一致的，但最终达到一致状态。满足<span class="hljs-keyword">BASE理论的事务，我们称之为“柔</span><br><span class="hljs-keyword"></span>性事务”。<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">基本可用:分布式系统在出现故障时，允许损失部分可用功能，保证核心功能可用。如，电商网站交易付款出</span><br>现问题了，商品依然可以正常浏览。<br><span class="hljs-section">软状态:由于不要求强一致性，所以BASE允许系统中存在中间状态（也叫软状态），这个状态不影响系统可用</span><br>性，如订单的<span class="hljs-string">&quot;支付中&quot;</span>、“数据同步中”等状态，待数据最终一致后状态改为“成功”状态。<br><span class="hljs-section">最终一致:最终一致是指经过一段时间后，所有节点数据都将会达到一致。如订单的&quot;支付中&quot;状态，最终会变</span><br>为“支付成功”或者<span class="hljs-string">&quot;支付失败&quot;</span>，使订单状态与实际交易结果达成一致，但需要一定时间的延迟、等待。<br></code></pre></td></tr></table></figure>
+
+<p>使用场景</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mathematica">在分布式事务场景下，如果对数据有强一致性要求，会在业务层上才去“两阶段提交”（<span class="hljs-number">2</span><span class="hljs-variable">PC</span>）的方案。<br>如果保证最终一致性的话可以采取<span class="hljs-variable">TCC</span> （<span class="hljs-variable">Try</span> <span class="hljs-built_in">Confirm</span> <span class="hljs-built_in">Cancel</span>）模式。虽然<span class="hljs-variable">TCC</span>保证最终一致性的模式被业内广泛使用，但是对于某些分布式事务场景，流程多、流程长、还可能要调用其它公司的服务。特别是对于不可控的服务（其他公司的服务），这些服务无法遵循 <span class="hljs-variable">TCC</span> 开发模式，导致<span class="hljs-variable">TCC</span>模式的开发成本增高。体现在具体场景中，以金融核心的业务为代表（渠道层、产品层、集成层），其特点是：流程多、流程长、调用不可控服务。同时也是应为流程长，事务边界太长，加锁时间长，使用<span class="hljs-variable">TCC</span>模式会影响并发性能。<br>鉴于此类业务场景的分布式事务处理，提出了<span class="hljs-variable">Saga</span>分布式处理模式。<span class="hljs-variable">Saga</span>是一种“长事务的解决方案”，更适合于“业务流程长、业务流程多”的场景。特别是针对参与事务的服务是遗留系统服务，此类服务无法提供<span class="hljs-variable">TCC</span>模式下的三个接口，就可以采用<span class="hljs-variable">Saga</span>模式。<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="四种分布式方案实现："><a href="#四种分布式方案实现：" class="headerlink" title="四种分布式方案实现："></a>四种分布式方案实现：</h1><h2 id="XA-—-eXtended-Architecture"><a href="#XA-—-eXtended-Architecture" class="headerlink" title="XA —  eXtended Architecture"></a>XA —  eXtended Architecture</h2><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/X/Open_XA">X&#x2F;Open XA (opens new window)</a>（XA 是 eXtended Architecture 的缩写）</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">核心内容是定义了全局的事务管理器（<span class="hljs-keyword">Transaction</span> Manager，用于协调全局事务）和局部的资源管理器（Resource Manager，用于驱动本地事务）之间的通信接口。<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h3><p>Prepare &#x2F; Commit</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">1. 准备阶段（<span class="hljs-keyword">Prepare</span> phase）：事务管理器给每个参与者发送<span class="hljs-keyword">Prepare</span>消息，每个数据库参与者在本地执行事<br>务，并写本地的Undo/Redo日志，此时事务没有提交。<br>（Undo日志是记录修改前的数据，用于数据库回滚，Redo日志是记录修改后的数据，用于提交事务后写入数<br>据文件）<br><span class="hljs-number">2.</span> 提交阶段（<span class="hljs-keyword">commit</span> phase）：如果事务管理器收到了参与者的执行失败或者超时消息时，直接给每个参与者<br>发送回滚(<span class="hljs-keyword">Rollback</span>)消息；否则，发送提交(<span class="hljs-keyword">Commit</span>)消息；参与者根据事务管理器的指令执行提交或者回滚操<br>作，并释放事务处理过程中使用的锁资源。注意:必须在最后阶段释放锁资源。<br></code></pre></td></tr></table></figure>
+
+<h3 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h3><p>准备拆为：CanCommit  PrepareCommit</p>
+<p>提交阶段：Docommit</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">三段式提交把原本的两段式提交的准备阶段再细分为两个阶段，分别称为 CanCommit、PreCommit，把提交阶段改称为 DoCommit 阶段。其中，新增的 CanCommit 是一个询问阶段，协调者让每个参与的数据库根据自身状态，评估该事务是否有可能顺利完成。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h2><p>“Try-Confirm-Cance”</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mathematica">以下三个阶段。<br><br><span class="hljs-variable">Try</span>：尝试执行阶段，完成所有业务可执行性的检查（保障一致性），并且预留好全部需用到的业务资源（保障隔离性）。<br><span class="hljs-built_in">Confirm</span>：确认执行阶段，不进行任何业务检查，直接使用 <span class="hljs-variable">Try</span> 阶段准备的资源来完成业务处理。<span class="hljs-built_in">Confirm</span> 阶段可能会重复执行，因此本阶段所执行的操作需要具备幂等性。<br><span class="hljs-built_in">Cancel</span>：取消执行阶段，释放 <span class="hljs-variable">Try</span> 阶段预留的业务资源。<span class="hljs-built_in">Cancel</span> 阶段可能会重复执行，也需要满足幂等性。<br></code></pre></td></tr></table></figure>
+
+
+
+<p>Hmily是一个高性能分布式事务TCC开源框架 – Try Comfirm Cancel</p>
+<p>介绍：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dalianpai/p/12455012.html">分布式事务解决方案之TCC - 天宇轩-王 - 博客园 (cnblogs.com)</a></p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mathematica">最复杂的方案 <span class="hljs-operator">--</span> 大厂采用的方案<br><span class="hljs-variable">TCC</span>要求每个分支事务实现三个操作：预处理<span class="hljs-variable">Try</span>、确认<br><span class="hljs-built_in">Confirm</span>、撤销<span class="hljs-built_in">Cancel</span>。<span class="hljs-variable">Try</span>操作做业务检查及资源预留，<span class="hljs-built_in">Confirm</span>做业务确认操作，<span class="hljs-built_in">Cancel</span>实现一个与<span class="hljs-variable">Try</span>相反的<br>操作即回滚操作。<br><span class="hljs-variable">TM</span>首先发起所有的分支事务的<span class="hljs-variable">try</span>操作，<br>任何一个分支事务的<span class="hljs-variable">try</span>操作执行失败，<span class="hljs-variable">TM</span>将会发起所有分支事务的<span class="hljs-built_in">Cancel</span>操作，<br>若<span class="hljs-variable">try</span>操作全部成功，<span class="hljs-variable">TM</span>将会发起所有分支事务的<span class="hljs-built_in">Confirm</span>操作，其中<span class="hljs-built_in">Confirm</span><span class="hljs-operator">/</span><span class="hljs-built_in">Cancel</span><br>操作若执行失败，<span class="hljs-variable">TM</span>会进行重试。<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">TCC</span>分为三个阶段：<br><span class="hljs-number">1.</span> <span class="hljs-variable">Try</span> 阶段是做业务检查<span class="hljs-punctuation">(</span>一致性<span class="hljs-punctuation">)</span>及资源预留<span class="hljs-punctuation">(</span>隔离<span class="hljs-punctuation">)</span>，此阶段仅是一个初步操作，它和后续的<span class="hljs-built_in">Confirm</span> 一起才能<br>真正构成一个完整的业务逻辑。<br><br><span class="hljs-number">2.</span> <span class="hljs-built_in">Confirm</span> 阶段是做确认提交，<span class="hljs-variable">Try</span>阶段所有分支事务执行成功后开始执行 <span class="hljs-built_in">Confirm</span>。通常情况下，采用<span class="hljs-variable">TCC</span>则<br>认为 <span class="hljs-built_in">Confirm</span>阶段是不会出错的。即：只要<span class="hljs-variable">Try</span>成功，<span class="hljs-built_in">Confirm</span>一定成功。若<span class="hljs-built_in">Confirm</span>阶段真的出错了，需引<br>入重试机制或人工处理。<br><span class="hljs-number">3.</span> <span class="hljs-built_in">Cancel</span> 阶段是在业务执行错误需要回滚的状态下执行分支事务的业务取消，预留资源释放。通常情况下，采<br>用<span class="hljs-variable">TCC</span>则认为<span class="hljs-built_in">Cancel</span>阶段也是一定成功的。若<span class="hljs-built_in">Cancel</span>阶段真的出错了，需引入重试机制或人工处理。<br><span class="hljs-number">4.</span> <span class="hljs-variable">TM</span>事务管理器<br><span class="hljs-variable">TM</span>事务管理器可以实现为独立的服务，也可以让全局事务发起方充当<span class="hljs-variable">TM</span>的角色，<span class="hljs-variable">TM</span>独立出来是为了成为公<br>用组件，是为了考虑系统结构和软件复用。<br><span class="hljs-variable">TM</span>在发起全局事务时生成全局事务记录，全局事务<span class="hljs-variable">ID</span>贯穿整个分布式事务调用链条，用来记录事务上下文，<br>追踪和记录状态，由于<span class="hljs-built_in">Confirm</span> 和<span class="hljs-variable">cancel</span>失败需进行重试，因此需要实现为幂等，幂等性是指同一个操作无论请求<br>多少次，其结果都相同。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="SAGA"><a href="#SAGA" class="headerlink" title="SAGA"></a>SAGA</h2><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">原本 SAGA 的目的是避免大事务长时间锁定数据库的资源，后来才发展成将一个分布式环境中的大事务分解为一系列本地事务的设计模式。SAGA 由两部分操作组成。<br><br>大事务拆分若干个小事务，将整个分布式事务 T 分解为 n 个子事务，命名为 <span class="hljs-built_in">T1</span>，<span class="hljs-built_in">T2</span>，…，Ti，…，Tn。每个子事务都应该是或者能被视为是原子行为。如果分布式事务能够正常提交，其对数据的影响（最终一致性）应与连续按顺序成功提交 Ti等价。<br>为每一个子事务设计对应的补偿动作，命名为 C1，C2，…，Ci，…，Cn。Ti与 Ci必须满足以下条件：<br>Ti与 Ci都具备幂等性。<br>Ti与 Ci满足交换律（Commutative），即先执行 Ti还是先执行 Ci，其效果都是一样的。<br>Ci必须能成功提交，即不考虑 Ci本身提交失败被回滚的情形，如出现就必须持续重试直至成功，或者要人工介入。<br>如果 <span class="hljs-built_in">T1</span>到 Tn均成功提交，那事务顺利完成，否则，要采取以下两种恢复策略之一：<br><br>正向恢复（Forward Recovery）：如果 Ti事务提交失败，则一直对 Ti进行重试，直至成功为止（最大努力交付）。这种恢复方式不需要补偿，适用于事务最终都要成功的场景，譬如在别人的银行账号中扣了款，就一定要给别人发货。正向恢复的执行模式为：<span class="hljs-built_in">T1</span>，<span class="hljs-built_in">T2</span>，…，Ti（失败），Ti（重试）…，Ti+<span class="hljs-number">1</span>，…，Tn。<br>反向恢复（<span class="hljs-keyword">Backward </span>Recovery）：如果 Ti事务提交失败，则一直执行 Ci对 Ti进行补偿，直至成功为止（最大努力交付）。这里要求 Ci必须（在持续重试后）执行成功。反向恢复的执行模式为：<span class="hljs-built_in">T1</span>，<span class="hljs-built_in">T2</span>，…，Ti（失败），Ci（补偿），…，C2，C1。<br></code></pre></td></tr></table></figure>
+
+<p>案例</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">与 TCC 相比，SAGA 不需要为资源设计冻结状态和撤销冻结的操作，补偿操作往往要比冻结操作容易实现得多。譬如，前面提到的账号余额直接在银行维护的场景，从银行划转货款到 Fenix<span class="hljs-symbol">&#x27;s</span> Bookstore 系统中，这步是经由用户支付操作（扫码或 U 盾）来促使银行提供服务；如果后续业务操作失败，尽管我们无法要求银行撤销掉之前的用户转账操作，但是由 Fenix<span class="hljs-symbol">&#x27;s</span> Bookstore 系统将货款转回到用户账上作为补偿措施却是完全可行的。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="可靠性消息最终一致性"><a href="#可靠性消息最终一致性" class="headerlink" title="可靠性消息最终一致性"></a>可靠性消息最终一致性</h2><p>基于MQ和 发送方（通知方）监听消息结果 Saga</p>
+<p>介绍：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dalianpai/p/12463845.html">分布式事务解决方案之可靠消息最终一致性 - 天宇轩-王 - 博客园 (cnblogs.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1839642">10分钟说透Saga分布式事务 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs">可靠消息一致性，发起通知方需要保证将消息发出去，并且将消息发到接收通知方，消息的可靠性关键由发起通知<br>方来保证。<br></code></pre></td></tr></table></figure>
+
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs awk">可靠消息最终一致性方案要解决以下几个问题：<br>**<span class="hljs-number">1</span>.本地事务与消息发送的原子性问题**<br>本地事务与消息发送的原子性问题即：事务发起方在本地事务执行成功后消息必须发出去，否则就丢弃消息。即实<br>现本地事务和消息发送的原子性，要么都成功，要么都失败。本地事务与消息发送的原子性问题是实现可靠消息最<br>终一致性方案的关键问题。<br>先来尝试下这种操作，先发送消息，再操作数据库：<br>begin transaction；<br>  <span class="hljs-regexp">//</span><span class="hljs-number">1</span>.发送MQ<br>  <span class="hljs-regexp">//</span><span class="hljs-number">2</span>.数据库操作<br>commit transation;<br>这种情况下无法保证数据库操作与发送消息的一致性，因为可能发送消息成功，数据库操作失败。<br>你立马想到第二种方案，先进行数据库操作，再发送消息：<br>begin transaction；<br>  <span class="hljs-regexp">//</span><span class="hljs-number">1</span>.数据库操作<br>  <span class="hljs-regexp">//</span><span class="hljs-number">2</span>.发送MQ<br>commit transation;<br>这种情况下貌似没有问题，如果发送MQ消息失败，就会抛出异常，导致数据库事务回滚。但如果是超时异常，数<br>据库回滚，但MQ其实已经正常发送了，同样会导致不一致。<br><br>**<span class="hljs-number">2</span>、事务参与方接收消息的可靠性**<br>事务参与方必须能够从消息队列接收到消息，如果接收消息失败可以重复接收消息。<br><br>**<span class="hljs-number">3</span>、消息重复消费的问题**<br>由于网络<span class="hljs-number">2</span>的存在，若某一个消费节点超时但是消费成功，此时消息中间件会重复投递此消息，就导致了消息的重<br>复消费。<br>要解决消息重复消费的问题就要实现事务参与方的方法幂等性。<br></code></pre></td></tr></table></figure>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-strong">**本地消息表方案**</span><br>本地消息表这个方案最初是eBay提出的，此方案的核心是通过本地事务保证数据业务操作和消息的一致性，然后<br>通过定时任务将消息发送至消息中间件，待确认消息发送给消费方成功再将消息删除。<br>下面以注册送积分为例来说明：<br><br></code></pre></td></tr></table></figure>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>下例共有两个微服务交互，用户服务和积分服务，用户服务负责添加用户，积分服务负责增加积分。<br><a target="_blank" rel="noopener" href="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200311170851784-1191939965.png"><img src="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200311170851784-1191939965.png" srcset="/img/loading.gif" lazyload alt="img"></a></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs awk">交互流程如下：<br><span class="hljs-number">1</span>、用户注册<br>用户服务在本地事务新增用户和增加 ”积分消息日志“。（用户表和消息表通过本地事务保证一致）<br>下边是伪代码<br>begin transaction；<br>  <span class="hljs-regexp">//</span><span class="hljs-number">1</span>.新增用户<br>  <span class="hljs-regexp">//</span><span class="hljs-number">2</span>.存储积分消息日志<br>commit transation;<br><br>这种情况下，本地数据库操作与存储积分消息日志处于同一个事务中，本地数据库操作与记录消息日志操作具备原<br>子性。<br><span class="hljs-number">2</span>、定时任务扫描日志<br>如何保证将消息发送给消息队列呢？<br>经过第一步消息已经写到消息日志表中，可以启动独立的线程，定时对消息日志表中的消息进行扫描并发送至消息<br>中间件，在消息中间件反馈发送成功后删除该消息日志，否则等待定时任务下一周期重试。<br><span class="hljs-number">3</span>、消费消息<br>如何保证消费者一定能消费到消息呢？<br>这里可以使用MQ的ack（即消息确认）机制，消费者监听MQ，如果消费者接收到消息并且业务处理完成后向MQ<br>发送ack（即消息确认），此时说明消费者正常消费消息完成，MQ将不再向消费者推送消息，否则消费者会不断重<br>试向消费者来发送消息。<br>积分服务接收到”增加积分“消息，开始增加积分，积分增加成功后向消息中间件回应ack，否则消息中间件将重复<br>投递此消息。<br>由于消息会重复投递，积分服务的”增加积分“功能需要实现幂等性。<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="最大努力通知"><a href="#最大努力通知" class="headerlink" title="最大努力通知"></a>最大努力通知</h2><p>基于MQ和接收方</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs">最大努力通知，发起通知方尽最大的努力将业务处理结果通知为接收通知方，但是可能消息接收不到，此时需要接<br>收通知方主动调用发起通知方的接口查询业务处理结果，通知的可靠性关键在接收通知方。<br><br>实现方案：采用MQ的ack机制就可以实现最大努力通知。<br><br><br><br></code></pre></td></tr></table></figure>
+
+<h3 id="方案一："><a href="#方案一：" class="headerlink" title="方案一："></a>方案一：</h3><p><img src="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200312185849106-1102915487.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-number">1</span>、发起通知方将通知发给MQ。<br>使用普通消息机制将通知发给MQ。<br>注意：如果消息没有发出去可由接收通知方主动请求发起通知方查询业务执行结果。（后边会讲）<br><span class="hljs-number">2</span>、接收通知方监听 MQ。<br><span class="hljs-number">3</span>、接收通知方接收消息，业务处理完成回应ack。<br><span class="hljs-number">4</span>、接收通知方若没有回应ack则MQ会重复通知。<br>MQ会按照间隔<span class="hljs-number">1</span><span class="hljs-built_in">min</span>、<span class="hljs-number">5</span><span class="hljs-built_in">min</span>、<span class="hljs-number">10</span><span class="hljs-built_in">min</span>、<span class="hljs-number">30</span><span class="hljs-built_in">min</span>、<span class="hljs-number">1</span>h、<span class="hljs-number">2</span>h、<span class="hljs-number">5</span>h、<span class="hljs-number">10</span>h的方式，逐步拉大通知间隔 （如果MQ采用<br>rocketMq，在broker中可进行配置），直到达到通知要求的时间窗口上限。<br><span class="hljs-number">5</span>、接收通知方可通过消息校对接口来校对消息的一致性。<br></code></pre></td></tr></table></figure>
+
+<h3 id="方案二：-新增中介-–-通知方"><a href="#方案二：-新增中介-–-通知方" class="headerlink" title="方案二：(新增中介 – 通知方)"></a>方案二：(新增中介 – 通知方)</h3><p><img src="https://img2020.cnblogs.com/i-beta/1829785/202003/1829785-20200312190007716-131503439.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs excel"><br><span class="hljs-number">1</span>、发起通知方将通知发给MQ。<br>使用可靠消息一致方案中的事务消息保证本地事务与消息的原子性，最终将通知先发给MQ。<br><span class="hljs-number">2</span>、通知程序监听 MQ，接收MQ的消息。<br>方案<span class="hljs-number">1</span>中接收通知方直接监听MQ，方案<span class="hljs-number">2</span>中由通知程序监听MQ。<br>通知程序若没有回应ack则MQ会重复通知。<br><span class="hljs-number">3</span>、通知程序通过互联网接口协议（如http、<span class="hljs-built_in">webservice</span>）调用接收通知方案接口，完成通知。<br>通知程序调用接收通知方案接口成功就表示通知成功，即消费MQ消息成功，MQ将不再向通知程序投递通知消<br>息。<br><span class="hljs-number">4</span>、接收通知方可通过消息校对接口来校对消息的一致性。<br><br></code></pre></td></tr></table></figure>
+
+<p>方案1和方案2的不同点：<br>1、方案1中接收通知方与MQ接口，即接收通知方案监听 MQ，此方案主要应用与内部应用之间的通知。<br>2、方案2中由通知程序与MQ接口，通知程序监听MQ，收到MQ的消息后由通知程序通过互联网接口协议调用接收<br>通知方。此方案主要应用于外部应用之间的通知，例如支付宝、微信的支付结果通知。</p>
+<p>介绍：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dalianpai/p/12482100.html">https://www.cnblogs.com/dalianpai/p/12482100.html</a></p>
+<h2 id="对比区别"><a href="#对比区别" class="headerlink" title="对比区别"></a>对比区别</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs">最大努力通知与可靠消息一致性有什么不同？<br>1、解决方案思想不同<br>可靠消息一致性，发起通知方需要保证将消息发出去，并且将消息发到接收通知方，消息的可靠性关键由发起通知<br>方来保证。<br>最大努力通知，发起通知方尽最大的努力将业务处理结果通知为接收通知方，但是可能消息接收不到，此时需要接<br>收通知方主动调用发起通知方的接口查询业务处理结果，通知的可靠性关键在接收通知方。<br>2、两者的业务应用场景不同<br>可靠消息一致性关注的是交易过程的事务一致，以异步的方式完成交易。<br>最大努力通知关注的是交易后的通知事务，即将交易结果可靠的通知出去。<br>3、技术解决方向不同<br>可靠消息一致性要解决消息从发出到接收的一致性，即消息发出并且被接收到。<br>最大努力通知无法保证消息从发出到接收的一致性，只提供消息接收的可靠性机制。可靠机制是，最大努力的将消<br>息通知给接收方，当消息无法被接收方接收时，由接收方主动查询消息（业务处理结果）。<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="Seata"><a href="#Seata" class="headerlink" title="Seata"></a>Seata</h1><h2 id="XA-AT-对比"><a href="#XA-AT-对比" class="headerlink" title="XA  - AT 对比"></a>XA  - AT 对比</h2><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">从整体上看是 AT 事务是参照了 XA 两段提交协议实现的，但针对 XA <span class="hljs-number">2</span>PC 的缺陷，即在准备阶段必须等待所有数据源都返回成功后，协调者才能统一发出 <span class="hljs-keyword">Commit</span> 命令而导致的木桶效应 (opens <span class="hljs-built_in">new</span> <span class="hljs-keyword">window</span>)（所有涉及的锁和资源都需要等待到最慢的事务完成后才能统一释放），设计了针对性的解决方案。<br>大致的做法是在业务数据提交时自动拦截所有 <span class="hljs-keyword">SQL</span>，将 <span class="hljs-keyword">SQL</span> 对数据修改前、修改后的结果分别保存快照，生成行锁，通过本地事务一起提交到操作的数据源中，相当于自动记录了重做和回滚日志。如果分布式事务成功提交，那后续清理每个数据源中对应的日志数据即可；如果分布式事务需要回滚，就根据日志数据自动产生用于补偿的“逆向 <span class="hljs-keyword">SQL</span>”。基于这种补偿方式，分布式事务中所涉及的每一个数据源都可以单独提交，然后立刻释放锁和资源。<br>这种异步提交的模式，相比起 <span class="hljs-number">2</span>PC 极大地提升了系统的吞吐量水平。而代价就是大幅度地牺牲了隔离性，甚至直接影响到了原子性。因为在缺乏隔离性的前提下，以补偿代替回滚并不一定是总能成功的。譬如，当本地事务提交之后、分布式事务完成之前，该数据被补偿之前又被其他操作修改过，即出现了脏写（Dirty <span class="hljs-keyword">Write</span>），这时候一旦出现分布式事务需要回滚，就不可能再通过自动的逆向 <span class="hljs-keyword">SQL</span> 来实现补偿，只能由人工介入处理了。  <span class="hljs-comment">-- &lt;凤凰架构&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>[Seata 分布式事务 XA 与 AT 全面解析 - 腾讯云开发者社区-腾讯云 (tencent.com)](<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1822227#:~:text=XA">https://cloud.tencent.com/developer/article/1822227#:~:text=XA</a> 模式：在 Seata 定义的分布式事务框架内，利用事务资源（数据库、消息服务等）对,XA 协议的支持，以 XA 协议的机制来管理分支事务的一种 事务模式。)</p>
+<h3 id="AT-与-XA-的关系"><a href="#AT-与-XA-的关系" class="headerlink" title="AT 与 XA 的关系"></a><strong>AT 与 XA 的关系</strong></h3><p>首先，我们要明确，无论是AT还是XA，他们都是有利用到数据库自带的事务特性，来保证数据一致性和隔离性</p>
+<p>比如AT一阶段提交和二阶段回滚，都是执行了本地事务。比如XA的一阶段和二阶段，也都是利用了数据库本身的事务特性</p>
+<p>那么这样一样我们是否应该在数据库层面进行挖掘，AT与XA的关系呢？</p>
+<p>首先这个时候，我们肯定要从中找相同，与找不同。AT首当其冲，他有个必须品，也就是undolog表，undolog，相 信了解数据库的同学肯定是知道。数据库有六种日志分别是：重做日志（redo log）、回滚日志（undo log）、二进制日志（binlog）、错误日志（errorlog）、 慢查询日志（slow query log）、一般查询日志（general log），中继日志（relay log）</p>
+<p>那么数据库的undolog是做什么用的呢？undolog保存了事务发生之前的数据的一个版本，可以用于回滚，同时可以提供多版本并发控制下的读（MVCC）</p>
+<p>可以发现数据库的undolog跟seata at模式的undolog的作用不谋而合，所以可以判断，at模式的undolog就是把本地事务作用中的undolog，利用他的原理，做到了分布式事务中，来保证了分布式事务下的事务一致性。</p>
+<p>那么说完了undolog，redolog呢？</p>
+<p>Redolog的作用便是防止在发生故障的时间点，尚有脏页未写入磁盘，在重启mysql服务的时候，根据redo log进行 重做，从而达到事务的持久性这一特性。</p>
+<p>那么为什么Seata AT模式没有看到redolog的存在？其实很简单，这个redolog被隐藏的很深，也就是AT模式的一阶段提交，让数据库作为我们的redolog，保证一阶段的数据准确落盘。</p>
+<p>这个时候是不是会想到LCN事务模式？他的undolog由数据库来保证，缺少了一个redolog的存在。其实大可不必思念LCN事务，解析到这里，如果把AT改为一阶段不提交，二阶段提交时，前镜像便是undolog，后镜像便是redolog,也就是说AT其实就是一个不在数据库层面，按照数据库事务思想和实现原理的方式，做到了分布式中的事务一致性。</p>
+<p>这时候讲到这里，XA跟AT的关系应该一幕了然了，准确的说，其实应该说是分布式事务跟数据库本地事务的关系，可以说XA的缺点造成了AT模式的出生，锁在多侧（多个库），资源阻塞，性能差。</p>
+<p>而AT就像为了把事务的实现决定权从数据库手中，放到了Seata中，自实现sql解析，自实现undolog(redolog)，既然我们没有 办法去直接优化数据库在分布式事务下的问题，那么不如创造一个新的模式，去其糟粕，取其精华。</p>
+<h3 id="Seata-AT-与-XA-的优劣"><a href="#Seata-AT-与-XA-的优劣" class="headerlink" title="Seata AT 与 XA 的优劣"></a><strong>Seata AT 与 XA 的优劣</strong></h3><p>其实上面零零碎碎也说了不少各自的优缺点，现在我们总结一下分3点来做比较</p>
+<ul>
+<li>sql支持</li>
+<li>隔离性</li>
+<li>侵入性</li>
+</ul>
+<p>我们先讲第一点，由于上面我们总结了，其实AT就是一个自实现的XA事务，所以其实可以知道，AT在sql支持上，是远不及利用本地事务的XA模式，既然AT需要做sql解析，那么背后的实现只能自己来解决，也就是靠Seata社区的贡献者们来贡献解决方案，这是一个长期性的关键问题，但是依然有很多用户选择了重写sql，来获取AT事务模式的支持。在sql支持上XA无疑是完胜的</p>
+<p>第二点隔离性，Seata AT模式通过解析sql获取涉及的主键id，生成行锁，也就是AT模式的隔离就是靠全局锁来保证，粒度细至行级，锁信息存储在Seata-Server一侧。XA模式的隔离性就是由本地数据库保证，锁存储在各个本地数据库中。由于XA模式一旦执行了prepare后，再也无法重入这个XA事务，也无法跟其他XA事务共享锁。因为XA协议，仅是通过XID来start一个xa事务，本身它不存在所谓的分支事务说法，它本事就是一个XA事务而已，也就是说它只管它自己。这时候可能由同学有疑问了，为什么我在branch_table里看到里XA分支事务呢？其实这个问题根据上面的什么是Seata事务模式可以了解到，Seata的事务模式就是由全局事务，分支事务，锁信息所组成。而XA的分支事务，仅仅是作为一个参与方的存在，也就是说这个XA分支在Seata定义中为分支事务，作为分支信息记录在案，方便宕机后也可以下发二阶段决议信息。而AT由于锁是自实现，也就相对XA来说，我只要知道用户sql涉及到的数据，是不是数据这个全局事务下的，只要是我默认他就可以使用这个锁，也就解决了重入问题。我们可以得出总结，XA的隔离性是全局的，AT的隔离性是更灵活且相对全局的(保证所有对数据的写操作被Seata事务覆盖)。第三点，入侵性，通过我们以上的信息，其实可以发现，谁更底层，谁的入侵性更小，所以由数据库自身所支持的XA模式来说，无疑入侵最小，使用成本最低。</p>
+<p>其实说到这里，大家可能会觉得XA模式怎么感觉比AT好这么多，虽然他不支持锁重入，但是我可以避免这个情况发生呀。这时候，我画个图，大家可能会比较理解</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-1065851/674qlvezxp.png?imageView2/2/w/2560/h/7000" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>上图中，右侧图1是at模式运行时，图2时xa模式运行时。可以很明显，xa的阻塞带来的性能下降时非常厉害的，特别是你的分支事务非常多，每个资源的释放必须等到每个分支的数据库去单独释放，后续的事务才能进入。虽然XA带来的无侵入非常高，但是由于性能下降的程度太大，也就促使了AT的诞生，而现在AT,TCC,SAGA的模式的接受度也越来越高，这也正说明了开发者对性能的要求。AT可以看作时由Seata社区进行全方面优化，自研的XA模式，最大特点就是解决了XA模式的性能差的问题。TCC由Seata决定二阶段状态通知，其使用全权交托用户，性能仅仅是2个本地事务+些许rpc开销。SAGA整个事务链路，事务处理全权交托用户编排，性能完全由用户来保证，Seata作为事务的协助方，记录全局事务的运行状态。可以看出来，越高入侵性的模式其实背后可优化的点更多，越少入侵性的，也就是会被局限，只能依托组件开发者进行不定期的优化来保证性能。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>在当前的技术发展中，目前分布式事务就是属于扮演东风的角色，大量的分布式，微服务化，带来的性能提 升非常明显，但是却缺少一个有利的保障，我相信Seata就是承担着这样的一个角色，让万事俱备不欠东风。Seata项目的最核心的价值在于：</p>
+<p>构建一个全面解决分布式事务问题的 标准化 平台。</p>
+<p>基于 Seata，上层应用架构可以根据实际场景的需求，灵活选择合适的分布式事务解决方案。</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-1065851/fhmrlvulle.png?imageView2/2/w/2560/h/7000" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="TCC-1"><a href="#TCC-1" class="headerlink" title="TCC"></a>TCC</h2><h2 id="Saga"><a href="#Saga" class="headerlink" title="Saga"></a>Saga</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1839642">10分钟说透Saga分布式事务 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<p><strong>编排（Choreography）</strong>：参与者（子事务）之间的调用、分配、决策和排序，通过交换事件进行进行。是一种去中心化的模式，参与者之间通过消息机制进行沟通，通过监听器的方式监听其他参与者发出的消息，从而执行后续的逻辑处理。由于没有中间协调点，靠参与靠自己进行相互协调。</p>
+<p><strong>控制（Orchestration）</strong>：Saga提供一个控制类，其方便参与者之前的协调工作。事务执行的命令从控制类发起，按照逻辑顺序请求Saga的参与者，从参与者那里接受到反馈以后，控制类在发起向其他参与者的调用。所有Saga的参与者都围绕这个控制类进行沟通和协调工作。</p>
+<p>下面通过一个例子来介绍这两种协调模式，假设有一个下单的业务，从订单服务的创建订单操作发起，会依次调用支付服务中的支付订单，库存服务中的扣减库存以及发货服务中的发货操作，最终如果所有参与者（服务）中的操作（子事务）完成的话，整个下单事务就算完成。</p>
+<p><strong>编排（Choreography）</strong>，由于没有中心的控制类参与参与者操作之间的协调工作，因此通过消息发送的方式进行协调。</p>
+<p>如图3所示：</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-8077228/984665855c8821a13713222d8ad3d86b.png?imageView2/2/w/2560/h/7000" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>图3 编排模式-事务执行成功</p>
+<p>\1. “订单服务”中执行“创建订单”操作，此时会发送一个“创建订单消息”到队列中。</p>
+<p>\2. “支付服务”监听到队列中的这个订单消息，调用“支付订单”的操作，同时也发送“只服务消息”到队列中。</p>
+<p>\3. “库存服务”在监听到“支付消息”之后会进行“扣减库存”的处理，并且发送“扣减库存消息”等待下一个消费者接受。</p>
+<p>\4. “发货服务”作为整个事务的最后一个子事务，在接到“扣减库存消息”以后会执行发货的子事务，完成事务以后会给“订单服务”发送“发货消息”，订单服务在接受到消息以后完成整个事务闭环，并且提交。</p>
+<p>上面说的是事务执行成功的情况，如果事务执行失败那应该如何处理？</p>
+<p>如图4所示：</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-8077228/dd85f114067d47462d1c3cc41172bc45.png?imageView2/2/w/2560/h/7000" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>图4 编排模式-事务执行失败</p>
+<p>\1. 假设在执行“发货”时子事务失败了，会发送“发货失败消息”。</p>
+<p>\2. 库存服务在接受到“发货失败消息”之后会执行“回滚库存”的操作，该操作将原来扣减的库存加回去，同时发送“扣减失败消息”。</p>
+<p>\3. “支付服务”在接受到“扣减失败消息”之后会执行“回滚支付”，进行退款的操作，同时发送“支付失败消息”。订单服务在接受到该消息以后将下单事务标记为失败。</p>
+<p><strong>从上面的描述可以看出编排的好处</strong>：</p>
+<p>简单：每个子事务进行操作时只用发布事件消息，其他子事务监听处理。</p>
+<p>松耦合：参与者（服务）之间通过订阅事件进行沟通，组合会更加灵活。</p>
+<p><strong>当然也有一些缺点</strong>：</p>
+<p>理解困难：没有对业务流程进行完整的描述，要了解整个事务的执行过程需要通过阅读代码完成。增加开发人员理解和维护代码的难度。</p>
+<p>存在服务的循环依赖：由于通过消息和事件进行沟通，参与者之间会存在循环依赖的情况。也就是A服务调用B服务，B服务又调用A服务的情况。这也增加了架构设计的复杂度，在设计初期需要认真考虑。</p>
+<p>紧耦合风险：每个参与者执行的方法都依赖于上一步参与者发出的消息，但是上一步的参与者的所有消息都需要被订阅，才能了解参与者的真实状态，无形中增加了两个服务的耦合度。</p>
+<p><strong>控制（Orchestration）</strong>，其核心是定义一个控制类，它会告诉参与者（服务）应该执行哪些操作（子事务）。 Saga控制类通过命令以及异步回复的方式与参与者进行交互。</p>
+<p>如图5所示：</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-8077228/84a3442ca7e539f3ed6ef78d8873220a.png?imageView2/2/w/2560/h/7000" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>图5 控制模式-成功</p>
+<p>\1. 订单服务执行下单事务时，向Saga协调器发送请求命令，Saga协调器接受到命令以后按照子事务执行的顺序调用服务中的方法。</p>
+<p>\2. 最开始执行“支付订单”的操作，调用“支付服务”中的“支付订单”操作，并且通过虚线的部分返回执行结果“支付完成”。</p>
+<p>\3. 接下来，执行“库存服务”中的“扣减库存”方法，同样通过虚线部分返回扣减完成的消息给“请求反馈“模块。</p>
+<p>\4. 紧接着就是执行“发货“命令，调用”发货服务“中的”发货“方法，并且返回”发货完成“的响应。</p>
+<p>\5. 最后，三个子事务都执行完毕以后，返回订单服务，完成整个分布式事务。</p>
+<p>介绍完成成功完成事务之后，再来看看出现异常的情况。</p>
+<p>如图6所示：</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-8077228/3eab37bde45c631df88db821b57354b6.png?imageView2/2/w/2560/h/7000" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>图6 控制模式-失败</p>
+<p>\1. 在执行“发货”命令时发现“发货失败”，于是“发货服务”反馈给Saga协调器。</p>
+<p>\2. 此时协调器调用“库存服务”中的“回滚库存”操作，将扣减的库存恢复。</p>
+<p>\3. 然后调用“支付服务”中的“回滚支付”完成支付退款的工作。</p>
+<p>\4. 最后，通知订单服务事务处理失败。</p>
+<p>需要指出的是控制模式也是基于事件驱动的，与编排模式一样会发送消息通知参与者执行命令，上面两个图中命令的执行和调用也是通过消息的方式进行。</p>
+<p><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230618152258563.png?token=AUR75H6Z2A3TMJAPMVZAY3LER2YR2">images</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">#分布式事务</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式事务</div>
+      <div>http://example.com/2023/06/01/分布式系统-大数据/分布式事务/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计算机网络</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA/" title="分布式理论">
+                        <span class="hidden-mobile">分布式理论</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

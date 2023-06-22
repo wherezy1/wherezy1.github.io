@@ -1,0 +1,749 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式系统理论Chandy - Lamport算法分布式快照算法: Chandy-Lamport 算法 - 知乎 (zhihu.com) 分步式时钟 Lamport Clock共识算法 - Paxos算法分布式计算从计算方式上看，一共就两种方法：  MR 方式（MapReduce） Stream 方式  从处理过程来看，也只有两种模式：  Actor 模式 流水线模式  如何学习DDIA（Desi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式理论">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E7%90%86%E8%AE%BA/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="分布式系统理论Chandy - Lamport算法分布式快照算法: Chandy-Lamport 算法 - 知乎 (zhihu.com) 分步式时钟 Lamport Clock共识算法 - Paxos算法分布式计算从计算方式上看，一共就两种方法：  MR 方式（MapReduce） Stream 方式  从处理过程来看，也只有两种模式：  Actor 模式 流水线模式  如何学习DDIA（Desi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-ac3658b52bab4cd20acb1e08f9c65669_r.jpg?source=1940ef5c">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-7c673b40dc53dbe7daf40de42747e92c_r.jpg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/6b5b633abb6b42db85d987c74e0adb91.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAc25lZnNuZWY=,size_20,color_FFFFFF,t_70,g_se,x_16">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.708Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic1.zhimg.com/v2-ac3658b52bab4cd20acb1e08f9c65669_r.jpg?source=1940ef5c">
+  
+  
+  
+  <title>分布式理论 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式理论"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          90 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式理论</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="分布式系统理论"><a href="#分布式系统理论" class="headerlink" title="分布式系统理论"></a>分布式系统理论</h1><h3 id="Chandy-Lamport算法"><a href="#Chandy-Lamport算法" class="headerlink" title="Chandy - Lamport算法"></a>Chandy - Lamport算法</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/53482103">分布式快照算法: Chandy-Lamport 算法 - 知乎 (zhihu.com)</a></p>
+<h3 id="分步式时钟-Lamport-Clock"><a href="#分步式时钟-Lamport-Clock" class="headerlink" title="分步式时钟 Lamport Clock"></a>分步式时钟 Lamport Clock</h3><h3 id="共识算法-Paxos算法"><a href="#共识算法-Paxos算法" class="headerlink" title="共识算法 - Paxos算法"></a>共识算法 - Paxos算法</h3><h2 id="分布式计算"><a href="#分布式计算" class="headerlink" title="分布式计算"></a>分布式计算</h2><p>从计算方式上看，一共就两种方法：</p>
+<ol>
+<li>MR 方式（MapReduce）</li>
+<li>Stream 方式</li>
+</ol>
+<p>从处理过程来看，也只有两种模式：</p>
+<ol>
+<li>Actor 模式</li>
+<li>流水线模式</li>
+</ol>
+<h1 id="如何学习"><a href="#如何学习" class="headerlink" title="如何学习"></a>如何学习</h1><h2 id="DDIA（Design-Data-Intensive-Application）"><a href="#DDIA（Design-Data-Intensive-Application）" class="headerlink" title="DDIA（Design  Data-Intensive Application）"></a>DDIA（Design  Data-Intensive Application）</h2><p>（数据密集型应用系统设计）</p>
+<p><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch10">第十章：批处理 (vonng.com)</a></p>
+<h2 id="mit的6-824"><a href="#mit的6-824" class="headerlink" title="mit的6.824"></a>mit的6.824</h2><p>课程视频官方地址：</p>
+<p><a href="https://link.zhihu.com/?target=https://www.youtube.com/channel/UC_7WrbZTCODu1o_kfUMq88g">https://www.youtube.com/channel/UC_7WrbZTCODu1o_kfUMq88gwww.youtube.com/channel/UC_7WrbZTCODu1o_kfUMq88g</a></p>
+<p>课程的paper和lab也有，课程地址：</p>
+<p><a href="https://link.zhihu.com/?target=https://pdos.csail.mit.edu/6.824/schedule.html">6.824 Schedule: Spring 2020pdos.csail.mit.edu&#x2F;6.824&#x2F;schedule.html</a></p>
+<p>哔哩哔哩</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1R7411t71W/?spm_id_from=333.337.search-card.all.click&vd_source=2698af0f3cc07a5ad7f7e52ec7805b75">2020 MIT 6.824 分布式系统_哔哩哔哩_bilibili</a></p>
+<h3 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h3><p><a target="_blank" rel="noopener" href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/">简介 - MIT6.824 (gitbook.io)</a></p>
+<p><img src="https://pic1.zhimg.com/v2-ac3658b52bab4cd20acb1e08f9c65669_r.jpg?source=1940ef5c" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="论文解读"><a href="#论文解读" class="headerlink" title="论文解读"></a>论文解读</h3><p>2019.12</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/38eb16b24cb9">西部小笼包 - 简书 (jianshu.com)</a></p>
+<h3 id="Lab"><a href="#Lab" class="headerlink" title="Lab"></a>Lab</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45938441/article/details/124018485">(11条消息) MIT6.824-lab1-2022篇(万字推导思路及代码构建）_幸平xp的博客-CSDN博客</a></p>
+<p>csdn专栏 ： 分布式</p>
+<h2 id="Leslie-Lamport论文"><a href="#Leslie-Lamport论文" class="headerlink" title="Leslie Lamport论文"></a>Leslie Lamport论文</h2><p><a target="_blank" rel="noopener" href="http://lamport.azurewebsites.net/pubs/pubs.html?from=https://research.microsoft.com/users/lamport/pubs/pubs.html&type=path">The Writings of Leslie Lamport</a></p>
+<h2 id="二、分布式系统"><a href="#二、分布式系统" class="headerlink" title="二、分布式系统"></a>二、分布式系统</h2><p><a href="../%E5%AD%A6%E4%B9%A0/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6.md">学习-分布式系统</a></p>
+<img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-7c673b40dc53dbe7daf40de42747e92c_r.jpg" srcset="/img/loading.gif" lazyload alt="img" style="zoom:200%;" />
+
+
+
+
+
+<h2 id="三、一致性"><a href="#三、一致性" class="headerlink" title="三、一致性"></a>三、一致性</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/snefsnef/article/details/123800371">(11条消息) 浅析分布式系统之体系结构 技术基本目标—-一致性（单对象、单操作）_snefsnef的博客-CSDN博客</a></p>
+<p><img src="https://img-blog.csdnimg.cn/6b5b633abb6b42db85d987c74e0adb91.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAc25lZnNuZWY=,size_20,color_FFFFFF,t_70,g_se,x_16" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="四、论文下载"><a href="#四、论文下载" class="headerlink" title="四、论文下载"></a>四、论文下载</h2><p>MapReduce是谷歌在2004年发表的一篇论文，它的正式名称为“MapReduce: Simplified Data Processing on Large Clusters”，您可以通过下面的链接进行下载：</p>
+<p><a target="_blank" rel="noopener" href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf">https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf</a></p>
+<p>对于国外计算机论文的访问，以下是几个值得推荐的学术组织和学术搜索引擎网站：</p>
+<ol>
+<li>ACM Digital Library（需要注册账号，收费）：<a target="_blank" rel="noopener" href="https://dl.acm.org/">https://dl.acm.org/</a></li>
+<li>IEEE Xplore（需要注册账号，收费）：<a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/">https://ieeexplore.ieee.org/</a></li>
+<li>Google Scholar（不需注册，但有些论文需要付费购买）：<a target="_blank" rel="noopener" href="https://scholar.google.com/">https://scholar.google.com/</a></li>
+<li>arXiv（免费获取，但并非所有论文都经过同行评审）：<a target="_blank" rel="noopener" href="https://arxiv.org/">https://arxiv.org/</a></li>
+</ol>
+<p>对于分布式系统的论文，您可以在以上的网站中进行搜索，并根据关键词筛选出相关的论文。如果您对具体的主题有更明确的需求，也可以在以上网站的高级搜索中进行详细的设定和过滤</p>
+<h1 id="分布式系统"><a href="#分布式系统" class="headerlink" title="分布式系统"></a>分布式系统</h1><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23645117/answer/124708083">(5 封私信) 学习分布式系统需要怎样的知识？ - 知乎 (zhihu.com)</a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>我的 Phd 研究方向是分布式系统，我老板也是分布式系统出身，我们实验室在这方面的积累还算不错，所以借此问题谈谈自己的看法。首先需要说明的是，分布式系统是一个复杂且宽泛的研究领域，学习一两门在线课程，看一两本书可能都是不能完全覆盖其所有内容的。介于这篇文章是引导初学者入门，所以我个人觉得为初学者介绍一下当前分布式系统领域的全貌，也许比直接推荐论文和课程更有帮助。当初学者对这个领域建立起一个大的 Picture 之后，可以根据自己的兴趣，有选择性的深入不同领域进行进一步的学习。</p>
+<p>这篇文章主要试图回答以下两个个问题：</p>
+<p>\1. 近些年分布式系统领域都在做些什么。<br>\2. 为什么现在投入分布式系统的学习和研究是值得的。</p>
+<p>我会尽可能多的去介绍更 “实用” 的分布式系统知识。 </p>
+<p>什么是实用？例如：</p>
+<p>Paxos 是分布式系统里一个重要而且实用的技术。<br>Consistent Hash 也是分布式系统里一个重要而且实用的技术。<br>MapReduce, Spark 等等都是很实用的系统。</p>
+<p>什么不实用？ 例如：</p>
+<p>Paxos 算法的数学证明。<em>（注意此处“不实用” 和 “不重要”的区别）</em></p>
+<p>当然，分布式系统实在是一个太宽泛的话题，本人才疏学浅，回答也仅仅可能侧重于我所关心的领域和方向，很多地方都不能面面俱到。所以在此只能抛砖引玉， 蜻蜓点水，欢迎大家提出宝贵意见，我也会及时对文章进行修改和补充。</p>
+<p><strong>分布式系统近些年都在做些什么？</strong></p>
+<p>分布式系统是一个古老而宽泛的话题，而近几年因为 “大数据” 概念的兴起，又焕发出了新的青春与活力。除此之外，分布式系统也是一门理论模型与工程技法并重的学科内容。相比于机器学习这样的研究方向，学习分布式系统的同学往往会感觉：“入门容易，深入难”。的确，学习分布式系统几乎不需要太多数学知识（相比于机器学习），这也是为什么会造成 “入门容易” 的错觉。然而一旦深入下去，往往需要我们去体会 system 研究的 “简洁” 与 “美”，正如楼上 李沐 的回答中说的那样，系统工作是 “艺术” 而不是 “科学” ，这一点我觉得是系统研究工作最难，同时也是最精华的地方。总之把握一点原则：好的系统研究工作，尤其是分布式系统研究，一定是尽可能地用最简单、最直观的方法去解决实际的问题（看看 MapReduce 就知道了），因为简单就意味着实用。</p>
+<p>总的来说，分布式系统要做的任务就是把多台机器有机的组合、连接起来，让其协同完成一件任务，可以是计算任务，也可以是存储任务。如果一定要给近些年的分布式系统研究做一个分类的话，我个人认为大概可以包括三大部分：</p>
+<p>\1. <strong>分布式存储系统</strong><br>\2. <strong>分布式计算系统</strong><br>\3. <strong>分布式管理系统</strong></p>
+<p>近十年来在这三个方向上，毫无疑问， Google 都是开创者，甚至很多业内人士都说，这十年是外界追随谷歌技术的十年。我们之前说到，分布式系统的研究是一门由实际问题驱动的研究，而 google 则是最先需要面对这些实际问题的公司。下面我们分别看看这三个方面工业界以及学术界这几年都在做些什么。</p>
+<h2 id="分布式存储系统："><a href="#分布式存储系统：" class="headerlink" title="分布式存储系统："></a><strong>分布式存储系统：</strong></h2><p>分布式存储系统是一个非常古老的话题，同时也是分布式系统里最难，最复杂，涉及面最广的问题。 往细了分，分布式存储系统大概可以分为四个子方向：</p>
+<p><strong>1. 结构化存储</strong><br><strong>2. 非结构化存储</strong><br><strong>3. 半结构化存储</strong><br><strong>4. In-memory 存储</strong></p>
+<p>除了这四个子方向之外，分布式存储系统还有一系列的理论、算法、技术作为支撑：例如 <em>Paxos</em>, <em>CAP</em>, <em>ConsistentHash</em>, <em>Timing (时钟)</em>,  <em>2PC, 3PC</em> 等等，这些内容我们会在后面提到。现在，我们先来看看上述四个子方向大致都在干些什么。</p>
+<h3 id="1-结构化存储"><a href="#1-结构化存储" class="headerlink" title="1. 结构化存储"></a><strong>1. 结构化存储</strong></h3><p><strong>结构化存储（structured storage systems）</strong>的历史非常古老，典型的场景就是事务处理系统或者<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:124708083%7D">关系型数据库</a>（RDBMS）。传统的结构化存储都是从单机做起的，比如大家耳熟能详的  MySQL。有句话说：MySQL的成长史就是互联网的成长史。这一点也不为过。除了 MySQL 之外，PostgreSQL 也是近几年来势头非常强劲的一个 RDBMS.  我们发现，传统的结构化存储系统强调的是：（1）结构化的数据（例如关系表）。（2）强一致性 （例如，银行系统，电商系统等场景）（3）随机访问（索引，增删查改，SQL 语言）。然而，正是由于这些性质和限制，结构化存储系统的可扩展性通常都不是很好，这在一定程度上限制了结构化存储在大数据环境下的表现。随着摩尔定律面临的瓶颈，传统的单机关系型数据库系统面临着巨大的挑战。不过真的没办法了吗？在此我们先埋下一个伏笔：）</p>
+<h3 id="2-非结构化存储"><a href="#2-非结构化存储" class="headerlink" title="2.非结构化存储"></a>2.非结构化存储</h3><p><strong>非结构化存储 （no-structed storage systems).</strong> 和结构化存储不同的是，非结构化存储强调的是高可扩展性，典型的系统就是分布式文件系统。分布式文件系统也是一个古老的研究话题，比如 70 年代的 Xerox Alto, 80 年代的 NFS, AFS, 90 年代 xFS 等等。然而，这些早期的分布式文件系统只是起到了网络磁盘的作用, 其最大的问题就是不支持 容错 （fault tolerance）和 错误恢复 （fault recovery）。而 Google 在 2003 年 SOSP 上推出的 GFS (google file system) 则是做出了里程碑的一步，其开源实现对应为  HDFS.  GFS 的主要思想包括：</p>
+<p>（1）用 master 来管理 metadata。<br>（2）文件使用 64MB 的 chunks 来存储，并且在不同的 server 上保存多个副本。<br>（3）自动容错，自动错误恢复。</p>
+<p>Google 设计 gfs 最初的目的是为了存储海量的日志文件以及网页等文本信息，并且对其进行批量处理（例如配合 mapreduce 为文档建立倒排索引，计算网页 PageRank 等）。和结构化存储系统相比，虽然分布式文件系统的可扩展性，吞吐率都非常好，但是几乎无法支持随机访问（random access）操作，通常只能进行文件进行追加（append）操作。而这样的限制使得非结构化存储系统很难面对那些低延时，实时性较强的应用。</p>
+<h3 id="3-半结构化存储"><a href="#3-半结构化存储" class="headerlink" title="3.半结构化存储"></a>3.半结构化存储</h3><p><strong>半结构化存储 （semi-structure storage systems）</strong>的提出便是为了解决结非构化存储系统随机访问性能差的问题。我们通常会听到一些流行的名词，比如 NoSQL, Key-Value Store,  甚至包括对象存储，例如 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=protobuf&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:124708083%7D">protobuf</a>，thrift 等等。这些都属于半结构化存储研究的领域，其中以 NoSQL 近几年的发展势头尤为强劲。NoSQL 系统既有分布式文件系统所具有的可扩展性，又有结构化存储系统的随机访问能力 （例如随机update, read 操作），系统在设计时通常选择简单键值（K-V）进行存储，抛弃了传统 RDBMS 里复杂 SQL 查询以及 ACID 事务。这样做可以换取系统最大的限度的可扩展性和灵活性。在 NoSQL 里比较有名系统包括：Google 的 Bigtable, Amazon 的 Dynamo, 以及开源界大名鼎鼎的 HBase，Cassandra 等.  通常这些 NoSQL 系统底层都是基于比较成熟的存储引擎，比如 Bigtable 就是基于 LevelDB ( jeff dean 写的，非常好的 C++ 源码教程) ，底层数据结构采用 LSM-Tree. 除了 LSM-Tree 之外 B-Tree （B+Tree）也是很成熟的存储引擎数据结构。</p>
+<h3 id="4-In-memory存储"><a href="#4-In-memory存储" class="headerlink" title="4.In-memory存储"></a>4.In-memory存储</h3><p><strong><a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=In-memory&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:124708083%7D">In-memory</a> 存储。</strong>随着业务的并发越来越高，存储系统对低延迟的要求也越来越高。 同时由于摩尔定律以及内存的价格不断下降，基于内存的存储系统也开始普及。 In-memory 存储顾名思义就是将数据存储在内存中, 从而获得读写的高性能。比较有名的系统包括 memcahed ，以及 Redis。 这些基于 K-V 键值系统的主要目的是为基于磁盘的存储系统做 cache。还有一些偏向于内存计算的系统，比如可以追溯到普林斯顿 Kai Lee 教授早期的研究工作 distributed shared memory ( DSM )，斯坦福的 RamCloud， 以及最近比较火的基于 lineage 技术的 tachyon (Alluxio) 项目（Spark生态系统子项目）等等。</p>
+<p><strong>NewSQL.</strong>  我们在介绍结构化存储时说到，单机 RDBMS 系统在可扩展性上面临着巨大的挑战，然而 NoSQL 不能很好的支持关系模型。那是不是有一种系统能兼备 RDBMS 的特性（例如：完整的 SQL 支持，ACID 事务支持），又能像 NoSQL 系统那样具有强大的可扩展能力呢？ 2012 年 Google 在 OSDI 上发表的 Spanner，以及 2013 年在 SIGMOD 发表的 F1, 让业界第一次看到了关系模型和 NoSQL 在超大规模数据中心上融合的可能性。不过由于这些系统都太过于黑科技了，没有大公司支持应该是做不出来的。比如 Spanner 里用了原子钟这样的黑科技来解决时钟同步问题，打破光速传输的限制。在这里只能对 google 表示膜拜。</p>
+<p>我们在之前提到，分布式存储系统有一系列的理论、算法、技术作为支撑：例如 <em>Paxos</em>, <em>CAP</em>, <em>Consistent Hash</em>, <em>Timing (时钟)</em>, <em>2PC, 3PC</em> 等等。那么如何掌握好这些技术呢？以我个人的经验，掌握这些内容一定要理解其对应的上下文。什么意思呢？就是一定要去思考为什么在当下环境需要某项技术，如果没有这个技术用其它技术替代是否可行，而不是一味的陷入大量的细节之中。例如：如何掌握好 Paxos?  Paxos本质上来说是一个三阶段提交，更 high level 讲是一个分布式锁。理解paxos必须一步一步从最简单的场景出发，比如从最简单的 master-backup 出发，发现不行，衍生出多数派读写，发现还是不行，再到 paxos.  之后再了解其变种，比如 [fast paxos](<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=fast">https://www.zhihu.com/search?q=fast</a> paxos&amp;search_source&#x3D;Entity&amp;hybrid_search_source&#x3D;Entity&amp;hybrid_search_extra&#x3D;{“sourceType”%3A”answer”%2C”sourceId”%3A124708083}), multi-paxos. 同理为什么需要 Consistent Hash, 我们可以先思考如果用简单range partition 划分数据有什么问题。再比如学习 2pc, 3pc 这样的技术时，可以想想他们和paxos 有什么关系，能否替代 paxos。</p>
+<p>以上是我关于分布式存储系统内容的一些总结，推荐一些相关的论文 ，有兴趣的读者可以看看：</p>
+<p><a href="https://link.zhihu.com/?target=https://www.baidu.com/link?url=SS7YNMslkAEuO1E8bDqjsHO4VCAkEiInpDkTiD6B8AAdmjr2vFkOUpEk9mAR5FWcEBkvzeBcXoLnAQgAx0QWzh2_aEW_VDLucUhH7NdrA1clT8kO3AJ6rNbx2jf0g9yS&wd=&eqid=8e651d0000027e2d00000006576a44d9">The Google File System</a><br><a href="https://link.zhihu.com/?target=http://lintool.github.io/UMD-courses/bigdata-2015-Spring/content/ChangFay_etal_OSDI2006.pdf">Bigtable: A Distributed Storage System for Structured Data.</a><br><a href="https://link.zhihu.com/?target=http://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf">Dynamo: Amazon’s Highly Available Key-value … </a><br><a href="https://link.zhihu.com/?target=http://lintool.github.io/UMD-courses/bigdata-2015-Spring/content/Khurana_etal_2012.pdf">Introduction to HBase Schema Design</a><br><a href="https://link.zhihu.com/?target=http://lintool.github.io/UMD-courses/bigdata-2015-Spring/content/Abadi_2012.pdf">Consistency Tradeoffs in Modern Distributed Database System Design</a><br><a href="https://link.zhihu.com/?target=https://www.usenix.org/conference/osdi12/technical-sessions/presentation/corbett">Spanner: Google’s Globally-Distributed Database</a><br><a href="https://link.zhihu.com/?target=https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&ved=0ahUKEwiZ1Lb5xLvPAhUH3mMKHSlOBlwQFggzMAI&url=http://datascienceassn.org/sites/default/files/F1%2520A%2520Distributed%2520SQL%2520Database%2520That%2520Scales.pdf&usg=AFQjCNGfWnwIaiTelNwV1WvQkKTVdQxARA">F1: A Distributed SQL Database That Scales</a><br><a href="https://link.zhihu.com/?target=https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=11&ved=0ahUKEwirlq61xbvPAhUG9WMKHTaBC9AQFghJMAo&url=http://www.cs.berkeley.edu/~haoyuan/papers/2014_socc_tachyon.pdf&usg=AFQjCNE7YQV3FT8kx6lE9uq342_qcdpoBA">Tachyon: Reliable, Memory Speed Storage for Cluster Computing</a><br><a href="https://link.zhihu.com/?target=https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=9&ved=0ahUKEwjCv53exbvPAhVX7mMKHYU7ByIQFghkMAg&url=http://www.snia.org/sites/default/files/JohnOusterhout_RAMCloud.pdf&usg=AFQjCNEM-UPY2o8QlRy4QcQlfBFqFLTBeg">RAMCloud and the Low- Latency Datacenter</a><a href="https://link.zhihu.com/?target=https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf">Cassandra - A Decentralized Structured Storage System</a><br><a href="https://link.zhihu.com/?target=http://homes.cs.washington.edu/~billhowe/mapreduce_a_major_step_backwards.html">MapReduce: A major step backwards</a><br><a href="https://link.zhihu.com/?target=http://lintool.github.io/UMD-courses/bigdata-2015-Spring/content/Stonebraker_etal_CACM2010.pdf">MapReduce and Parallel DBMSs: Friends or Foes?</a><br><a href="https://link.zhihu.com/?target=http://www.baidu.com/link?url=gpEJK81Kna-aic8i5y8_b0hGhItJiGfBrBPymDKYh-QCCuWXAzMKRlTWn9x9niwIbgDRagOlNpArC-QiTNzMDv6L47Vq7YrO4dLQMEbsXK0pqNI-r2L6p-4Bb70k_Tw7">A comparison of approaches to large scale data analysis</a></p>
+<h2 id="分布式计算系统"><a href="#分布式计算系统" class="headerlink" title="分布式计算系统"></a><strong>分布式计算系统</strong></h2><p>聊完了分布式存储系统，让我们来聊聊分布式计算系统 ：） 首先解决一个很多初学分布式计算的同学的疑惑：分布式计算和并行计算是一回事吗？最初我也有这样的疑惑，而现在我的理解是这样的：</p>
+<p>传统的并行计算要的是：投入更多机器，数据大小不变，计算速度更快。<br>分布式计算要求：投入更多的机器，能处理更大的数据。</p>
+<p>换句话说二者的出发点从一开始就不同，一个强调 high performance, 一个强调 scalability. 举例来说，MapReduce 给业界带来的真正的思考是什么？其实是给我们普及了 google 这样级别的公司对真正意义上的「大数据」的理解。因为在 04 年论文出来之前，搞并行计算的人压根连 「容错」的概念都没有。换句话说，分布式计算最为核心的部分就是「容错」，没有容错，分布式计算根本无从谈起。MapReduce 统要做成这个样子（map ＋ reduce），其实就是为了容错。</p>
+<p>然而很多初学分布式计算的同学对容错的概念多多少少是有误解的。包括我在初学 mapreduce 的时候也会思考：好好的计算怎么就会出错了呢？一方面，由于硬件的老化，有可能会导致某台存储设备没有启动起来，某台机器的网卡坏了，甚至于计算运行过程中断电了，这些都是有可能的。然而最平凡发生的错误是计算进程被杀掉。因为 google 的运行环境是共有集群，任何一个权限更高的进程都可能 kill 掉你的计算进程。设想在一个拥有几千台机器的集群中运行，一个进程都不被 kill 掉的概率几乎为零。具体的容错机制我们会在后面介绍具体的系统时提到。</p>
+<p>另一个有意思的话题是，随着机器学习技术的兴起，越来越多的分布式计算系统是为了机器学习这样的应用设计的，这也是我比较关注的研究领域，也会在后面重点谈到。</p>
+<p>如同分布式存储系统一样，我对分布式计算系统也做了一个分类，如下：</p>
+<p><strong>1. 传统基于msg的系统</strong><br><strong>2. MapReduce-like 系统</strong><br><strong>3. 图计算系统</strong><br><strong>4. 基于状态（state）的系统</strong><br><strong>5. Streaming 系统</strong></p>
+<p>当然不同的人可能会有不同的分类方法，不过大同小异。我们接下来聊聊这些系统都在干些什么。</p>
+<h3 id="1-传统基于msg的系统"><a href="#1-传统基于msg的系统" class="headerlink" title="1. 传统基于msg的系统"></a><strong>1. 传统基于msg的系统</strong></h3><p><strong>传统基于msg的系统 .</strong> 这类系统里比较有代表性的就是 MPI （message passing interface）. 目前比较流行的两个 MPI 实现是 mpich2 和 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=openmpi&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:124708083%7D">openmpi</a> . MPI 这个框架非常灵活，对程序的结构几乎没有太多约束，以至于大家有时把 MPI 称为一组接口 API, 而不是系统框架。在这些 API 里最常用的两个就是 send 和 recv 接口（还有一系列非阻塞扩展接口，例如：Isend, Irecv 等）。MPI 除了提供消息传递接口之外，其框架还实现了资源管理和分配，以及调度的功能。除此之外，MPI 在高性能计算里也被广泛使用，通常可以和 Infiniband 这样的高速网络无缝结合。</p>
+<p>除了 send 和 recv 接口之外，MPI 中另一个接口也值得注意，那就是 AllReduce. 这个接口在很多机器学习系统开发里都很用。因为很多并行机器学习系统都是各个进程分别训练模型，然后再合适的时候（例如一轮迭代结束）大家同步一下答案，达成共识，然后继续迭代。这个 “达成共识” 的操作往往可以很方便的通过 AllReduce 来完成。 AllReduce 接口具有两个优点：1. 高效。 2. 实用简单。 先说说为什么使用简单。使用 AllReduce 通常只需要在单机核心源码里加入  AllReduce 一行代码，就能完成并行化的功能。说 AllReduce 高效的原因是因为其底层消息传递使用了 tree aggregation，尽可能的将计算分摊到每一个节点。</p>
+<p>可是，既然 AllReduce 这么好，为什么在实际大大规模计算中很少看到呢？原因很简单，就是因为  MPI 不支持容错，所以很难扩展到大规模集群之上。不过最近陈天奇写了一个支持容错的 allreduce 接口，叫rabit，有兴趣的同学可以关注一下。 大名鼎鼎的 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=xgboost&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:124708083%7D">xgboost</a> 底层的分布式接口就是 rabit.</p>
+<h3 id="2-MapReduce-like-系统"><a href="#2-MapReduce-like-系统" class="headerlink" title="2. MapReduce-like 系统"></a><strong>2. MapReduce-like 系统</strong></h3><p><strong>[MapReduce-like 系统](<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=MapReduce-like">https://www.zhihu.com/search?q=MapReduce-like</a> 系统&amp;search_source&#x3D;Entity&amp;hybrid_search_source&#x3D;Entity&amp;hybrid_search_extra&#x3D;{“sourceType”%3A”answer”%2C”sourceId”%3A124708083}).</strong>  这一类系统又叫作 dataflow 系统，其中以 MapReduce (Hadoop) 和 Spark 为代表。其实在学术界很有很多类似的系统例如 Dryad, FlumeJava, Twister 等等。这一类系统的特点是将计算抽象成为 high-level operator, 例如像 map，reduce，filter 这样的函数式算子，然后将算子组合成 DAG ，然后由后端的调度引擎进行并行化调度。其中，MapReduce 系统属于比较简单的 DAG，只有 map 和 reduce 两层节点。MapReduce 这样的系统之所以可以扩展到超大规模的集群上运行，就是因为其完备的容错机制。在 Hadoop 社区还有很多基于 mapreduce 框架的衍生产品，比如 Hive (并行数据库OLAP), Pig（交互式数据操作）等等。</p>
+<p>MapReduce-like 的编程风格和 MPI 截然相反。MapReduce对程序的结构有严格的约束——计算过程必须能在两个函数中描述：map 和 reduce；输入和输出数据都必须是一个一个的 records；任务之间不能通信，整个计算过程中唯一的通信机会是 map phase 和 [reduce phase](<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=reduce">https://www.zhihu.com/search?q=reduce</a> phase&amp;search_source&#x3D;Entity&amp;hybrid_search_source&#x3D;Entity&amp;hybrid_search_extra&#x3D;{“sourceType”%3A”answer”%2C”sourceId”%3A124708083}) 之间的 shuffuling phase，这是在框架控制下的，而不是应用代码控制的。因为有了严格的控制，系统框架在任何时候出错都可以从上一个状态恢复。Spark 的 RDD 则是利用 Lineage，可以让数据在内存中完成转换。</p>
+<p>由于良好的扩展性，许多人都机器学习算法的并行化任务放在了这些平台之上。比较有名的库包括 Mahout （基于Hadoop）, 以及 MLI （基于 Spark) .  然而这些系统最大缺点有两点：</p>
+<p>\1. 这些系统所能支持的机器学习模型通常都不是很大。导致这个问题的主要原因是这系统在 push back 机器学习模型时都是粗粒度的把整个模型进行回传，导致了网络通信的瓶颈。有些机器学习的模型可以大到无法想象，比如我们用 Field-aware factorization machine （FFM）做  criteo 的 ctr prediction 时模型大小可以达到100 GB.</p>
+<p>\2. 严格的 BSP 同步计算使得集群的效率变的很低。也就是说系统很容易受到straggle的影响。</p>
+<h3 id="3、图计算系统"><a href="#3、图计算系统" class="headerlink" title="3、图计算系统."></a><strong>3、图计算系统.</strong></h3><p><strong>图计算系统.</strong> 图计算系统是分布式计算里另一个分支，这些系统都是把计算过程抽象成图，然后在不同节点分布式执行，例如 PageRank 这样的任务，很适合用图计算系统来表示。最早成名的图计算系统当属 Google  的 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=pregel&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:124708083%7D">pregel</a>，该系统采用 BSP 模型，计算以 vectex 为中心。随后又有一系列图计算框架推出，例如：GPS （对 Pregel 做了优化，除了vectex-centric computation，还有 global computation，动态调整分区等等。）Giraph &#x2F; Hama 都是基于 Hadoop 的 Apache 的开源 BSP 图计算项目。</p>
+<p>除了同步（BSP）图计算系统之外，异步图计算系统里的佼佼者当属 GraphLab，该系统提出了 GAS 的编程模型。目前这个项目已经该名为 dato.，专门推广基于图的大规模机器学习系统。</p>
+<h3 id="4、基于状态（state）的系统"><a href="#4、基于状态（state）的系统" class="headerlink" title="4、基于状态（state）的系统."></a>4、基于状态（state）的系统.</h3><p><strong>基于状态（state）的系统.</strong> 这一类系统主要包括 2010 年 OSDI 上推出的 Piccolo, 以及后来 2012 年 nips 上 Google 推出的 distbelief，再到后来被机器系学习领域广泛应用的 Parameter Server 架构。这里我们重点介绍一下 Parameter Server 这个架构。</p>
+<p>我们之前说，MPI 由于不支持容错所以很难扩展至大规模集群之中；MapReduce 系统无法支持大模型机器学习应用，并且节点同步效率较低。用图抽象来做机器学习任务，很多问题都不能很好的求解，比如深度学习中的多层结构。而 Parameter Server 这种 state-centric 模型则把机器学习的模型存储参数上升为主要组件，并且采用异步机制提升处理能力。参数服务器的概念最早来自于 Alex Smola 于 2010 年提出的并行  LDA 架构。它通过采用分布式的 <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=memcached&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:124708083%7D">memcached</a> 作为存放参数的存储，这样就提供了有效的机制作用于不同worker节点同步模型参数。 Google 的 jeff dean 在 2012 年进一步提出了第一代 Google Brain 大规模神经网络的解决方案 Distbelief. 在后来的  CMU  的 Eric xing 以及百度少帅 李沐 都提出了更通用的 Parameter server 架构。</p>
+<p>如果要深入 Parameter server 系统的设计，需要一些机器学习的背景，比如什么是 ssp  协议， 在此我们就不详细讨论了。</p>
+<h3 id="5、Streaming-系统"><a href="#5、Streaming-系统" class="headerlink" title="5、Streaming 系统."></a><strong>5、Streaming 系统.</strong></h3><p><strong>Streaming 系统.</strong> Streaming 系统听名字就能看出来是为流式数据提供服务的。其中比较有名的系统包括 Storm, Spark Streaming, Flink 等等。由于本人对这个领域并不是很熟，就不详细介绍了。</p>
+<p>以上是我对分布式计算系统的一些介绍，其实每一个方向深入下去都是一个研究领域，在此推荐一些论文：</p>
+<p><a href="https://link.zhihu.com/?target=https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0ahUKEwimgKrZgb7PAhVS_mMKHZv2AEsQFgggMAA&url=http://research.google.com/archive/mapreduce-osdi04.pdf&usg=AFQjCNEL7nTxrQ6fiMUtt4AZh6gK5og2IQ">MapReduce: Simplified Data Processing on Large Clusters</a><br><a href="https://link.zhihu.com/?target=https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0ahUKEwjurZjsgb7PAhUM62MKHavWDhoQFggaMAA&url=http://www-bcf.usc.edu/~minlanyu/teach/csci599-fall12/papers/nsdi_spark.pdf&usg=AFQjCNFzpytpG78Bbg8BIWalnQK6FF3UOA">Resilient Distributed Datasets</a><br><a href="https://link.zhihu.com/?target=https://www.cs.cmu.edu/~muli/file/parameter_server_osdi14.pdf">Scaling Distributed Machine Learning with the Parameter Server</a><br><a href="https://link.zhihu.com/?target=http://vldb.org/pvldb/vol5/p716_yuchenglow_vldb2012.pdf">Distributed GraphLab: A Framework for Machine Learning</a><br><a href="https://link.zhihu.com/?target=https://www.usenix.org/event/osdi10/tech/full_papers/Power.pdf">Piccolo: Building Fast, Distributed Programs with Partitioned ..</a><br><a href="https://link.zhihu.com/?target=https://www.cs.cmu.edu/~./seunghak/petuum_kdd15.pdf">Petuum: A New Platform for Distributed Machine Learning on Big Data</a><br><a href="https://link.zhihu.com/?target=https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0ahUKEwjdp5uagr7PAhVY92MKHVgeDx0QFggdMAA&url=https://stanford.edu/~rezab/sparkclass/slides/td_streaming.pdf&usg=AFQjCNFCSnjtM2UnnYZyuO8h0nBBKo6vfQ">Spark Streaming</a><br><a href="https://link.zhihu.com/?target=https://www.microsoft.com/en-us/research/publication/dryad-distributed-data-parallel-programs-from-sequential-building-blocks/">Dryad: Distributed Data-parallel Programs from Sequential Building …</a><br><a href="https://link.zhihu.com/?target=https://papers.nips.cc/paper/4687-large-scale-distributed-deep-networks.pdf">Large Scale Distributed Deep Networks - NIPS Proceedings</a></p>
+<h2 id="分布式管理系统："><a href="#分布式管理系统：" class="headerlink" title="分布式管理系统："></a><strong>分布式管理系统：</strong></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">sort</span><span class="hljs-params">(<span class="hljs-type">int</span> iRecordNum, <span class="hljs-type">int</span> iType)</span> &#123;<br>    <span class="hljs-type">int</span> x = <span class="hljs-number">0</span>, y = <span class="hljs-number">0</span>;<br>    whiel (iRecordNum-- &gt; <span class="hljs-number">0</span>) &#123;<br>		<span class="hljs-keyword">if</span> (iType == <span class="hljs-number">0</span>)<br>            x = y + <span class="hljs-number">2</span>;<br>        <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">if</span> (iType == <span class="hljs-number">1</span>) x = y + <span class="hljs-number">10</span>;<br>            <span class="hljs-keyword">else</span> &#123;<br>                x = y + <span class="hljs-number">20</span>;<br>                y = y++;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式理论</div>
+      <div>http://example.com/2023/06/01/分布式系统-大数据/理论/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="分布式系统">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式系统</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/" title="分布式系统计算框架">
+                        <span class="hidden-mobile">分布式系统计算框架</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

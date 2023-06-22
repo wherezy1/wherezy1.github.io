@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="负载均衡常见负载均衡实现组件： Nginx， Spring Gateway，Ribbon，Dubbo 负载均衡负载均衡是指通过将请求分发到多个服务器上，从而实现更好的性能、可伸缩性、容错性等。对于单机和分布式系统，实现负载均衡的方式有所不同，具体如下：  单机系统的负载均衡  单机负载均衡的目标是通过利用多核心、多线程、多进程等资源，实现更高的并发和更好的性能。常见的实现方式包括以下几种：  轮询">
+<meta property="og:type" content="article">
+<meta property="og:title" content="负载均衡">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="负载均衡常见负载均衡实现组件： Nginx， Spring Gateway，Ribbon，Dubbo 负载均衡负载均衡是指通过将请求分发到多个服务器上，从而实现更好的性能、可伸缩性、容错性等。对于单机和分布式系统，实现负载均衡的方式有所不同，具体如下：  单机系统的负载均衡  单机负载均衡的目标是通过利用多核心、多线程、多进程等资源，实现更高的并发和更好的性能。常见的实现方式包括以下几种：  轮询">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:01:41.026Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>负载均衡 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="负载均衡"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">负载均衡</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p>常见负载均衡实现组件：</p>
+<p>Nginx， Spring Gateway，Ribbon，Dubbo</p>
+<h2 id="负载均衡-1"><a href="#负载均衡-1" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>负载均衡是指通过将请求分发到多个服务器上，从而实现更好的性能、可伸缩性、容错性等。对于单机和分布式系统，实现负载均衡的方式有所不同，具体如下：</p>
+<ol>
+<li>单机系统的负载均衡</li>
+</ol>
+<p>单机负载均衡的目标是通过利用多核心、多线程、多进程等资源，实现更高的并发和更好的性能。常见的实现方式包括以下几种：</p>
+<ul>
+<li>轮询法：按照请求的顺序依次分配到不同的进程或线程中。</li>
+<li>随机法：将请求随机分配到不同的进程或线程中。</li>
+<li>短连接优先法：优先处理短连接，以避免阻塞长连接。</li>
+<li>最少连接法：将请求分配到连接数最少的进程或线程中。</li>
+</ul>
+<p>其中，轮询法和随机法是最常用的方式。</p>
+<ol start="2">
+<li>分布式系统的负载均衡</li>
+</ol>
+<p>分布式负载均衡的目标是通过利用多台服务器的资源，实现更好的性能、可伸缩性和容错性。常见的实现方式包括以下几种：</p>
+<ul>
+<li>集中式负载均衡：使用专用的负载均衡器（如HAProxy、Nginx等）来分配请求，可以控制流量和实现负载均衡。</li>
+<li>分布式负载均衡：将负载均衡的工作分布到多个节点中，每个节点对请求进行分发和处理。常见的现方式包括Round-robin DNS、一致性哈希等。</li>
+<li>内容路由：根据请求的内容对请求进行路由。例如，将视频请求分发到视频服务器，将图片请求分发到图片服务器等。</li>
+<li>时间权重法：根据服务器的响应时间来分配请求，响应时间越短的服务器会得到更多的请求分配。</li>
+</ul>
+<p>其中，集中式负载均衡常用于Web应用程序、数据库、Cache等，而分布式负载均衡更适用于分布式系统、云计算等场景。</p>
+<p>需要注意的是，负载均衡不仅涉及到请求的分发，还需要注意如何管理和监控服务器的运行状态和负载情况，以保证整个系统的可用性和性能。</p>
+<h2 id="分布式负载均衡"><a href="#分布式负载均衡" class="headerlink" title="分布式负载均衡"></a>分布式负载均衡</h2><p>分布式系统的负载均衡常用的实现方式包括以下几种：</p>
+<ol>
+<li>集中式负载均衡（Centralized Load Balancing）</li>
+</ol>
+<p>集中式负载均衡器是一个单独的负载均衡设备，可以接收来自客户端的请求，并将其转发到背后的服务器。常用的集中式负载均衡器包括HAProxy、Nginx、F5等。集中式负载均衡器通常可用于Web应用程序、数据库、Cache等场景。</p>
+<p>优点：</p>
+<ul>
+<li>简单易用。</li>
+<li>可以实现精确的流量控制和灵活的负载均衡策略。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>可能成为瓶颈。</li>
+<li>需要购买和维护额外的设备。</li>
+</ul>
+<ol start="2">
+<li>分布式负载均衡（Distributed Load Balancing）</li>
+</ol>
+<p>分布式负载均衡通过将负载均衡任务分发到多台服务器中，从而实现更好的性能、可伸缩性和容错性。常用的分布式负载均衡算法包括Round-robin DNS、一致性哈希、Least Connections等。</p>
+<p>优点：</p>
+<ul>
+<li>可以扩展处理能力，实现更好的性能和可伸缩性。</li>
+<li>不会成为单点故障。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>实现较为复杂。</li>
+<li>需要更多的计算资源。</li>
+<li>可能存在数据不一致性的问题。</li>
+</ul>
+<ol start="3">
+<li>内容路由（Content-based Routing）</li>
+</ol>
+<p>内容路由根据请求的内容进行路由，可以将请求分配到专门处理该请求类型的服务器中，从而实现更好的性能和可伸缩性。常用的内容路由算法包括URL路由、IP路由、识别码路由、HTTP头路由等。</p>
+<p>优点：</p>
+<ul>
+<li>可以高效地处理不同类型的请求。</li>
+<li>可以针对特定请求类型进行优化和优化。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>实现较为复杂。</li>
+<li>需要协调多个服务器的处理。</li>
+</ul>
+<ol start="4">
+<li>时间加权法（Weighted Round Robin）</li>
+</ol>
+<p>时间加权法是一种基于时间权重的分布式负载均衡算法，将时间权重分配给不同的服务器，并按照权重分配请求。常用的时间加权法包括加权轮询、加权最少连接等。</p>
+<p>优点：</p>
+<ul>
+<li>可以根据处理能力分配请求。</li>
+<li>可以实现动态负载均衡。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>无法处理突发请求。</li>
+<li>实现较为复杂。</li>
+</ul>
+<p>常用的实现组件包括HAProxy、Nginx、F5等负载均衡器，以及使用一致性哈希算法实现的分布式负载均衡组件如Hashicorp Consul等。</p>
+<p>以下是使用Nginx实现的一个分布式负载均衡的示例代码：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-section">upstream</span> backend &#123;<br>         <span class="hljs-attribute">server</span> backend1.example.com;<br>         <span class="hljs-attribute">server</span> backend2.example.com;<br>    &#125;<br><br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;<br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">proxy_pass</span> http://backend;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>该配置用于接收80端口的请求，并分发到两台背后的服务器（backend1.example.com和backend2.example.com）中。</p>
+<p>需要注意的是，分布式负载均衡的实现需要根据具体应用场景进行选择，并需要考虑性能、可伸缩性、容错性等因素。</p>
+<h2 id="组件实现"><a href="#组件实现" class="headerlink" title="组件实现"></a>组件实现</h2><ol>
+<li>Round-robin DNS</li>
+</ol>
+<p>Round-robin DNS常用于对Web应用程序进行负载均衡。通过在DNS服务器中设置多个IP地址，每次请求都会返回不同IP地址的负载均衡策略。比如，可以将请求发送给多个Web服务器中的其中一个。</p>
+<ol start="2">
+<li>一致性哈希</li>
+</ol>
+<p>一致性哈希常用于对缓存、Key-value存储、消息中间件等进行负载均衡。将请求哈希到一个虚拟的环中，并将节点映射到环上。当请求到来时，通过哈希计算得到一个位置，并将请求发送给该位置上最近的服务器节点。可以动态地添加或删除节点，实现高可用性和扩展性。常用的组件包括Hashicorp Consul、Zookeeper等。</p>
+<ol start="3">
+<li>Least Connections</li>
+</ol>
+<p>Least Connections常用于负载均衡器中对Web服务器进行负载均衡。对于每个请求，选取连接数最少的服务器进行处理。可以有效地避免繁忙服务器的过度负载。</p>
+<ol start="4">
+<li>内容路由</li>
+</ol>
+<p>内容路由常用于对Web应用程序中的静态资源、动态页面、API等进行负载均衡。根据请求中的URL、请求头、请求方法等信息进行路由，将请求转发到不同的服务器集群中来处理。</p>
+<ol start="5">
+<li>时间加权法</li>
+</ol>
+<p>时间加权法常用于对Web应用程序进行负载均衡。对于每个请求，按照服务器的处理能力分配更多或更少的带宽和处理时间，达到更好的负载均衡效果。</p>
+<p>以下是几个常见的组件的负载均衡实现方式：</p>
+<ol>
+<li>Nginx请求转发</li>
+</ol>
+<p>Nginx常用于Web服务器负载均衡。可以通过设置多个上游服务器，并将请求分发到多个服务器中。同时，Nginx也支持内容路由和时间加权法等负载均衡策略。</p>
+<ol start="2">
+<li>Gateway、Ribbon负载均衡实现</li>
+</ol>
+<p>Spring Cloud Gateway和Netflix Ribbon都是开源的微服务架构组件，可以对多个服务实例进行负载均衡。通过Gateway和Ribbon，可以实现多种负载均衡策略，包括轮询、随机、最少连接、加权等等。</p>
+<ol start="3">
+<li>Dubbo负载均衡实现</li>
+</ol>
+<p>Dubbo也是一个开源的分布式框架，可以通过自身的负载均衡组件实现负载均衡。Dubbo的负载均衡组件支持轮询、随机、最少活跃数、一致性哈希等负载均衡算法。可以通过在Dubbo配置文件中进行配置，例如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dubbo:reference</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userService&quot;</span> <span class="hljs-attr">interface</span>=<span class="hljs-string">&quot;com.example.UserService&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dubbo:method</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;getUserInfo&quot;</span> <span class="hljs-attr">loadbalance</span>=<span class="hljs-string">&quot;roundrobin&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dubbo:reference</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>在这个配置中，将getUserInfo方法的负载均衡算法配置为轮询方式。Dubbo还支持自定义负载均衡算法，可以通过实现LoadBalance接口来实现。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>负载均衡</div>
+      <div>http://example.com/2023/06/01/分布式组件+常见组件/负载均衡/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E6%9C%AA%E5%AD%A6-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" title="未学组件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">未学组件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%B7%A5%E5%85%B7/JVM%E8%B0%83%E4%BC%98/" title="JVM调优">
+                        <span class="hidden-mobile">JVM调优</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

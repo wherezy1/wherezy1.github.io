@@ -1,0 +1,1190 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Flink-应用- 概念深究checkPoint基础概念元数据 检查点元数据信息主要包括：  检查点的ID，用于标识检查点的唯一性。 检查点的触发时间，指的是执行检查点操作的时间点。 Checkpoint状态，指示是否已经完成或取消检查点。 创建检查点时应用程序的并行任务操作符状态。 每个并行任务操作符的私有状态，比如值状态和列表状态等。 快照的状态大小，以字节为单位，用于监视检查点的大小。  流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink-应用">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/Flink%E7%AC%94%E8%AE%B0-%E6%96%B0/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Flink-应用- 概念深究checkPoint基础概念元数据 检查点元数据信息主要包括：  检查点的ID，用于标识检查点的唯一性。 检查点的触发时间，指的是执行检查点操作的时间点。 Checkpoint状态，指示是否已经完成或取消检查点。 创建检查点时应用程序的并行任务操作符状态。 每个并行任务操作符的私有状态，比如值状态和列表状态等。 快照的状态大小，以字节为单位，用于监视检查点的大小。  流">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1902689/1633213582389-2561c5aa-51d9-4952-9856-0100e8f2ecb8.png">
+<meta property="og:image" content="http://flink.apachecn.org/docs/img/tumbling-windows.svg">
+<meta property="og:image" content="http://flink.apachecn.org/docs/img/sliding-windows.svg">
+<meta property="og:image" content="http://flink.apachecn.org/docs/img/session-windows.svg">
+<meta property="og:image" content="http://flink.apachecn.org/docs/img/non-windowed.svg">
+<meta property="og:image" content="http://flink.apachecn.org/docs/img/interval-join.svg">
+<meta property="og:image" content="http://flink.apachecn.org/docs/img/times_clocks.svg">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:01:41.115Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="flink">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/1902689/1633213582389-2561c5aa-51d9-4952-9856-0100e8f2ecb8.png">
+  
+  
+  
+  <title>Flink-应用 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flink-应用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          38k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          318 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Flink-应用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Flink-应用"><a href="#Flink-应用" class="headerlink" title="Flink-应用"></a>Flink-应用</h1><h1 id="概念深究"><a href="#概念深究" class="headerlink" title="- 概念深究"></a>- 概念深究</h1><h2 id="checkPoint"><a href="#checkPoint" class="headerlink" title="checkPoint"></a>checkPoint</h2><h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><p><strong>元数据</strong></p>
+<p>检查点元数据信息主要包括：</p>
+<ol>
+<li>检查点的ID，用于标识检查点的唯一性。</li>
+<li>检查点的触发时间，指的是执行检查点操作的时间点。</li>
+<li>Checkpoint状态，指示是否已经完成或取消检查点。</li>
+<li>创建检查点时应用程序的并行任务操作符状态。</li>
+<li>每个并行任务操作符的私有状态，比如值状态和列表状态等。</li>
+<li>快照的状态大小，以字节为单位，用于监视检查点的大小。</li>
+</ol>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs scss">检查点是Flink中用于实现高可靠性和容错性的重要机制，它能够在应用程序发生故障时提供可靠的状态恢复功能。下面是检查点在Flink中的整体流程以及各个组件之间的关系：<br><span class="hljs-number">1</span>. 检查点<br><br>(<span class="hljs-number">1</span>) 每个任务运行时都会有一个计划好的检查点，并在指定的时间点执行检查点操作。<br><br>(<span class="hljs-number">2</span>) 检查点操作将应用程序的状态保存在一个持久化存储中。<br><br>(<span class="hljs-number">3</span>) 一旦一个检查点被完全完成，Flink会将其元数据信息保存在JobManager的内存中。<br><br>(<span class="hljs-number">4</span>) 如果在检查点保存后应用程序发生故障，Flink会尝试从最近完成的检查点开始恢复应用程序的状态。<br><br>(<span class="hljs-number">5</span>) 当应用程序成功地从故障中恢复后，Flink会在其内部重新计划偏离恢复点的计算任务。<br><br><span class="hljs-number">1</span>. 生成逻辑<br>当应用程序在运行过程中，Flink会按照一定的时间间隔自动生成检查点。在生成检查点时，Flink会执行以下操作：<br><br>(<span class="hljs-number">1</span>) 在收到生成检查点的命令后，Flink会通知所有的TaskManager暂停计算，并开始对应用程序状态进行快照。<br><br>(<span class="hljs-number">2</span>) 等待所有任务完成对应状态的快照后，Flink会执行算子的快照操作并持久化全部状态到内部或者外部存储系统中（如HDFS、S3或其他云存储服务）。<br><br>(<span class="hljs-number">3</span>) 当检查点的全部数据已经写入到存储系统中并完成备份，Flink会更新检查点元数据。此时，检查点已经生成完毕，并等待恢复时使用。<br><br><span class="hljs-number">2</span>. 执行逻辑<br>在应用程序发生故障需要恢复时，Flink会按照以下方式执行检查点：<br><br>(<span class="hljs-number">1</span>) 从最近已完成的检查点开始恢复。<br><br>(<span class="hljs-number">2</span>) 读取检查点元数据，加载检查点数据并将其应用到应用程序状态中。<br><br>(<span class="hljs-number">3</span>) 重新启动应用程序并从恢复点恢复数据流管道。<br><br><span class="hljs-number">3</span>. 恢复逻辑<br>在发生故障后，Flink会从检查点开始进行恢复。总的恢复流程如下：<br><br>(<span class="hljs-number">1</span>) Flink会获取最近的完成检查点，并加载检查点元数据和对应的状态数据。<br><br>(<span class="hljs-number">2</span>) 对于每个状态后端，Flink会在内部或外部存储系统中查找最新的写入的状态和元数据快照，并构建状态快照。<br><br>(<span class="hljs-number">3</span>) 通过组合所有状态快照，Flink会构造应用程序的完整状态。<br><br>(<span class="hljs-number">4</span>) 重新启动应用程序的数据流管道，并从恢复点开始继续处理数据。<br><br><span class="hljs-number">4</span>. 检查逻辑<br>Flink会周期性地重新处理一些数据以检查应用程序是否已经成功地恢复。具体检查逻辑如下：<br><br>(<span class="hljs-number">1</span>) 从当前时间的后面某个时间开始，向上回溯。<br><br>(<span class="hljs-number">2</span>) 对于每个算子，Flink会判断是否所有数据块都已经处理完毕。<br><br>(<span class="hljs-number">3</span>) 如果某个算子还有未处理完的数据块，Flink会重新启动该算子并重新处理还未处理的数据。<br><br>总之，Flink中的检查点机制主要涉及Flink、Job Manager、Task Manager、Zookeeper和第三方存储系统之间的协作。在生成、执行、恢复和检查过程中，不同的组件都会发挥不同的作用，以确保应用程序状态的完整性和可靠性。<br></code></pre></td></tr></table></figure>
+
+<h3 id="涉及组件"><a href="#涉及组件" class="headerlink" title="涉及组件"></a>涉及组件</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs ada">Flink、Job Manager、<span class="hljs-keyword">Task</span> Manager、Zookeeper和第三方存储系统在检查点机制方面的协作如下：<br><br><span class="hljs-number">1</span>. Flink<br><br>Flink是检查点机制的核心，它的任务包括生成、执行、恢复和检查检查点。由于检查点机制需要涉及到跨多个<span class="hljs-keyword">Task</span> Manager节点的协作，因此Flink需要负责统一调度和协调检查点的生成和执行，以及恢复过程中的资源协调管理等。<br><br><span class="hljs-number">2</span>. Job Manager<br>Job Manager是Flink的主控节点，也是检查点机制的协调者和管理者。它负责协调和管理每个<span class="hljs-keyword">Task</span> Manager节点的检查点操作，以及保存检查点的元数据和状态信息。<br><br><span class="hljs-number">3</span>. <span class="hljs-keyword">Task</span> Manager<br><span class="hljs-keyword">Task</span> Manager是Flink中的工作节点。每个<span class="hljs-keyword">Task</span> Manager节点都需要执行检查点操作，生成和保存应用程序的状态信息，并且在恢复时重新启动数据流管道和应用程序。同时，<span class="hljs-keyword">Task</span> Manager还需要与Job Manager进行通信，向其汇报检查点状态和进度信息。<br><br><span class="hljs-number">4</span>. Zookeeper<br>Zookeeper是用于分布式应用程序的一种协调服务。在Flink中，Zookeeper主要用于协调Job Manager和<span class="hljs-keyword">Task</span> Manager之间的信息交换和状态同步操作，并确保在Flink集群中的<span class="hljs-keyword">Task</span> Manager和Job Manager能够有效地相互协作。Zookeeper还用于管理和协调检查点的存储，以便在应用程序发生故障时，Flink可以从最近的检查点开始快速恢复应用程序状态。<br><br><span class="hljs-number">5</span>. 第三方存储系统<br>在Flink中，检查点的数据需要存储在第三方存储系统中，以保证数据在Flink集群中的故障和不可用的情况下的安全性和持久性。此外，第三方存储系统还需要集成Flink的状态后端，以便Flink能够通过其API接口来操作存储系统中的检查点数据和元数据。<br><br>综上所述，在Flink中，不同组件之间的协作非常重要，各自需要承担不同的角色，以实现检查点机制的高可靠性和稳定性。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="savePoint"><a href="#savePoint" class="headerlink" title="savePoint"></a>savePoint</h2><ol start="2">
+<li>保存点</li>
+</ol>
+<p>(1) 保存点是创建检查点的一个手动快照。</p>
+<p>(2) 手动创建保存点时，Flink会停止计算过程并保存应用程序的状态。</p>
+<p>(3) 保存点的元数据会记录在JobManager的内存中和外部持久化存储中。</p>
+<p>(4) 如果应用程序发生故障，可以使用最近的保存点来恢复应用程序的状态。</p>
+<p>(5) 创建保存点时需要保证存储的状态是可用的，并将元数据保存到持久化存储中以防止应用程序故障。</p>
+<h3 id="流程-1"><a href="#流程-1" class="headerlink" title="流程"></a>流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs l">Savepoint是Flink用于在应用程序更新、升级和迁移等场景下进行状态备份和恢复的机制之一。与检查点（Checkpoint）不同，Savepoint是一种手动创建的快照，它对应用程序的状态进行全量备份，并不需要周期性、自动化地生成。<br><br>下面是Savepoint在Flink中的整体流程以及各个组件之间的关系：<br><br>1. 生成逻辑<br>在运行时，应用程序可以通过触发Savepoint命令来手动创建Savepoint。在生成Savepoint时，Flink会执行以下操作：<br><br>(1) 向JobManager发送Savepoint操作的请求，并开始对应用程序状态进行快照。<br><br>(2) 等待所有任务完成对应状态的快照后，开始执行算子的快照操作，并将全部状态持久化。<br><br>(3) 当Savepoint中的全部数据已经完全保存在存储系统上并完成备份，Flink会更新元数据，表示Savepoint已经生成。<br><br>2. 执行逻辑<br>在应用程序发生故障需要恢复时，可以从最近的Savepoint开始恢复。在执行Savepoint时，Flink会执行以下操作：<br><br>(1) 读取Savepoint的元数据和状态数据。<br><br>(2) 加载状态数据并将其应用到应用程序状态中。<br><br>(3) 重新启动应用程序的数据流管道并从Savepoint开始处理数据。<br><br>3. 恢复逻辑<br>与检查点数据的恢复逻辑类似，Savepoint数据的恢复逻辑如下：<br><br>(1) Flink会获取最近的Savepoint，并加载指定的状态数据。<br><br>(2) 对于每个状态后端，Flink会在存储系统中查找最新的状态和元数据快照，并构建状态快照。<br><br>(3) 通过组合所有状态快照，Flink会构造应用程序的完整状态。<br><br>(4) 重新启动应用程序数据流管道，并从Savepoint开始恢复数据。<br><br>4. 检查逻辑<br>与检查点类似，Flink会周期性地重新处理一些数据来检查应用程序是否已经成功地恢复。具体检查逻辑如下：<br><br>(1) 从当前时间的一个时间点开始向上回溯。<br><br>(2) 对于每个算子，检查其是否已经处理所有数据块和所有任务。<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="二者对比"><a href="#二者对比" class="headerlink" title="二者对比"></a>二者对比</h3><p>区别：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs">保存点只是作用于单个应用程序，它只是快速地保存了当前应用程序的全局状态，并没有像检查点那样与Flink整个集群相关。<br><br>如果保存点中的数据丢失，可以通过重新启动应用程序并从最近的检查点中恢复来恢复状态。但是这可能会导致一定的数据丢失，因为保存点只有应用程序的状态，而检查点是整个应用程序的状态。而且，保存点的新创建与计划的检查点不同。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><h2 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h2><p>三种时间（Processing Time、Event Time、Ingestion Time）在Flink中都有各自的作用和应用场景。在这之上，水位线作为事件时序的标识，会对这三种时间产生影响。</p>
+<h3 id="Processing-Time"><a href="#Processing-Time" class="headerlink" title="Processing Time"></a>Processing Time</h3><p>Processing Time（处理时间）是指事件（数据）进入Flink算子之后，处理时间所对应的实际时间。Processing Time常用于需要实现极低延迟、实时快速处理的场景。例如对于某些需要即时计算得出确认结果的实时应用，处理时间就是最好的事件时间戳。 </p>
+<p>水位线对Processing Time的影响：水位线不能直接影响Processing Time，因为Processing Time是由Flink系统内部的时钟指定的，主要是用于计算过期和超时。所以，水位线常被用来控制Event Time的延迟。</p>
+<h3 id="Event-Time"><a href="#Event-Time" class="headerlink" title="Event Time"></a>Event Time</h3><p>Event Time（事件时间）是指事件实际发生的时间而非进入Flink系统的时间，因此Event Time会受到延迟、乱序等影响，但也因此更贴近于实际业务场景。基于Event Time的处理方式，通常会先将数据根据时间戳转换为数据时间，再进行时间窗口、时间滑动和增量聚合等操作，并用水位线来标记窗口是否关闭。 </p>
+<p>应用场景：当系统中要处理分布式数据流时，通常选择使用基于Event Time模式来触发数据的聚合、嵌套、排序和分区操作。常见的应用场景包括数据分析、数据挖掘、实时仪表盘和监控等。</p>
+<p>水位线对Event Time的影响：水位线是用来标识事件的进度和业务时间的进展，因此在基于Event Time的数据处理流程中，水位线起到了至关重要的作用。水位线通常用于触发窗口的计算和关闭，以保证计算结果的准确性。</p>
+<h3 id="Ingestion-Time"><a href="#Ingestion-Time" class="headerlink" title="Ingestion Time"></a>Ingestion Time</h3><p>Ingestion Time（摄入时间）是指事件进入Flink系统的时间而产生的时间戳，它与Processing Time和Event Time不同，因为它不是由事件自己所传递的时间戳所确定的，而是由接收事件的Flink节点系统内部时钟所确定的。因此，Ingestion Time具有中等的准确度和可信度，通常情况下，它被用于实现对数据到达延迟的控制与分析。</p>
+<p>应用场景：Ingestion Time相对于Event Time准确性来说较低，但它通常用于在需要在实时应用程序中，记录数据写入的时间等场景中。通常场景包括实时刷卡、在线支付、实时广告类实时数据处理等场景。</p>
+<p>水位线对Ingestion Time的影响：Ingestion Time并不是由事件中的时间戳所确定，因此水位线对Ingestion Time并没有直接影响，但是水位线可以用来控制Ingestion Time的乱序和延迟，确保数据的可靠性和准确性。</p>
+<p>总之，在Flink中，Processing Time、Event Time和Ingestion Time都有各自的应用场景和所适用的数据类型和处理方式。同时，水位线对于三种时间的影响也是决定数据处理和计算结果准确性和可靠性的关键所在。</p>
+<h2 id="窗口-视窗-window-窗口"><a href="#窗口-视窗-window-窗口" class="headerlink" title="[窗口](#视窗- window - 窗口)"></a>[窗口](#视窗- window - 窗口)</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml">[](#视窗- window - 窗口)<br>跳转语法<br><br><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#top&quot;</span>&gt;</span>a标签回到顶部<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="flink-组件"><a href="#flink-组件" class="headerlink" title="flink 组件"></a>flink 组件</h1><p>job、算子、task</p>
+<p>在Flink中，Job、Task和算子的关系如下：</p>
+<ul>
+<li>Job：代表一个完整的数据处理任务，由一系列算子和依赖关系组成。</li>
+<li>算子（Operator）：代表数据处理过程中的具体操作，如数据源的读取、数据的转换和计算、数据的输出等。算子可以由一个或多个Task组成，并且可以通过Flink的算子函数API自定义编写算子逻辑。</li>
+<li>Task：是执行算子的具体执行单元，每个Task负责处理一个数据分区的数据，即算子的并行实例。每个算子可以由多个并行的Task组成，Task之间独立运行并发相互之间通过网络连接进行数据交换。</li>
+</ul>
+<p>Job、算子和Task的关系如下图所示：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/1902689/1633213582389-2561c5aa-51d9-4952-9856-0100e8f2ecb8.png" srcset="/img/loading.gif" lazyload alt="Flink Job, Operator, Task关系图"></p>
+<p>其中，Job描述了整个数据处理过程的逻辑和依赖关系，算子则表示实现不同任务的数据处理逻辑，而Task则是算子的具体执行单元。整个数据处理过程可以看做是一棵计算图，Job是整个计算图的根节点，每个算子是树的分支节点，每个Task是叶子节点。</p>
+<p>实际上，Flink还有一个更为精细的中间元素——数据流（DataStream），用于描述数据在算子之间的流动关系，它连接了不同算子之间的依赖关系，使得整个计算图更加清晰和直观。但是，这并不影响Job、Task、算子在Flink中的核心地位。</p>
+<p>示例</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs gradle">以一个简单的WordCount任务为例，这个任务需要从一个数据源中读取数据，将每个单词进行计数，并输出结果。那么：<br><br>- 这个WordCount任务就是一个Job。<br>- 数据源读取、单词计数、输出结果三个操作对应着三个<span class="hljs-keyword">Task</span>，这些<span class="hljs-keyword">Task</span>可以并行执行。<br><br>在用户使用Flink进行数据处理时，如下所示：<br><br>- 用户首先需要定义一个Job，描述数据处理流程、指定数据源和输出位置等。<br>- 将Job提交到Flink集群上运行。<br>- Flink集群根据Job的配置自动创建多个<span class="hljs-keyword">Task</span>，每个<span class="hljs-keyword">Task</span>处理Job中的一个分片数据，并将处理结果输出到目标位置。<br><br>例如，用户可以通过编写Flink程序，定义一个Job来实现WordCount任务，可以通过以下方式来提交任务：<br><br>```<br>bin<span class="hljs-regexp">/flink run -c com.example.WordCount /</span>path<span class="hljs-regexp">/to/</span>wordcount.jar<br>```<br><br>在这个例子中，用户将WordCount.java编译为wordcount.jar，并使用flink run命令提交任务。因此，整个WordCount任务就是一个Job，而每个用于处理单词计数、数据读取和结果输出的<span class="hljs-keyword">Task</span>各自负责对应的处理逻辑。<br><br><br>算子：<br>在Flink中，算子（Operator）是一个特殊的<span class="hljs-keyword">Task</span>，负责对输入数据进行一些处理、计算、过滤等操作，并将结果输出到下一个算子或最终的输出位置。每个算子都可以由一个或多个并行的<span class="hljs-keyword">Task</span>组成，这些<span class="hljs-keyword">Task</span>在运行时并发处理输入数据。<br><br>以WordCount任务为例，我们可以将其分解成三个算子（Operator）：<br><br><span class="hljs-number">1</span>. 数据源算子（<span class="hljs-keyword">Source</span> Operator）：从数据源中读取数据，将输入数据传递给下一个算子。<br><span class="hljs-number">2</span>. 转换算子（Transformation Operator）：将输入数据拆分成单词，并对单词进行计数，将计数后的结果传递给下一个算子。<br><span class="hljs-number">3</span>. 输出算子（Sink Operator）：将计数后的结果输出到指定的数据存储位置。<br><br>每个算子都可以由多个<span class="hljs-keyword">Task</span>组成，每个<span class="hljs-keyword">Task</span>处理输入数据的一部分，并将处理结果传递给下一个算子或最终的输出位置。例如，在转换算子中，每个<span class="hljs-keyword">Task</span>负责处理输入数据的一部分，并将计算结果传递给下一个算子或输出算子。<br><br>因此，可以说算子是Flink中一个比<span class="hljs-keyword">Task</span>更高层次的抽象，每个算子都对应着一些具体的操作，而每个<span class="hljs-keyword">Task</span>则负责具体的输入数据处理和计算。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="基础API"><a href="#基础API" class="headerlink" title="- 基础API"></a>- 基础API</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>批处理 和 流处理</strong></p>
+<p>Flink程序是实现分布式集合转换的常规程序（例如，Filter，映射，更新状态，Join，分组，定义窗口，聚合）。</p>
+<p>集合最初是从源创建的（例如，通过读取文件，kafka主题或从本地的内存中集合）。</p>
+<p>结果通过接收器返回，接收器可以例如将数据写入（分布式）文件或标准输出（例如，命令行终端）。</p>
+<p>Flink程序可以在各种环境中运行，独立运行或嵌入其他程序中。执行可以在本地JVM中执行，也可以在许多计算机的集群上执行。</p>
+<p>根据数据源的类型（即有界或无界源），您可以编写批处理程序或流程序，其中DataSet API用于批处理，DataStream API用于流式处理。本指南将介绍两种API共有的基本概念，但请参阅我们的 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/datastream_api.html">流处理指南</a>和 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/batch/index.html">批处理指南</a>，了解有关使用每个API编写程序的具体信息。</p>
+<p><strong>注：</strong>当显示的API时，如何使用，我们将用实际的例子 <code>StreamingExecutionEnvironment</code>和<code>DataStream</code>API。<code>DataSet</code>API中的概念完全相同，只需替换为<code>ExecutionEnvironment</code>和<code>DataSet</code>。</p>
+<h2 id="DataSet-与-DataStream"><a href="#DataSet-与-DataStream" class="headerlink" title="DataSet 与 DataStream"></a>DataSet 与 DataStream</h2><p>Flink具有特殊类<code>DataSet</code>并<code>DataStream</code>在程序中表示数据。您可以将它们视为可以包含重复项的不可变数据集合。在<code>DataSet</code>数据有限的情况下，对于一个<code>DataStream</code>数据元的数量可以是无界的。</p>
+<h2 id="Flink计划的剖析"><a href="#Flink计划的剖析" class="headerlink" title="Flink计划的剖析"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=flink%E8%AE%A1%E5%88%92%E7%9A%84%E5%89%96%E6%9E%90">Flink计划的剖析</a></h2><p>Flink程序看起来像是转换数据集合的常规程序。每个程序包含相同的基本部分：</p>
+<ol>
+<li>获得一个<code>execution environment</code>，</li>
+<li>加载&#x2F;创建初始数据，</li>
+<li>指定此数据的转换，</li>
+<li>指定放置计算结果的位置，</li>
+<li>触发程序执行</li>
+</ol>
+<h2 id="支持类型"><a href="#支持类型" class="headerlink" title="支持类型"></a>支持类型</h2><h3 id="元组和案例类-–-Tuple"><a href="#元组和案例类-–-Tuple" class="headerlink" title="元组和案例类 – Tuple"></a>元组和案例类 – Tuple</h3><p>元组是包含固定数量的具有各种类型的字段的复合类型。Java API提供<code>Tuple1</code>最多的类<code>Tuple25</code>。元组的每个字段都可以是包含更多元组的任意Flink类型，从而产生嵌套元组。可以使用字段名称直接访问元组的字段<code>tuple.f4</code>，或使用通用getter方法 <code>tuple.getField(int position)</code>。字段索引从0开始。请注意，这与Scala元组形成鲜明对比，但它与Java常规索引更为一致。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; wordCounts = env.fromElements(<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;String, Integer&gt;(<span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-number">1</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;String, Integer&gt;(<span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-number">2</span>));<br><br>wordCounts.map(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MapFunction</span>&lt;Tuple2&lt;String, Integer&gt;, Integer&gt;() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Integer <span class="hljs-title function_">map</span><span class="hljs-params">(Tuple2&lt;String, Integer&gt; value)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">return</span> value.f1;<br>    &#125;<br>&#125;);<br><br>wordCounts.keyBy(<span class="hljs-number">0</span>); <span class="hljs-comment">// also valid .keyBy(&quot;f0&quot;)</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="POJOs"><a href="#POJOs" class="headerlink" title="POJOs"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=pojos">POJOs</a></h3><p>如果满足以下要求，则Flink将Java和Scala类视为特殊的POJO数据类型：</p>
+<ul>
+<li>这类必须公开。</li>
+<li>它必须有一个没有参数的公共构造函数（默认构造函数）。</li>
+<li>所有字段都是公共的，或者必须通过getter和setter函数访问。对于一个名为<code>foo</code>getter和setter方法的字段必须命名<code>getFoo()</code>和<code>setFoo()</code>。</li>
+<li>Flink必须支持字段的类型。目前，Flink使用<a target="_blank" rel="noopener" href="http://avro.apache.org/">Avro</a>序列化任意对象（例如<code>Date</code>）。</li>
+</ul>
+<p>Flink分析了POJO类型的结构，即它了解了POJO的字段。因此，POJO类型比一般类型更容易使用。此外，Flink可以比一般类型更有效地处理POJO。</p>
+<p>以下示例显示了一个包含两个公共字段的简单POJO。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WordWithCount</span> &#123;<br><br>    <span class="hljs-keyword">public</span> String word;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> count;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">WordWithCount</span><span class="hljs-params">()</span> &#123;&#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">WordWithCount</span><span class="hljs-params">(String word, <span class="hljs-type">int</span> count)</span> &#123;<br>        <span class="hljs-built_in">this</span>.word = word;<br>        <span class="hljs-built_in">this</span>.count = count;<br>    &#125;<br>&#125;<br><br>DataStream&lt;WordWithCount&gt; wordCounts = env.fromElements(<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">WordWithCount</span>(<span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-number">1</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">WordWithCount</span>(<span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-number">2</span>));<br><br>wordCounts.keyBy(<span class="hljs-string">&quot;word&quot;</span>); <span class="hljs-comment">// key by field expression &quot;word&quot;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="原始类型-Integer等"><a href="#原始类型-Integer等" class="headerlink" title="原始类型 - Integer等"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B">原始类型</a> - Integer等</h3><p>Flink支持所有Java和Scala的原始类型，如<code>Integer</code>，<code>String</code>和<code>Double</code>。</p>
+<h3 id="一般类别-非POJO"><a href="#一般类别-非POJO" class="headerlink" title="一般类别 - 非POJO"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E4%B8%80%E8%88%AC%E7%B1%BB%E5%88%AB">一般类别</a> - 非POJO</h3><p>Flink支持大多数Java和Scala类（API和自定义）。限制适用于包含无法序列化的字段的类，如文件指针，I &#x2F; O流或其他本机资源。遵循Java Beans约定的类通常可以很好地工作。</p>
+<p>所有未标识为POJO类型的类（请参阅上面的POJO要求）都由Flink作为常规类类型处理。Flink将这些数据类型视为黑盒子，并且无法访问其内容（即，用于有效排序）。使用序列化框架<a target="_blank" rel="noopener" href="https://github.com/EsotericSoftware/kryo">Kryo</a>对常规类型进行反序列化。</p>
+<h3 id="值-–-Value"><a href="#值-–-Value" class="headerlink" title="值 – Value"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E5%80%BC">值</a> – Value</h3><p>_值_类型手动描述它们的序列化和反序列化。它们不是通过通用序列化框架，而是通过<code>org.apache.flinktypes.Value</code>使用方法<code>read</code>和实现接口为这些 算子操作提供自定义代码<code>write</code>。当通用序列化效率非常低时，使用值类型是合理的。一个示例是将数据元的稀疏向量实现为数组的数据类型。知道数组大部分为零，可以对非零数据元使用特殊编码，而通用序列化只需编写所有数组数据元。</p>
+<p>该<code>org.apache.flinktypes.CopyableValue</code>接口以类似的方式支持手动内部克隆逻辑。</p>
+<p>Flink带有与基本数据类型对应的预定义值类型。（<code>ByteValue</code>， <code>ShortValue</code>，<code>IntValue</code>，<code>LongValue</code>，<code>FloatValue</code>，<code>DoubleValue</code>，<code>StringValue</code>，<code>CharValue</code>， <code>BooleanValue</code>）。这些Value类型充当基本数据类型的可变变体：它们的值可以被更改，允许程序员重用对象并从垃圾收集器中消除压力。</p>
+<h3 id="Hadoop-Writables"><a href="#Hadoop-Writables" class="headerlink" title="Hadoop Writables"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=hadoop-writables">Hadoop Writables</a></h3><p>您可以使用实现该<code>org.apache.hadoop.Writable</code>接口的类型。<code>write()</code>和<code>readFields()</code>方法中定义的序列化逻辑将用于序列化。</p>
+<h3 id="特殊类型"><a href="#特殊类型" class="headerlink" title="特殊类型"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E7%89%B9%E6%AE%8A%E7%B1%BB%E5%9E%8B">特殊类型</a></h3><p>您可以使用特殊类型，包括Scala的<code>Either</code>，<code>Option</code>和<code>Try</code>。Java API有自己的自定义实现<code>Either</code>。与Scala类似<code>Either</code>，它代表两种可能类型的值，_左_或_右_。 <code>Either</code>可用于错误处理或需要输出两种不同类型记录的 算子。</p>
+<h2 id="累加器和计数器"><a href="#累加器和计数器" class="headerlink" title="累加器和计数器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E7%B4%AF%E5%8A%A0%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8">累加器和计数器</a></h2><p>累加器是具有<strong>添加 算子操作</strong>和<strong>最终累积结果的</strong>简单构造，可在作业结束后使用。</p>
+<p>最直接的累加器是一个<strong>计数器</strong>：您可以使用该<code>Accumulator.add(V value)</code>方法递增它 。在工作结束时，Flink将汇总（合并）所有部分结果并将结果发送给客户。在调试过程中，或者如果您想快速了解有关数据的更多信息，累加器非常有用。</p>
+<p>Flink目前有以下<strong>内置累加器</strong>。它们中的每一个都实现了 <a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/Accumulator.java">Accumulator</a> 接口。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/IntCounter.java"><strong>IntCounter</strong></a>， <a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/LongCounter.java"><strong>LongCounter</strong></a> 和<a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/DoubleCounter.java"> <strong>DoubleCounter</strong></a>：请参阅下面的使用计数器的示例。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/Histogram.java"><strong>直方图</strong></a>：离散数量的区间的直方图实现。在内部，它只是一个从Integer到Integer的映射。您可以使用它来计算值的分布，例如字数统计程序的每行字数的分布。</li>
+</ul>
+<p><strong>如何使用累加器：</strong></p>
+<p>首先，您必须在要使用它的用户定义转换函数中创建累加器对象（此处为计数器）。</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-keyword">private</span> IntCounter numLines = <span class="hljs-keyword">new</span> <span class="hljs-type">IntCounter</span>();复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>其次，您必须注册累加器对象，通常在_富_函数的<code>open()</code>方法中 。在这里您还可以定义名称。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">get<span class="hljs-constructor">RuntimeContext()</span>.add<span class="hljs-constructor">Accumulator(<span class="hljs-string">&quot;num-lines&quot;</span>, <span class="hljs-params">this</span>.<span class="hljs-params">numLines</span>)</span>;复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>您现在可以在 算子函数中的任何位置使用累加器，包括在<code>open()</code>和 <code>close()</code>方法中。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">this</span>.numLines.<span class="hljs-keyword">add</span>(<span class="hljs-number">1</span>);复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>整个结果将存储在<code>JobExecutionResult</code>从<code>execute()</code>运行环境的方法返回的对象中（当前这仅在执行等待作业完成时才有效）。</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs erlang-repl">myJobExecutionResult.getAccumulatorResult(<span class="hljs-string">&quot;num-lines&quot;</span>)复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>所有累加器每个作业共享一个命名空间。因此，您可以在作业的不同算子函数中使用相同的累加器。Flink将在内部合并所有具有相同名称的累加器。</p>
+<p>关于累加器和迭代的注释：目前累加器的结果仅在整个作业结束后才可用。我们还计划在下一次迭代中使前一次迭代的结果可用。您可以使用 <a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-java/src/main/java/org/apache/flink/api/java/operators/IterativeDataSet.java#L98">聚合器</a> 来计算每次迭代统计信息，并根据此类统计信息确定迭代的终止。</p>
+<p><strong>定制累加器：</strong></p>
+<p>要实现自己的累加器，只需编写Accumulator接口的实现即可。如果您认为自定义累加器应与Flink一起提供，请随意创建拉取请求。</p>
+<p>您可以选择实现 <a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/Accumulator.java">Accumulator</a> 或<a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/SimpleAccumulator.java">SimpleAccumulator</a>。</p>
+<p><code>Accumulator&lt;V,R&gt;</code>最灵活：它定义<code>V</code>要添加的值的类型<code>R</code>，以及最终结果的结果类型。例如，对于直方图，<code>V</code>是数字并且<code>R</code>是直方图。<code>SimpleAccumulator</code>适用于两种类型相同的情况，例如计数器。</p>
+<h1 id="DataStreamAPI"><a href="#DataStreamAPI" class="headerlink" title="- DataStreamAPI"></a>- DataStreamAPI</h1><h1 id="–-框架"><a href="#–-框架" class="headerlink" title="– 框架"></a>– 框架</h1><h2 id="数据源-输入"><a href="#数据源-输入" class="headerlink" title="数据源 - 输入"></a>数据源 - 输入</h2><p>调用：StreamExecutionEnvironment.addSource(sourceFunction)</p>
+<p>自定义：addSource() 接口</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">源是您的程序从中读取输入的位置。您可以使用将附加源附加到程序<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">StreamExecutionEnvironment</span>.</span></span>add<span class="hljs-constructor">Source(<span class="hljs-params">sourceFunction</span>)</span>。Flink附带了许多预先实现的源函数，但您可以通过实现SourceFunction 非并行源，或通过实现ParallelSourceFunction接口或扩展 RichParallelSourceFunction并行源来编写自己的自定义源。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="DataStream转换-操作"><a href="#DataStream转换-操作" class="headerlink" title="DataStream转换 - 操作"></a>DataStream转换 - 操作</h2><p>算子的转化：算子将一个或多个DataStream转换为新的DataStream。程序可以将多个转换组合成复杂的数据流拓扑。</p>
+<p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/26">算子 (apachecn.org)</a></p>
+<p>转化方式：参见链接 （map、）</p>
+<h2 id="数据接收-输出"><a href="#数据接收-输出" class="headerlink" title="数据接收 - 输出"></a>数据接收 - 输出</h2><p>调用：数据接收器使用DataStream并将它们转发到文件，套接字，外部系统或打印它们。Flink带有各种内置输出格式，这些格式封装在DataStreams上的 算子操作后面:</p>
+<ul>
+<li><code>writeAsText()</code>&#x2F; <code>TextOutputFormat</code>- 按字符串顺序写入数据元。通过调用每个数据元的_toString（）_方法获得字符串。</li>
+<li><code>writeAsCsv(...)</code>&#x2F; <code>CsvOutputFormat</code>- 将元组写为逗号分隔值文件。行和字段分隔符是可配置的。每个字段的值来自对象的_toString（）_方法。</li>
+<li><code>print()</code>&#x2F; <code>printToErr()</code> - 在标准输出&#x2F;标准错误流上打印每个数据元的_toString（）_值。可选地，可以提供前缀（msg），其前缀为输出。这有助于区分不同的_打印_调用。如果并行度大于1，则输出也将与生成输出的任务的标识符一起添加。</li>
+<li><code>writeUsingOutputFormat()</code>&#x2F; <code>FileOutputFormat</code>- 自定义文件输出的方法和基类。支持自定义对象到字节的转换。</li>
+<li><code>writeToSocket</code> - 根据a将数据元写入套接字 <code>SerializationSchema</code></li>
+<li><code>addSink</code> - 调用自定义接收器函数。Flink捆绑了其他系统（如Apache Kafka）的连接器，这些系统实现为接收器函数。</li>
+</ul>
+<p>自定义：addSink() 接口</p>
+<h2 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h2><h3 id="控制延迟"><a href="#控制延迟" class="headerlink" title="控制延迟"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E6%8E%A7%E5%88%B6%E5%BB%B6%E8%BF%9F">控制延迟</a></h3><p>目的：控制吞吐量 和 延迟</p>
+<p>默认情况下，数据元不会逐个传输到网络上（这会导致不必要的网络流量），但会被缓冲。可以在Flink配置文件中设置缓冲区的大小（实际在计算机之间传输）。虽然此方法适用于优化吞吐量，但当传入流速度不够快时，可能会导致延迟问题。要控制吞吐量和延迟，您可以<code>env.setBufferTimeout(timeoutMillis)</code>在运行环境（或单个 算子）上使用以设置缓冲区填充的最长等待时间。在此之后，即使缓冲区未满，也会自动发送缓冲区。此超时的默认值为100毫秒。</p>
+<p>用法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">LocalStreamEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> StreamExecutionEnvironment.createLocalEnvironment();<br>env.setBufferTimeout(timeoutMillis);<br><br>env.generateSequence(<span class="hljs-number">1</span>,<span class="hljs-number">10</span>).map(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MyMapper</span>()).setBufferTimeout(timeoutMillis);<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="迭代-迭代器"><a href="#迭代-迭代器" class="headerlink" title="迭代 - 迭代器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E8%BF%AD%E4%BB%A3">迭代</a> - 迭代器</h3><p>​	迭代流程序实现步进函数并将其嵌入到<code>IterativeStream</code>。由于DataStream程序可能永远不会完成，因此没有最大迭代次数。相反，您需要指定流的哪个部分反馈到迭代，哪个部分使用<code>split</code>转换或转发到下游<code>filter</code>。在这里，我们展示了使用过滤器的示例。首先，我们定义一个<code>IterativeStream</code>.</p>
+<p>例如，这里是从一系列整数中连续减去1直到它们达到零的程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;Long&gt; someIntegers = env.generateSequence(<span class="hljs-number">0</span>, <span class="hljs-number">1000</span>);<br><br>IterativeStream&lt;Long&gt; iteration = someIntegers.iterate();<br><br>DataStream&lt;Long&gt; minusOne = iteration.map(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MapFunction</span>&lt;Long, Long&gt;() &#123;<br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> Long <span class="hljs-title function_">map</span><span class="hljs-params">(Long value)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-keyword">return</span> value - <span class="hljs-number">1</span> ;<br>  &#125;<br>&#125;);<br><br>DataStream&lt;Long&gt; stillGreaterThanZero = minusOne.filter(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FilterFunction</span>&lt;Long&gt;() &#123;<br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">filter</span><span class="hljs-params">(Long value)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-keyword">return</span> (value &gt; <span class="hljs-number">0</span>);<br>  &#125;<br>&#125;);<br><br>iteration.closeWith(stillGreaterThanZero);<br><br>DataStream&lt;Long&gt; lessThanZero = minusOne.filter(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FilterFunction</span>&lt;Long&gt;() &#123;<br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">filter</span><span class="hljs-params">(Long value)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-keyword">return</span> (value &lt;= <span class="hljs-number">0</span>);<br>  &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h3 id="收集数据源"><a href="#收集数据源" class="headerlink" title="收集数据源"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE%E6%BA%90">收集数据源</a></h3><p>即：形如。<strong>List&lt;Tuple2&lt;String, Integer&gt;&gt;</strong>  等特殊集合类型，转为 <strong>DataStream</strong></p>
+<p>Flink提供了特殊的数据源，这些数据源由Java集合支持，以方便测试。一旦程序经过测试，源和接收器可以很容易地被读取&#x2F;写入外部系统的源和接收器替换。</p>
+<p>集合数据源可以使用如下：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_java_6"><strong>Java</strong></a></li>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_scala_6"><strong>Scala</strong></a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> <span class="hljs-type">StreamExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> StreamExecutionEnvironment.createLocalEnvironment();<br><br><span class="hljs-comment">// Create a DataStream from a list of elements</span><br>DataStream&lt;Integer&gt; myInts = env.fromElements(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>);<br><br><span class="hljs-comment">// Create a DataStream from any Java collection</span><br>List&lt;Tuple2&lt;String, Integer&gt;&gt; data = ...<br>DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; myTuples = env.fromCollection(data);<br><br><span class="hljs-comment">// Create a DataStream from an Iterator</span><br>Iterator&lt;Long&gt; longIt = ...<br>DataStream&lt;Long&gt; myLongs = env.fromCollection(longIt, Long.class);<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="迭代器数据接收器"><a href="#迭代器数据接收器" class="headerlink" title="迭代器数据接收器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%95%B0%E6%8D%AE%E6%8E%A5%E6%94%B6%E5%99%A8">迭代器数据接收器</a></h3><p>Flink还提供了一个接收器，用于收集DataStream结果以进行测试和调试。它可以使用如下：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_java_7"><strong>Java</strong></a></li>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_scala_7"><strong>Scala</strong></a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.apache.flink.streaming.experimental.DataStreamUtils<br><br>DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; myResult = ...<br>Iterator&lt;Tuple2&lt;String, Integer&gt;&gt; myOutput = DataStreamUtils.collect(myResult)<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="–-关键词下包含的概念"><a href="#–-关键词下包含的概念" class="headerlink" title="– 关键词下包含的概念"></a>– 关键词下包含的概念</h1><h1 id="算子"><a href="#算子" class="headerlink" title="算子"></a>算子</h1><h2 id="视窗-window-窗口"><a href="#视窗-window-窗口" class="headerlink" title="视窗- window - 窗口"></a>视窗- window - 窗口</h2><h3 id="被Keys化与非被Keys化Windows"><a href="#被Keys化与非被Keys化Windows" class="headerlink" title="被Keys化与非被Keys化Windows"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E8%A2%ABkeys%E5%8C%96%E4%B8%8E%E9%9D%9E%E8%A2%ABkeys%E5%8C%96windows">被Keys化与非被Keys化Windows</a></h3><p>要指定的第一件事是您的流是否应该键入。必须在定义窗口之前完成此 算子操作。使用the <code>keyBy(...)</code>将您的无限流分成逻辑被Key化的数据流。如果<code>keyBy(...)</code>未调用，则表示您的流不是被Keys化的。</p>
+<p>对于被Key化的数据流，可以将传入事件的任何属性用作键（<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/api_concepts.html#specifying-keys">此处有</a>更多详细信息）。拥有被Key化的数据流将允许您的窗口计算由多个任务并行执行，因为每个逻辑被Key化的数据流可以独立于其余任务进行处理。引用相同Keys的所有数据元将被发送到同一个并行任务。</p>
+<p>在非被Key化的数据流的情况下，您的原始流将不会被拆分为多个逻辑流，并且所有窗口逻辑将由单个任务执行，_即_并行度为1。</p>
+<p>区别：窗口    可并行 与 不可并行</p>
+<p><strong>被Keys化Windows</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">stream<br>       .keyBy(...)               &lt;-  keyed versus non-keyed windows<br>       .window(...)              &lt;-  required: <span class="hljs-string">&quot;assigner&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>非被Keys化Windows</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">stream<br>       .windowAll(...)           &lt;-  required: <span class="hljs-string">&quot;assigner&quot;</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="窗口分配器-windowAssigner"><a href="#窗口分配器-windowAssigner" class="headerlink" title="窗口分配器 - windowAssigner"></a>窗口分配器 - windowAssigner</h3><p>指定窗口类型</p>
+<h4 id="翻滚的Windows-–-固定窗口（tumbling）"><a href="#翻滚的Windows-–-固定窗口（tumbling）" class="headerlink" title="翻滚的Windows – 固定窗口（tumbling）"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E7%BF%BB%E6%BB%9A%E7%9A%84windows">翻滚的Windows</a> – 固定窗口（tumbling）</h4><p>一个_翻滚窗口_分配器的每个数据元分配给指定的窗口_的窗口大小_。翻滚窗具有固定的尺寸，不重叠。例如，如果指定大小为5分钟的翻滚窗口，则将评估当前窗口，并且每五分钟将启动一个新窗口，如下图所示。</p>
+<p><img src="http://flink.apachecn.org/docs/img/tumbling-windows.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>以下代码段显示了如何使用翻滚窗口。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=tab_java_0"><strong>Java</strong></a></li>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=tab_scala_0"><strong>Scala</strong></a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;T&gt; input = ...;<br><br><span class="hljs-comment">// tumbling event-time windows</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(TumblingEventTimeWindows.of(Time.seconds(<span class="hljs-number">5</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br><br><span class="hljs-comment">// tumbling processing-time windows</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(TumblingProcessingTimeWindows.of(Time.seconds(<span class="hljs-number">5</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br><br><span class="hljs-comment">// daily tumbling event-time windows offset by -8 hours.</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(TumblingEventTimeWindows.of(Time.days(<span class="hljs-number">1</span>), Time.hours(-<span class="hljs-number">8</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>时间间隔可以通过使用一个指定<code>Time.milliseconds(x)</code>，<code>Time.seconds(x)</code>， <code>Time.minutes(x)</code>，等等。</p>
+<p>如上一个示例所示，翻滚窗口分配器还采用可选<code>offset</code> 参数，可用于更改窗口的对齐方式。例如，如果没有偏移每小时翻滚窗口划时代对齐，这是你会得到如窗口 <code>1:00:00.000 - 1:59:59.999</code>，<code>2:00:00.000 - 2:59:59.999</code>等等。如果你想改变它，你可以给出一个偏移量。随着15分钟的偏移量，你会，例如，拿 <code>1:15:00.000 - 2:14:59.999</code>，<code>2:15:00.000 - 3:14:59.999</code>等一个重要的用例的偏移是窗口调整到比UTC-0时区等。例如，在中国，您必须指定偏移量<code>Time.hours(-8)</code>。</p>
+<h4 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a></h4><p>该_滑动窗口_分配器分配元件以固定长度的窗口。与翻滚窗口分配器类似，_窗口大小_由_窗口大小_参数配置。附加的_窗口滑动_参数控制滑动窗口的启动频率。因此，如果幻灯片小于窗口大小，则滑动窗口可以重叠。在这种情况下，数据元被分配给多个窗口。</p>
+<p>例如，您可以将大小为10分钟的窗口滑动5分钟。有了这个，你每隔5分钟就会得到一个窗口，其中包含过去10分钟内到达的事件，如下图所示。</p>
+<p><img src="http://flink.apachecn.org/docs/img/sliding-windows.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>以下代码段显示了如何使用滑动窗口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;T&gt; input = ...;<br><br><span class="hljs-comment">// sliding event-time windows</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(SlidingEventTimeWindows.of(Time.seconds(<span class="hljs-number">10</span>), Time.seconds(<span class="hljs-number">5</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br><br><span class="hljs-comment">// sliding processing-time windows</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(SlidingProcessingTimeWindows.of(Time.seconds(<span class="hljs-number">10</span>), Time.seconds(<span class="hljs-number">5</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br><br><span class="hljs-comment">// sliding processing-time windows offset by -8 hours</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(SlidingProcessingTimeWindows.of(Time.hours(<span class="hljs-number">12</span>), Time.hours(<span class="hljs-number">1</span>), Time.hours(-<span class="hljs-number">8</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>时间间隔可以通过使用一个指定<code>Time.milliseconds(x)</code>，<code>Time.seconds(x)</code>， <code>Time.minutes(x)</code>，等等。</p>
+<p>如上一个示例所示，滑动窗口分配器还采用可选<code>offset</code>参数，可用于更改窗口的对齐方式。例如，如果没有偏移每小时窗口半小时滑动与时代一致，那就是你会得到如窗口 <code>1:00:00.000 - 1:59:59.999</code>，<code>1:30:00.000 - 2:29:59.999</code>等等。如果你想改变它，你可以给出一个偏移量。随着15分钟的偏移量，你会，例如，拿 <code>1:15:00.000 - 2:14:59.999</code>，<code>1:45:00.000 - 2:44:59.999</code>等一个重要的用例的偏移是窗口调整到比UTC-0时区等。例如，在中国，您必须指定偏移量<code>Time.hours(-8)</code>。</p>
+<h4 id="会话窗口"><a href="#会话窗口" class="headerlink" title="会话窗口"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E4%BC%9A%E8%AF%9D%E7%AA%97%E5%8F%A3">会话窗口</a></h4><p>在_会话窗口_中按活动会话分配器组中的数据元。与_翻滚窗口_和_滑动窗口_相比，会话窗口不重叠并且没有固定的开始和结束时间。相反，当会话窗口在一段时间内没有接收到数据元时，_即_当发生不活动的间隙时，会关闭会话窗口。会话窗口分配器可以配置静态_会话间隙_或 _会话间隙提取器_函数，该函数定义不活动时间段的长度。当此期限到期时，当前会话将关闭，后续数据元将分配给新的会话窗口。</p>
+<p><img src="http://flink.apachecn.org/docs/img/session-windows.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>以下代码段显示了如何使用会话窗口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;T&gt; input = ...;<br><br><span class="hljs-comment">// event-time session windows with static gap</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(EventTimeSessionWindows.withGap(Time.minutes(<span class="hljs-number">10</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br><br><span class="hljs-comment">// event-time session windows with dynamic gap</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(EventTimeSessionWindows.withDynamicGap((element) -&gt; &#123;<br>        <span class="hljs-comment">// determine and return session gap</span><br>    &#125;))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br><br><span class="hljs-comment">// processing-time session windows with static gap</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(ProcessingTimeSessionWindows.withGap(Time.minutes(<span class="hljs-number">10</span>)))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br><br><span class="hljs-comment">// processing-time session windows with dynamic gap</span><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(ProcessingTimeSessionWindows.withDynamicGap((element) -&gt; &#123;<br>        <span class="hljs-comment">// determine and return session gap</span><br>    &#125;))<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br></code></pre></td></tr></table></figure>
+
+<p>静态间隙可以通过使用中的一个来指定<code>Time.milliseconds(x)</code>，<code>Time.seconds(x)</code>， <code>Time.minutes(x)</code>，等。</p>
+<p>通过实现<code>SessionWindowTimeGapExtractor</code>接口指定动态间隙。</p>
+<p>注意由于会话窗口没有固定的开始和结束，因此它们的评估方式与翻滚和滑动窗口不同。在内部，会话窗口算子为每个到达的记录创建一个新窗口，如果它们彼此之间的距离比定义的间隙更接近，则将窗口合并在一起。为了可合并的，会话窗口 算子操作者需要一个合并<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=triggers">触发器</a>和一个合并 <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=window-functions">的窗函数</a>，如<code>ReduceFunction</code>，<code>AggregateFunction</code>，或<code>ProcessWindowFunction</code> （<code>FoldFunction</code>不能合并。）</p>
+<h4 id="全局Windows"><a href="#全局Windows" class="headerlink" title="全局Windows"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E5%85%A8%E5%B1%80windows">全局Windows</a></h4><p>一个_全局性的窗口_分配器分配使用相同的Keys相同的单个的所有数据元_全局窗口_。此窗口方案仅在您还指定自定义<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=triggers">触发器</a>时才有用。否则，将不执行任何计算，因为全局窗口没有我们可以处理聚合数据元的自然结束。</p>
+<p><img src="http://flink.apachecn.org/docs/img/non-windowed.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>以下代码段显示了如何使用全局窗口。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=tab_java_3"><strong>Java</strong></a></li>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=tab_scala_3"><strong>Scala</strong></a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;T&gt; input = ...;<br><br>input<br>    .keyBy(&lt;key selector&gt;)<br>    .window(GlobalWindows.create())<br>    .&lt;windowed transformation&gt;(&lt;window function&gt;);<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="窗口函数-Function"><a href="#窗口函数-Function" class="headerlink" title="窗口函数 - Function"></a>窗口函数 - Function</h3><p>定义窗口分配器后，我们需要指定要在每个窗口上执行的计算。这是_窗口函数_的职责，_窗口函数_用于在系统确定窗口准备好进行处理后处理每个（可能是被Keys化的）窗口的数据元（请参阅Flink如何确定窗口何时准备好的<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=triggers">触发器</a>）。</p>
+<p>的窗函数可以是一个<code>ReduceFunction</code>，<code>AggregateFunction</code>，<code>FoldFunction</code>或<code>ProcessWindowFunction</code>。前两个可以更有效地执行（参见[State Size](#state size)部分），因为Flink可以在每个窗口到达时递增地聚合它们的数据元。A <code>ProcessWindowFunction</code>获取<code>Iterable</code>窗口中包含的所有数据元以及有关数据元所属窗口的其他元信息。</p>
+<p>具有a的窗口转换<code>ProcessWindowFunction</code>不能像其他情况一样有效地执行，因为Flink必须在调用函数之前在内部缓冲窗口的_所有_数据元。这可以通过组合来减轻<code>ProcessWindowFunction</code>与<code>ReduceFunction</code>，<code>AggregateFunction</code>或<code>FoldFunction</code>以获得两个窗口元件的增量聚合并且该附加元数据窗口 <code>ProcessWindowFunction</code>接收。我们将查看每个变体的示例。</p>
+<h3 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E8%A7%A6%E5%8F%91%E5%99%A8">触发器</a></h3><p>A <code>Trigger</code>确定何时_窗口函数_准备好处理窗口（由_窗口分配器_形成）。每个都有默认值。如果默认触发器不符合您的需要，您可以使用指定自定义触发器。<code>WindowAssigner``Trigger``trigger(...)</code></p>
+<p>触发器界面有五种方法可以<code>Trigger</code>对不同的事件做出反应：</p>
+<ul>
+<li><code>onElement()</code>为添加到窗口的每个数据元调用该方法。</li>
+<li><code>onEventTime()</code>在注册的事件时间计时器触发时调用该方法。</li>
+<li><code>onProcessingTime()</code>在注册的处理时间计时器触发时调用该方法。</li>
+<li>该<code>onMerge()</code>方法与状态触发器相关，并且当它们的相应窗口合并时合并两个触发器的状态，_例如_当使用会话窗口时。</li>
+<li>最后，该<code>clear()</code>方法在移除相应窗口时执行所需的任何动作。</li>
+</ul>
+<p>关于上述方法需要注意两点：</p>
+<p>1）前三个决定如何通过返回a来对其调用事件进行 算子操作<code>TriggerResult</code>。该 算子操作可以是以下之一：</p>
+<ul>
+<li><code>CONTINUE</code>： 没做什么，</li>
+<li><code>FIRE</code>：触发计算，</li>
+<li><code>PURGE</code>：清除窗口中的数据元，和</li>
+<li><code>FIRE_AND_PURGE</code>：触发计算并清除窗口中的数据元。</li>
+</ul>
+<p>2）这些方法中的任何一种都可用于注册处理或事件时间计时器以用于将来的 算子操作。</p>
+<h4 id="火与清除"><a href="#火与清除" class="headerlink" title="火与清除"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E7%81%AB%E4%B8%8E%E6%B8%85%E9%99%A4">火与清除</a></h4><p>一旦触发器确定窗口已准备好进行处理，它就会触发，_即_它返回<code>FIRE</code>或<code>FIRE_AND_PURGE</code>。这是窗口算子发出当前窗口结果的信号。给定一个窗口，将<code>ProcessWindowFunction</code> 所有数据元传递给<code>ProcessWindowFunction</code>（可能在将它们传递给逐出器后）。窗口<code>ReduceFunction</code>，<code>AggregateFunction</code>或<code>FoldFunction</code>简单地发出他们急切地汇总结果。</p>
+<p>当触发器触发时，它可以<code>FIRE</code>或者<code>FIRE_AND_PURGE</code>。虽然<code>FIRE</code>保持了窗口的内容，<code>FIRE_AND_PURGE</code>删除其内容。默认情况下，预先实现的触发器只是<code>FIRE</code>没有清除窗口状态。</p>
+<p>注意清除将简单地删除窗口的内容，并将保存有关窗口和任何触发状态的任何潜在元信息。</p>
+<h3 id="逐出器-Evictor"><a href="#逐出器-Evictor" class="headerlink" title="逐出器 -Evictor"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E9%80%90%E5%87%BA%E5%99%A8">逐出器</a> -Evictor</h3><p>Flink的窗口模型允许指定<code>Evictor</code>除了<code>WindowAssigner</code>和之外的可选项<code>Trigger</code>。这可以使用<code>evictor(...)</code>方法（在本文档的开头显示）来完成。所述逐出器必须从一个窗口中删除数据元的能力_之后_触发器触发和_之前和&#x2F;或之后_被施加的窗口函数。为此，该<code>Evictor</code>接口有两种方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Optionally evicts elements. Called before windowing function.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> elements The elements currently in the pane.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> size The current number of elements in the pane.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> window The &#123;<span class="hljs-doctag">@link</span> Window&#125;</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> evictorContext The context for the Evictor</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">evictBefore</span><span class="hljs-params">(Iterable&lt;TimestampedValue&lt;T&gt;&gt; elements, <span class="hljs-type">int</span> size, W window, EvictorContext evictorContext)</span>;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Optionally evicts elements. Called after windowing function.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> elements The elements currently in the pane.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> size The current number of elements in the pane.</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> window The &#123;<span class="hljs-doctag">@link</span> Window&#125;</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> evictorContext The context for the Evictor</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">evictAfter</span><span class="hljs-params">(Iterable&lt;TimestampedValue&lt;T&gt;&gt; elements, <span class="hljs-type">int</span> size, W window, EvictorContext evictorContext)</span>; 复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>在<code>evictBefore()</code>包含窗口函数之前被施加驱逐逻辑，而<code>evictAfter()</code> 包含窗口函数之后要施加的一个。在应用窗口函数之前被逐出的数据元将不会被处理。</p>
+<p>Flink带有三个预先实施的驱逐者。这些是：</p>
+<ul>
+<li><code>CountEvictor</code>：保持窗口中用户指定数量的数据元，并从窗口缓冲区的开头丢弃剩余的数据元。</li>
+<li><code>DeltaEvictor</code>：取a <code>DeltaFunction</code>和a <code>threshold</code>，计算窗口缓冲区中最后一个数据元与其余每个数据元之间的差值，并删除delta大于或等于阈值的值。</li>
+<li><code>TimeEvictor</code>：以<code>interval</code>毫秒为单位作为参数，对于给定窗口，它查找<code>max_ts</code>其数据元中的最大时间戳，并删除时间戳小于的所有数据元<code>max_ts - interval</code>。</li>
+</ul>
+<p>默认默认情况下，所有预先实现的驱逐程序在窗口函数之前应用它们的逻辑。</p>
+<p>注意指定逐出器会阻止任何预聚合，因为在应用计算之前，必须将窗口的所有数据元传递给逐出器。</p>
+<p>注意 Flink不保证窗口中数据元的顺序。这意味着尽管逐出器可以从窗口的开头移除数据元，但这些数据元不一定是首先或最后到达的数据元。</p>
+<h2 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h2><p>窗口连接连接两个共享公共Keys并位于同一窗口中的流的数据元。可以使用<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/stream/operators/windows.html#window-assigners">窗口分配器</a>定义这些窗口，并对来自两个流的数据元进行评估。</p>
+<p>然后将来自双方的数据元传递给用户定义的，<code>JoinFunction</code>或者<code>FlatJoinFunction</code>用户可以发出满足连接条件的结果。</p>
+<p>一般用法可概括如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">stream.join(otherStream)<br>    .where(&lt;KeySelector&gt;)<br>    .equalTo(&lt;KeySelector&gt;)<br>    .window(&lt;WindowAssigner&gt;)<br>    .apply(&lt;JoinFunction&gt;)复制ErrorOK!<br></code></pre></td></tr></table></figure>
+
+<p>关于语义的一些注释：</p>
+<ul>
+<li>两个流的数据元的成对组合的创建表现得像内部连接，意味着如果它们没有来自要连接的另一个流的对应数据元，则不会发出来自一个流的数据元。</li>
+<li>那些关联的数据元将在其时间戳中包含仍位于相应窗口中的最大时间戳。例如，<code>[5, 10)</code>具有其边界的窗口将导致连接的数据元具有9作为其时间戳。</li>
+</ul>
+<p>在下一节中，我们将使用一些示例性场景概述不同类型的窗口连接的行为。</p>
+<h3 id="窗口连接-join"><a href="#窗口连接-join" class="headerlink" title="窗口连接 join"></a>窗口连接 join</h3><p>差异：    .window(TumblingEventTimeWindows.of(Time.seconds(2))) &#x2F;&#x2F;</p>
+<p>​		    .window(SlidingEventTimeWindows.of(Time.milliseconds(2) &#x2F;* size <em>&#x2F;, Time.milliseconds(1) &#x2F;</em> slide *&#x2F;))</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.apache.flink.api.java.functions.KeySelector;<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.time.Time;<br><br>...<br><br>DataStream&lt;Integer&gt; orangeStream = ...<br>DataStream&lt;Integer&gt; greenStream = ...<br><br>orangeStream.join(greenStream)<br>    .where(&lt;KeySelector&gt;)<br>    .equalTo(&lt;KeySelector&gt;)<br>    .window(TumblingEventTimeWindows.of(Time.seconds(<span class="hljs-number">2</span>)))<br>    .apply (<span class="hljs-keyword">new</span> <span class="hljs-title class_">JoinFunction</span>&lt;Integer, Integer, String&gt; ()&#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> String <span class="hljs-title function_">join</span><span class="hljs-params">(Integer first, Integer second)</span> &#123;<br>            <span class="hljs-keyword">return</span> first + <span class="hljs-string">&quot;,&quot;</span> + second;<br>        &#125;<br>    &#125;);<br><br><br><span class="hljs-comment">// --------------------------------------------------------------</span><br><span class="hljs-keyword">import</span> org.apache.flink.api.java.functions.KeySelector;<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.time.Time;<br><br>...<br><br>DataStream&lt;Integer&gt; orangeStream = ...<br>DataStream&lt;Integer&gt; greenStream = ...<br><br>orangeStream.join(greenStream)<br>    .where(&lt;KeySelector&gt;)<br>    .equalTo(&lt;KeySelector&gt;)<br>    .window(SlidingEventTimeWindows.of(Time.milliseconds(<span class="hljs-number">2</span>) <span class="hljs-comment">/* size */</span>, Time.milliseconds(<span class="hljs-number">1</span>) <span class="hljs-comment">/* slide */</span>))<br>    .apply (<span class="hljs-keyword">new</span> <span class="hljs-title class_">JoinFunction</span>&lt;Integer, Integer, String&gt; ()&#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> String <span class="hljs-title function_">join</span><span class="hljs-params">(Integer first, Integer second)</span> &#123;<br>            <span class="hljs-keyword">return</span> first + <span class="hljs-string">&quot;,&quot;</span> + second;<br>        &#125;<br>    &#125;);<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="间隔关联"><a href="#间隔关联" class="headerlink" title="间隔关联"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/28?id=%E9%97%B4%E9%9A%94%E5%85%B3%E8%81%94">间隔关联</a></h3><p>区间连接使用公共Keys连接两个流的数据元（我们现在将它们称为A和B），并且流B的数据元具有时间戳，该时间戳位于流A中数据元的时间戳的相对时间间隔中。</p>
+<p>这也可以更正式地表达为 <code>b.timestamp ∈ [a.timestamp + lowerBound; a.timestamp + upperBound]</code>或 <code>a.timestamp + lowerBound &lt;= b.timestamp &lt;= a.timestamp + upperBound</code></p>
+<p>其中a和b是共享公共Keys的A和B的数据元。只要下限总是小于或等于上限，下限和上限都可以是负数或上限。间隔连接当前仅执行内连接。</p>
+<p>当一对数据元传递给<code>ProcessJoinFunction</code>它们时，它们将被赋予<code>ProcessJoinFunction.Context</code>两个数据元的更大的时间戳（可以通过它访问）。</p>
+<p>注意间隔连接当前仅支持事件时间。</p>
+<p><img src="http://flink.apachecn.org/docs/img/interval-join.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在上面的例子中，我们连接两个流’orange’和’green’，下限为-2毫秒，上限为+1毫秒。缺省情况下，这些界限是包容性的，但<code>.lowerBoundExclusive()</code>并<code>.upperBoundExclusive</code>可以应用到改变行为。</p>
+<p>再次使用更正式的表示法，这将转化为</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">orangeElem<span class="hljs-selector-class">.ts</span> + lowerBound &lt;= greenElem<span class="hljs-selector-class">.ts</span> &lt;= orangeElem<span class="hljs-selector-class">.ts</span> + upperBound<br></code></pre></td></tr></table></figure>
+
+<p>如三角形所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.apache.flink.api.java.functions.KeySelector;<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.functions.co.ProcessJoinFunction;<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.time.Time;<br><br>...<br><br>DataStream&lt;Integer&gt; orangeStream = ...<br>DataStream&lt;Integer&gt; greenStream = ...<br><br>orangeStream<br>    .keyBy(&lt;KeySelector&gt;)<br>    .intervalJoin(greenStream.keyBy(&lt;KeySelector&gt;))<br>  <span class="hljs-comment">// 区间[t - 2, t + 1]</span><br>    .between(Time.milliseconds(-<span class="hljs-number">2</span>), Time.milliseconds(<span class="hljs-number">1</span>))<br>    .process (<span class="hljs-keyword">new</span> <span class="hljs-title class_">ProcessJoinFunction</span>&lt;Integer, Integer, String()&#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processElement</span><span class="hljs-params">(Integer left, Integer right, Context ctx, Collector&lt;String&gt; out)</span> &#123;<br>            out.collect(first + <span class="hljs-string">&quot;,&quot;</span> + second);<br>        &#125;<br>    &#125;);<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Process"><a href="#Process" class="headerlink" title="Process"></a>Process</h2><h3 id="ProcessFunction"><a href="#ProcessFunction" class="headerlink" title="ProcessFunction"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/29?id=processfunction">ProcessFunction</a></h3><p>这<code>ProcessFunction</code>是一个低级流处理 算子操作，可以访问所有（非循环）流应用程序的基本构建块：</p>
+<ul>
+<li>事件（流数据元）</li>
+<li>state（容错，一致，仅在被Key化的数据流上）</li>
+<li>定时器（事件时间和处理时间，仅限被Key化的数据流）</li>
+</ul>
+<p>该<code>ProcessFunction</code>可被认为是一个<code>FlatMapFunction</code>可以访问Keys状态和定时器。它通过为输入流中接收的每个事件调用来处理事件。</p>
+<p>对于容错状态，<code>ProcessFunction</code>可以访问Flink的<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/stream/state/state.html">被Keys化状态</a>，可以通过其访问 <code>RuntimeContext</code>，类似于其他有状态函数可以访问被Keys化状态的方式。</p>
+<p>定时器允许应用程序对处理时间和<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/event_time.html">事件时间的</a>变化作出反应。每次调用该函数<code>processElement(...)</code>都会获得一个<code>Context</code>对象，该对象可以访问数据元的事件时间戳和_TimerService_。的<code>TimerService</code>可用于注册为将来事件- &#x2F;处理-时刻回调。达到计时器的特定时间时，将<code>onTimer(...)</code>调用该方法。在该调用期间，所有状态再次限定为创建计时器的键，允许计时器操纵被Keys化状态。</p>
+<p>注意如果要访问被Keys化状态和计时器，则必须应用<code>ProcessFunction</code>被Key化的数据流：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">stream.key<span class="hljs-constructor">By(<span class="hljs-operator">...</span>)</span>.process(<span class="hljs-keyword">new</span> <span class="hljs-constructor">MyProcessFunction()</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Async-–-异步"><a href="#Async-–-异步" class="headerlink" title="Async – 异步"></a>Async – 异步</h2><h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>Flink的Async I &#x2F; O API允许用户将异步请求客户端与数据流一起使用。API处理与数据流的集成，以及处理<strong>顺序，事件时间，容错</strong>等。</p>
+<p>假设有一个目标数据库的异步客户端，则需要三个部分来实现对数据库的异步I &#x2F; O流转换：</p>
+<ul>
+<li>的实现<code>AsyncFunction</code>是把请求分派</li>
+<li>一个_回调_，它接受 算子操作的结果并将其交给<code>ResultFuture</code></li>
+<li>在DataStream上应用异步I &#x2F; O 算子操作作为转换</li>
+</ul>
+<p>以下代码示例说明了基本模式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// This example implements the asynchronous request and callback with Futures that have the</span><br><span class="hljs-comment">// interface of Java 8&#x27;s futures (which is the same one followed by Flink&#x27;s Future)</span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * An implementation of the &#x27;AsyncFunction&#x27; that sends requests and sets the callback.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AsyncDatabaseRequest</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RichAsyncFunction</span>&lt;String, Tuple2&lt;String, String&gt;&gt; &#123;<br><br>    <span class="hljs-comment">/** The database specific client that can issue concurrent requests with callbacks */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> DatabaseClient client;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">open</span><span class="hljs-params">(Configuration parameters)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatabaseClient</span>(host, post, credentials);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        client.close();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">asyncInvoke</span><span class="hljs-params">(String key, <span class="hljs-keyword">final</span> ResultFuture&lt;Tuple2&lt;String, String&gt;&gt; resultFuture)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br><br>        <span class="hljs-comment">// issue the asynchronous request, receive a future for result</span><br>        <span class="hljs-keyword">final</span> Future&lt;String&gt; result = client.query(key);<br><br>        <span class="hljs-comment">// set the callback to be executed once the request by the client is complete</span><br>        <span class="hljs-comment">// the callback simply forwards the result to the result future</span><br>        CompletableFuture.supplyAsync(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Supplier</span>&lt;String&gt;() &#123;<br><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> String <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-keyword">return</span> result.get();<br>                &#125; <span class="hljs-keyword">catch</span> (InterruptedException | ExecutionException e) &#123;<br>                    <span class="hljs-comment">// Normally handled explicitly.</span><br>                    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>                &#125;<br>            &#125;<br>        &#125;).thenAccept( (String dbResult) -&gt; &#123;<br>            resultFuture.complete(Collections.singleton(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;&gt;(key, dbResult)));<br>        &#125;);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// create the original stream</span><br>DataStream&lt;String&gt; stream = ...;<br><br><span class="hljs-comment">// apply the async I/O transformation</span><br>DataStream&lt;Tuple2&lt;String, String&gt;&gt; resultStream =<br>    AsyncDataStream.unorderedWait(stream, <span class="hljs-keyword">new</span> <span class="hljs-title class_">AsyncDatabaseRequest</span>(), <span class="hljs-number">1000</span>, TimeUnit.MILLISECONDS, <span class="hljs-number">100</span>);<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="超时处理"><a href="#超时处理" class="headerlink" title="超时处理"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/30?id=%E8%B6%85%E6%97%B6%E5%A4%84%E7%90%86">超时处理</a></h3><p>当异步I &#x2F; O请求超时时，默认情况下会引发异常并重新启动作业。如果要处理超时，可以覆盖该<code>AsyncFunction#timeout</code>方法。</p>
+<h3 id="结果顺序"><a href="#结果顺序" class="headerlink" title="结果顺序"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/30?id=%E7%BB%93%E6%9E%9C%E9%A1%BA%E5%BA%8F">结果顺序</a></h3><p>由<code>AsyncFunction</code>一些未定义的顺序经常完成的并发请求，基于哪个请求首先完成。为了控制发出结果记录的顺序，Flink提供了两种模式：</p>
+<ul>
+<li><strong>无序</strong>：异步请求完成后立即发出结果记录。在异步I &#x2F; O 算子之后，流中记录的顺序与之前不同。当使用_处理时间_作为基本时间特性时，此模式具有最低延迟和最低开销。使用<code>AsyncDataStream.unorderedWait(...)</code>此模式。</li>
+<li><strong>Ordered</strong>：在这种情况下，保存流顺序。结果记录的发出顺序与触发异步请求的顺序相同（ 算子输入记录的顺序）。为此，算子缓冲结果记录，直到其所有先前记录被发出（或超时）。这通常会在检查点中引入一些额外的延迟和一些开销，因为与无序模式相比，记录或结果在检查点状态下保持更长的时间。使用<code>AsyncDataStream.orderedWait(...)</code>此模式。</li>
+</ul>
+<h3 id="活动时间"><a href="#活动时间" class="headerlink" title="活动时间"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/30?id=%E6%B4%BB%E5%8A%A8%E6%97%B6%E9%97%B4">活动时间</a></h3><p>当流应用程序与<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/event_time.html">事件时间</a>一起工作<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/event_time.html">时</a>，异步I &#x2F; O算子将正确处理水印。这意味着两种订单模式具体如下：</p>
+<ul>
+<li><p><strong>无序</strong>：水印不会超过记录，反之亦然，这意味着水印建立了一个_订单边界_。记录仅在水印之间无序发出。只有在发出水印后才会发出某个水印后发生的记录。反过来，只有在水印发出之前输入的所有结果记录之后才会发出水印。</p>
+<p>这意味着，在水印的存在，将_无序的_方式介绍了一些相同的延迟和管理开销的_订购_模式一样。开销量取决于水印频率。</p>
+</li>
+<li><p><strong>Ordered</strong>：保存记录的水印顺序，就像保存记录之间的顺序一样。与_处理时间_相比，开销没有显着变化。</p>
+</li>
+</ul>
+<p>请记住，_摄取时间_是_事件时间的_一种特殊情况，其中自动生成的水印基于源处理时间。</p>
+<h3 id="容错保证"><a href="#容错保证" class="headerlink" title="容错保证"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/30?id=%E5%AE%B9%E9%94%99%E4%BF%9D%E8%AF%81">容错保证</a></h3><p>异步I &#x2F; O 算子提供<strong>完全一次的容错保证</strong>。它将检查点中的飞行中异步请求的记录存储起来，并在从故障中恢复时恢复&#x2F;重新触发请求。</p>
+<h3 id="实施技巧"><a href="#实施技巧" class="headerlink" title="实施技巧"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/30?id=%E5%AE%9E%E6%96%BD%E6%8A%80%E5%B7%A7">实施技巧</a></h3><p>对于实现_期货_有一个_执行人_（或_执行上下文_在Scala）回调，我们建议使用<code>DirectExecutor</code>，因为回调通常做最少的工作，并且<code>DirectExecutor</code>避免了额外的线程到线程切换的开销。回调通常只将结果传递给<code>ResultFuture</code>，将其添加到输出缓冲区。从那里开始，包括记录发射和与检查点副本记录交互的重要逻辑无论如何都发生在专用线程池中。</p>
+<p>A <code>DirectExecutor</code>可以通过<code>org.apache.flink.runtime.concurrent.Executors.directExecutor()</code>或 获得<code>com.google.common.util.concurrent.MoreExecutors.directExecutor()</code>。</p>
+<h3 id="警告"><a href="#警告" class="headerlink" title="警告"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/30?id=%E8%AD%A6%E5%91%8A">警告</a></h3><p><strong>AsyncFunction不称为多线程</strong></p>
+<p>我们想在这里明确指出的常见混淆<code>AsyncFunction</code>是不以多线程方式调用。只存在一个实例，<code>AsyncFunction</code>并且对于流的相应分区中的每个记录顺序调用它。除非该<code>asyncInvoke(...)</code>方法快速返回并依赖于回调（由客户端），否则它将不会导致正确的异步I &#x2F; O.</p>
+<p>例如，以下模式会导致阻塞<code>asyncInvoke(...)</code>函数，从而使异步行为无效：</p>
+<ul>
+<li>使用其查找&#x2F;查询方法调用阻塞的数据库客户端，直到收到结果为止</li>
+<li>阻止&#x2F;等待<code>asyncInvoke(...)</code>方法内异步客户端返回的future-type对象</li>
+</ul>
+<h1 id="活动时间-time"><a href="#活动时间-time" class="headerlink" title="活动时间 -  time"></a>活动时间 -  time</h1><h2 id="事件时间-x2F-处理时间-x2F-摄取时间"><a href="#事件时间-x2F-处理时间-x2F-摄取时间" class="headerlink" title="事件时间&#x2F;处理时间&#x2F;摄取时间"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=%E4%BA%8B%E4%BB%B6%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86%E6%97%B6%E9%97%B4%E6%91%84%E5%8F%96%E6%97%B6%E9%97%B4">事件时间&#x2F;处理时间&#x2F;摄取时间</a></h2><p>Flink 在流处理节目中支持不同的_时间_概念。</p>
+<p>处理时间（process time）：处理算子时，使用本地 机器的 系统时钟</p>
+<ul>
+<li><p><strong>处理时间：</strong>处理时间是指执行相应 算子操作的机器的系统时间。</p>
+<p>当流程序在处理时间运行时，所有<strong>基于时间的 算子操作（如时间窗口）将使用运行相应算子的机器的系统时钟</strong>。每小时处理时间窗口将包括在系统时钟指示整个小时之间到达特定算子的所有记录。例如，如果应用程序在上午9:15开始运行，则第一个每小时处理时间窗口将包括在上午9:15到上午10:00之间处理的事件，下一个窗口将包括在上午10:00到11:00之间处理的事件，因此上。</p>
+<p>处理时间是最简单的时间概念，不需要流和机器之间的协调。它提供最佳性能和最低延迟。但是，在分布式和异步环境中，处理时间不提供确定性，因为它容易受到记录到达系统的速度（例如从消息队列）到记录在系统内的算子之间流动的速度的影响。和停电（预定或其他）。</p>
+</li>
+</ul>
+<p>事件时间（event time）： - 配合水位线，管理区间内的事件；可以无序到达</p>
+<ul>
+<li><p><strong>事件时间：</strong>事件时间是每个事件在其生产设备上发生的时间。此时间通常在进入Flink之前嵌入记录中，并且 可以从每个记录中提取该_事件时间戳_。在事件时间，时间的进展取决于数据，而不是任何挂钟**。事件时间程序必须指定如何生成_事件时间水印（水位线）_**，这是表示事件时间进度的机制。该水印机制在<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=event-time-and-watermarks">下面</a>的后面部分中描述。</p>
+<p>在一个完美的世界中，事件时间处理将产生完全一致和确定的结果，无论事件何时到达，或者它们的排序。但是，除非事件已知按顺序到达（按时间戳），否则事件时间处理会在等待无序事件时产生一些延迟。由于只能等待一段有限的时间，因此限制了确定性事件时间应用程序的可能性。</p>
+<p>假设所有数据都已到达，事件时间 算子操作将按预期运行，即使在处理无序或延迟事件或重新处理历史数据时也会产生正确且一致的结果。例如，每小时事件时间窗口将包含带有落入该小时的事件时间戳的所有记录，无论它们到达的顺序如何，或者何时处理它们。（有关更多信息，请参阅有关<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=late-elements">迟发事件</a>的部分。）</p>
+<p>请注意，有时当事件时间程序实时处理实时数据时，它们将使用一些<em>处理时间</em> 算子操作，以确保它们及时进行。</p>
+</li>
+</ul>
+<p>摄取时间：Data Source生成时的时间</p>
+<ul>
+<li><p><strong>摄取时间（ingestion time）：</strong>摄取时间是事件进入Flink的时间。在源算子处，每个记录将源的当前时间作为时间戳，并且基于时间的 算子操作（如时间窗口）引用该时间戳。</p>
+<p>_摄取时间_在概念上位于_事件时间_和_处理时间之间_。与_处理时间_相比 ，它稍贵一些，但可以提供更可预测的结果。因为 _摄取时间_使用稳定的时间戳（在源处分配一次），所以对记录的不同窗口 算子操作将引用相同的时间戳，而在_处理时间中，_每个窗口算子可以将记录分配给不同的窗口（基于本地系统时钟和任何运输延误）。</p>
+<p>与_事件时间_相比，_摄取时间_程序无法处理任何无序事件或后期数据，但程序不必指定如何生成_水印_。</p>
+<p>在内部，_摄取时间_与_事件时间_非常相似，但具有自动时间戳分配和自动水印生成函数。</p>
+</li>
+</ul>
+<p><img src="http://flink.apachecn.org/docs/img/times_clocks.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="时间戳分配器-x2F-水印生成器"><a href="#时间戳分配器-x2F-水印生成器" class="headerlink" title="时间戳分配器&#x2F;水印生成器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/17?id=%E6%97%B6%E9%97%B4%E6%88%B3%E5%88%86%E9%85%8D%E5%99%A8%E6%B0%B4%E5%8D%B0%E7%94%9F%E6%88%90%E5%99%A8">时间戳分配器&#x2F;水印生成器</a></h3><p>时间戳分配器获取流并生成带有带时间戳数据元和水印的新流。如果原始流已经有时间戳和&#x2F;或水印，则时间戳分配器会覆盖它们。</p>
+<p>时间戳分配器通常在数据源之后立即指定，但并非严格要求这样做。例如，常见的模式是在时间戳分配器之前解析（_MapFunction_）和过滤（_FilterFunction_）。在任何情况下，需要在事件时间的第一个 算子操作之前指定时间戳分配器（例如第一个窗口 算子操作）。作为一种特殊情况，当使用Kafka作为流式传输作业的源时，Flink允许在源（或消费者）本身内指定时间戳分配器&#x2F;水印发射器。有关如何 算子操作的更多信息，请参阅 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/connectors/kafka.html">Kafka Connector文档</a>。</p>
+<p><strong>注意：</strong>本节的其余部分介绍了程序员必须实现的主要接口，以便创建自己的时间戳提取器&#x2F;水印发射器。要查看Flink附带的预先实现的提取器，请参阅 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/event_timestamp_extractors.html">预定义的时间戳提取器&#x2F;水印发射器</a>页面。<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/17?id=tab_scala_2">http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/17?id=tab_scala_2</a>)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> <span class="hljs-type">StreamExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();<br>env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);<br><br>DataStream&lt;MyEvent&gt; stream = env.readFile(<br>        myFormat, myFilePath, FileProcessingMode.PROCESS_CONTINUOUSLY, <span class="hljs-number">100</span>,<br>        FilePathFilter.createDefaultFilter(), typeInfo);<br><br>DataStream&lt;MyEvent&gt; withTimestampsAndWatermarks = stream<br>        .filter( event -&gt; event.severity() == WARNING )<br>        .assignTimestampsAndWatermarks(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MyTimestampsAndWatermarks</span>());<br><br>withTimestampsAndWatermarks<br>        .keyBy( (event) -&gt; event.getGroup() )<br>        .timeWindow(Time.seconds(<span class="hljs-number">10</span>))<br>        .reduce( (a, b) -&gt; a.add(b) )<br>        .addSink(...);<br></code></pre></td></tr></table></figure>
+
+<h3 id="具有递增时间戳的分发者"><a href="#具有递增时间戳的分发者" class="headerlink" title="具有递增时间戳的分发者"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=%E5%85%B7%E6%9C%89%E9%80%92%E5%A2%9E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E5%88%86%E5%8F%91%E8%80%85"><strong>具有递增时间戳的分发者</strong></a></h3><p>_定期_水印生成的最简单的特殊情况是给定源任务看到的时间戳按升序发生的情况。在这种情况下，当前时间戳始终可以充当水印，因为没有更早的时间戳会到达。</p>
+<p>请注意，_每个并行数据源任务_只需要提升时间戳。例如，如果在特定设置中，一个并行数据源实例读取一个Kafka分区，则只需要在每个Kafka分区中时间戳递增。当并行流被混洗，联合，连接或合并时，Flink的水印合并机制将生成正确的水印。<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_scala_0">http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_scala_0</a>)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;MyEvent&gt; stream = ...<br><br>DataStream&lt;MyEvent&gt; withTimestampsAndWatermarks =<br>    stream.assignTimestampsAndWatermarks(<span class="hljs-keyword">new</span> <span class="hljs-title class_">AscendingTimestampExtractor</span>&lt;MyEvent&gt;() &#123;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-type">long</span> <span class="hljs-title function_">extractAscendingTimestamp</span><span class="hljs-params">(MyEvent element)</span> &#123;<br>            <span class="hljs-keyword">return</span> element.getCreationTime();<br>        &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<h3 id="允许固定数量的迟到的分配者"><a href="#允许固定数量的迟到的分配者" class="headerlink" title="允许固定数量的迟到的分配者"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=%E5%85%81%E8%AE%B8%E5%9B%BA%E5%AE%9A%E6%95%B0%E9%87%8F%E7%9A%84%E8%BF%9F%E5%88%B0%E7%9A%84%E5%88%86%E9%85%8D%E8%80%85"><strong>允许固定数量的迟到的分配者</strong></a></h3><p>定期水印生成的另一个例子是当水印滞后于在流中看到的最大（事件 - 时间）时间戳一段固定的时间。这种情况涵盖了预先知道流中可能遇到的最大延迟的情况，例如，当创建包含时间戳在固定时间段内扩展的数据元的自定义源以进行测试时。对于这些情况，Flink提供了<code>BoundedOutOfOrdernessTimestampExtractor</code>作为参数的参数<code>maxOutOfOrderness</code>，即在计算给定窗口的最终结果时，在忽略数据元之前允许数据元延迟的最长时间。延迟对应于结果<code>t - t_w</code>，其中<code>t</code>是数据元的（事件 - 时间）时间戳，以及<code>t_w</code>前一个水印的时间戳。如果<code>lateness &gt; 0</code>然后，该数据元被认为是迟到的，并且在计算其对应窗口的作业结果时默认被忽略。有关 使用延迟数据元的更多信息，请参阅有关<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/stream/operators/windows.html#allowed-lateness">允许延迟</a>的文档。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_java_1"><strong>Java</strong></a></li>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_scala_1"><strong>Scala</strong></a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;MyEvent&gt; stream = ...<br><br>DataStream&lt;MyEvent&gt; withTimestampsAndWatermarks =<br>    stream.assignTimestampsAndWatermarks(<span class="hljs-keyword">new</span> <span class="hljs-title class_">BoundedOutOfOrdernessTimestampExtractor</span>&lt;MyEvent&gt;(Time.seconds(<span class="hljs-number">10</span>)) &#123;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-type">long</span> <span class="hljs-title function_">extractTimestamp</span><span class="hljs-params">(MyEvent element)</span> &#123;<br>            <span class="hljs-keyword">return</span> element.getCreationTime();<br>        &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="状态和容错-–-status-x2F-fault-tolerant"><a href="#状态和容错-–-status-x2F-fault-tolerant" class="headerlink" title="状态和容错 – status &#x2F; fault- tolerant"></a>状态和容错 – status &#x2F; fault- tolerant</h1><h2 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h2><h2 id="启用和配置检查点"><a href="#启用和配置检查点" class="headerlink" title="启用和配置检查点"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/22?id=%E5%90%AF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E7%82%B9">启用和配置检查点</a></h2><p>默认情况下，禁用检查点。为了使检查点，调用<code>enableCheckpointing(n)</code>上<code>StreamExecutionEnvironment</code>，其中 <em>N</em> 是以毫秒为单位的检查点间隔。</p>
+<p>检查点的其他参数包括：</p>
+<ul>
+<li><p>_完全一次与至少一次_：您可以选择将模式传递给<code>enableCheckpointing(n)</code>方法，以在两个保证级别之间进行选择。对于大多数应用来说，恰好一次是优选的。至少一次可能与某些超低延迟（始终为几毫秒）的应用程序相关。</p>
+</li>
+<li><p>_checkpoint timeout（检查点超时）_：如果当前检查点未完成，则中止检查点的时间。</p>
+</li>
+<li><p>_检查点之间的最短时间_：为确保流应用程序在检查点之间取得一定进展，可以定义检查点之间需要经过多长时间。如果将此值设置为例如_5000_，则无论检查点持续时间和检查点间隔如何，下一个检查点将在上一个检查点完成后的5秒内启动。请注意，这意味着检查点间隔永远不会小于此参数。</p>
+<p>通过定义“检查点之间的时间”而不是检查点间隔来配置应用程序通常更容易，因为“检查点之间的时间”不易受检查点有时需要比平均时间更长的事实的影响（例如，如果目标存储系统暂时很慢）。</p>
+<p>请注意，此值还表示并发检查点的数量为_一_。</p>
+</li>
+<li><p>_并发检查点数_：默认情况下，当一个检查点仍处于运行状态时，系统不会触发另一个检查点。这可确保拓扑不会在检查点上花费太多时间，也不会在处理流方面取得进展。可以允许多个重叠检查点，这对于具有特定处理延迟的管道（例如，因为函数调用需要一些时间来响应的外部服务）而感兴趣，但是仍然希望执行非常频繁的检查点（100毫秒） ）在失败时重新处理很少。</p>
+<p>当定义检查点之间的最短时间时，不能使用此选项。</p>
+</li>
+<li><p>_外部化检查点_：您可以将_外围检查点_配置为外部持久化。外部化检查点将其元数据写入持久存储，并且在作业失败时_不会_自动清除。这样，如果您的工作失败，您将有一个检查点可以从中-recovery。<a target="_blank" rel="noopener" href="https://flink.sojb.cn/ops/state/checkpoints.html#externalized-checkpoints">有关外部化检查点</a>的<a target="_blank" rel="noopener" href="https://flink.sojb.cn/ops/state/checkpoints.html#externalized-checkpoints">部署说明中</a>有更多详细信息。</p>
+</li>
+<li><p>_关于检查点错误的失败&#x2F;继续任务_：这确定如果在执行任务的检查点过程中发生错误，任务是否将失败。这是默认行为。或者，当禁用此选项时，任务将简单地拒绝检查点协调器的检查点并继续运行。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">StreamExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();<br><br><span class="hljs-comment">// start a checkpoint every 1000 ms</span><br>env.enableCheckpointing(<span class="hljs-number">1000</span>);<br><br><span class="hljs-comment">// advanced options:</span><br><br><span class="hljs-comment">// set mode to exactly-once (this is the default)</span><br>env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);<br><br><span class="hljs-comment">// make sure 500 ms of progress happen between checkpoints</span><br>env.getCheckpointConfig().setMinPauseBetweenCheckpoints(<span class="hljs-number">500</span>);<br><br><span class="hljs-comment">// checkpoints have to complete within one minute, or are discarded</span><br>env.getCheckpointConfig().setCheckpointTimeout(<span class="hljs-number">60000</span>);<br><br><span class="hljs-comment">// allow only one checkpoint to be in progress at the same time</span><br>env.getCheckpointConfig().setMaxConcurrentCheckpoints(<span class="hljs-number">1</span>);<br><br><span class="hljs-comment">// enable externalized checkpoints which are retained after job cancellation</span><br>env.getCheckpointConfig().enableExternalizedCheckpoints(ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="管理状态的自定义序列化"><a href="#管理状态的自定义序列化" class="headerlink" title="管理状态的自定义序列化"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E7%AE%A1%E7%90%86%E7%8A%B6%E6%80%81%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96">管理状态的自定义序列化</a></h1><p>如果您的应用程序使用Flink的托管状态，则可能需要为特殊用例实现自定义序列化逻辑。</p>
+<p>此页面的目标是需要对其状态使用自定义序列化的用户，包括如何提供自定义序列化程序以及如何处理序列化程序的升级以实现兼容性。如果您只是使用Flink自己的序列化程序，则此页面无关紧要，可以跳过。</p>
+<h3 id="使用自定义序列化器"><a href="#使用自定义序列化器" class="headerlink" title="使用自定义序列化器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8">使用自定义序列化器</a></h3><p>如上例所示，当注册托管算子或被Keys化状态时，<code>StateDescriptor</code>需要指定状态名称以及有关状态类型的信息。Flink的<a target="_blank" rel="noopener" href="https://flink.sojb.cn/types_serialization.html">类型序列化框架</a>使用类型信息为 状态创建适当的序列化程序。</p>
+<p>也可以完全绕过这个并让Flink使用您自己的自定义序列化程序来序列化托管状态，只需直接<code>StateDescriptor</code>使用您自己的<code>TypeSerializer</code>实现实例化：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomTypeSerializer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TypeSerializer</span>&lt;Tuple2&lt;String, Integer&gt;&gt; &#123;...&#125;;<br><br>ListStateDescriptor&lt;Tuple2&lt;String, Integer&gt;&gt; descriptor =<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">ListStateDescriptor</span>&lt;&gt;(<br>        <span class="hljs-string">&quot;state-name&quot;</span>,<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomTypeSerializer</span>());<br><br>checkpointedState = getRuntimeContext().getListState(descriptor);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<h1 id="旁路输出"><a href="#旁路输出" class="headerlink" title="旁路输出"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/42?id=%E6%97%81%E8%B7%AF%E8%BE%93%E5%87%BA">旁路输出</a></h1><p>除了<code>DataStream</code> 算子操作产生的主流之外，您还可以生成任意数量的附加旁路输出结果流。结果流中的数据类型不必与主流中的数据类型匹配，并且不同旁路输出的类型也可以不同。当您希望拆分通常必须复制流的数据流，然后从每个流中过滤掉您不希望拥有的数据时，此 算子操作非常有用。</p>
+<p>使用旁路输出时，首先需要定义一个<code>OutputTag</code>用于标识旁路输出流的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// this needs to be an anonymous inner class, so that we can analyze the type</span><br>OutputTag&lt;String&gt; outputTag = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputTag</span>&lt;String&gt;(<span class="hljs-string">&quot;side-output&quot;</span>) &#123;&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>注意如何<code>OutputTag</code>根据旁路输出流包含的数据元类型键入。</p>
+<p>可以通过以下函数将数据发送到旁路输出：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/stream/operators/process_function.html">ProcessFunction</a></li>
+<li>CoProcessFunction</li>
+<li><a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/stream/operators/windows.html#processwindowfunction">ProcessWindowFunction</a></li>
+<li>ProcessAllWindowFunction</li>
+</ul>
+<p>您可以使用<code>Context</code>在上述函数中向用户公开的参数将数据发送到由a标识的旁路输出<code>OutputTag</code>。以下是从以下位置发出旁路输出数据的示例<code>ProcessFunction</code>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/42?id=tab_java_1"><strong>Java</strong></a></li>
+<li><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/42?id=tab_scala_1"><strong>Scala</strong></a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;Integer&gt; input = ...;<br><br><span class="hljs-keyword">final</span> OutputTag&lt;String&gt; outputTag = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputTag</span>&lt;String&gt;(<span class="hljs-string">&quot;side-output&quot;</span>)&#123;&#125;;<br><br>SingleOutputStreamOperator&lt;Integer&gt; mainDataStream = input<br>  .process(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ProcessFunction</span>&lt;Integer, Integer&gt;() &#123;<br><br>      <span class="hljs-meta">@Override</span><br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processElement</span><span class="hljs-params">(</span><br><span class="hljs-params">          Integer value,</span><br><span class="hljs-params">          Context ctx,</span><br><span class="hljs-params">          Collector&lt;Integer&gt; out)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-comment">// emit data to regular output</span><br>        out.collect(value);<br><br>        <span class="hljs-comment">// emit data to side output</span><br>        ctx.output(outputTag, <span class="hljs-string">&quot;sideout-&quot;</span> + String.valueOf(value));<br>      &#125;<br>    &#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+<p> 使用<code>getSideOutput(OutputTag)</code> 在<code>DataStream</code> 算子操作结果上使用的旁路输出流。这将为您提供一个<code>DataStream</code>输入到旁路输出流的结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> OutputTag&lt;String&gt; outputTag = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputTag</span>&lt;String&gt;(<span class="hljs-string">&quot;side-output&quot;</span>)&#123;&#125;;<br><br>SingleOutputStreamOperator&lt;Integer&gt; mainDataStream = ...;<br><br>DataStream&lt;String&gt; sideOutputStream = mainDataStream.getSideOutput(outputTag);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Stream-Connect"><a href="#Stream-Connect" class="headerlink" title="Stream Connect"></a>Stream Connect</h1><h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="-1"><a href="#-1" class="headerlink" title=""></a></h1><h1 id="DataSet-API"><a href="#DataSet-API" class="headerlink" title="- DataSet API"></a>- DataSet API</h1><p><strong>大致参照 DataStream API</strong> </p>
+<h2 id="示例程序"><a href="#示例程序" class="headerlink" title="示例程序"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/46?id=%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F">示例程序</a></h2><p>以下程序是WordCount的完整工作示例。您可以复制并粘贴代码以在本地运行它。您只需要在项目中包含正确的Flink库（请参见<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/linking_with_flink.html">使用Flink链接</a>）并指定导入。那你就准备好了！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WordCountExample</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">ExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> ExecutionEnvironment.getExecutionEnvironment();<br><br>        DataSet&lt;String&gt; text = env.fromElements(<br>            <span class="hljs-string">&quot;Who&#x27;s there?&quot;</span>,<br>            <span class="hljs-string">&quot;I think I hear them. Stand, ho! Who&#x27;s there?&quot;</span>);<br><br>        DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; wordCounts = text<br>            .flatMap(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LineSplitter</span>())<br>            .groupBy(<span class="hljs-number">0</span>)<br>            .sum(<span class="hljs-number">1</span>);<br><br>        wordCounts.print();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LineSplitter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">FlatMapFunction</span>&lt;String, Tuple2&lt;String, Integer&gt;&gt; &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">flatMap</span><span class="hljs-params">(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out)</span> &#123;<br>            <span class="hljs-keyword">for</span> (String word : line.split(<span class="hljs-string">&quot; &quot;</span>)) &#123;<br>                out.collect(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;String, Integer&gt;(word, <span class="hljs-number">1</span>));<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h1><p>DataSet -》 DataSet</p>
+<p>参照api文档 ：<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/47">数据集转换 (apachecn.org)</a></p>
+<h1 id="容错"><a href="#容错" class="headerlink" title="容错"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E5%AE%B9%E9%94%99">容错</a></h1><p>Flink的容错机制在出现故障时恢复程序并继续执行它们。此类故障包括机器硬件故障，网络故障，瞬态程序故障等。</p>
+<h2 id="批处理容错（DataSet-API）"><a href="#批处理容错（DataSet-API）" class="headerlink" title="批处理容错（DataSet API）"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E6%89%B9%E5%A4%84%E7%90%86%E5%AE%B9%E9%94%99%EF%BC%88dataset-api%EF%BC%89">批处理容错（DataSet API）</a></h2><p>_DataSet API中_程序的容错能力通过重试失败的执行来实现。Flink在作业声明为失败之前重试执行的时间可通过_执行重试_参数进行配置。值_0_有效意味着禁用容错。</p>
+<p>要激活容错，请将_执行重试次数_设置为大于零的值。常见的选择是值为3。</p>
+<p>此示例显示如何配置Flink DataSet程序的执行重试。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> ExecutionEnvironment.getExecutionEnvironment();<br>env.setNumberOfExecutionRetries(<span class="hljs-number">3</span>);<br></code></pre></td></tr></table></figure>
+
+<h2 id="重试延迟"><a href="#重试延迟" class="headerlink" title="重试延迟"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E9%87%8D%E8%AF%95%E5%BB%B6%E8%BF%9F">重试延迟</a></h2><p>执行重试可以配置为延迟。延迟重试意味着在执行失败后，重新执行不会立即开始，而是仅在一定延迟之后。</p>
+<p>当程序与外部系统交互时，延迟重试可能会有所帮助，例如，在尝试重新执行之前，连接或挂起的事务应该达到超时。</p>
+<p>您可以按如下方式为每个程序设置重试延迟（示例显示DataStream API - DataSet API的工作方式类似）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> ExecutionEnvironment.getExecutionEnvironment();<br>env.getConfig().setExecutionRetryDelay(<span class="hljs-number">5000</span>); <span class="hljs-comment">// 5000 milliseconds delay</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="Table-API和SQL"><a href="#Table-API和SQL" class="headerlink" title="- Table API和SQL"></a>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/56?id=table-api%E5%92%8Csql">Table API和SQL</a></h1><p>Apache Flink具有两个关系API - Table API和SQL - 用于统一流和批处理。 Table API是Scala和Java语言集成查询API，允许以非常直观的方式组合来自关系 算子的查询，例如选择，过滤和连接。Flink的SQL支持基于实现SQL标准的<a target="_blank" rel="noopener" href="https://calcite.apache.org/">Apache Calcite</a>。无论输入是批输入（DataSet）还是流输入（DataStream），任一接口中指定的查询都具有相同的语义并指定相同的结果。</p>
+<p>Table API和SQL接口彼此紧密集成，以及Flink的DataStream和DataSet API。您可以轻松地在基于API构建的所有API和库之间切换。例如，您可以使用<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/libs/cep.html">CEP库</a>从DataStream中提取模式，然后使用 Table API分析模式，或者可以在预处理上运行<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/libs/gelly">Gelly图算法</a>之前使用SQL查询扫描，过滤和聚合批处理表数据。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%A4%A7%E6%95%B0%E6%8D%AE/" class="category-chain-item">大数据</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">#大数据</a>
+      
+        <a href="/tags/flink/">#flink</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flink-应用</div>
+      <div>http://example.com/2023/06/01/分布式系统-大数据/Flink笔记-新/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7/" title="分布式一致性">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式一致性</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/ElastciStack/" title="ElasticSearch">
+                        <span class="hidden-mobile">ElasticSearch</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

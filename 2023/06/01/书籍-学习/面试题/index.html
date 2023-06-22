@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="面试题网络12socket位于传输层之上，应用层之下Nignx位于第四层 - ip转发， 第七层，http请求解析    12345物理层（建立物理连接，传输二进制流）。那么首先摆在面前的第一个问题就是主机A与主机B之间得有一条物理链路（有线、无线）进行数据传输，否则通信无从谈起；所以物理层的作用便是在主机之间搭建一条物理链路传输二进制流（即0与1，与协议无关）。数据链路层（局域网，主机间通信）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题">
+<meta property="og:url" content="http://example.com/2023/06/01/%E4%B9%A6%E7%B1%8D-%E5%AD%A6%E4%B9%A0/%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="面试题网络12socket位于传输层之上，应用层之下Nignx位于第四层 - ip转发， 第七层，http请求解析    12345物理层（建立物理连接，传输二进制流）。那么首先摆在面前的第一个问题就是主机A与主机B之间得有一条物理链路（有线、无线）进行数据传输，否则通信无从谈起；所以物理层的作用便是在主机之间搭建一条物理链路传输二进制流（即0与1，与协议无关）。数据链路层（局域网，主机间通信）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.698Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>面试题 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="面试题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          116 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">面试题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h1><h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-built_in">socket</span>位于传输层之上，应用层之下<br>Nignx位于第四层 - ip转发， 第七层，<span class="hljs-keyword">http</span>请求解析<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">物理层（建立物理连接，传输二进制流）。那么首先摆在面前的第一个问题就是主机A与主机B之间得有一条物理链路（有线、无线）进行数据传输，否则通信无从谈起；所以物理层的作用便是在主机之间搭建一条物理链路传输二进制流（即<span class="hljs-number">0</span>与<span class="hljs-number">1</span>，与协议无关）。<br>数据链路层（局域网，主机间通信）。物理链路联通以后主机之间就具备了数据传输的基础能力，但是物理链路上是无协议的，传输的是二进制流；二进制流意味着没有起始标识符，接收的主机不知道什么时候开始解析数据，也不知道什么时候终止数据的接收；于是在数据链路层上对发送的数据进行了封装：分装成帧（frame）；这样主机在接收二进制流时就知道什么时候开始，什么时候结束；。<br>网络层（网络路由，主机间通信）。当物理层和数据链路层准备就绪以后，另外的问题出现了：计算机网络中存在大量的主机，那么主机A如何找到主机B呢？即网络路由寻址能力；在网络层最出名的协议莫过于IP协议（Internet Protocol）。在特定的网络下，每台主机都分配了一个唯一IP地址，配合路由器的IP路由寻址，主机A就能通过IP协议找到主机B了；也就意味着主机A与主机B之间具备了数据传输能力。<br>传输层（进程间通信）。主机之间具备传输功能之后，那么更近一步把数据发送到指定端口即可完成一次不同主机间的进程通信了；记住传输层并不是数据传输的地方，而是控制数据如何传输的地方：面向连接还是无连接，传输的拥塞控制等。<br>应用层（发送&amp;接收数据）。主机B上的进程b只要监听特定的端口号，那么就能够收到主机A上的进程a发送过来的数据了。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><p>sql语句如何通过分数排名查询第三到第十名信息</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> id, <span class="hljs-type">name</span>, score<br><span class="hljs-keyword">FROM</span> (<br>  <span class="hljs-keyword">SELECT</span> id, <span class="hljs-type">name</span>, score, RANK() <span class="hljs-keyword">OVER</span> (<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> score <span class="hljs-keyword">DESC</span>) <span class="hljs-keyword">AS</span> rank<br>  <span class="hljs-keyword">FROM</span> students<br>) <span class="hljs-keyword">as</span> <span class="hljs-keyword">temp</span><br><span class="hljs-keyword">WHERE</span> rank <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">3</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">10</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h3 id="Redis的持久化方式"><a href="#Redis的持久化方式" class="headerlink" title="Redis的持久化方式"></a>Redis的持久化方式</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs markdown">Redis有两种持久化方式：RDB和AOF。<br><span class="hljs-bullet">1.</span> RDB持久化方式：<br>RDB是Redis的默认持久化方式，它会定期将内存中的数据快照保存到磁盘上，以保证数据的持久化。RDB的优点是数据量小，可以快速恢复数据，但缺点是可能会丢失最近的一些数据。<br><br><span class="hljs-bullet">2.</span> AOF持久化方式：<br>AOF是Redis的另一种持久化方式，它会将所有的写操作记录下来，以文本方式保存在磁盘上。AOF的优点是可以保证数据的完整性和可靠性，但缺点是数据量大，恢复速度相对较慢。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p> 创建一个String – new String()，第一步都是看字符串常量池中有无字符串，没有就现在字符串常量池中创建，</p>
+<p>然后，new String()，一定会在堆中创建对象实例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java">下面代码创建了几个对象<br><span class="hljs-type">String</span> <span class="hljs-variable">str</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;Cat&quot;</span>);<br>答案：一个或者两个<br>原因:先判断字符串常量池里面有没有Cat字符串对象，如果有，就不会在常量池里面创建Cat对象，但是会在堆内存里面创建一个Cat对象，并将对象地址返回给str变量，这种情况创建一个对象；<br>如果常量字符串没有，就会现在常量池里面创建Cat字符串，然后再在堆内存里面创建Cat字符串对象，这种情况会创建两个对象<br>    <br><span class="hljs-type">String</span> <span class="hljs-variable">hello</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;hello&quot;</span>;   <br><span class="hljs-type">String</span> <span class="hljs-variable">hel</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;hel&quot;</span>;   <br><span class="hljs-type">String</span> <span class="hljs-variable">lo</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;lo&quot;</span>;   <br>System.out.println(hello == <span class="hljs-string">&quot;hel&quot;</span> + <span class="hljs-string">&quot;lo&quot;</span>);  <span class="hljs-comment">//true </span><br><br>    <span class="hljs-comment">// 注意：修改字符串对象会在堆内存里面创建一个字符串对象</span><br>System.out.println(hello == <span class="hljs-string">&quot;hel&quot;</span> + lo); <span class="hljs-comment">//false</span><br>	前三句在String Pool里分别产生“hello”、“hel”、“lo”三个常量字符串对象。<br>“hel”+”lo” 这是两个字符串拼接成一个”hello”字符串对象，拼接后会在String pool看有没有hello字符串对象，如果有，则返回已有对象的地址，没有的话，就在String pool创建一个hello字符串对象<br>“hel”+lo 这相当于修改lo字符串对象，由于字符串是不可变的数据类型，所以会在字符串堆内存里面创建一个新的字符串对象<br></code></pre></td></tr></table></figure>
+
+
+
+<p>StringBuilder</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 解释：</span><br><span class="hljs-comment">// 1.先在 池中创建 &quot;abc&quot;，然后返回池中地址，s对象的value指向池中地址</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>(<span class="hljs-string">&quot;abc&quot;</span>).toString();<br><span class="hljs-comment">// 2.池中有，改变池中地址 </span><br>s.intern();<br><span class="hljs-comment">// 3.为池中地址</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s1</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br><span class="hljs-comment">// 4.s：为对象堆中地址，s1为池中地址 // fasle</span><br>System.out.println(s1 == s);    <span class="hljs-comment">// false</span><br><br><br><span class="hljs-comment">// 1.对象append，为运行时变量，只在堆中创建 &quot;abcss&quot;，池中创建 &quot;abc&quot;, &quot;ss&quot;</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>(<span class="hljs-string">&quot;abc&quot;</span>).append(<span class="hljs-string">&quot;ss&quot;</span>).toString();<br><span class="hljs-comment">// 2.池中没有 &quot;abcss&quot;，将s对象堆中地址 复制 到常量池</span><br>s.intern();<br><span class="hljs-comment">// 3.取出常量池地址，即 s对象堆中地址</span><br><span class="hljs-type">String</span> <span class="hljs-variable">s1</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abcss&quot;</span>;<br><span class="hljs-comment">// 4.s1 为堆中地址，s为对象堆中地址 // true</span><br>System.out.println(s1 == s);    <span class="hljs-comment">// true</span><br></code></pre></td></tr></table></figure>
+
+<p>1）静态常量池：<br>是指程序（.class）文件在加载时候会将程序中保存的字符串、普通的常量、类和方法等信息，全部进行分配。</p>
+<p>2） 运行时常量池：<br>是指当一个和程序(.class)加载之后，有一些字符串内容是通过String对象的形式保存后在实现字符串连接处理，由于String对象的内容可以改变，所以此称为运行时常量池。</p>
+<p>举个栗子：静态常量池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">strA</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;HelloWorld&quot;</span>;<span class="hljs-comment">//开辟新对象并入池</span><br><span class="hljs-type">String</span> <span class="hljs-variable">strB</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Hello&quot;</span>+<span class="hljs-string">&quot;World&quot;</span>;<span class="hljs-comment">//使用+进行字符串连接，由于所有都是常量，实际上表示一个字符串</span><br>	<span class="hljs-comment">// class:  String strB = &quot;HelloWorld&quot;;</span><br>System.out.println(strA==strB);<span class="hljs-comment">//判断结果：true</span><br></code></pre></td></tr></table></figure>
+
+<p>举个栗子：运行时常量池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">strA</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;HelloWorld&quot;</span>;<span class="hljs-comment">//开辟新对象并入池</span><br><span class="hljs-type">String</span> <span class="hljs-variable">strB</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;World&quot;</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">strC</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Hello&quot;</span>+strB;<br>	<span class="hljs-comment">// class:  (new StringBuilder()).append(&quot;Hello&quot;).append(strB).toString();</span><br></code></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;使用+进行字符串连接，动态拼凑时，由于strB是变量其内容运行时可能改变，所以其无法从常量池获取字符串引用<br>System.out.println(strA&#x3D;&#x3D;strC);&#x2F;&#x2F;判断结果：false</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dos">对于字符串，首先分析他是 静态常量池（字符常量池） 还是运行常量池（对象）<br>静态之间，编译器即可确定，为字符常量池的地址，<br>有对象参与，则使用StringBuilder的<span class="hljs-built_in">append</span>进行处理，只在堆中创建最终对象<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43122090/article/details/103651794">(1条消息) RabbitMQ（总结最全面的面试题！！！）_rabbitmq面试题_小杰要吃蛋的博客-CSDN博客</a></p>
+<h2 id="场景题"><a href="#场景题" class="headerlink" title="场景题"></a>场景题</h2><h3 id="Hash一致性算法是如何解决数据倾斜问题的"><a href="#Hash一致性算法是如何解决数据倾斜问题的" class="headerlink" title="Hash一致性算法是如何解决数据倾斜问题的"></a>Hash一致性算法是如何解决数据倾斜问题的</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42864905/article/details/105635577">(1条消息) 面试官：Hash一致性算法是如何解决数据倾斜问题的_hashtag 如何防止cachecloud数据倾斜_Java架构师联盟的博客-CSDN博客</a></p>
+<h3 id="单点登录"><a href="#单点登录" class="headerlink" title="单点登录"></a>单点登录</h3><p>基于直接访问模式</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs markdown">Me:<br>如何实现不通过跳转的页面的方式，进行单点登录<br><br>AI:please wait...<br>要实现不通过跳转的页面的方式进行单点登录，可以采用以下步骤：<br><br><span class="hljs-bullet">1.</span> 在用户登录时，将用户的认证信息（如用户名和密码）保存在后端的session中。<br><br><span class="hljs-bullet">2.</span> 在需要进行单点登录的应用中，通过后端的接口获取用户的认证信息。<br><br><span class="hljs-bullet">3.</span> 将用户的认证信息保存在前端的cookie中，设置过期时间。<br><br><span class="hljs-bullet">4.</span> 在其他需要进行单点登录的应用中，通过前端的cookie获取用户的认证信息，然后向后端发送请求进行认证。<br><br><span class="hljs-bullet">5.</span> 如果认证成功，则在后端生成一个token，并将token保存在cookie中，设置过期时间。<br><br><span class="hljs-bullet">6.</span> 在其他需要进行单点登录的应用中，通过前端的cookie获取token，然后向后端发送请求进行验证。<br><br><span class="hljs-bullet">7.</span> 如果验证通过，则认为用户已经登录，可以直接进入应用。<br><br>需要注意的是，在保存用户的认证信息和token时，应该采用加密算法对其进行加密，以保证安全性。同时，应该设置合理的过期时间，避免信息泄露和安全问题。<br></code></pre></td></tr></table></figure>
+
+<p>基于页面跳转方式</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs stata">Me:<br>如何实现跨域单点登录<br><br>AI:please wait...<br>跨域单点登录（<span class="hljs-keyword">Cross</span>-domain Single Sign-<span class="hljs-keyword">On</span>，简称SSO）是指在不同的域名下进行用户认证，用户只需要在一个域名下登录后，就可以在其他域名下自动登录，无需再次输入用户名和密码。<br><br>实现跨域单点登录的方式有很多，下面列举几种常用的方式：<br><br>1. 基于Cookie的跨域单点登录<br><br>使用这种方式，用户在第一次登录时，登录信息会保存在Cookie中。当用户跳转到其他子域名下的页面时，可以通过读取Cookie来判断用户是否已经登录。如果已经登录，则可以直接跳转到目标页面，否则需要跳转到登录页面进行认证。<br><br>2. 基于<span class="hljs-keyword">Token</span>的跨域单点登录<br><br>使用这种方式，用户在登录时会生成一个<span class="hljs-keyword">Token</span>，该<span class="hljs-keyword">Token</span>会保存在服务器端。当用户跳转到其他子域名下的页面时，需要将该<span class="hljs-keyword">Token</span>传递给目标页面。目标页面再将<span class="hljs-keyword">Token</span>发送给认证服务器进行验证，验证通过后用户就可以被认为已经登录了。<br><br>3. 基于OAuth2.0的跨域单点登录<br><br>OAuth2.0是一种授权框架，可以用于实现跨域单点登录。使用这种方式，用户在登录时会被重定向到认证服务器，用户需要输入用户名和密码进行认证。认证通过后，服务器会生成一个Access <span class="hljs-keyword">Token</span>，该<span class="hljs-keyword">Token</span>会被传递回到客户端。当用户跳转到其他子域名下的页面时，需要将该<span class="hljs-keyword">Token</span>发送给目标页面。目标页面再将<span class="hljs-keyword">Token</span>发送给认证服务器进行验证，验证通过后用户就可以被认为已经登录了。<br><br>无论使用哪种方式，都需要注意安全性问题，比如防止CSRF攻击、XSS攻击等等。同时，还需要在不同的域名下进行配置，以确保各子域名之间的通信能够正常进行。<br></code></pre></td></tr></table></figure>
+
+<p>备注：cookie类型</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> 会话Cookie（Session Cookie）：保存在用户浏览器中，仅在当前会话有效，浏览器关闭后失效。<br><br><span class="hljs-bullet">2.</span> 持久化Cookie（Persistent Cookie）：保存在用户浏览器中，可以设置失效时间，即使浏览器关闭后也可以保留。<br><br><span class="hljs-bullet">3.</span> 安全Cookie（Secure Cookie）：只能通过HTTPS连接传输，可以提高Cookie的安全性。<br><br><span class="hljs-bullet">4.</span> HttpOnly Cookie：只能通过HTTP/HTTPS协议访问，不能通过JavaScript等客户端脚本访问，可以有效防止XSS攻击。<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="LRU算法-—-最近最久未使用算法"><a href="#LRU算法-—-最近最久未使用算法" class="headerlink" title="LRU算法  —  最近最久未使用算法"></a>LRU算法  —  最近最久未使用算法</h3><p><strong>LinkedHashMap</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.LinkedHashMap;<br><span class="hljs-keyword">import</span> java.util.Map;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 简单用LinkedHashMap来实现的LRU算法的缓存</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCache</span>&lt;K, V&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LinkedHashMap</span>&lt;K, V&gt; &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> cacheSize;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">LRUCache</span><span class="hljs-params">(<span class="hljs-type">int</span> cacheSize)</span> &#123;<br>        <span class="hljs-comment">// 				true 插入顺序排序</span><br>        <span class="hljs-built_in">super</span>(<span class="hljs-number">16</span>, (<span class="hljs-type">float</span>) <span class="hljs-number">0.75</span>, <span class="hljs-literal">true</span>);<br>        <span class="hljs-built_in">this</span>.cacheSize = cacheSize;<br>    &#125;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">removeEldestEntry</span><span class="hljs-params">(Map.Entry&lt;K, V&gt; eldest)</span> &#123;<br>        <span class="hljs-keyword">return</span> size() &gt; cacheSize;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">import</span> org.slf4j.Logger;<br><span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCacheTest</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Logger</span> <span class="hljs-variable">log</span> <span class="hljs-operator">=</span> LoggerFactory.getLogger(LRUCacheTest.class);<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> LRUCache&lt;String, Integer&gt; cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LRUCache</span>&lt;&gt;(<span class="hljs-number">10</span>);<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;<br>			cache.put(<span class="hljs-string">&quot;k&quot;</span> + i, i);<br>		&#125;<br>		log.info(<span class="hljs-string">&quot;all cache :&#x27;&#123;&#125;&#x27;&quot;</span>,cache);<br>		cache.get(<span class="hljs-string">&quot;k3&quot;</span>);<br>		log.info(<span class="hljs-string">&quot;get k3 :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>		cache.get(<span class="hljs-string">&quot;k4&quot;</span>);<br>		log.info(<span class="hljs-string">&quot;get k4 :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>		cache.get(<span class="hljs-string">&quot;k4&quot;</span>);<br>		log.info(<span class="hljs-string">&quot;get k4 :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>		cache.put(<span class="hljs-string">&quot;k&quot;</span> + <span class="hljs-number">10</span>, <span class="hljs-number">10</span>);<br>		log.info(<span class="hljs-string">&quot;After running the LRU algorithm cache :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="LFU算法"><a href="#LFU算法" class="headerlink" title="LFU算法"></a>LFU算法</h3><p>LFU（Least Frequently Used ，最近最少使用算法）也是一种常见的缓存算法。</p>
+<p>顾名思义，LFU算法的思想是：<strong>如果一个数据在最近一段时间很少被访问到，那么可以认为在将来它被访问的可能性也很小。因此，当空间满时，最小频率访问的数据最先被淘汰</strong>。</p>
+<p>LFU 算法的描述：</p>
+<p>设计一种缓存结构，该结构在构造时确定大小，假设大小为 K，并有两个功能：</p>
+<ol>
+<li>set(key,value)：将记录(key,value)插入该结构。当缓存满时，将访问频率最低的数据置换掉。</li>
+<li>get(key)：返回key对应的value值。</li>
+</ol>
+<p>算法实现策略：考虑到 LFU 会淘汰访问频率最小的数据，我们需要一种合适的方法按大小顺序维护数据访问的频率。LFU 算法本质上可以看做是一个 top K 问题(K &#x3D; 1)，即选出频率最小的元素，因此我们很容易想到可以用二项堆来选择频率最小的元素，这样的实现比较高效。最终实现策略为<strong>小顶堆+哈希表。</strong></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">一面<br><span class="hljs-keyword">Java集合类 </span><span class="hljs-keyword">JUC </span>ConcurrentHashmap 初始化 put过程 冲突 size实现<br><span class="hljs-keyword">Java并发编程（voliatle </span><span class="hljs-keyword">synchronize </span>reentrantlock aqs cas ABA）<br><span class="hljs-keyword">JVM组成，栈溢出的几种情况</span><br><span class="hljs-keyword"></span>类加载机制（过程final static，双亲委派，破坏）<br>GC 收集器（列举，特点）<br>Redis数据类型，底层数据结构，SDS 跳跃表红黑树<br>分布式事务解决方案<br>nacos ap cp<br>源码读过哪些，Dubbo底层原理知道吗，Netty 序列化框架有哪些 性能指标<br>聊项目<br><br>二面<br>先笔试，三题，简单难度，过了几天后电话面试。<br><br>介绍项目<br>大学的时候做过什么项目<br>自研框架团队分工，价值，设计<br>团队划分，产品组做了啥，你负责了啥，说了<span class="hljs-keyword">jmeter压测，监控选型</span><br><span class="hljs-keyword"></span>项目价值<br>反射的原理<br>学习方式，线上沙龙，书籍<br>大数据转前端，前端转后端，心态变化和学习方式的变化<br>职业规划<br>秒杀场景设计： 预减库存 ，层层拦截，请求去重，幂等，数据预热，预减库存，MQ操作减库存<br>频繁GC问题怎么解决<br>项目中的遇到的最难的问题<br>一直问我最大数据量的场景<br>说说什么上线中的深刻经验<br>项目管理经验<br>最喜欢的leader，为什么<br>问常用Linux系统常用命令<br>堆栈信息导出命令，堆转储什么的怎么导出<br><span class="hljs-keyword">jstack </span>-l &lt;pid&gt;<br><span class="hljs-keyword">jmap </span>-dump:live,format=<span class="hljs-keyword">b,file=heap-dump.bin </span>&lt;pid&gt;<br>然后面试官说先这样，匆匆挂了，看时间到晚上<span class="hljs-number">10</span>点了<br><br>补充二面：<br>说上次没问完，仍然是二面。<br>分库分表，中间件<br><span class="hljs-keyword">java线程状态</span><br><span class="hljs-keyword"></span>死锁线程排查，和状态，top -Hp<br>死锁现象<br>线程的创建方式、参数<br>single线程池 和 size=<span class="hljs-number">1</span> 线程池的区别<br>mysql中的幻读 不可重复读<br>mysql索引实现<br>mysql分页查询 limit<br>分布式事务<br>redis memcache 区别<br>分布式缓存 redis分布式锁几种实现<br>分布式缓存问题，击穿 穿透 雪崩<br>如何带团队<br>如何带应届生<br><br>菜鸟二面：<br>自我介绍<br>项目背景<br>业务背景<br>业务价值、技术价值<br><br>菜鸟三面：<br>交叉面。<br>没有自我介绍。。<br>直接问了简历上的项目细节<br>讨论了项目如何处理缓存<br>问有没有擅长的东西<br>最后问了几个简单的<span class="hljs-keyword">java并发问题</span><br><span class="hljs-keyword"></span>看过什么源码？<br>想问的？问了面试官的职位方向（业务架构师）<br><br>菜鸟四面：<br>自我介绍，三个项目，<br>公司基本背景：解决方案提供商<br>部门结构，职责划分，<span class="hljs-keyword">java开发人员</span><br><span class="hljs-keyword"></span>项目的业务背景，商业模式，<span class="hljs-number">2</span>B 供应链业务<br>项目解决方案的具体部分，从开发到上线<br>核心技术（技术含量）有哪些 ？个人负责的工作？<br>技术栈有哪些？<br>技术设计亮点？技术价值？<br>业务设计亮点？研发效率？业务设计抽象？<br>工作中自己推动的、创新的、有哪些？<br>平常看的书？开源的代码？<br>职业思考和规划？<br>想问的：大佬最近在忙啥？菜鸟跟cbu的关系？<br><br><br><br>一面：<br>先做自我介绍<br>说说现在做的项目，业务场景，技术实现<br>现在住哪，换工作原因<br>为什么来杭州<br>直接问简历上只是提了一下的物联网平台。<br>动态代理几种实现方式？<br>mybatis 两种分页方式？<br>mybatis 事务的运行过程？<br>mysql 事务原理？<br>mysql 如何实现acid？<br>问什么比较擅长？<br>问我想问些什么吗？<br>我问了部门业务有哪些。<br>然后问了他我的面试过程有哪些严重的缺陷？<br>他说知识体系结构有问题，mysql即使达不到DBA的程度，熟知原理是必须的。<br>最后就是等通知。<br><br>挂了，全程大概<span class="hljs-number">10</span>分钟左右。<br><span class="hljs-number">12</span>月中旬，周六上午面的。去了一趟杭州，顺便跟一个大佬同学面基，下雨天还去了趟西湖。<br>以为要问并发、缓存、分布式。结果在数据库上翻车了。回头复盘一下。总的来说这一趟面试还是很值的。（绝对不是因为蹭了大佬一顿饭，杭州大虾很不错，哈哈哈。）<br><br><span class="hljs-number">2</span>. 莱斯网信<br>一面：<br>业务场景，项目介绍，工作内容<br>spring gateway原理 。webflux 解决过一个<span class="hljs-keyword">bug</span><br><span class="hljs-keyword"></span>nacos 源码看过吗 raft算法。只是编译过，说了 ap cp<br>skywalking 原理 agent gRPC<br>为什么使用spring <span class="hljs-keyword">cloud </span>alibaba 技术栈<br><span class="hljs-keyword">jsr269注解处理器，使用场景，为什么要用</span><br><span class="hljs-keyword"></span>ELK用来做什么 ，日志收集<br>聊聊<span class="hljs-keyword">java锁，synchronize </span>volatial<br>aqs是什么<br>rokectmq原理，为什么用mq<br>分布式事务 xa saga tcc mq<br>mysql acid 实现，隔离性 mvcc过程，undo log redo log<br><span class="hljs-keyword">oracle和mysql实现区别</span><br><span class="hljs-keyword"></span>redis 数据结构，跳跃表 二叉树 复杂度的区别<br>hive hbase 数据倾斜<br>能否接受另一套架构栈开发<br>为什么换工作<br><br>二面：<br>为什么用spring security<br>工作中收获最大的事情<br>做过什么项目<br>为什么换工作<br>平常的爱好和兴趣<br>在原公司的工作内容<br>自己的未来发展方向<br>能否接受CRUD<br>了解中科<span class="hljs-number">28</span>所吗。然后介绍了他们的部门业务<br>谈薪资<br><br>挂，应该跟学历有关。<br>每次都是多个部门的面试官一起面的，每次都是<span class="hljs-number">4</span>~<span class="hljs-number">5</span>个人面一个。<br>一面的时候有个大佬面试官应该是玩开源社区的，还吐槽了nacos源码。正好我这一年用的技术栈他都熟悉，所以聊的还不错。不过大佬问的挺深，像mvcc的具体实现过程和redis跳跃表这种问题当时没回答上来，还是要多读书多总结啊。<br><br><span class="hljs-number">3</span>. 中科曙光南京研究院<br>一面<br>sqoop 支持的数据压缩类型？<br>sqoop 抽取多少数据用多少时间，有哪些调优方式？<br>mysql 执行一百条sql后，怎么找出慢sql，如何优化？<br>mysql 批量插入一亿条测试数据，需要的时间，有哪些方法？<br>mysql 手写行转列。<br>mysql 索引类型 使用场景<br>kylin 构建过程、构建时间和查询时间。剪枝优化。<br>hive udf 写过吗<br>spring 里的设计模式 举例子，简单工厂 抽象工厂的区别？<br>spring <span class="hljs-keyword">boot </span>多数据源怎么做？<br>spring <span class="hljs-keyword">boot </span>打包到别的容器怎么做？<br>spring <span class="hljs-keyword">boot </span>项目依赖冲突怎么解决？<br>spring 读取外部自定义配置文件怎么做？<br>你简历上写熟悉<span class="hljs-keyword">java那就说说jvm</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">jvm中一个对象从年轻代到老年代的过程和条件，几种，几次</span><br><span class="hljs-keyword"></span>gc算法cms和g1区别特点<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="面经"><a href="#面经" class="headerlink" title="面经"></a>面经</h1><h2 id="一、"><a href="#一、" class="headerlink" title="一、"></a>一、</h2><p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/discuss/476840885213323264?sourceSSR=post">腾讯云智二面_牛客网 (nowcoder.com)</a></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">面试官上来先问你这个实习是只实习暑假还是一直下去，我说当然一直下下去，能转正最好<br><br>自我介绍<br><br>挑一个项目说说<br><br>我的项目是利用C++<span class="hljs-number">11</span>实现的简易RPC网络通信框架，实现了服务的发布、注册、远程过程调用等功能，在这个项目中我使用zookeeper的watch机制和znode节点实现服务的的分布式部署，利用protobuf进行数据的序列化和反序列化，利用muduo进行高性能网络发送，利用生产者消费者模型编写异步日志模块<br><br>面试官反问：你为什么选择使用zookeeper作为服务注册中心<br><br>在分布式环境中，我们需要用到一个服务注册中心，来将我们发布的服务注册到上面取，来保证客户端在这个注册中心找到我们对应的节点，同时服务注册中心还要能够监听我们注册服务结点的变化，如何节点出现故障了我们就需要动态删除节点，同时也需要通知客户端节点节点发生了变化，需要做哪些处理，而Zookeeper正好实现了这么一个机制，它通过心跳机制来检测rpc节点是否还存在，每个一段事件zookeeper服务端就像rpc节点发送心跳包来判断rpc节点是否存在，如果不存在就删除节点，同时通过watch机制告诉客户端节点出现了变化，需要做出相应的变化。<br><br>面试官：你用没有考虑使用其它中间件做服务注册中心<br><br>我说：zookeeper刚好满足我的服务注册中心的要求，所以我就选了它<br><br>面试官：有了解过其它的吗？<br><br>额，没有<br><br>面试官：做项目要横向对比，分析所有组件的优缺点，选出最合适的，不能说只看一两个<br><br>面试官：你的项目使用protobuf进行数据序列化和反序列化，为什么<br><br>利用protobuf主要是为了进行数据的序列化和反序列化，也可以用<span class="hljs-type">json</span>，<span class="hljs-type">xml</span>，但是它们没有protobuf高效，protobuf是以二进制形式存储的，<span class="hljs-type">json</span>是以key <span class="hljs-keyword">value</span>形式存储的，<span class="hljs-type">xml</span>存储需要二外的文本，所以在同等条件下哦，protobuf的数据大小较小，传输效率较高，而且protobuf支持rpc方法的描述，更加有利于我们实现rpc服务<br><br>面试官：了解protobuf的底层实现吗<br><br>额，只了解过它的基本使用场景，没有了解底层具体实现(感觉要寄了)<br><br>面试官：也就是你这个项目都是使用了其它库，没有深入理解过，这个项目那个部分你深入了解过<br><br>muduo库部分，我在做这个项目的时候需要一个高性能网络传输框架，我就使用了muduo库，之后我看了muduo库的源码，进行了相应的了解<br><br>面试官：了解过源码，那么具体说说muduo的实现<br><br>使用“One <span class="hljs-keyword">Loop</span> per thread”的设计模式，可以很好的处理网络IO和数据发送，不会导致我的框架在网络IO部分出现问题<br><br>One <span class="hljs-keyword">Loop</span> per thread:一个线程里面还有一个EventLoop，一个Reactor模型包含<span class="hljs-number">4</span>个部分，Event事件，Recator反应堆，事件分发器，事件处理器；在muduo库设计中，我们主线程的EventLoop只负责新用户的连接，每次找到连接的用户之后就会把他交给子线程进行处理，而每个子线程里面也维护者一个EventLoop，它负责监听已连接用户的读写事件，如果一个文件描述符上发生了对应文件描述符感兴趣的事件，就调用对应的事件处理器EventHandler进行处理<br><br>面试官：为什么使用muduo库<br><br>muduo库刚好满足我的需求，而且它的效率也很高，所有我是用了它<br><br>面试官：其它很多库也可能使用了这个设计，甚至比它设计好，为什么使用了它<br><br>(有点无语了，因为只会使用它啊)muduo基于C++<span class="hljs-number">11</span>进行实现，很好的支持了现代C++语法，使用bind进行回调时间的绑定，更有利于现代C++的使用，同时它的设计也非常棒，基于one <span class="hljs-keyword">Loop</span> per thread，效率非常好，同时他对于C++新手非常友好，代码通俗易懂，而且一般的网络库线程之间都是通过加锁来实现线程间通信的，而muduo网络库采取无锁的方式，利用threadlocal来判断当前Chanel是否有该EventLoop执行，更加提升了效率，对于学习C++高性能服务器开发非常有帮助<br><br>面试官：你是如何学习muduo库的，仅仅只是看了它的代码？<br><br>没有的，我在学习muduo库的时候不仅看过它的源代码，我还对muduo库进行改进，实现了muduo库的TcpServer部分，去除这部分对于boost库的依赖，同时进行归纳总结(埋坑了)<br><br>面试官：你是怎么进行归纳总结的，使用什么工具<br><br>(啊这，我当时就随口一说而已)我一般在本地使用typora进行归纳总结，然后自己一个人进行复习<br><br>面试官：项目部分差不多了，接下来问点算法的吧，如果求一个数的n次方<br><br>我说直接n个数相乘，然后考虑n为负数能特殊情况，判断特殊情况即可<br><br>面试官：还有其它想法吗，可以考虑优化一下吗？<br><br>我说：应该只能这样了吧，其它方法没有了解过，可以给点提示吗？<br><br>面试官：你试试递归，看看递归如何？<br><br>递归的话效率有点低吧，因为他需要大量重复值得计算，所以相比于递归可能上面迭代的效率更高(寄了)<br><br>面试官：为什么会有这种感觉吗，有没有学过归并排序<br><br>有的，它采取分支思想，局部有序之后在进行合并，艹，到这终于有点思路了<br><br>X^n=X^(n/<span class="hljs-number">2</span>)**X^(n/<span class="hljs-number">2</span>)=X^(n/<span class="hljs-number">4</span>)*X^(n/<span class="hljs-number">4</span>) X^(n/<span class="hljs-number">4</span>) X^(n/<span class="hljs-number">4</span>)<br><br>之后一直进行递归就可以找出答案了<br><br>面试官：没错的，就是这种方法，那么你在学校学过计算机组成原理吧，那么如何求一个浮点数得最大最小值<br><br>(直接寄，组成原理上课我都没有去过，压根不知道讲了什么)我说组成原理学过的时间有点久了，有点想不起来了<br><br>面试官：没关系，你可以在纸上画画，推导推导<br><br>我的内心mmp啊，直接不会啊，我说好，然后假装推导了几分钟之后就告诉面试官抱歉面试官，我下去在好好想想吧，是在是忘记了，太尴尬了<br><br>面试官：那行吧，问你一个简单得，如何求一个链表是否有环<br><br>(终于遇到一个会的了，后面才知道原来也有坑)，快慢指针，快指针一次走两步，慢指针一次走<span class="hljs-number">1</span>步，判断快慢指针是否会相遇，如果相遇就有环，如果没有相遇就没有环<br><br>面试官：还有其它方法吗？<br><br>利用unordered_map记录走过的节点，如果一个节点重复走过那么就是有环，如果没有重复节点就没有环<br><br>面试官：那么你怎么保证快慢指针一定可以遇到<br><br>我说这个问题就类比操场上跑圈，那跑得快得人到最后可以套那个跑的慢的一圈，两者就相遇了(面试官听到这😀了)<br><br>面试官：我们考虑问题要理性，而不能感性，要严谨得证明，那么假设快指针一次走<span class="hljs-number">5</span>步，慢指针一次走<span class="hljs-number">2</span>步，可以相遇吗<br><br>艹，这才想起来，可能快指针可能刚好超过慢指针，以前都没有考虑过，面试官然我再想想<br><br>想了一会还是没有思路啊，以前都没有注意过，寄了<br><br>面试官：时间差不多了，我们聊点其它得，chatgpt了解过吗<br><br>我说了解过<br><br>面试官：那你了解过它的底层吗<br><br>那肯定没有啊，我本科没有学过相关课程，所以没有了解过，抱歉了<br><br>面试官：看来只是简单注册了账号玩了玩啊<br><br>啊对对对()<br><br>面试官：看你对数据库索引，事务，索引优化有理解，讲一讲索引吧<br><br>索引是一种特殊的数据结构，通过建立索引可以加快数据搜索速度，它就像书的目录一样，MySQL默认使用innodb作为存储引擎，它的底层索引结果是B+树，查询效率是非常高的，但是不一定创建索引就是非常好的，索引的创建本身是非常消耗资源的，在数据量比较大的时候创建索引需要花费大量时间，而且索引本身是非常占用内存空间的；在后期新增数据的时候可能需要进行数据的移动，后期维护也是需要大量时间的；当数据量比较小的时候没有必要建立索引，MySQL底层在判断索引和整表查询时间差不多的时候是不会使用索引的；有时候建立索引过多或者建立不当可能起到相反的作用<br><br>面试官：应该如何建立索引<br><br>前缀索引优化：利用字符串前几个字符建立索引，而不是整个字符串建立索引<br><br>联合索引优化<br><br>自增主键作为索引<br><br>防止索引失效<br><br>面试官：优化索引，你如何做的，实际应用中<br><br><span class="hljs-number">1.</span>启动慢查询日志，记录操作时间过长的<span class="hljs-keyword">SQL</span>语句，<br><br><span class="hljs-number">2.</span>利用<span class="hljs-keyword">explain</span>分析执行时间过长的<span class="hljs-keyword">SQL</span>语句<br><br><span class="hljs-number">3.</span>看看该语句是否加索引，没有加索引就加上索引，若有索引看看索引是否起作用<br><br><span class="hljs-number">4.</span>看看索引是否添加正确，查询是否用到索引，有没有用到回表，是否用到外排序，如果有外排序是否可以考虑建立联合索引，在<span class="hljs-keyword">sql</span>语句中是否存在函数、强制类型转换等，然后具体问题进行具体分析<br><br>面试官：你在网络学习上花了多少时间<br><br>上学期一直在跟着学校课程学习，这学期也在积极自学<br><br>面试官：我也不问你了，你自己说说你网络学到了什么<br><br>学习了TCP/IP协议栈，学习了HTTP,TCP,UDP,IP,ICMP(埋坑了)等协议，了解网络通信基本流程，能够进行高并发网络编程<br><br>面试官：TCP三次握手四次挥手，及状态转换<br><br>这个就不写了<br><br>面试官：整整的网络环境可能不是这样的，抓包抓过吗<br><br>抓过，上学期实验课使用Wireshark抓包，Linux平台没有试过(辛亏给自己没有埋坑啊)<br><br>面试官：Linux平台没有抓过包就算了，有时候网络环境很差，需要进行探测，icmp了解吗<br><br>ICMP协议称为互联网报文控制协议，主要用来检测对端网络环境是否良好，通过发生ICMP报文判断是否有ICMP回应<br><br>面试官：那么icmp报文是怎么传输会我的发送端得，应用层面上有ip协议，这个是怎么做到的<br><br>直接寄，没有了解过，<br><br>面试官：(可能觉得没有希望了)，直接问我我和其它同学相比有什么优势<br><br>瞎扯ing….<br><br>面试官：高数、概率论成绩怎么样，切比雪夫不等式了解过吗<br><br>高数，概率论当时成绩还可以，但是现在基本都忘光了，切比雪夫不等式我记得是概率论的，现在有点忘记了，抱歉啊<br><br>今典反问：<br><br>我有什么需要改进的吗<br><br>基础可以，但是学习东西不能只看重表面，编程是一个与时俱进，日新月异的，要注重持续学习<br><br>自我反思：为什么我的面试和别人的不一样啊，我看别人面经的东西我都没有考到，背了那么长时间面经好像没有用到，有点郁郁，感觉有点想kpi面，上次我答得很垃圾，过了两天给我发二面了，当时以为裂开了，兄弟门判断一下这个是不是kpi面<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="二、"><a href="#二、" class="headerlink" title="二、"></a>二、</h2>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%9F%BA%E7%A1%80/" class="category-chain-item">基础</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%9F%BA%E7%A1%80/">#基础</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>面试题</div>
+      <div>http://example.com/2023/06/01/书籍-学习/面试题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E5%AD%A6%E4%B9%A0/%E6%96%B0%E6%8A%80%E6%9C%AF/" title="新技术">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">新技术</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络">
+                        <span class="hidden-mobile">计算机网络</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

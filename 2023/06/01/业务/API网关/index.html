@@ -1,0 +1,990 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="API网关选型微服务网关选型：5种主流 API 网关，哪个最香！ - 知乎 (zhihu.com) 作用实现功能 统计接口访问次数，接口隔离，权限验证，熔断降级， KongNginx + luaSpring gatewaychatGPTNginx + lua要在 API 网关中实现统计接口访问次数、接口隔离、权限验证和熔断降级等功能，可以使用 OpenResty 或 NGINX 等高性能 Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="API网关">
+<meta property="og:url" content="http://example.com/2023/06/01/%E4%B8%9A%E5%8A%A1/API%E7%BD%91%E5%85%B3/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="API网关选型微服务网关选型：5种主流 API 网关，哪个最香！ - 知乎 (zhihu.com) 作用实现功能 统计接口访问次数，接口隔离，权限验证，熔断降级， KongNginx + luaSpring gatewaychatGPTNginx + lua要在 API 网关中实现统计接口访问次数、接口隔离、权限验证和熔断降级等功能，可以使用 OpenResty 或 NGINX 等高性能 Web">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.358Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="业务">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>API网关 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="API网关"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          37k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          309 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">API网关</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="API网关"><a href="#API网关" class="headerlink" title="API网关"></a>API网关</h1><h2 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/500587132">微服务网关选型：5种主流 API 网关，哪个最香！ - 知乎 (zhihu.com)</a></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>实现功能</p>
+<p>统计接口访问次数，接口隔离，权限验证，熔断降级，</p>
+<h2 id="Kong"><a href="#Kong" class="headerlink" title="Kong"></a>Kong</h2><h2 id="Nginx-lua"><a href="#Nginx-lua" class="headerlink" title="Nginx + lua"></a>Nginx + lua</h2><h2 id="Spring-gateway"><a href="#Spring-gateway" class="headerlink" title="Spring gateway"></a>Spring gateway</h2><h2 id="chatGPT"><a href="#chatGPT" class="headerlink" title="chatGPT"></a>chatGPT</h2><h3 id="Nginx-lua-1"><a href="#Nginx-lua-1" class="headerlink" title="Nginx + lua"></a>Nginx + lua</h3><p>要在 API 网关中实现<strong>统计接口访问次数、接口隔离、权限验证和熔断降级</strong>等功能，可以使用 OpenResty 或 NGINX 等高性能 Web 服务器。以下是一个使用 OpenResty 实现这些功能的示例代码：</p>
+<p>首先，确保已经安装了 OpenResty 和 PostgreSQL。然后，使用以下示例代码创建一个 API 网关服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装 OpenResty 和 PostgreSQL</span><br>sudo apt-get update<br>sudo apt-get install openresty postgresql<br><br><span class="hljs-comment"># 配置 OpenResty</span><br><span class="hljs-built_in">cat</span> &gt; /etc/openresty/nginx.conf &lt;&lt; <span class="hljs-string">EOF</span><br><span class="hljs-string">user root;</span><br><span class="hljs-string">worker_processes auto;</span><br><span class="hljs-string">pid /run/nginx.pid;</span><br><span class="hljs-string"></span><br><span class="hljs-string">events &#123;</span><br><span class="hljs-string">    worker_connections 1024;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">http &#123;</span><br><span class="hljs-string">    log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="hljs-string">                      &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="hljs-string">                      &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="hljs-string"></span><br><span class="hljs-string">    access_log  /var/log/nginx/api-gateway.access.log  main;</span><br><span class="hljs-string"></span><br><span class="hljs-string">    server &#123;</span><br><span class="hljs-string">        listen 80;</span><br><span class="hljs-string">        server_***;</span><br><span class="hljs-string"></span><br><span class="hljs-string">        location / &#123;</span><br><span class="hljs-string">            content_by_lua_block &#123;</span><br><span class="hljs-string">                local resty = require(&quot;resty&quot;)</span><br><span class="hljs-string">                local pg = require(&quot;resty.postgres&quot;)</span><br><span class="hljs-string">                local db, err = pg.connect(&quot;your-database-user&quot;)</span><br><span class="hljs-string">            &#125;</span><br><span class="hljs-string">	&#125;</span><br><span class="hljs-string">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>非常抱歉，我需要更多关于您的数据库信息才能提供示例代码。您能提供一下您的数据库用户名、密码和数据库名称吗？</p>
+<p>例如，如果您的数据库用户名为 “your_database_user”，密码为 “your_database_password”，数据库名称为 “your_database_name”，您可以使用以下代码片段：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装 OpenResty 和 PostgreSQL</span><br>sudo apt-get update<br>sudo apt-get install openresty postgresql<br><br><span class="hljs-comment"># 配置 OpenResty</span><br><span class="hljs-built_in">cat</span> &gt; /etc/openresty/nginx.conf &lt;&lt; <span class="hljs-string">EOF</span><br><span class="hljs-string">user root;</span><br><span class="hljs-string">worker_processes auto;</span><br><span class="hljs-string">pid /run/nginx.pid;</span><br><span class="hljs-string"></span><br><span class="hljs-string">events &#123;</span><br><span class="hljs-string">    worker_connections 1024;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">http &#123;</span><br><span class="hljs-string">    log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="hljs-string">                      &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="hljs-string">                      &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="hljs-string"></span><br><span class="hljs-string">    access_log  /var/log/nginx/api-gateway.access.log  main;</span><br><span class="hljs-string"></span><br><span class="hljs-string">    server &#123;</span><br><span class="hljs-string">        listen 80;</span><br><span class="hljs-string">        server_***;</span><br><span class="hljs-string"></span><br><span class="hljs-string">        location / &#123;</span><br><span class="hljs-string">            content_by_lua_block &#123;</span><br><span class="hljs-string">                local resty = require(&quot;resty&quot;)</span><br><span class="hljs-string">                local pg = require(&quot;resty.postgres&quot;)</span><br><span class="hljs-string">                local db, err = pg.connect(&quot;your_database_user@your_database_host/your_database_name&quot;)</span><br><span class="hljs-string">                </span><br></code></pre></td></tr></table></figure>
+
+<p>抱歉刚刚的回答有误。这里是一个示例 Lua 代码片段，使用 OpenResty 和 PostgreSQL 连接到指定的数据库，并访问指定的数据表。请根据您的实际情况替换相应的值。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> resty = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty&quot;</span>)<br><span class="hljs-keyword">local</span> pg = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.postgres&quot;</span>)<br><span class="hljs-keyword">local</span> db, err = pg.connect(<span class="hljs-string">&quot;your_database_user@your_database_host/your_database_name&quot;</span>)<br><br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> db <span class="hljs-keyword">then</span><br>    ngx.say(<span class="hljs-string">&quot;Error: &quot;</span>, err)<br>    <span class="hljs-keyword">return</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 查询数据表</span><br><span class="hljs-keyword">local</span> query = <span class="hljs-string">&quot;SELECT * FROM your_table_name&quot;</span><br><span class="hljs-keyword">local</span> result, err = db:query(query)<br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> result <span class="hljs-keyword">then</span><br>    ngx.say(<span class="hljs-string">&quot;Error: &quot;</span>, err)<br>    <span class="hljs-keyword">return</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 获取结果行数</span><br><span class="hljs-keyword">local</span> rows = result:rows_count()<br><br><span class="hljs-comment">-- 遍历结果集</span><br><span class="hljs-keyword">for</span> i, row <span class="hljs-keyword">in</span> <span class="hljs-built_in">ipairs</span>(result) <span class="hljs-keyword">do</span><br>    <span class="hljs-comment">-- 在此处处理获取到的数据</span><br>    ngx.say(row[<span class="hljs-number">1</span>], <span class="hljs-string">&quot; | &quot;</span>, row[<span class="hljs-number">2</span>])<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 关闭连接</span><br>db:<span class="hljs-built_in">close</span>()<br></code></pre></td></tr></table></figure>
+
+<p>请注意将 <code>your_database_user</code>、<code>your_database_host</code> 和 <code>your_database_name</code> 替换为实际的数据库信息。在您的 OpenResty 配置文件（例如 <code>/etc/openresty/nginx.conf</code>）中，您可以将以下内容添加到 <code>http</code> 块中：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">http</span> &#123;<br>    ...<br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span> your_domain_or_ip;<br><br>        <span class="hljs-section">location</span> / &#123;<br></code></pre></td></tr></table></figure>
+
+<p>接下来，在您的 <code>/etc/openresty/nginx.conf</code> 配置文件中，添加以下内容以设置 Lua 脚本所在的路径：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">location</span> <span class="hljs-regexp">~ ^/api-gateway-lua</span> &#123;<br>    <span class="hljs-attribute">access_by_lua_file</span> /path/to/your/api-gateway-lua.lua;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>/path/to/your/api-gateway-lua.lua</code> 应替换为实际的 Lua 脚本文件路径。将 <code>/path/to/your/api-gateway-lua.lua</code> 替换为您实际的 Lua 脚本所在路径。</p>
+<p>然后，重新加载 OpenResty 配置以应用更改：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo nginx -s reload<br></code></pre></td></tr></table></figure>
+
+<p>现在，您的 API 网关已经集成了统计接口访问次数、接口隔离、权限验证和熔断降级等功能。您可以通过访问指定的 API 路径（如 <code>/api-gateway-lua</code>）并在请求上下文中传递 <code>client_id</code> 和 <code>client_secret</code>（或其他自定义 <code>id</code> 和 <code>secret</code>）来启用客户端身份验证。</p>
+<p>要实现这些功能，您可以将以下代码片段添加到 <code>/path/to/your/api-gateway-lua.lua</code> 文件中：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.app&quot;</span>)<br><span class="hljs-keyword">local</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.log&quot;</span>)<br><span class="hljs-keyword">local</span> https = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.https&quot;</span>)<br><span class="hljs-keyword">local</span> redis = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.redis&quot;</span>)<br><br><span class="hljs-comment">-- 设置日志记录器</span><br><span class="hljs-keyword">local</span> logger_conf = &#123;<br>    prefix = <span class="hljs-string">&quot;api-gateway&quot;</span>,<br>    level = <span class="hljs-string">&quot;debug&quot;</span>,<br>    <span class="hljs-built_in">format</span> = <span class="hljs-string">&quot;%[1]T&quot;</span><br>    <br></code></pre></td></tr></table></figure>
+
+
+<p>接下来，在您的 <code>/etc/openresty/nginx.conf</code> 配置文件中，添加以下内容以设置 Lua 脚本所在的路径：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">location</span> <span class="hljs-regexp">~ ^/api-gateway-lua</span> &#123;<br>    <span class="hljs-attribute">access_by_lua_file</span> /path/to/your/api-gateway-lua.lua;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>/path/to/your/api-gateway-lua.lua</code> 应替换为实际的 Lua 脚本文件路径。将 <code>/path/to/your/api-gateway-lua.lua</code> 替换为您实际的 Lua 脚本所在路径。</p>
+<p>然后，重新加载 OpenResty 配置以应用更改：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo nginx -s reload<br></code></pre></td></tr></table></figure>
+
+<p>现在，您的 API 网关已经集成了统计接口访问次数、接口隔离、权限验证和熔断降级等功能。您可以通过访问指定的 API 路径（如 <code>/api-gateway-lua</code>）并在请求上下文中传递 <code>client_id</code> 和 <code>client_secret</code>（或其他自定义 <code>id</code> 和 <code>secret</code>）来启用客户端身份验证。</p>
+<p>要实现这些功能，您可以将以下代码片段添加到 <code>/path/to/your/api-gateway-lua.lua</code> 文件中：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.app&quot;</span>)<br><span class="hljs-keyword">local</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.log&quot;</span>)<br><span class="hljs-keyword">local</span> https = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.https&quot;</span>)<br><span class="hljs-keyword">local</span> redis = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.redis&quot;</span>)<br><br><span class="hljs-comment">-- 设置日志记录器</span><br><span class="hljs-keyword">local</span> logger_conf = &#123;<br>    prefix = <span class="hljs-string">&quot;api-gateway&quot;</span>,<br>    level = <span class="hljs-string">&quot;debug&quot;</span>,<br>    <span class="hljs-built_in">format</span> = <span class="hljs-string">&quot;%[1]T&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>在前面的示例中，我们提供了一个基本的 API 网关，可以实现接口访问次数统计、接口隔离、权限验证和熔断降级等功能。接下来，我们将详细介绍每个功能。</p>
+<ol>
+<li>接口访问次数统计：</li>
+</ol>
+<p>要实现接口访问次数统计，您可以在每次请求时在响应中包含一个名为 <code>x-access-count</code> 的响应头，其值为请求的 <code>x-access-count</code> 令牌。然后，您可以在后台数据库中创建一个表，用于存储每个 API 的访问次数。在收到请求时，您可以将请求的 <code>x-access-count</code> 令牌与存储在该表中的值进行比较，以统计接口访问次数。</p>
+<ol start="2">
+<li>接口隔离：</li>
+</ol>
+<p>接口隔离是指将不同的业务逻辑或功能模块划分为独立的 API，以便它们可以在不同的资源上运行。为了实现接口隔离，您可以将业务逻辑或功能模块封装为 Lua 模块，并通过 <code>ngx.var.request_uri</code> 或 <code>ngx.var.route</code> 等变量来匹配请求的路由。当请求匹配到对应的路由时，将调用相应的模块并执行其逻辑。</p>
+<ol start="3">
+<li>权限验证：</li>
+</ol>
+<p>要实现权限验证，您需要在 API 网关的请求上下文中保存用户的身份信息。当请求到达时，您可以检查请求的 <code>x-access-token</code>（或其他自定义令牌，如 <code>x-app-id</code> 和 <code>x-app-secret</code>）是否与存储在后台数据库中的用户身份信息相匹配。如果匹配，则允许该用户访问该 API；如果不匹配，则拒绝该请求。您还可以提供一个 API 来验证客户端证书，以确保请求来自预期的来源。</p>
+<ol start="4">
+<li>熔断降级：</li>
+</ol>
+<p>熔断降级是指当某个服务出现问题时，自动将其熔断并调用备用服务。您可以使用 OpenResty 的 <code>ngx.timer.at</code> 函数创建一个定时器，并在请求到达时检查指定的服务是否可用。如果不可用，您可以通过以下方式执行熔断降级：</p>
+<ol>
+<li><p>删除与该服务关联的资源：在请求上下文中删除所有与该服务相关的资源，如路径匹配、查询参数和请求头。这将导致所有调用该服务的请求失败。</p>
+</li>
+<li><p>设置请求超时：如果请求在指定的时间段内没有得到响应，您可以设置请求超时，并在响应中返回错误码或错误信息。这将使客户端能够自动重试请求，直到服务恢复正常。</p>
+</li>
+<li><p>禁用其他路由：在服务故障期间，您可以暂时禁用与该服务相关的所有路由，直到服务恢复正常。这可以防止请求意外地调用故障服务。</p>
+</li>
+<li><p>重试次数限制：为了避免过量重试导致的问题，您可以设置每个服务的重试次数限制。在超过限制后，将不再尝试调用该服务。</p>
+</li>
+</ol>
+<p>要实现这些功能，您可以将以下代码片段添加到 <code>/path/to/your/api-gateway-lua.lua</code> 文件中：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.http&quot;</span>)<br><span class="hljs-keyword">local</span> https = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.https&quot;</span>)<br><span class="hljs-keyword">local</span> redis = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.redis&quot;</span>)<br><br><span class="hljs-comment">-- 创建 HTTP 客户端</span><br><span class="hljs-keyword">local</span> client = http.client&#123;<br>    agent = <span class="hljs-literal">true</span>,<br>    keepAlive = <span class="hljs-literal">false</span><br>&#125;<br><br><span class="hljs-comment">-- 设置日志记录器</span><br><span class="hljs-keyword">local</span> logger_conf = &#123;<br>    prefix = <span class="hljs-string">&quot;api-gateway&quot;</span>,<br>    level = <span class="hljs-string">&quot;debug&quot;</span>,<br>    <span class="hljs-built_in">format</span> = <span class="hljs-string">&quot;%[1]T&quot;</span><br><br></code></pre></td></tr></table></figure>
+
+<p>以下是一个在 OpenResty 和 PostgreSQL 上实现的示例，以支持接口访问次数统计、接口隔离、权限验证和熔断降级功能。</p>
+<ol>
+<li>安装 OpenResty 和 PostgreSQL：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get update<br>sudo apt-get install openresty postgresql<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>配置 OpenResty：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &gt; /etc/openresty/nginx.conf &lt;&lt; <span class="hljs-string">EOF</span><br><span class="hljs-string">user root;</span><br><span class="hljs-string">worker_processes auto;</span><br><span class="hljs-string">pid /run/nginx.pid;</span><br><span class="hljs-string"></span><br><span class="hljs-string">events &#123;</span><br><span class="hljs-string">    worker_connections 1024;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">http &#123;</span><br><span class="hljs-string">    log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="hljs-string">                      &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="hljs-string">                      &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="hljs-string"></span><br><span class="hljs-string">    access_log  /var/log/nginx/api-gateway.access.log  main;</span><br><span class="hljs-string"></span><br><span class="hljs-string">    server &#123;</span><br><span class="hljs-string">        listen 80;</span><br><span class="hljs-string">        server_name your_domain_or_ip;</span><br><span class="hljs-string"></span><br><span class="hljs-string">        location / &#123;</span><br><span class="hljs-string">            access_by_lua_block &#123;</span><br><span class="hljs-string">                local api_gateway = require(&quot;resty.api_gateway&quot;)</span><br><span class="hljs-string"></span><br><span class="hljs-string">                local redis = require(&quot;resty.redis&quot;)</span><br><span class="hljs-string">                local red = redis.new()</span><br><span class="hljs-string"></span><br><span class="hljs-string">                local client_id = &quot;your-client-id&quot;</span><br><span class="hljs-string">                local client_secret = &quot;your-client-secret&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>以下是一个在 OpenResty 和 PostgreSQL 上实现的示例，以支持接口访问次数统计、接口隔离、权限验证和熔断降级功能。</p>
+<ol start="5">
+<li>配置 PostgreSQL：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo vi /etc/postgresql/13/main/postgresql.conf<br></code></pre></td></tr></table></figure>
+
+<p>将以下内容添加到 <code>listen_addresses</code> 配置项中：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">listen_addresses</span> = <span class="hljs-string">&#x27;*&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>保存并退出。</p>
+<ol start="6">
+<li>启动 PostgreSQL 服务：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo systemctl restart postgresql-13<br></code></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>创建一个新的 PostgreSQL 用户，用于与 API 网关交互：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo -u postgres createuser --interactive<br></code></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>为新创建的用户分配数据库：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo -u postgres psql -c <span class="hljs-string">&quot;create user api_gateway with password &#x27;api_gateway_password&#x27; superuser;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>api_gateway_password</code> 应替换为您为新创建的 API 网关用户设置的密码。</p>
+<ol start="9">
+<li>配置 <code>/path/to/your/api-gateway-lua.lua</code>：</li>
+</ol>
+<p>在 <code>/path/to/your/api-gateway-lua.lua</code> 文件中，配置 API 网关和 Redis。添加以下内容：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- API 网关</span><br><span class="hljs-keyword">local</span> api_gateway = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.api_gateway&quot;</span>)<br><span class="hljs-keyword">local</span> redis = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;resty.redis&quot;</span>)<br><br><span class="hljs-comment">-- Redis 配置</span><br><span class="hljs-keyword">local</span> red = redis.new()<br>red.connect(<span class="hljs-string">&quot;localhost&quot;</span>,<br><br><br>以下是一个在 OpenResty 和 PostgreSQL 上实现的示例，以支持接口访问次数统计、接口隔离、权限验证和熔断降级功能。<br><br><span class="hljs-number">10.</span> Redis 配置<br><br><span class="hljs-keyword">local</span> red = redis.new()<br>red.connect(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">6379</span>)<br><br><span class="hljs-comment">-- 设置 Redis 数据表</span><br><span class="hljs-keyword">local</span> redis_table = red.<span class="hljs-built_in">table</span>()<br>redis_table.set(<span class="hljs-string">&quot;access_count&quot;</span>, <span class="hljs-number">0</span>)<br><br><span class="hljs-comment">-- 接口访问次数统计</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">increment_counter</span><span class="hljs-params">(request)</span></span><br>    redis_table.incr(<span class="hljs-string">&quot;access_count&quot;</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 接口隔离</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check_access_permission</span><span class="hljs-params">(user, role)</span></span><br>    <span class="hljs-keyword">if</span> user == <span class="hljs-literal">nil</span> <span class="hljs-keyword">or</span> role == <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;User or Role arguments are required.&quot;</span><br>    <span class="hljs-keyword">end</span><br>    <span class="hljs-keyword">if</span> user == <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span><br>        user = <span class="hljs-literal">nil</span><br>    <span class="hljs-keyword">elseif</span> user ~= role <span class="hljs-keyword">then</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;User has no permission to access the given path.&quot;</span><br>    <span class="hljs-keyword">end</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>, <span class="hljs-literal">nil</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 权限验证</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check_permission</span><span class="hljs-params">(user, path)</span></span><br>    <span class="hljs-keyword">if</span> check_access_permission(user, user) <span class="hljs-keyword">and</span> check_access_permission(user, <span class="hljs-string">&quot;read&quot;</span>) <span class="hljs-keyword">then</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span><br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span><br>    <span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 熔断降级</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">apply_fallback</span><span class="hljs-params">(error)</span></span><br>    ***(<span class="hljs-string">&quot;Api Gateway failed to handle the request, falling back to a default response.&quot;</span>)<br>    <span class="hljs-keyword">return</span> ngx.var.<span class="hljs-built_in">status</span>, ngx.var.request_uri, <span class="hljs-built_in">error</span><br>    <br></code></pre></td></tr></table></figure>
+
+
+<p>以下是一个在 OpenResty 和 PostgreSQL 上实现的示例，以支持接口访问次数统计、接口隔离、权限验证和熔断降级功能。</p>
+<ol start="11">
+<li>熔断降级<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">apply_fallback</span><span class="hljs-params">(error)</span></span><br>    ***(<span class="hljs-string">&quot;Api Gateway failed to handle the request, falling back to a default response.&quot;</span>)<br>    <span class="hljs-keyword">return</span> ngx.var.<span class="hljs-built_in">status</span>, ngx.var.request_uri, <span class="hljs-built_in">error</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 认证</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">authenticate</span><span class="hljs-params">()</span></span><br>    <span class="hljs-keyword">local</span> auth_token = ngx.var.auth_token<br><br>    <span class="hljs-keyword">if</span> auth_token <span class="hljs-keyword">then</span><br>        <span class="hljs-keyword">local</span> user = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;user&quot;</span>)<br>        <span class="hljs-keyword">local</span> users = user.get_all()<br><br>        <span class="hljs-keyword">for</span> _, user <span class="hljs-keyword">in</span> <span class="hljs-built_in">ipairs</span>(users) <span class="hljs-keyword">do</span><br>            <span class="hljs-keyword">if</span> auth_token == user.auth_token <span class="hljs-keyword">then</span><br>                <span class="hljs-keyword">return</span> user<br>            <span class="hljs-keyword">end</span><br>        <span class="hljs-keyword">end</span><br>    <span class="hljs-keyword">end</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 接口调用</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">process_request</span><span class="hljs-params">(request, user)</span></span><br>    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check_permission</span><span class="hljs-params">(path, user)</span></span><br>        <span class="hljs-keyword">if</span> user == <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span><br>            user = <span class="hljs-literal">nil</span><br>        <span class="hljs-keyword">elseif</span> user ~= <span class="hljs-string">&quot;read&quot;</span> <span class="hljs-keyword">then</span><br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;User has no permission to access the given path.&quot;</span><br>        <span class="hljs-keyword">end</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>, <span class="hljs-literal">nil</span><br>    <span class="hljs-keyword">end</span><br><br>    <span class="hljs-comment">-- 判断用户是否存在</span><br>    <span class="hljs-keyword">local</span> user = authenticate()<br>    <span class="hljs-keyword">if</span> user == <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span><br>        <span class="hljs-keyword">return</span> apply_fallback(<span class="hljs-string">&quot;No authentication token provided. User is denied access.&quot;</span>)<br>    <span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>以下是一个在 OpenResty 和 PostgreSQL 上实现的示例，以支持接口访问次数统计、接口隔离、权限验证和熔断降级功能。</p>
+<ol start="12">
+<li>判断用户是否存在<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> user = authenticate()<br><span class="hljs-keyword">if</span> user == <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span><br>    <span class="hljs-keyword">return</span> apply_fallback(<span class="hljs-string">&quot;No authentication token provided. User is denied access.&quot;</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 根据用户权限确定是否有访问权限</span><br><span class="hljs-keyword">local</span> has_access = check_permission(request.<span class="hljs-built_in">path</span>, user)<br><br><span class="hljs-comment">-- 如果用户没有访问权限，将其记录到 Redis 数据表中</span><br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> has_access <span class="hljs-keyword">then</span><br>    <span class="hljs-keyword">local</span> now = <span class="hljs-built_in">os</span>.<span class="hljs-built_in">time</span>()<br>    <span class="hljs-keyword">local</span> method, <span class="hljs-built_in">path</span>, response_status, response_body = ngx.var.request_uri<br><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;User has no permission to access the given path. Path: &quot;</span> .. <span class="hljs-built_in">path</span><br>    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write_error_log</span><span class="hljs-params">(log_type, message)</span></span><br>        ngx.<span class="hljs-built_in">log</span>(log_type, message)<br>    <span class="hljs-keyword">end</span><br><br>    <span class="hljs-keyword">if</span> has_access <span class="hljs-keyword">then</span><br>        write_error_log(<span class="hljs-string">&quot;debug&quot;</span>, error_message)<br>    <span class="hljs-keyword">else</span><br>        write_error_log(<span class="hljs-string">&quot;info&quot;</span>, error_message)<br>    <span class="hljs-keyword">end</span><br><br>    ngx.<span class="hljs-built_in">status</span> = response_status<br>    <span class="hljs-keyword">return</span> response_body<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 如果用户有访问权限，执行正常逻辑</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">process_request_auth_success</span><span class="hljs-params">()</span></span><br>    <span class="hljs-keyword">local</span> new_response = <span class="hljs-literal">nil</span><br><br>    <span class="hljs-comment">-- 获取请求体中的参数</span><br>    <span class="hljs-keyword">local</span> body = ngx.req.get_body_data()<br><br>    <span class="hljs-comment">-- 执行具体业务逻辑</span><br>    <span class="hljs-keyword">local</span> new_<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>以下是一个在 OpenResty 和 PostgreSQL 上实现的示例，以支持接口访问次数统计、接口隔离、权限验证和熔断降级功能。</p>
+<ol start="13">
+<li><p>获取请求体中的参数</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> body = ngx.req.get_body_data()<br><br><span class="hljs-comment">-- 执行具体业务逻辑</span><br><span class="hljs-keyword">local</span> new_response = <span class="hljs-literal">nil</span><br><br><span class="hljs-comment">-- 如果请求体中有 Authorization 请求头，获取认证信息</span><br><span class="hljs-keyword">if</span> body <span class="hljs-keyword">and</span> body[<span class="hljs-string">&quot;Authorization&quot;</span>] <span class="hljs-keyword">then</span><br>    <span class="hljs-keyword">local</span> auth_token = body[<span class="hljs-string">&quot;Authorization&quot;</span>]<br><br>    <span class="hljs-comment">-- 从 Redis 数据表中查询认证信息</span><br>    <span class="hljs-keyword">local</span> user = authenticate()<br><br>    <span class="hljs-comment">-- 如果认证信息正确，将用户信息存储到 Redis</span><br>    <span class="hljs-keyword">if</span> user <span class="hljs-keyword">and</span> user.auth_token == auth_token <span class="hljs-keyword">then</span><br>        redis_table.set(<span class="hljs-string">&quot;user&quot;</span>, user)<br>    <span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 如果认证信息不存在或认证信息错误，返回错误提示</span><br><span class="hljs-keyword">if</span> new_response == <span class="hljs-literal">nil</span> <span class="hljs-keyword">or</span> new_response[<span class="hljs-string">&quot;status&quot;</span>] ~= <span class="hljs-string">&quot;success&quot;</span> <span class="hljs-keyword">then</span><br>    <span class="hljs-keyword">local</span> now = <span class="hljs-built_in">os</span>.<span class="hljs-built_in">time</span>()<br>    <span class="hljs-keyword">local</span> method, <span class="hljs-built_in">path</span>, response_status, response_body = ngx.var.request_uri<br><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Invalid authentication token. Path: &quot;</span> .. <span class="hljs-built_in">path</span><br>    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write_error_log</span><span class="hljs-params">(log_type, message)</span></span><br>        ngx.<span class="hljs-built_in">log</span>(log_type, message)<br>    <span class="hljs-keyword">end</span><br><br>    <span class="hljs-keyword">if</span> new_response <span class="hljs-keyword">then</span><br>        write_error_log(<span class="hljs-string">&quot;debug&quot;</span>, error_message)<br>    <span class="hljs-keyword">else</span><br>        write_error_log(<span class="hljs-string">&quot;info&quot;</span>, error_message)<br>    <span class="hljs-keyword">end</span><br><br>    new_response[<span class="hljs-string">&quot;stat</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>如果认证信息不存在或认证信息错误，返回错误提示</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">if</span> new_response == <span class="hljs-literal">nil</span> <span class="hljs-keyword">or</span> new_response[<span class="hljs-string">&quot;status&quot;</span>] ~= <span class="hljs-string">&quot;success&quot;</span> <span class="hljs-keyword">then</span><br>    <span class="hljs-keyword">local</span> now = <span class="hljs-built_in">os</span>.<span class="hljs-built_in">time</span>()<br>    <span class="hljs-keyword">local</span> method, <span class="hljs-built_in">path</span>, response_status, response_body = ngx.var.request_uri<br><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Invalid authentication token. Path: &quot;</span> .. <span class="hljs-built_in">path</span><br>    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write_error_log</span><span class="hljs-params">(log_type, message)</span></span><br>        ngx.<span class="hljs-built_in">log</span>(log_type, message)<br>    <span class="hljs-keyword">end</span><br><br>    <span class="hljs-keyword">if</span> new_response <span class="hljs-keyword">then</span><br>        write_error_log(<span class="hljs-string">&quot;debug&quot;</span>, error_message)<br>    <span class="hljs-keyword">else</span><br>        write_error_log(<span class="hljs-string">&quot;info&quot;</span>, error_message)<br>    <span class="hljs-keyword">end</span><br><br>    new_response[<span class="hljs-string">&quot;status&quot;</span>] = <span class="hljs-string">&quot;error&quot;</span><br>    new_response[<span class="hljs-string">&quot;error_message&quot;</span>] = error_message<br>    <span class="hljs-keyword">return</span> ngx.var.request_uri<br><span class="hljs-keyword">end</span><br><br><span class="hljs-keyword">return</span> new_response<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>以上代码展示了如何在 OpenResty 和 PostgreSQL 上实现接口访问次数统计、接口隔离、权限验证和熔断降级功能。在实际应用中，您需要根据实际需求对其进行调整。</p>
+<p>请注意，上述示例中的代码可能会引发一些安全问题，如 XSS 攻击等。在实际应用中，您应该对用户输入进行适当的验证和编码，并确保代码的其他部分也考虑了安全性。</p>
+<p>以下是对之前代码的进一步补充，包括错误处理和日志记录：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 错误处理</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_error</span><span class="hljs-params">(error)</span></span><br>    ngx.<span class="hljs-built_in">log</span>(ngx.ERR, <span class="hljs-string">&quot;Error: &quot;</span>, <span class="hljs-built_in">error</span>)<br>    <span class="hljs-keyword">return</span> ngx.<span class="hljs-built_in">exit</span>(ngx.HTTP_INTERNAL_SERVER_ERROR)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 日志记录</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write_error_log</span><span class="hljs-params">(log_type, message)</span></span><br>    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log_error</span><span class="hljs-params">()</span></span><br>        ngx.<span class="hljs-built_in">log</span>(log_type, message)<br>        <span class="hljs-keyword">if</span> log_type == <span class="hljs-string">&quot;debug&quot;</span> <span class="hljs-keyword">then</span><br>            ngx.say(<span class="hljs-string">&quot;[DEBUG]: &quot;</span>, message)<br>        <span class="hljs-keyword">end</span><br>    <span class="hljs-keyword">end</span><br><br>    log_error()<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理认证错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">authenticate_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Authentication failed. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 认证成功</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">authenticate_success</span><span class="hljs-params">(user)</span></span><br>    <span class="hljs-keyword">local</span> new_response = &#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;success&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = <span class="hljs-literal">nil</span><br>    &#125;<br>    <span class="hljs-comment">-- 存储认证信息到 Redis</span><br>    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write_redis</span><span class="hljs-params">(key, value)</span></span><br>        redis_table.set(key, value)<br>    <span class="hljs-keyword">end</span><br><br>    write_redis(<span class="hljs-string">&quot;user&quot;</span>, user)<br>    <span class="hljs-keyword">return</span> new_response<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理其他错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_other_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Other error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>   <br>    [<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理 OAuth 错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_oauth_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;OAuth error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理 API 资源错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_api_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;API error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理 Server 端错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_server_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Server error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理请求体格式错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_body_parsing_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Body parsing error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理请求数据不完整的错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_incomplete_request</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Incomplete request data occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理其他错误</span><br><br></code></pre></td></tr></table></figure>
+
+<p>以下是对前面代码的补充，以处理其他可能的错误：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 处理其他错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_other_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Other error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理 HTTP 认证错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_http_auth_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;HTTP authentication error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理 URL 编码错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_url_encoding_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;URL encoding error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理资源被禁止访问的错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_rate_limit_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Resource rate limit error occurred. Request URI: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    <span class="hljs-keyword">return</span> handle_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 返回错误响应</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">return_error_response</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> new_response = &#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;message&quot;</span>],<br>        <span class="hljs-string">&quot;error_code&quot;</span> = <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;code&quot;</span>]<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>以下是对之前代码的补充，以处理返回错误响应的逻辑：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 返回错误响应</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">return_error_response</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> new_response = &#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;message&quot;</span>],<br>        <span class="hljs-string">&quot;error_code&quot;</span> = <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;code&quot;</span>]<br>    &#125;<br>    <br>    <span class="hljs-comment">-- 设置响应头，说明错误原因</span><br>    new_response[<span class="hljs-string">&quot;headers&quot;</span>][<span class="hljs-string">&quot;Content-Type&quot;</span>] = <span class="hljs-string">&quot;application/json&quot;</span><br>    new_response[<span class="hljs-string">&quot;headers&quot;</span>][<span class="hljs-string">&quot;Error-Code&quot;</span>] = <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;code&quot;</span>]<br>    new_response[<span class="hljs-string">&quot;headers&quot;</span>][<span class="hljs-string">&quot;Error-Message&quot;</span>] = <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;message&quot;</span>]<br>    <br>    <span class="hljs-comment">-- 写入响应体</span><br>    <span class="hljs-keyword">local</span> response_body = fmt(<br>        <span class="hljs-string">&quot;&#123;\&quot;code\&quot;: &#123;&#123;Error-Code&#125;&#125;, \&quot;message\&quot;: &#123;&#123;Error-Message&#125;&#125;&#125;&#125;&quot;</span><br>    )<br>    <span class="hljs-built_in">table</span>.<span class="hljs-built_in">insert</span>(new_response[<span class="hljs-string">&quot;body&quot;</span>], response_body)<br><br>    <span class="hljs-comment">-- 返回错误响应</span><br>    <span class="hljs-keyword">return</span> new_response<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这段代码包含了如何处理 HTTP 响应的逻辑，如果请求失败，它会返回一个包含错误信息的响应。这可以用于为客户端提供更多有关错误的信息。</p>
+<p>请注意，这个示例没有考虑实际应用中可能遇到的所有错误情况。在实际项目中，你需要根据你的需求和场景来扩展这个示例，以包含所有可能的错误情况。</p>
+<p>– 错误日志记录</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write_error_log</span><span class="hljs-params">(log_type, message)</span></span><br>    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log_error</span><span class="hljs-params">()</span></span><br>        ngx.<span class="hljs-built_in">log</span>(log_type, message)<br>        <span class="hljs-keyword">if</span> log_type == <span class="hljs-string">&quot;debug&quot;</span> <span class="hljs-keyword">then</span><br>            ngx.say(<span class="hljs-string">&quot;[DEBUG]: &quot;</span>, message)<br>        <span class="hljs-keyword">end</span><br>    <span class="hljs-keyword">end</span><br><br>    log_error()<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 日志记录</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log_error</span><span class="hljs-params">(error)</span></span><br>    write_error_log(<span class="hljs-string">&quot;error&quot;</span>, <span class="hljs-string">&quot;Request error: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;request_uri&quot;</span>])<br>    write_error_log(<span class="hljs-string">&quot;debug&quot;</span>, <span class="hljs-string">&quot;Request error message: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;message&quot;</span>])<br>    write_error_log(<span class="hljs-string">&quot;info&quot;</span>, <span class="hljs-string">&quot;Request error code: &quot;</span> .. <span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;code&quot;</span>])<br><br>    ngx.<span class="hljs-built_in">exit</span>(<span class="hljs-built_in">error</span>[<span class="hljs-string">&quot;status&quot;</span>])<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+<p>在以下示例中，我们将扩展之前的代码，以添加针对资源不可用错误的逻辑。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 定义资源不可用错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resource_unavailable_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> error_code = <span class="hljs-string">&quot;404&quot;</span>  <span class="hljs-comment">-- 资源未找到的错误代码</span><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Resource not found&quot;</span><br><br>    <span class="hljs-keyword">return</span> return_error_response(&#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = error_message,<br>        <span class="hljs-string">&quot;error_code&quot;</span> = error_code<br>    &#125;)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理资源不可用错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_resource_unavailable_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">return</span> resource_unavailable_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这段代码定义了一个名为 <code>resource_unavailable_error</code> 的函数，用于处理资源不可用的情况。当请求的资源不可用时，这个函数将返回一个包含错误代码和消息的响应。</p>
+<p>同时，我们添加了一个名为 <code>handle_resource_unavailable_error</code> 的函数，它将调用 <code>resource_unavailable_error</code> 函数来处理资源不可用错误。这样，当您需要处理资源不可用错误时，只需调用 <code>handle_resource_unavailable_error</code> 函数即可。</p>
+<p>以下是继续的代码示例，用于处理HTTP认证失败的情况：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 定义认证失败错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">authentication_failed_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> error_code = <span class="hljs-string">&quot;401&quot;</span> <span class="hljs-comment">-- 认证失败的错误代码</span><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Unauthorized access&quot;</span><br><br>    <span class="hljs-keyword">return</span> return_error_response(&#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = error_message,<br>        <span class="hljs-string">&quot;error_code&quot;</span> = error_code<br>    &#125;)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理认证失败错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_authentication_failed_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">return</span> authentication_failed_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这段代码定义了一个名为 <code>authentication_failed_error</code> 的函数，用于处理认证失败的情况。当请求的认证信息无效或不正确时，这个函数将返回一个包含错误代码和消息的响应。</p>
+<p>同时，我们添加了一个名为 <code>handle_authentication_failed_error</code> 的函数，它将调用 <code>authentication_failed_error</code> 函数来处理认证失败错误。这样，当您需要处理认证失败错误时，只需调用 <code>handle_authentication_failed_error</code> 函数即可。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 定义其他错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">other_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> error_code = <span class="hljs-string">&quot;500&quot;</span> <span class="hljs-comment">-- 内部服务器错误的错误代码</span><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Internal server error&quot;</span><br><br>    <span class="hljs-keyword">return</span> return_error_response(&#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = error_message,<br>        <span class="hljs-string">&quot;error_code&quot;</span> = error_code<br>    &#125;)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理其他常见错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_other_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">return</span> other_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>以下是继续的代码示例，用于处理资源被禁用或限制的情况：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 定义资源被禁用错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resource_disabled_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> error_code = <span class="hljs-string">&quot;503&quot;</span> <span class="hljs-comment">-- 资源不可用的错误代码</span><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Resource is temporarily unavailable&quot;</span><br><br>    <span class="hljs-keyword">return</span> return_error_response(&#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = error_message,<br>        <span class="hljs-string">&quot;error_code&quot;</span> = error_code<br>    &#125;)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理资源被禁用或限制的情况</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_resource_disabled_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">return</span> resource_disabled_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这段代码定义了一个名为 <code>resource_disabled_error</code> 的函数，用于处理资源被禁用或限制的情况。当请求的资源被临时禁用或限制时，这个函数将返回一个包含错误代码和消息的响应。</p>
+<p>同时，我们添加了一个名为 <code>handle_resource_disabled_error</code> 的函数，它将调用 <code>resource_disabled_error</code> 函数来处理资源被禁用或限制的情况。这样，当您需要处理资源被禁用或限制的情况时，只需调用 <code>handle_resource_disabled_error</code> 函数即可。</p>
+<p>这个示例代码主要包括对错误日志记录、错误响应逻辑和处理资源被禁用或限制的情况的逻辑。请根据您的实际需求和场景调整和扩展这些代码，以便满足您的特定需求。</p>
+<p>以下是继续的代码示例，用于处理客户端请求参数不完整或无效的情况：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 定义参数不完整或无效错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parameter_invalid_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> error_code = <span class="hljs-string">&quot;400&quot;</span> <span class="hljs-comment">-- 参数无效的错误代码</span><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Invalid parameter&quot;</span><br><br>    <span class="hljs-keyword">return</span> return_error_response(&#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = error_message,<br>        <span class="hljs-string">&quot;error_code&quot;</span> = error_code<br>    &#125;)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理参数不完整或无效的情况</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_parameter_invalid_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">return</span> parameter_invalid_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这段代码定义了一个名为 <code>parameter_invalid_error</code> 的函数，用于处理客户端请求参数不完整或无效的情况。当请求的参数不完整或无效时，这个函数将返回一个包含错误代码和消息的响应。</p>
+<p>同时，我们添加了一个名为 <code>handle_parameter_invalid_error</code> 的函数，它将调用 <code>parameter_invalid_error</code> 函数来处理参数不完整或无效的情况。这样，当您需要处理客户端请求参数不完整或无效的情况时，只需调用 <code>handle_parameter_invalid_error</code> 函数即可。</p>
+<p>这个示例代码主要包括对错误日志记录、错误响应逻辑和处理客户端请求参数不完整或无效的情况的逻辑。请根据您的实际需求和场景调整和扩展这些代码，以便满足您的特定需求。</p>
+<p>以下是继续的代码示例，用于处理API被大量请求攻击的情况：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- 定义攻击性请求的错误</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">attack_request_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">local</span> error_code = <span class="hljs-string">&quot;429&quot;</span> <span class="hljs-comment">-- 请求过多的错误代码</span><br>    <span class="hljs-keyword">local</span> error_message = <span class="hljs-string">&quot;Too many requests&quot;</span><br><br>    <span class="hljs-keyword">return</span> return_error_response(&#123;<br>        <span class="hljs-string">&quot;status&quot;</span> = <span class="hljs-string">&quot;error&quot;</span>,<br>        <span class="hljs-string">&quot;error_message&quot;</span> = error_message,<br>        <span class="hljs-string">&quot;error_code&quot;</span> = error_code<br>    &#125;)<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">-- 处理攻击性请求的情况</span><br><span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handle_attack_request_error</span><span class="hljs-params">(error)</span></span><br>    <span class="hljs-keyword">return</span> attack_request_error(<span class="hljs-built_in">error</span>)<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>这段代码定义了一个名为 <code>attack_request_error</code> 的函数，用于处理攻击性请求的情况。当请求过多或频繁时，这个函数将返回一个包含错误代码和消息的响应。</p>
+<p>同时，我们添加了一个名为 <code>handle_attack_request_error</code> 的函数，它将调用 <code>attack_request_error</code> 函数来处理攻击性请求的情况。这样，当您需要处理攻击性请求的情况时，只需调用 <code>handle_attack_request_error</code> 函数即可。</p>
+<p>这个示例代码主要包括对错误日志记录、错误响应逻辑和处理攻击性请求的情况的逻辑。请根据您的实际需求和场景调整和扩展这些代码，以便满足您的特定需求。</p>
+<h3 id="gateway"><a href="#gateway" class="headerlink" title="gateway"></a>gateway</h3><h4 id="功能1"><a href="#功能1" class="headerlink" title="功能1"></a>功能1</h4><p>Spring Gateway是Spring Cloud生态圈中的一个API网关，它提供了通用的路由、过滤和负载均衡等基础功能，可以方便地将HTTP请求转发到不同的服务上。</p>
+<p>Sentinel是一个开源的分布式系统防护组件，它提供了实时的流量控制、熔断降级和系统保护等功能，可以保护服务免受高并发流量的冲击，保障系统的稳定性。</p>
+<p>通过Spring Gateway和Sentinel的结合，我们可以实现以下功能：</p>
+<ol>
+<li>统计接口访问次数：使用Sentinel的流量控制功能，可以在API网关层面统计每个接口的访问次数，通过Dashboard进行实时监控。</li>
+<li>接口隔离：通过Sentinel的熔断降级和系统保护功能，可以在API网关层面对不同的服务进行隔离，避免服务间的相互影响。</li>
+<li>权限验证：通过Spring Gateway的过滤器功能，可以在API网关层面对请求进行鉴权操作，保障系统的安全性。</li>
+<li>熔断降级：使用Sentinel的熔断降级功能，可以在API网关层面对请求进行限流或熔断操作，避免服务的雪崩效应。</li>
+</ol>
+<p>实现方式：</p>
+<ol>
+<li>配置Sentinel的流量统计和熔断降级规则，在API网关中引入Sentinel的相关组件。</li>
+<li>配置Spring Gateway的路由规则，将HTTP请求转发到对应的服务上。</li>
+<li>配置Spring Gateway的过滤器，用于权限验证等操作。</li>
+<li>在Sentinel的Dashboard中进行实时监控和管理。</li>
+</ol>
+<p>示例代码（仅供参考）：</p>
+<p>配置Sentinel的规则：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@PostConstruct</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doInit</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 定义流控规则</span><br>    List&lt;FlowRule&gt; rules = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>    <span class="hljs-type">FlowRule</span> <span class="hljs-variable">flowRule</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FlowRule</span>();<br>    flowRule.setResource(<span class="hljs-string">&quot;api-gateway&quot;</span>);<br>    flowRule.setCount(<span class="hljs-number">100</span>);<br>    flowRule.setGrade(RuleConstant.FLOW_GRADE_QPS);<br>    rules.add(flowRule);<br>    <span class="hljs-comment">// 定义熔断规则</span><br>    <span class="hljs-type">DegradeRule</span> <span class="hljs-variable">degradeRule</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DegradeRule</span>();<br>    degradeRule.setResource(<span class="hljs-string">&quot;api-gateway&quot;</span>);<br>    degradeRule.setCount(<span class="hljs-number">20</span>);<br>    degradeRule.setGrade(RuleConstant.DEGRADE_GRADE_RT);<br>    degradeRule.setTimeWindow(<span class="hljs-number">10</span>);<br>    DegradeRuleManager.loadRules(Collections.singletonList(degradeRule));<br>    <span class="hljs-comment">// 加载规则</span><br>    FlowRuleManager.loadRules(rules);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>配置Spring Gateway的路由规则：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">cloud:</span><br>    <span class="hljs-attr">gateway:</span><br>      <span class="hljs-attr">routes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">id:</span> <span class="hljs-string">user-service</span><br>        <span class="hljs-attr">uri:</span> <span class="hljs-string">lb://user-service</span><br>        <span class="hljs-attr">predicates:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">Path=/api/user/**</span><br></code></pre></td></tr></table></figure>
+
+<p>配置Spring Gateway的过滤器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">GatewayFilter</span>, Ordered &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Logger</span> <span class="hljs-variable">logger</span> <span class="hljs-operator">=</span> LoggerFactory.getLogger(AuthFilter.class);<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Mono&lt;Void&gt; <span class="hljs-title function_">filter</span><span class="hljs-params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">token</span> <span class="hljs-operator">=</span> exchange.getRequest().getHeaders().getFirst(<span class="hljs-string">&quot;Authorization&quot;</span>);<br>        <span class="hljs-keyword">if</span> (token == <span class="hljs-literal">null</span>) &#123;<br>            logger.warn(<span class="hljs-string">&quot;Unauthorized request: &#123;&#125;&quot;</span>, exchange.getRequest().getPath());<br>            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);<br>            <span class="hljs-keyword">return</span> exchange.getResponse().setComplete();<br>        &#125;<br>        <span class="hljs-comment">// 校验token</span><br>        <span class="hljs-keyword">return</span> chain.filter(exchange);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getOrder</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在Sentinel的Dashboard中进行实时监控和管理：可以通过访问<a target="_blank" rel="noopener" href="http://localhost:8080/demo/abc%EF%BC%8C%E4%BB%8E%E8%80%8C%E5%9C%A8Dashboard%E4%B8%AD%E6%9F%A5%E7%9C%8B%E5%AF%B9%E5%BA%94%E6%8E%A5%E5%8F%A3%E7%9A%84QPS%E5%92%8CRT%E7%AD%89%E6%8C%87%E6%A0%87%E3%80%82">http://localhost:8080/demo/abc，从而在Dashboard中查看对应接口的QPS和RT等指标。</a></p>
+<h4 id="功能2"><a href="#功能2" class="headerlink" title="功能2"></a>功能2</h4><p>这里提供一个实现Spring Gateway、Sentinel和Spring Security的示例代码，实现了接口访问次数统计、熔断降级、权限验证和OAuth2认证等功能。</p>
+<p>首先是pom.xml文件的配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- Spring Boot Starter --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-webflux<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br><span class="hljs-comment">&lt;!-- Spring Cloud Gateway --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;&gt;</span>org.springframework.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-gateway<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br><span class="hljs-comment">&lt;!-- Spring Cloud Sentinel --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br><span class="hljs-comment">&lt;!-- Spring Security --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br><span class="hljs-comment">&lt;!-- Spring Security OAuth2 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.cloud<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    &lt;artifactIdspring-cloud-starter-security-oauth2<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>接下来是application.yml文件的配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">server:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br><br><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">cloud:</span><br>    <span class="hljs-attr">gateway:</span><br>      <span class="hljs-attr">routes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">id:</span> <span class="hljs-string">user-service</span><br>        <span class="hljs-attr">uri:</span> <span class="hljs-string">lb://user-service</span><br>        <span class="hljs-attr">predicates:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">Path=/api/user/**</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">id:</span> <span class="hljs-string">product-service</span><br>        <span class="hljs-attr">uri:</span> <span class="hljs-string">lb://product-service</span><br>        <span class="hljs-attr">predicates:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">Path=/api/product/**</span><br>  <span class="hljs-attr">application:</span><br>    <span class="hljs-attr">name:</span> <span class="hljs-string">api-gateway</span><br>  <span class="hljs-attr">security:</span><br>    <span class="hljs-attr">oauth2:</span><br>      <span class="hljs-attr">client:</span><br>        <span class="hljs-attr">registration:</span><br>          <span class="hljs-attr">oauth-client:</span><br>            <span class="hljs-attr">provider:</span> <span class="hljs-string">my-oauth2-server</span><br>            <span class="hljs-attr">client-id:</span> <span class="hljs-string">client</span><br>            <span class="hljs-attr">client-secret:</span> <span class="hljs-string">secret</span><br>            <span class="hljs-attr">authorization-grant-type:</span> <span class="hljs-string">authorization_code</span><br>            <span class="hljs-attr">redirect-uri:</span> <span class="hljs-string">&#x27;&#123;baseUrl&#125;/login/oauth2/code/&#123;registrationId&#125;&#x27;</span><br>            <span class="hljs-attr">scope:</span> <span class="hljs-string">email,</span> <span class="hljs-string">profile,</span> <span class="hljs-string">openid</span><br>        <span class="hljs-attr">provider:</span><br>          <span class="hljs-attr">my-oauth2-server:</span><br>            <span class="hljs-attr">authorize-uri:</span> <span class="hljs-string">http://localhost:8081/oauth/authorize</span><br>            <span class="hljs-attr">token-uri:</span> <span class="hljs-string">http://localhost:8081/oauth/token</span><br>            <span class="hljs-attr">user-info-uri:</span> <span class="hljs-string">http://localhost:8081/userinfo</span><br>            <span class="hljs-attr">jwk-set-uri:</span> <span class="hljs-string">http://localhost:8081/.well-known/jwks.json</span><br>            <span class="hljs-attr">user-name-attribute:</span> <span class="hljs-string">sub</span><br></code></pre></td></tr></table></figure>
+
+<p>其中，OAuth2相关配置需要根据具体的情况进行修改。</p>
+<p>接下来是启动类的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-meta">@EnableDiscoveryClient</span><br><span class="hljs-meta">@EnableWebFluxSecurity</span><br><span class="hljs-meta">@EnableReactiveMethodSecurity</span><br><span class="hljs-meta">@EnableOAuth2Client</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ApiGatewayApplication</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        SpringApplication.run(ApiGatewayApplication.class, args);<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> SecurityWebFilterChain <span class="hljs-title function_">springSecurityFilterChain</span><span class="hljs-params">(ServerHttpSecurity http)</span> &#123;<br>        http.authorizeExchange()<br>                .pathMatchers(<span class="hljs-string">&quot;/actuator/**&quot;</span>).permitAll() <span class="hljs-comment">// 放行actuator节点</span><br>                .pathMatchers(<span class="hljs-string">&quot;/login/oauth2/**&quot;</span>).permitAll() <span class="hljs-comment">// 放行OAuth2登录页面</span><br>                .anyExchange().authenticated() <span class="hljs-comment">// 其他路径需要认证</span><br>                .and()<br>                .oauth2Login() <span class="hljs-comment">// 启用OAuth2登录</span><br>                .and()<br>                .oauth2ResourceServer().jwt(); <span class="hljs-comment">// 启用OAuth2资源服务器</span><br>        <span class="hljs-keyword">return</span> http.build();<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> RouteLocator <span class="hljs-title function_">customRouteLocator</span><span class="hljs-params">(RouteLocatorBuilder builder)</span> &#123;<br>        <span class="hljs-keyword">return</span> builder.routes()<br>                .route(<span class="hljs-string">&quot;user-service&quot;</span>, r -&gt; r.path(<span class="hljs-string">&quot;/api/user/**&quot;</span>).filters(f -&gt; f.circuitBreaker(c -&gt; c.setName(<span class="hljs-string">&quot;user-service-cb&quot;</span>).setFallbackUri(<span class="hljs-string">&quot;forward:/user-service-fallback&quot;</span>))).uri(<span class="hljs-string">&quot;lb://user-service&quot;</span>))<br>                .route(<span class="hljs-string">&quot;product-service&quot;</span>, r -&gt; r.path(<span class="hljs-string">&quot;/api/product/**&quot;</span>).filters(f -&gt; f.circuitBreaker(c -&gt; c.setName(<span class="hljs-string">&quot;product-service-cb&quot;</span>).setFallbackUri(<span class="hljs-string">&quot;forward:/product-service-fallback&quot;</span>))).uri(<span class="hljs-string">&quot;lb://product-service&quot;</span>))<br>                .build();<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> CustomFallbackHandler <span class="hljs-title function_">userServiceFallbackHandler</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomFallbackHandler</span>(<span class="hljs-string">&quot;user-service is unavailable, please try again later.&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> CustomFallbackHandler <span class="hljs-title function_">productServiceFallbackHandler</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomFallbackHandler</span>(<span class="hljs-string">&quot;product-service is unavailable, please try again later.&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> SentinelGatewayFilterFactory <span class="hljs-title function_">sentinelGatewayFilterFactory</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SentinelGatewayFilterFactory</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> SentinelGatewayBlockExceptionHandler <span class="hljs-title function_">sentinelGatewayBlockExceptionHandler</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SentinelGatewayBlockExceptionHandler</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultBlockExceptionHandler</span>(), <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomBlockPageHandler</span>());<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> BlockRequestHandler <span class="hljs-title function_">blockRequestHandler</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomBlockRequestHandler</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中，SecurityWebFilterChain负责OAuth2认证的配置，customRouteLocator负责路由规则的配置，CustomFallbackHandler负责熔断降级的处理，SentinelGatewayFilterFactory、SentinelGatewayBlockExceptionHandler和BlockRequestHandler负责Sentinel的集成和异常处理。</p>
+<p>路由规则中，添加了熔断器的配置，当访问&#x2F;user-service和&#x2F;product-service服务时出现异常时，将跳转到&#x2F;user-service-fallback和&#x2F;product-service-fallback路径，展示友好的提示页面。</p>
+<p>最后是熔断降级的处理类CustomFallbackHandler的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomFallbackHandler</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">HandlerFunction</span>&lt;Response&gt; &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> String message;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">CustomFallbackHandler</span><span class="hljs-params">(String message)</span> &#123;<br>        <span class="hljs-built_in">this</span>.message = message;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Mono&lt;Response&gt; <span class="hljs-title function_">handle</span><span class="hljs-params">(ServerRequest serverRequest)</span> &#123;<br>        <span class="hljs-keyword">return</span> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)<br>                .body(BodyInserters.fromValue(Collections.singletonMap(<span class="hljs-string">&quot;message&quot;</span>, message)));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里定义了一个简单的处理逻辑，返回一个包含错误信息的json消息。可以根据具体需求进行定制。</p>
+<p>至此，一个集成Spring Gateway、Sentinel和Spring Security的API网关就搭建完成了。实现了统计接口访问次数、接口隔离、权限验证和熔断降级等功能，为企业应用架构的构建提供了有力保障。</p>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>要使用Spring Gateway + Sentinel实现上述功能，您需要先创建一个Spring Boot应用程序，并集成Spring Gateway和Sentinel。以下是一个基本的步骤说明：</p>
+<ol>
+<li><p>创建一个Spring Boot应用程序：<br>打开您喜欢的IDE，然后使用Spring Initializr创建一个新的Spring Boot项目。选择Web和Sentinel依赖项。</p>
+</li>
+<li><p>配置Spring Gateway和Sentinel：<br>在<code>application.yml</code>文件中，配置Spring Gateway和Sentinel。</p>
+</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">application:</span><br>    <span class="hljs-attr">name:</span> <span class="hljs-string">gateway-sentinel</span><br><br><span class="hljs-attr">server:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">8080</span><br><br><span class="hljs-attr">cloud:</span><br>  <span class="hljs-attr">nacos:</span><br>    <span class="hljs-attr">discovery:</span><br>      <span class="hljs-attr">server-addr:</span> <span class="hljs-string">localhost:8848</span><br>  <span class="hljs-attr">sentinel:</span><br>    <span class="hljs-attr">transport:</span><br>      <span class="hljs-attr">dashboard:</span> <span class="hljs-string">localhost:8080</span><br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>创建一个自定义的<code>BlockExceptionHandler</code>：<br>在Spring Boot应用程序中，创建一个自定义的<code>BlockExceptionHandler</code>实现，以处理异常和自定义错误响应逻辑。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.springframework.web.server.ServerWebExchange;<br><span class="hljs-keyword">import</span> org.springframework.web.server.WebExceptionHandler;<br><span class="hljs-keyword">import</span> reactor.core.publisher.Mono;<br><br><span class="hljs-keyword">import</span> java.util.Objects;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomBlockExceptionHandler</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">WebExceptionHandler</span> &#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Mono&lt;Void&gt; <span class="hljs-title function_">handle</span><span class="hljs-params">(ServerWebExchange exchange, Throwable ex)</span> &#123;<br>        <span class="hljs-keyword">if</span> (ex <span class="hljs-keyword">instanceof</span> CommonBlockException) &#123;<br>            <span class="hljs-keyword">return</span> handleCommonBlockException(exchange, (CommonBlockException)ex);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> Mono.just(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(<span class="hljs-string">&quot;Unexpected error: &quot;</span> + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR));<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">private</span> Mono&lt;Void&gt; <span class="hljs-title function_">handleCommonBlockException</span><span class="hljs-params">(ServerWebExchange exchange, CommonBlockException ex)</span> &#123;<br>    <span class="hljs-keyword">switch</span> (ex.getErrCode()) &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">400</span>:<br>            <span class="hljs-keyword">return</span> Mono.just(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(<span class="hljs-string">&quot;Invalid parameter&quot;</span>, HttpStatus.BAD_REQUEST));<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">401</span>:<br>            <span class="hljs-keyword">return</span> Mono.just(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(<span class="hljs-string">&quot;Unauthorized&quot;</span>, HttpStatus.UNAUTHORIZED));<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">403</span>:<br>            <span class="hljs-keyword">return</span> Mono.just(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(<span class="hljs-string">&quot;Forbidden&quot;</span>, HttpStatus.FORBIDDEN));<br>        <span class="hljs-keyword">default</span>:<br>            <span class="hljs-keyword">return</span> Mono.just(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(<span class="hljs-string">&quot;Internal server error&quot;</span>, HttpStatus.INTERNAL_SERVER_ERROR));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>定义一个异常处理类：<br>创建一个名为<code>CommonException</code>的异常类，用于表示常见的错误类型。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CommonException</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RuntimeException</span> &#123;<br>    <span class="hljs-keyword">private</span> String errorCode;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">CommonException</span><span class="hljs-params">(String errorCode)</span> &#123;<br>        <span class="hljs-built_in">this</span>.errorCode = errorCode;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getErrCode</span><span class="hljs-params">()</span> <br>    <br>    `<span class="hljs-keyword">return</span> errorCode;`<br><br>```java<br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getMessage</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> String.format(<span class="hljs-string">&quot;Error code: %s&quot;</span>, errorCode);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setMessage</span><span class="hljs-params">(String message)</span> &#123;<br>        <span class="hljs-built_in">this</span>.message = message;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>实现自定义异常处理逻辑：<br>在处理请求时，处理自定义异常和错误类型。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.springframework.http.HttpStatus;<br><span class="hljs-keyword">import</span> org.springframework.http.ResponseEntity;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ExceptionHandler;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestControllerAdvice;<br><br><span class="hljs-meta">@RestControllerAdvice</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomExceptionHandler</span> &#123;<br><br>    <span class="hljs-meta">@ExceptionHandler(CommonException.class)</span><br>    <span class="hljs-keyword">public</span> ResponseEntity&lt;?&gt; handleCommonException(CommonException ex) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(ex.getMessage(), HttpStatus.valueOf(ex.getErrCode()));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>测试：<br>启动Spring Boot应用程序，访问一个可能引发异常的API端点，例如<code>/api/example</code>。您应该会看到一个自定义的错误响应，其中包含错误代码和描述。</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs css">&#123;<br>  &quot;<span class="hljs-selector-tag">code</span>&quot;: <span class="hljs-string">&quot;400&quot;</span>,<br>  <span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">&quot;Invalid parameter&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>通过以上步骤，您已经成功地在Spring Gateway中使用Sentinel实现了上述功能。在实际生产环境中，您可能需要根据实际情况对配置和实现进行调整。</p>
+<p>如果您希望更进一步，可以考虑将错误日志记录到适当的日志系统中，以便更好地了解应用程序在处理错误时的行为。以下是如何将错误日志记录到日志系统的步骤：</p>
+<ol>
+<li>添加日志依赖项：<br>在<code>pom.xml</code>或<code>build.gradle</code>文件中，添加<code>logback-classic</code>和<code>logback-core</code>依赖项。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>  ...<br>  <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>ch.qos.logback<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>logback-classic<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.2.3<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>ch.qos.logback<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>logback-core<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.2.3<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>配置日志：<br>在项目的<code>src/main/resources</code>目录下，创建一个名为<code>logback.xml</code>的文件。在该文件中，配置日志记录器以将日志输出到控制台和日志文件。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">appender</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;STDOUT&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">encoder</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">pattern</span>&gt;</span>%d&#123;HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;36&#125; - %msg%n<span class="hljs-tag">&lt;/<span class="hljs-name">pattern</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">encoder</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">appender</span>&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">appender</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;FILE&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">file</span>&gt;</span>$&#123;sys:log.path&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">file</span>&gt;</span><span class="hljs-comment">&lt;!-- 部分的路径应根据您的项目实际配置进行设置。--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">append</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">append</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">rollingPolicy</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">FileNamePattern</span>&gt;</span>$&#123;sys:log.path&#125;/app-%d&#123;yyyy-MM-dd&#125;-%i.log<span class="hljs-tag">&lt;/<span class="hljs-name">FileNamePattern</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">MaxHistory</span>&gt;</span>30<span class="hljs-tag">&lt;/<span class="hljs-name">MaxHistory</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">rollingPolicy</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">appender</span>&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">root</span> <span class="hljs-attr">level</span>=<span class="hljs-string">&quot;INFO&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">appender-ref</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;STDOUT&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">appender-ref</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;FILE&quot;</span> /&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">root</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>启用日志记录：<br>在Spring Boot应用程序的<code>application.properties</code>或<code>application.yml</code>文件中，配置日志记录器的属性。</li>
+</ol>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">logging.path</span>=<span class="hljs-string">/var/logs</span><br><span class="hljs-attr">logging.file</span>=<span class="hljs-string">app.log</span><br><span class="hljs-attr">logging.level.root</span>=<span class="hljs-string">INFO</span><br><span class="hljs-attr">***.example</span>=<span class="hljs-string">DEBUG</span><br></code></pre></td></tr></table></figure>
+
+<p>在<code>application.yml</code>文件中，语法略有不同：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">logging:</span><br>  <span class="hljs-attr">path:</span> <span class="hljs-string">/var/logs</span><br>  <span class="hljs-string">***</span><br>  <span class="hljs-attr">level:</span><br>    <span class="hljs-attr">root:</span> <span class="hljs-string">INFO</span><br>    <span class="hljs-attr">com.example:</span> <span class="hljs-string">DEBUG</span><br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>重启应用程序：<br>现在，当应用程序运行时，它将在控制台和指定的日志文件中记录错误日志。您可以根据需要调整日志级别和日志文件路径以满足需求。</li>
+</ol>
+<p>如果您希望进一步调整错误处理，可以考虑在处理异常时执行自定义的异常处理逻辑。以下是如何实现自定义异常处理逻辑的步骤：</p>
+<ol>
+<li>创建一个自定义异常处理器：<br>创建一个名为<code>CustomExceptionHandler</code>的类，继承<code>SimpleMappingExceptionResolver</code>，并实现<code>processException</code>方法。在<code>processException</code>方法中，您可以对异常进行处理，例如，将错误信息记录到日志系统。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ControllerAdvice;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ExceptionHandler;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestControllerAdvice;<br><span class="hljs-keyword">import</span> org.springframework.web.servlet.ModelAndView;<br><span class="hljs-keyword">import</span> org.springframework.web.servlet.mvc.method.annotation.SimpleMappingExceptionResolver;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-meta">@RestControllerAdvice</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomExceptionHandler</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">SimpleMappingExceptionResolver</span> &#123;<br><br>    <span class="hljs-meta">@ExceptionHandler(&#123;CommonException.class&#125;)</span><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-keyword">public</span> ModelAndView <span class="hljs-title function_">handleCommonException</span><span class="hljs-params">(CommonException ex)</span> &#123;<br>        <span class="hljs-type">ModelAndView</span> <span class="hljs-variable">modelAndView</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ModelAndView</span>();<br>        modelAndView.setViewName(<span class="hljs-string">&quot;error&quot;</span>);<br>        modelAndView.addObject(<span class="hljs-string">&quot;error&quot;</span>, ex.getMessage());<br>        <span class="hljs-keyword">return</span> modelAndView;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>测试异常处理器：<br>要测试异常处理器的功能，请使用以下步骤：</p>
+</li>
+<li><p>创建一个新的Spring Boot应用程序，并添加适当的依赖项。确保已将<code>spring-boot-starter-web</code>添加到项目依赖中。</p>
+</li>
+<li><p>创建一个包含错误处理的控制器，例如，<code>ErrorController</code>：</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.springframework.http.HttpStatus;<br><span class="hljs-keyword">import</span> org.springframework.http.ResponseEntity;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.GetMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ExceptionHandler;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestController;<br><br><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ErrorController</span> &#123;<br><br>    <span class="hljs-meta">@GetMapping(&quot;/error&quot;)</span><br>    <span class="hljs-keyword">public</span> ResponseEntity&lt;String&gt; <span class="hljs-title function_">handleError</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(<span class="hljs-string">&quot;Internal server error&quot;</span>, HttpStatus.INTERNAL_SERVER_ERROR);<br>    &#125;<br><br>    <span class="hljs-meta">@ExceptionHandler(CommonException.class)</span><br>    <span class="hljs-keyword">public</span> ResponseEntity&lt;String&gt; <span class="hljs-title function_">handleCommonException</span><span class="hljs-params">(CommonException ex)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResponseEntity</span>&lt;&gt;(ex.getMessage(), HttpStatus.valueOf(ex.getErrCode()));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>启动新创建的Spring Boot应用程序，并尝试访问错误处理URL<code>***</code>。您应该会看到一个包含错误消息的响应，该消息与处理异常的自定义处理程序返回的消息匹配。</li>
+</ol>
+<p>这个示例展示了如何将自定义的异常处理逻辑与Spring Boot应用程序结合使用，以</p>
+<p>在实际生产环境中，您可能需要考虑更多因素，例如，如何确保异常被正确处理、如何记录和追踪异常，以及如何进行错误分类。以下是一些建议：</p>
+<ol>
+<li><p>异常分类：<br>为了更好地组织和处理异常，您可以对异常进行分类。将异常按照类别、严重性或其他属性进行分类。例如，您可以创建<code>ApplicationException</code>类来表示一般的应用程序错误，并创建<code>InvalidParameterException</code>类来表示参数无效的错误。</p>
+</li>
+<li><p>异常处理方法签名：<br>为了让开发人员知道如何处理特定类型的异常，应该为异常处理方法提供适当的签名。例如，处理<code>ApplicationException</code>的方法应该具有<code>@ResponseBody</code>注解，以便返回自定义的错误消息。</p>
+</li>
+<li><p>异常堆栈跟踪：<br>异常处理器应该返回带有异常堆栈跟踪的响应。这样，开发人员可以轻松地诊断和解决问题。</p>
+</li>
+<li><p>异常处理记录：<br>为了记录异常处理过程中的信息，可以将处理异常的方法添加到<code>@TraceEnabled</code>注解。这可以帮助您了解异常处理器在处理异常时是否成功，以及处理过程中发生了什么。</p>
+</li>
+<li><p>配置日志记录：<br>在异常处理器中添加日志记录，以便更好地了解异常处理的过程。例如，可以将异常消息记录到日志文件中。</p>
+</li>
+<li><p>测试：<br>在实际生产环境中运行应用程序之前，确保测试异常处理器的功能。这可以帮助您发现问题并及时进行修复。</p>
+</li>
+<li><p>监控：<br>如果可能，可以考虑对异常处理器进行监控，以便在发生异常时提供实时通知。例如，您可以使用Spring Boot Actuator的<code>/error</code>端点提供实时错误信息。</p>
+</li>
+</ol>
+<p>遵循这些建议，您可以更有效地处理和监控异常，从而提高应用程序的可靠性和稳定性。</p>
+<p>在进一步讨论如何改进异常处理之前，让我们回顾一下之前讨论过的内容，并将它们组织在一个更详细的视图中。</p>
+<ul>
+<li>将异常处理逻辑与Spring Boot应用程序相结合，以提供自定义的错误处理功能。</li>
+<li>为不同类型的异常创建自定义异常类，例如<code>CommonException</code>、<code>InvalidParameterException</code>等。</li>
+<li>为每个异常类型提供异常处理器方法，例如<code>@ExceptionHandler</code>注解的方法。</li>
+<li>处理异常时，使用<code>@ResponseBody</code>注解将异常消息返回到客户端。</li>
+<li>在异常处理器中添加日志记录，以便更好地了解异常处理的过程。</li>
+<li>确保异常处理器在实际生产环境中运行，并进行充分的测试。</li>
+<li>对异常处理器进行监控，以便在发生异常时提供实时通知。</li>
+</ul>
+<p>在这个基础上，我们可以继续讨论如何进一步改进异常处理。以下是一些可能的改进点：</p>
+<ol>
+<li><p>异常路由：<br>您可以根据异常类型和严重性，将异常路由到不同的错误页面。例如，对于<code>ApplicationException</code>，您可以将其路由到全局错误页面，而对于<code>InvalidParameterException</code>，您可以将其路由到特定于参数无效的错误页面。</p>
+</li>
+<li><p>异常页面模板：<br>为每个异常类型创建特定于异常的页面模板，以便为用户提供更好的错误信息和指导。例如，对于<code>ApplicationException</code>，您可以使用通用的错误页面模板，而对于<code>InvalidParameterException</code>，您可以为其创建特定的错误页面模板。</p>
+</li>
+<li><p>默认异常处理策略：<br>为应用程序定义默认的异常处理策略。这样，如果用户未采取任何操作，可以确保在发生异常时获得恰当的错误页面和错误消息。</p>
+</li>
+<li><p>异常优先级：<br>为不同类型的异常定义优先级。例如，您可以将<code>ApplicationException</code>定义为最高优先级，而将<code>InvalidParameterException</code>定义为较低优先级。这样, 您可以在处理异常时根据优先级进行有选择地处理，例如，仅在当前用户会话中显示较低优先级的异常，而在全局会话中显示较高优先级的异常。</p>
+</li>
+<li><p>用户身份验证：<br>如果您的应用程序支持用户身份验证，可以在异常处理器中检查用户身份。根据用户身份，您可以为不同用户提供不同的错误页面或限制某些异常类型的显示。</p>
+</li>
+<li><p>分析和报告：<br>对异常处理器的性能和成功率进行分析，以便识别潜在的瓶颈或问题。此外，您可以创建报表以跟踪错误类型、错误率和异常处理时间等指标，以便为系统优化提供数据支持。</p>
+</li>
+<li><p>错误代码：<br>为每个异常类型分配错误代码。这样，您可以通过API将错误代码返回给后端系统，以便它们了解出现了哪种类型的错误。</p>
+</li>
+<li><p>改进异常处理器的性能：<br>优化异常处理器的性能，以便在处理大量异常时不会影响应用程序的整体性能。这可能包括调整异常处理器的线程数、避免不必要的数据库查询等。</p>
+</li>
+<li><p>用户友好的错误消息：<br>为用户提供友好的错误消息，以便他们更容易理解错误原因并采取适当的操作。例如，对于参数无效的异常，可以提供示例参数值和详细的错误消息。</p>
+</li>
+<li><p>国际化和本地化：<br>  考虑将错误消息进行国际化和本地化，以便为来自不同国家和地区的用户提供更好的体验。您可以使用Spring Framework的LocaleResolver来实现这一点。</p>
+</li>
+</ol>
+<p>通过实施这些改进，您可以进一步优化异常处理，提高系统的可靠性和稳定性。这些建议为您提供了一个改进异常处理的框架，具体实现取决于您的应用程序需求和场景。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%B8%9A%E5%8A%A1/" class="category-chain-item">业务</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B8%9A%E5%8A%A1/">#业务</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>API网关</div>
+      <div>http://example.com/2023/06/01/业务/API网关/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/" title="压力测试">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">压力测试</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/%E5%B8%B8%E8%A7%81%E4%B8%9A%E5%8A%A1/" title="常见业务">
+                        <span class="hidden-mobile">常见业务</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

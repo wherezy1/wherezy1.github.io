@@ -1,0 +1,776 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Go基础 + 进阶基础http包 与 web服务03.3. Go 如何使得 Web 工作 | 第三章. Web 基础 |《Go Web 编程》| Go 技术论坛 (learnku.com)  ​							图 3.9 http 包执行流程 创建 Listen Socket, 监听指定的端口，等待客户端请求到来。 Listen Socket 接受客户端的请求，得到 Client Socket, 接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go基础 + 进阶">
+<meta property="og:url" content="http://example.com/2023/06/01/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/Go%E5%9F%BA%E7%A1%80%20+%20%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Go基础 + 进阶基础http包 与 web服务03.3. Go 如何使得 Web 工作 | 第三章. Web 基础 |《Go Web 编程》| Go 技术论坛 (learnku.com)  ​							图 3.9 http 包执行流程 创建 Listen Socket, 监听指定的端口，等待客户端请求到来。 Listen Socket 接受客户端的请求，得到 Client Socket, 接">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.learnku.com/build-web-application-with-golang/images/3.3.http.png?raw=true">
+<meta property="og:image" content="https://cdn.learnku.com/build-web-application-with-golang/images/3.3.illustrator.png?raw=true">
+<meta property="og:image" content="https://cdn.learnku.com/build-web-application-with-golang/images/8.4.rpc.png?raw=true">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.353Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.learnku.com/build-web-application-with-golang/images/3.3.http.png?raw=true">
+  
+  
+  
+  <title>Go基础 + 进阶 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Go基础 + 进阶"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          58 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Go基础 + 进阶</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Go基础-进阶"><a href="#Go基础-进阶" class="headerlink" title="Go基础 + 进阶"></a>Go基础 + 进阶</h1><h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h2 id="http包-与-web服务"><a href="#http包-与-web服务" class="headerlink" title="http包 与 web服务"></a>http包 与 web服务</h2><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/build-web-application-with-golang/how-033-go-makes-web-work/3170">03.3. Go 如何使得 Web 工作 | 第三章. Web 基础 |《Go Web 编程》| Go 技术论坛 (learnku.com)</a></p>
+<p><img src="https://cdn.learnku.com/build-web-application-with-golang/images/3.3.http.png?raw=true" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​							图 3.9 http 包执行流程</p>
+<p>创建 Listen Socket, 监听指定的端口，等待客户端请求到来。</p>
+<p>Listen Socket 接受客户端的请求，得到 Client Socket, 接下来通过 Client Socket 与客户端通信。</p>
+<p>处理客户端的请求，首先从 Client Socket 读取 HTTP 请求的协议头，如果是 POST 方法，还可能要读取客户端提交的数据，然后交给相应的 handler 处理请求，handler 处理完毕准备好客户端需要的数据，通过 Client Socket 写给客户端。</p>
+<p><img src="https://cdn.learnku.com/build-web-application-with-golang/images/3.3.illustrator.png?raw=true" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h3><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/build-web-application-with-golang/034-gos-http-package-detailed-solution/3171">03.4. Go 的 http 包详解 | 第三章. Web 基础 |《Go Web 编程》| Go 技术论坛 (learnku.com)</a></p>
+<p>路由：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// ServeMux 的自定义</span><br><span class="hljs-keyword">type</span> ServeMux <span class="hljs-keyword">struct</span> &#123;<br>    mu sync.RWMutex   <span class="hljs-comment">// 锁，由于请求涉及到并发处理，因此这里需要一个锁机制</span><br>    m  <span class="hljs-keyword">map</span>[<span class="hljs-type">string</span>]muxEntry  <span class="hljs-comment">// 路由规则，一个 string 对应一个 mux 实体，这里的 string 就是注册的路由表达式</span><br>    hosts <span class="hljs-type">bool</span> <span class="hljs-comment">// 是否在任意的规则中带有 host 信息</span><br>&#125;<br><span class="hljs-comment">// 下面看一下 muxEntry</span><br><span class="hljs-keyword">type</span> muxEntry <span class="hljs-keyword">struct</span> &#123;<br>    explicit <span class="hljs-type">bool</span>   <span class="hljs-comment">// 是否精确匹配</span><br>    h        Handler <span class="hljs-comment">// 这个路由表达式对应哪个 handler</span><br>    pattern  <span class="hljs-type">string</span>  <span class="hljs-comment">// 匹配字符串</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>Go 默认的路由添加是通过函数 http.Handle 和 http.HandleFunc 等来添加，底层都是调用了 DefaultServeMux.Handle(pattern string, handler Handler), 这个函数会把路由信息存储在一个 map 信息中 map[string]muxEntry，这就解决了上面说的第一点。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// </span><br><span class="hljs-keyword">type</span> Handler <span class="hljs-keyword">interface</span> &#123;<br>    ServeHTTP(ResponseWriter, *Request)  <span class="hljs-comment">// 路由实现器</span><br>&#125;<br><span class="hljs-comment">// </span><br><span class="hljs-keyword">type</span> HandlerFunc <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(ResponseWriter, *Request)</span></span><br><span class="hljs-comment">// ServeHTTP calls f(w, r).</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(f HandlerFunc)</span></span> ServeHTTP(w ResponseWriter, r *Request) &#123;<br>    f(w, r)<br>&#125;<br><br><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(mux *ServeMux)</span></span> ServeHTTP(w ResponseWriter, r *Request) &#123;<br>    <span class="hljs-keyword">if</span> r.RequestURI == <span class="hljs-string">&quot;*&quot;</span> &#123;<br>        w.Header().Set(<span class="hljs-string">&quot;Connection&quot;</span>, <span class="hljs-string">&quot;close&quot;</span>)<br>        w.WriteHeader(StatusBadRequest)<br>        <span class="hljs-keyword">return</span><br>    &#125; <span class="hljs-comment">// 获取handler</span><br>    h, _ := mux.Handler(r)<br>    h.ServeHTTP(w, r)<br>&#125;<br><span class="hljs-comment">// 如上所示路由器接收到请求之后，如果是 * 那么关闭链接，不然调用 mux.Handler(r) 返回对应设置路由的处理 Handler，然后执行 h.ServeHTTP(w, r)</span><br><span class="hljs-comment">// 也就是调用对应路由的 handler 的 ServerHTTP 接口，那么 mux.Handler (r) 怎么处理的呢？</span><br><br><span class="hljs-comment">// 根据request 获取</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(mux *ServeMux)</span></span> Handler(r *Request) (h Handler, pattern <span class="hljs-type">string</span>) &#123;<br>    <span class="hljs-keyword">if</span> r.Method != <span class="hljs-string">&quot;CONNECT&quot;</span> &#123;<br>        <span class="hljs-keyword">if</span> p := cleanPath(r.URL.Path); p != r.URL.Path &#123;<br>            _, pattern = mux.handler(r.Host, p)<br>            <span class="hljs-keyword">return</span> RedirectHandler(p, StatusMovedPermanently), pattern<br>        &#125;<br>    &#125;   <br>    <span class="hljs-keyword">return</span> mux.handler(r.Host, r.URL.Path)<br>&#125;<br><span class="hljs-comment">// 根据host，path</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(mux *ServeMux)</span></span> handler(host, path <span class="hljs-type">string</span>) (h Handler, pattern <span class="hljs-type">string</span>) &#123;<br>    mux.mu.RLock()<br>    <span class="hljs-keyword">defer</span> mux.mu.RUnlock()<br><br>    <span class="hljs-comment">// Host-specific pattern takes precedence over generic ones</span><br>    <span class="hljs-keyword">if</span> mux.hosts &#123;<br>        h, pattern = mux.match(host + path)<br>    &#125;<br>    <span class="hljs-keyword">if</span> h == <span class="hljs-literal">nil</span> &#123;<br>        h, pattern = mux.match(path)<br>    &#125;<br>    <span class="hljs-keyword">if</span> h == <span class="hljs-literal">nil</span> &#123;<br>        h, pattern = NotFoundHandler(), <span class="hljs-string">&quot;&quot;</span><br>    &#125;<br>    <span class="hljs-keyword">return</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<p>Go 代码的执行流程#<br>通过对 http 包的分析之后，现在让我们来梳理一下整个的代码执行过程。</p>
+<ul>
+<li>首先调用 Http.HandleFunc</li>
+</ul>
+<p>按顺序做了几件事：</p>
+<p>1 调用了 DefaultServeMux 的 HandleFunc</p>
+<p>2 调用了 DefaultServeMux 的 Handle</p>
+<p>3 往 DefaultServeMux 的 map [string] muxEntry 中增加对应的 handler 和路由规则</p>
+<ul>
+<li>其次调用 http.ListenAndServe (“:9090”, nil)</li>
+</ul>
+<p>按顺序做了几件事情：</p>
+<p>1 实例化 Server</p>
+<p>2 调用 Server 的 ListenAndServe ()</p>
+<p>3 调用 net.Listen (“tcp”, addr) 监听端口</p>
+<p>4 启动一个 for 循环，在循环体中 Accept 请求</p>
+<p>5 对每个请求实例化一个 Conn，并且开启一个 goroutine 为这个请求进行服务 go c.serve ()</p>
+<p>6 读取每个请求的内容 w, err :&#x3D; c.readRequest ()</p>
+<p>7 判断 handler 是否为空，如果没有设置 handler（这个例子就没有设置 handler），handler 就设置为 DefaultServeMux</p>
+<p>8 调用 handler 的 ServeHttp</p>
+<p>9 在这个例子中，下面就进入到 DefaultServeMux.ServeHttp</p>
+<p>10 根据 request 选择 handler，并且进入到这个 handler 的 ServeHTTP</p>
+<p>mux.handler(r).ServeHTTP(w, r)<br>11 选择 handler：</p>
+<p>A 判断是否有路由能满足这个 request（循环遍历 ServeMux 的 muxEntry）</p>
+<p>B 如果有路由满足，调用这个路由 handler 的 ServeHTTP</p>
+<p>C 如果没有路由满足，调用 NotFoundHandler 的 ServeHTTP</p>
+<h2 id="数据库加载原理"><a href="#数据库加载原理" class="headerlink" title="数据库加载原理"></a>数据库加载原理</h2><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/build-web-application-with-golang/051-databasesql-interface/3181">05.1. database&#x2F;sql 接口 | 第五章. 访问数据库 |《Go Web 编程》| Go 技术论坛 (learnku.com)</a></p>
+<h2 id="模拟RESTful-路由"><a href="#模拟RESTful-路由" class="headerlink" title="模拟RESTful 路由"></a>模拟RESTful 路由</h2><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/build-web-application-with-golang/083-rest/3205">08.3. REST | 第八章. Web 服务 |《Go Web 编程》| Go 技术论坛 (learnku.com)</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">adduser</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request, ps httprouter.Params)</span></span> &#123;<br>    <span class="hljs-comment">// uid := r.FormValue(&quot;uid&quot;)</span><br>    uid := ps.ByName(<span class="hljs-string">&quot;uid&quot;</span>)<br>    fmt.Fprintf(w, <span class="hljs-string">&quot;you are add user %s&quot;</span>, uid)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    router := httprouter.New()<br>    router.GET(<span class="hljs-string">&quot;/&quot;</span>, Index)<br>    router.GET(<span class="hljs-string">&quot;/hello/:name&quot;</span>, Hello)<br><br>    router.GET(<span class="hljs-string">&quot;/user/:uid&quot;</span>, getuser)<br>    router.POST(<span class="hljs-string">&quot;/adduser/:uid&quot;</span>, adduser)<br>    router.DELETE(<span class="hljs-string">&quot;/deluser/:uid&quot;</span>, deleteuser)<br>    router.PUT(<span class="hljs-string">&quot;/moduser/:uid&quot;</span>, modifyuser)<br><br>    log.Fatal(http.ListenAndServe(<span class="hljs-string">&quot;:8080&quot;</span>, router))<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="go-RPC"><a href="#go-RPC" class="headerlink" title="go RPC"></a>go RPC</h2><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/build-web-application-with-golang/084-rpc/3206">08.4. RPC | 第八章. Web 服务 |《Go Web 编程》| Go 技术论坛 (learnku.com)</a></p>
+<p>RPC 工作原理#</p>
+<p><img src="https://cdn.learnku.com/build-web-application-with-golang/images/8.4.rpc.png?raw=true" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>图 8.8 RPC 工作流程图</p>
+<p>运行时，一次客户机对服务器的 RPC 调用，其内部操作大致有如下十步：</p>
+<ol>
+<li>调用客户端句柄；执行传送参数</li>
+<li>调用本地系统内核发送网络消息</li>
+<li>消息传送到远程主机</li>
+<li>服务器句柄得到消息并取得参数</li>
+<li>执行远程过程</li>
+<li>执行的过程将结果返回服务器句柄</li>
+<li>服务器句柄返回结果，调用远程系统内核</li>
+<li>消息传回本地主机</li>
+<li>客户句柄由内核接收消息</li>
+<li>客户接收句柄返回的数据</li>
+</ol>
+<h2 id="结构体嵌套"><a href="#结构体嵌套" class="headerlink" title="结构体嵌套"></a>结构体嵌套</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> appsCC <span class="hljs-keyword">struct</span> &#123;<br>	cc *CC<br>&#125;<br><span class="hljs-keyword">type</span> CC <span class="hljs-keyword">struct</span> &#123;<br>	apps *appsCC<br>&#125;<br><br>这段代码在 Go 语言中定义了两个类型，分别是 <span class="hljs-string">`appsCC`</span> 和 <span class="hljs-string">`CC`</span>。<br><br>其中，<span class="hljs-string">`appsCC`</span> 是一个结构体类型，这个结构体包含了一个指向 <span class="hljs-string">`CC`</span> 类型的指针。这个指针的作用是被用于在 <span class="hljs-string">`appsCC`</span> 类型中访问和操作 <span class="hljs-string">`CC`</span> 类型的属性和方法。<br><br>而 <span class="hljs-string">`CC`</span> 是另一个结构体类型，这个结构体中包含了一个指向 <span class="hljs-string">`appsCC`</span> 类型的指针。这个指针的作用是被用于在 <span class="hljs-string">`CC`</span> 类型中访问和操作 <span class="hljs-string">`appsCC`</span> 类型的属性和方法。<br><br>这种定义可以被视为是一种嵌套结构体的方式，通过指针的方式将两个结构体类型相互引用。这样的设计有助于实现模块化和代码复用，使得程序更易于维护和扩展。<br><br>需要注意的是，这种定义并不会发生循环嵌套的问题，因为 <span class="hljs-string">`apps`</span> 属性和 <span class="hljs-string">`cc`</span> 属性的类型是不同的结构体类型，它们互相引用不会形成死循环。<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs markdown">在 Go 语言中，内嵌（嵌入）是指在一个结构体类型中嵌入另一个结构体类型。<br><br>内嵌指针和内嵌结构体的区别在于：<br><br><span class="hljs-bullet">1.</span> 内嵌指针：在一个结构体类型中嵌入了另一个结构体类型指针，可以通过指针访问内嵌结构体的属性和方法，这种方式可以降低内存占用和提高程序效率。内嵌指针与外部结构体分别分配内存，外部结构体包含了内部结构体的地址，不会将整个内部结构体复制到外部结构体中。<br><br>   下面是内嵌指针的示例代码：<br><br></code></pre></td></tr></table></figure>
+<p>   type A struct {<br>       a int<br>   }<br>   type B struct {<br>       *A<br>       b int<br>   }</p>
+<p>   b :&#x3D; &amp;B{&amp;A{a: 1}, 2} &#x2F;&#x2F; 创建 B 的实例并初始化 a 和 b<br>   fmt.Println(b.a)     &#x2F;&#x2F; 通过指针访问内嵌结构体的属性<br>   <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">2.</span> 内嵌结构体：在一个结构体类型中嵌入了另一个结构体类型，可以通过外层结构体访问内层结构体的属性和方法。内嵌结构体与外部结构体在同一个结构体中分配内存，这意味着内嵌结构体不能独立存在，必须随着外部结构体一起创建和销毁。<br><br>   下面是内嵌结构体的示例代码：<br><br></code></pre></td></tr></table></figure><br>   type A struct {<br>       a int<br>   }<br>   type B struct {<br>       A<br>       b int<br>   }</p>
+<p>   b :&#x3D; B{A: A{a: 1}, b: 2} &#x2F;&#x2F; 创建 B 的实例并初始化 A 的属性和 b<br>   fmt.Println(b.A.a)       &#x2F;&#x2F; 通过外层结构体访问内层结构体的属性<br>   <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs"><br>需要根据具体情况选择内嵌指针或内嵌结构体，以达到最优的性能和易用性。<br></code></pre></td></tr></table></figure></p>
+<h1 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h1><h2 id="进阶学习方式"><a href="#进阶学习方式" class="headerlink" title="进阶学习方式"></a>进阶学习方式</h2><p>如果想要深入了解 Go 语言的底层逻辑，可以从以下几个方向入手：</p>
+<ol>
+<li><p>Go 语言编译器：了解 Go 语言编译器和编译器优化技术，理解生成的汇编代码和可执行文件的结构。</p>
+</li>
+<li><p>Go 语言运行时系统：了解 Go 语言的内存管理、垃圾回收、调度器、并发机制、信号处理和系统调用等底层机制。</p>
+</li>
+<li><p>Go 语言标准库：了解 Go 标准库的设计思想和底层实现。</p>
+</li>
+</ol>
+<p>以下是一些推荐的阅读资料：</p>
+<ol>
+<li><p>《Go语言编程》：一本从基础到进阶都很全面的 Go 语言教材，涉及 Go 语言的基础知识、网络编程、进程和线程、性能分析和调优等方面。</p>
+</li>
+<li><p>《Go语言高级编程》：一本涉及 Go 语言高级主题的教材，包括 Go 语言运行时系统、内存管理、垃圾回收、网络编程和并发编程等。</p>
+</li>
+<li><p>《Go源码剖析》：一本介绍 Go 语言源码的书籍，通过深入阅读和分析 Go 语言的源代码，让读者深入了解 Go 语言底层机制和实现。</p>
+</li>
+<li><p>Go 官方文档：官方文档包括 Go 语言规范、Go 语言标准库文档、Go 语言编译器和运行时系统文档等，是了解 Go 语言底层机制的重要途径。</p>
+</li>
+<li><p>Go官方代码库：Go 语言的开源代码库提供了大量的实现细节和技术细节，可以通过阅读代码库来了解 Go 语言底层实现。</p>
+</li>
+<li><p>Go源码分析系列博客：由国内 Go 社区的大佬们写就的针对 Go 源代码的解读分析系列博客，可以更深入地了解 Go 的设计思想和底层实现。</p>
+</li>
+<li><p>Go 官方博客：官方博客提供了关于 Go 语言开发和技术方面的信息，它涵盖了从新手到专业人士的各种主题。</p>
+</li>
+</ol>
+<p>需要注意的是，Go 语言有其独特的设计思想和底层实现，初学者可能需要逐步了解相关概念和内部实现，尤其是对于底层系统设计和并发机制。因此建议从基础到进阶，一步一步深入学习，注重理解底层原理，通过实践编写代码并进行调试。</p>
+<h2 id="init-和-main"><a href="#init-和-main" class="headerlink" title="init 和 main"></a>init 和 main</h2><p>在 Go 中，<code>init()</code> 函数的执行顺序与包的导入顺序有关。具体来说，每个文件中的 <code>init()</code> 函数会在文件被编译时被执行，而导入该文件的包的 <code>init()</code> 函数则会在导入包时被执行，按照导入的顺序依次执行。因此，导入该文件的包的 <code>init()</code> 函数的执行顺序是在每个文件内的 <code>init()</code> 函数的前面。</p>
+<p>在程序执行时，与包被加载的时间无关，<code>init()</code> 函数会在程序启动时自动执行。具体来说，在程序的 <code>main()</code> 函数执行前，Go 会自动执行所有包中的 <code>init()</code> 函数，包括第三方依赖的包。由于 Go 的包是惰性加载的，在编写程序时可能会导入一些不必要的包，因此需要根据实际情况减少导入不必要的包，以提高程序的启动速度。</p>
+<p>需要注意的是，如果一个包被多次导入，那么其中的 <code>init()</code> 函数也会被多次执行。为了避免这种情况，可以使用 <code>sync.Once</code> 等方式来保证 <code>init()</code> 函数只被执行一次。</p>
+<h2 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h2><p>在 Go 中，如果一个包被多次导入，则该包的 <code>init()</code> 函数会被多次执行。这个含义是指在一个程序中，如果多次导入同一个包，该包的 <code>init()</code> 函数会被多次调用，而不是只调用一次。这种情况可能会导致不必要的性能开销，因此应该尽可能避免多次导入同一个包的情况。</p>
+<p>Go 的执行方式包含三个阶段：编译、链接和运行。在编译阶段，Go 会将代码编译为目标平台可执行的二进制文件。在链接阶段，Go 会将编译得到的二进制文件与所有的依赖库链接，生成最终的可执行文件。在运行阶段，用户通过执行生成的可执行文件来运行程序。</p>
+<p><code>go build</code> 命令用于编译 Go 程序，可以将指定的 Go 源代码文件编译为可执行文件。该命令会执行编译和链接两个阶段，但不会执行最终的运行阶段。编译后的结果是一个二进制文件，而不是直接执行程序。例如，执行以下命令编译程序：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> build main.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
+
+<p>该命令会将 <code>main.go</code> 编译为可执行文件 <code>main</code>，可以通过以下命令来运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./main<br></code></pre></td></tr></table></figure>
+
+<p><code>go run</code> 命令用于编译并执行 Go 程序，它执行的是编译、链接和最终的运行三个阶段。例如，执行以下命令编译并执行程序：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> run main.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
+
+<p><code>go install</code> 命令用于编译 Go 程序，并安装生成的可执行文件到 <code>$GOPATH/bin</code> 目录中。这个命令会在编译、链接和最终的运行三个阶段都执行，并将编译生成的可执行文件安装到系统中。如果在 <code>$GOPATH/bin</code> 和 <code>$PATH</code> 环境变量中配置了该目录，那么就可以在任何地方通过命令行来执行该程序。</p>
+<p>在使用以上命令时，需要注意的是，在执行 <code>go build</code> 或 <code>go install</code> 等命令时，如果多次导入同一个包，会导致该包的 <code>init()</code> 函数被多次调用，增加了编译、链接和运行的时间。因此，在编写程序时应尽量避免多次导入同一个包。可以使用 <code>go mod</code> 命令管理依赖关系，减少包的导入次数。</p>
+<p>同时，应该注意在安装和执行 Go 程序时，确保系统环境变量 <code>$GOPATH</code> 和 <code>$PATH</code> 都正确配置，以确保程序可以被正确地编译、安装和执行。</p>
+<h2 id="Go-本地缓存"><a href="#Go-本地缓存" class="headerlink" title="Go 本地缓存"></a>Go 本地缓存</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/487455942">golang本地缓存(bigcache&#x2F;freecache&#x2F;fastcache等)选型对比及原理总结 - 知乎 (zhihu.com)</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/" class="category-chain-item">Go入门到精通</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Go/">#Go</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Go基础 + 进阶</div>
+      <div>http://example.com/2023/06/01/Go入门到精通/Go基础 + 进阶/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/DevOps-%E9%83%A8%E7%BD%B2/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC-Istic/" title="Istio">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Istio</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/Makefile/" title="Makefile">
+                        <span class="hidden-mobile">Makefile</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

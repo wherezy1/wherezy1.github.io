@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="架构师基操要成为优秀的架构师，需要具备丰富的实践经验、卓越的技术能力和深刻的业务理解。以下是一些建议：  培养全局观念：架构师需要考虑整个系统的设计和开发，因此需要对整个企业业务有深刻的理解，包括客户需求、市场趋势、组织目标等。 学习新技术：架构师需要不断学习新技术，保持技术领先，并将其应用到实际项目中。同时，还要掌握各种技术之间的差异性和互补性。 关注性能和可扩展性：架构师需要关注系统的性能和可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="架构师">
+<meta property="og:url" content="http://example.com/2023/06/01/%E6%9E%B6%E6%9E%84%E5%B8%88/readme/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="架构师基操要成为优秀的架构师，需要具备丰富的实践经验、卓越的技术能力和深刻的业务理解。以下是一些建议：  培养全局观念：架构师需要考虑整个系统的设计和开发，因此需要对整个企业业务有深刻的理解，包括客户需求、市场趋势、组织目标等。 学习新技术：架构师需要不断学习新技术，保持技术领先，并将其应用到实际项目中。同时，还要掌握各种技术之间的差异性和互补性。 关注性能和可扩展性：架构师需要关注系统的性能和可">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.463Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="架构">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>架构师 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="架构师"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">架构师</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="架构师"><a href="#架构师" class="headerlink" title="架构师"></a>架构师</h1><h2 id="基操"><a href="#基操" class="headerlink" title="基操"></a>基操</h2><p>要成为优秀的架构师，需要具备丰富的实践经验、卓越的技术能力和深刻的业务理解。以下是一些建议：</p>
+<ol>
+<li>培养全局观念：架构师需要考虑整个系统的设计和开发，因此需要对整个<strong>企业业务有深刻的理解</strong>，包括客户需求、市场趋势、组织目标等。</li>
+<li>学习新技术：架构师需要不断学习新技术，保持技术领先，并将其应用到实际项目中。同时，还要掌握各种<strong>技术之间的差异性和互补性</strong>。</li>
+<li>关注<strong>性能和可扩展性</strong>：架构师需要关注系统的性能和可扩展性，确保系统在高负载下能够正常运行，并且可以通过增加服务器等方式进行扩展。</li>
+<li>了解<strong>安全</strong>方面知识：架构师还需要掌握一定的安全知识，包括数据加密、防火墙、入侵检测等，确保系统的安全性。</li>
+<li>与<strong>团队</strong>合作：架构师需要与项目团队密切合作，包括开发人员、测试人员、产品经理等，确保系统开发的顺利进行。</li>
+</ol>
+<h2 id="能力体现"><a href="#能力体现" class="headerlink" title="能力体现"></a>能力体现</h2><p>架构师的业务水平主要体现在如下几个方面：</p>
+<ol>
+<li>全局把握：架构师需要对企业业务有深刻的理解，并考虑整个系统的设计和开发，将业务需求快速转化为可执行方案。</li>
+<li>技术能力：架构师需要具备卓越的技术能力，包括新技术的掌握和应用、各种技术之间的差异性和互补性等。</li>
+<li>团队管理：架构师需要与团队紧密合作，确保项目开发的顺利进行，并在其中扮演好领导和指导角色。</li>
+<li>交流沟通：架构师需要与客户和相关方面进行良好的沟通和交流，以达成共识，并且与其他部门合作，打造出更加完善的产品。</li>
+</ol>
+<h2 id="业务水平"><a href="#业务水平" class="headerlink" title="业务水平"></a>业务水平</h2><p>至于如何提升Java程序员的业务水平，可以从以下几个方面入手：</p>
+<ol>
+<li>学习业务知识：深入了解所在公司的业务和市场，通过学习行业知识和相关领域的技能来提升自己的业务水平。</li>
+<li>掌握技术技能：不断掌握新的技术技能、编程语言等，保持技术领先，并将其应用到实际项目中。</li>
+<li>实践经验：参与真实项目，在实践中学习和掌握更多的技能和经验。</li>
+<li>阅读源码：阅读优秀开源框架或者优秀的项目的源码，从中学习设计思想和代码风格。</li>
+</ol>
+<p>最后，通过一个完整的项目开发也可以提升自己的业务水平。在项目中，需要熟悉各种技术和流程，包括需求分析、系统设计、开发、测试、发布等环节。同时，还需要注意项目中的风险管理、客户沟通等事项，以全面提升自己的业务水平。</p>
+<h1 id="成为计划"><a href="#成为计划" class="headerlink" title="成为计划"></a>成为计划</h1><h2 id="第一步：安全"><a href="#第一步：安全" class="headerlink" title="第一步：安全"></a>第一步：安全</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>对于一个Javaweb的项目，可能会遇到以下网络安全问题：</p>
+<ol>
+<li>XSS攻击：Cross-site scripting（跨站点脚本编制）攻击，是一种代码注入攻击。攻击者在目标网站上注入恶意脚本，当用户访问时，这些脚本将被执行，从而窃取用户数据。</li>
+<li>CSRF攻击：Cross-site request forgery（跨站点请求伪造）攻击，是一种利用网站对用户身份认证不严谨的漏洞的攻击方式。攻击者可以伪造用户请求进行恶意操作，如转账、修改密码等。</li>
+<li>SQL注入攻击：攻击者通过向应用程序中插入恶意的SQL语句来获取敏感信息，如数据库中的用户名和密码等。</li>
+<li>DDos攻击：Distributed Denial of Service（分布式拒绝服务）攻击，是一种通过给目标服务器发送大量数据流量，导致其无法正常工作的攻击方式。</li>
+</ol>
+<p>常见的网络攻击方式有以下几种：</p>
+<ol>
+<li>物理攻击：指直接攻击计算机硬件设施或拆卸并盗窃计算机与通信设备。</li>
+<li>木马病毒攻击：指将木马程序隐藏在合法软件中，以达到非法控制或刺探目的的攻击手段。</li>
+<li>网络钓鱼攻击：指通过伪造合法网站或电子邮件的方式，引诱用户输入个人账户信息等敏感数据。</li>
+<li>路由欺骗攻击：指通过修改网络路由表、ARP协议缓存等方式，使得受害者流量经过攻击者控制的位置。</li>
+</ol>
+<p>这些攻击方式都可能导致严重的危害，例如窃取用户隐私信息、篡改数据、拒绝服务等。为了避免和解决这些问题，我们可以采取以下措施：</p>
+<ol>
+<li>输入验证：对于用户提交的表单数据，要进行一定的格式验证和安全过滤，防止恶意脚本的注入。</li>
+<li>防火墙：配置有效的网络防火墙，限制非法访问。</li>
+<li>安全更新：使用最新版本的软件和补丁，修复已知漏洞。</li>
+<li>日志记录：定期记录服务器运行日志，及时发现异常情况。</li>
+<li>密码管理：强制规范密码要求，如长度、复杂度等，并定期更换密码。</li>
+</ol>
+<p>对于一个大型的Java程序，需要考虑以下方面的问题：</p>
+<ol>
+<li>性能优化：对系统性能进行优化，包括代码高效性、数据库连接池优化、缓存技术、负载均衡等。</li>
+<li>容错处理：在代码设计时，应该考虑到各种异常情况，如服务故障、网络中断等，提高代码的容错性。</li>
+<li>安全方面：实现输入验证、数据加密、权限控制、登录检查等安全保护策略，保障系统的安全性。</li>
+<li>数据库设计：合理的数据库设计可以提高系统的稳定性和可靠性，建议使用分布式数据库，以减轻单点故障风险。</li>
+<li>代码规范：编写规范化的代码，注重代码的可读性和可维护性，方便后期的代码修改和维护。</li>
+<li>日志记录：记录程序运行日志，及时发现程序运行问题，并及时解决。</li>
+<li>测试和验收：要进行充分的测试和验收，包括单元测试、集成测试、端到端测试、压力测试等，以保证系统的质量和稳定性。</li>
+</ol>
+<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>一、XSS攻击，CSRF攻击，SQL注入攻击，DDos攻击在前端如何避免</p>
+<ol>
+<li>对于XSS攻击，可以采取以下措施：</li>
+</ol>
+<p>（1）对用户输入数据进行验证和过滤，特别是JavaScript脚本中可能存在的敏感字符；</p>
+<p>（2）使用HttpOnly属性设置cookie，禁止客户端脚本访问cookie；</p>
+<p>（3）对特殊字符进行转义处理，例如&lt;, &gt;, &amp;, ‘, “等；</p>
+<p>（4）使用X-XSS-Protection响应头开启浏览器内置的XSS防护机制。</p>
+<ol>
+<li>对于CSRF攻击，可以采取以下措施：</li>
+</ol>
+<p>（1）增加token验证机制，防止跨站请求伪造；</p>
+<p>（2）在请求URL中添加随机数字或时间戳等参数来防御CSRF攻击；</p>
+<p>（3）限制HTTP请求方法，只接受POST请求，拒绝GET请求。</p>
+<ol>
+<li>对于SQL注入攻击，可以采取以下措施：</li>
+</ol>
+<p>（1）对用户输入数据进行验证和过滤；</p>
+<p>（2）使用预编译语句或者参数化查询方式；</p>
+<p>（3）限制数据库用户权限，控制访问权限。</p>
+<ol>
+<li>对于DDoS攻击，可以采取以下措施：</li>
+</ol>
+<p>（1）配置防火墙或者边界网关设备，限制IP地址范围；</p>
+<p>（2）使用流量清洗设备，过滤掉非法流量；</p>
+<p>（3）使用云服务提供商中的DDoS防护服务，以协助保护系统免受大规模攻击。</p>
+<p>二、在后端如何避免</p>
+<ol>
+<li>对于XSS攻击和CSRF攻击，可以在服务器端进行输入数据的验证和过滤，避免恶意脚本和请求的注入；</li>
+<li>对于SQL注入攻击，可以采取预编译语句或者参数化查询方式，并限制数据库用户权限，防止恶意SQL语句执行；</li>
+<li>对于DDoS攻击，可以使用防火墙、CDN等方式进行防范。</li>
+</ol>
+<p>三、在架构设计的时候如何预防</p>
+<ol>
+<li>架构设计应考虑安全性，采用合理的安全策略、安全技术和安全体系结构；</li>
+<li>架构设计需要规划好网络拓扑、服务器部署、负载均衡等方面的问题，以保证系统的可靠性和稳定性；</li>
+<li>需要采用缓存技术、分布式存储、容灾方案等，以增强系统的可扩展性和可恢复性。</li>
+</ol>
+<p>四、在需求分析的时候如何处理</p>
+<ol>
+<li>在需求分析阶段，应认真了解用户需求，规划安全性和可靠性方面的功能需求；</li>
+<li>在需求分析阶段需开展威胁建模、风险评估等相关工作，以确定系统中可能存在的漏洞和风险。</li>
+</ol>
+<p>五、Java程序员该如何提前预防</p>
+<ol>
+<li>编写安全性高的代码，对用户输入进行合理验证和处理；</li>
+<li>对于网络攻击的各种手段要有清晰的认识，增强意识，做好日常维护和安全管理。</li>
+</ol>
+<p>六、当遇到了这些问题应当如何应对和如何解决</p>
+<ol>
+<li>及时发现问题并采取措施，如关闭服务器、过滤非法数据、放宽权限等；</li>
+<li>记录日志，分析问题原因，做好安全事件的溯源和调查工作；</li>
+<li>及时升级系统、应用程序和补丁，修复已知漏洞，以降低安全风险。</li>
+</ol>
+<p>七、企业级方案有哪些</p>
+<ol>
+<li>安全运维体系建设：通过建立科学合理的信息安全管理制度、规范操作流程和建立专业的安全运维团队等手段，确保企业信息安全有效管控；</li>
+<li>安全监控体系建设：利用多层次信息安全技术实现对重点资产的实时动态监测和统一的安全事件处置能力，保障企业信息资源安全；</li>
+<li>风险评估体系建设：通过对企业自身及外部环境进行全面、深入的风险评估工作，为企业制定相应的信息安全措施提供依据；</li>
+<li>应急响应体系建设：通过建立完备的应急响应机制和相应的演练机制，提高企业应对信息安全事件的能力和响应能力。</li>
+</ol>
+<p>八、为什么提前预防了依然会造成很大损失</p>
+<ol>
+<li>新的攻击手段和安全漏洞不断出现，安全威胁形势日趋复杂；</li>
+<li>人为失误、规范不清或者外部因素导致的安全事件也有可能发生，例如账号密码泄露等；</li>
+<li>安全预防工作的成本较高，需要投入大量的时间和人力资源，企业可能存在资金瓶颈。</li>
+</ol>
+<p>因此，通过提前预防可以尽最大可能避免安全事故发生。但即便如此，也不能保证绝对的安全性。所以企业还需要建立健全的安全应急响应机制，及时处置安全事件，减少安全事件可能带来的损失。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9E%B6%E6%9E%84/" class="category-chain-item">架构</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9E%B6%E6%9E%84/">#架构</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>架构师</div>
+      <div>http://example.com/2023/06/01/架构师/readme/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E6%9E%B6%E6%9E%84-OSGi/%E7%AC%94%E8%AE%B0-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="微服务架构设计模式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">微服务架构设计模式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%89%8D%E7%AB%AF/%E5%89%8D%E7%AB%AF%20-%20nvm/" title="nvm">
+                        <span class="hidden-mobile">nvm</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

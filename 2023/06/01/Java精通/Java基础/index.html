@@ -1,0 +1,1112 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Java基础官方JCPJava Community Proposal （Java社区提案） 官网： The Java Community Process(SM) Program (jcp.org) JSRJSR ： Java Specification（规范） Request 官网： The Java Community Process(SM) Program - JSRs: Java Speci">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础">
+<meta property="og:url" content="http://example.com/2023/06/01/Java%E7%B2%BE%E9%80%9A/Java%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Java基础官方JCPJava Community Proposal （Java社区提案） 官网： The Java Community Process(SM) Program (jcp.org) JSRJSR ： Java Specification（规范） Request 官网： The Java Community Process(SM) Program - JSRs: Java Speci">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425085827149.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190814163336520.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMjE3MzYz,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/aa.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/aaa.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421091819780.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102923677.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102910290.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102556800.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102336945.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102416154.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421091531975.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/set.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421093453501.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421093513565.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230505090506099.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230505090408579.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230505080931154.png">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-53c6d6002d06005a8be8a6219fe2ae24_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422085820960.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425145612255.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090807781.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090545110.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090522062.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425145011749.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422091310688.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425144509705.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425144354116.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090926125.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230402113730016.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425090523430.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230406155355103.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425153432179.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425090631846.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425090529658.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230406155732251.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425153408914.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230402092343076.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230402092507991.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/9jGkYWndSvUAPs6.png">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-4392601/138fc517709511231762df57d4a2e428.png?imageView2/2/w/2560/h/7000">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421110253881.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421111446826.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/7000.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230401225412176.png">
+<meta property="article:published_time" content="2023-06-01T09:20:01.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:40.704Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425085827149.png">
+  
+  
+  
+  <title>Java基础 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 17:20" pubdate>
+          2023年6月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          44k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          365 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Java基础"><a href="#Java基础" class="headerlink" title="Java基础"></a>Java基础</h1><h1 id="官方"><a href="#官方" class="headerlink" title="官方"></a>官方</h1><h2 id="JCP"><a href="#JCP" class="headerlink" title="JCP"></a>JCP</h2><p>Java Community Proposal （Java社区提案）</p>
+<p>官网：</p>
+<p><a target="_blank" rel="noopener" href="https://jcp.org/en/home/index">The Java Community Process(SM) Program (jcp.org)</a></p>
+<h2 id="JSR"><a href="#JSR" class="headerlink" title="JSR"></a>JSR</h2><p>JSR ： Java Specification（规范） Request</p>
+<p>官网：</p>
+<p><a target="_blank" rel="noopener" href="https://jcp.org/en/jsr/all">The Java Community Process(SM) Program - JSRs: Java Specification Requests - List of all JSRs (jcp.org)</a></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425085827149.png" srcset="/img/loading.gif" lazyload alt="image-20230425085827149"></p>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/">Java Platform Standard Edition 8 Documentation (oracle.com)</a></p>
+<h1 id="日期类-java-time-x2F-util"><a href="#日期类-java-time-x2F-util" class="headerlink" title="日期类 - java.time&#x2F;util"></a>日期类 - java.time&#x2F;util</h1><p>Java处理时间的日期类主要包括以下几种：</p>
+<ol>
+<li><p>Date类：是Java早期版本的日期类，主要用于获取当前时间和进行日期格式转换，但由于其线程不安全，并且设计较差，使用已经逐渐被弃用。</p>
+</li>
+<li><p>Calendar类：是Java处理日期比较方便的类，可以进行日期的比较、设置、获取等操作。但使用起来还是比较繁琐，也存在很多缺陷。</p>
+</li>
+<li><p>SimpleDateFormat类：是Java中一个用于格式化和解析日期的类，可以将日期格式化成想要的形式，也可以将字符串转换为日期对象。但在多线程环境下使用需要注意线程安全问题。</p>
+</li>
+<li><p>LocalDate、LocalDateTime、LocalTime类：是JDK 1.8引入的新的日期时间类，提供了更加便捷和线程安全的解决方案，可以处理日期时间的加减、格式化、比较等操作。</p>
+</li>
+<li><p>Instant类：是JDK 1.8中新增的类，可以获取精确到纳秒的时间戳。</p>
+</li>
+<li><p>Duration类：可以用于计算两个日期之间的间隔时间，包括天数、小时数、分钟数和秒数等。</p>
+</li>
+<li><p>StopWatch，它是Spring Framework中的一个计时工具类。它可以帮助我们在代码中方便地计算方法的执行时间，用于性能调优。</p>
+</li>
+</ol>
+<p>在实际开发中，建议使用JDK 1.8中新增的LocalDateTime、LocalTime等类，能够满足大部分的日期处理需求，也是线程安全的。</p>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><ol>
+<li>Date类示例：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 获取当前时间</span><br><span class="hljs-type">Date</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();<br>System.out.println(now);<br><br><span class="hljs-comment">// 将字符串转换成Date对象</span><br><span class="hljs-type">String</span> <span class="hljs-variable">dateString</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2021-08-17 15:30:00&quot;</span>;<br><span class="hljs-type">SimpleDateFormat</span> <span class="hljs-variable">sdf</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleDateFormat</span>(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);<br><span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> sdf.parse(dateString);<br>System.out.println(date);<br><br><span class="hljs-comment">// 将Date对象转换成字符串</span><br><span class="hljs-type">String</span> <span class="hljs-variable">formattedDateString</span> <span class="hljs-operator">=</span> sdf.format(date);<br>System.out.println(formattedDateString);<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Calendar类示例：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 获取指定日期的年月日时分秒</span><br><span class="hljs-type">Calendar</span> <span class="hljs-variable">calendar</span> <span class="hljs-operator">=</span> Calendar.getInstance();<br>calendar.set(<span class="hljs-number">2021</span>, <span class="hljs-number">7</span>, <span class="hljs-number">17</span>, <span class="hljs-number">15</span>, <span class="hljs-number">30</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// 月份从0开始，这里设置的是8月份，因此为7</span><br><span class="hljs-type">int</span> <span class="hljs-variable">year</span> <span class="hljs-operator">=</span> calendar.get(Calendar.YEAR);<br><span class="hljs-type">int</span> <span class="hljs-variable">month</span> <span class="hljs-operator">=</span> calendar.get(Calendar.MONTH) + <span class="hljs-number">1</span>; <span class="hljs-comment">// 月份从0开始，需要加1</span><br><span class="hljs-type">int</span> <span class="hljs-variable">day</span> <span class="hljs-operator">=</span> calendar.get(Calendar.DAY_OF_MONTH);<br><span class="hljs-type">int</span> <span class="hljs-variable">hour</span> <span class="hljs-operator">=</span> calendar.get(Calendar.HOUR_OF_DAY);<br><span class="hljs-type">int</span> <span class="hljs-variable">minute</span> <span class="hljs-operator">=</span> calendar.get(Calendar.MINUTE);<br><span class="hljs-type">int</span> <span class="hljs-variable">second</span> <span class="hljs-operator">=</span> calendar.get(Calendar.SECOND);<br>System.out.println(year + <span class="hljs-string">&quot;-&quot;</span> + month + <span class="hljs-string">&quot;-&quot;</span> + day + <span class="hljs-string">&quot; &quot;</span> + hour + <span class="hljs-string">&quot;:&quot;</span> + minute + <span class="hljs-string">&quot;:&quot;</span> + second);<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>SimpleDateFormat类示例：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 将字符串转换为Date对象</span><br><span class="hljs-type">String</span> <span class="hljs-variable">dateString</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2021-08-17 15:30:00&quot;</span>;<br><span class="hljs-type">SimpleDateFormat</span> <span class="hljs-variable">sdf</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleDateFormat</span>(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);<br><span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> sdf.parse(dateString);<br>System.out.println(date);<br><br><span class="hljs-comment">// 将Date对象格式化为字符串</span><br><span class="hljs-type">String</span> <span class="hljs-variable">formattedDateString</span> <span class="hljs-operator">=</span> sdf.format(date);<br>System.out.println(formattedDateString);<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>LocalDate、LocalDateTime、LocalTime类示例：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 获取当前日期和时间</span><br><span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> LocalDateTime.now();<br>System.out.println(now);<br><br><span class="hljs-comment">// 将时间字符串解析成LocalDateTime对象</span><br><span class="hljs-type">String</span> <span class="hljs-variable">dateTimeString</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2021-08-17T15:30:00&quot;</span>;<br><span class="hljs-type">LocalDateTime</span> <span class="hljs-variable">dateTime</span> <span class="hljs-operator">=</span> LocalDateTime.parse(dateTimeString);<br>System.out.println(dateTime);<br><br><span class="hljs-comment">// 计算两个日期间隔天数</span><br><span class="hljs-type">LocalDate</span> <span class="hljs-variable">date1</span> <span class="hljs-operator">=</span> LocalDate.of(<span class="hljs-number">2021</span>, <span class="hljs-number">8</span>, <span class="hljs-number">17</span>);<br><span class="hljs-type">LocalDate</span> <span class="hljs-variable">date2</span> <span class="hljs-operator">=</span> LocalDate.of(<span class="hljs-number">2021</span>, <span class="hljs-number">8</span>, <span class="hljs-number">19</span>);<br><span class="hljs-type">long</span> <span class="hljs-variable">days</span> <span class="hljs-operator">=</span> ChronoUnit.DAYS.between(date1, date2);<br>System.out.println(days);<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>Instant类示例：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 获取当前时间戳</span><br><span class="hljs-type">Instant</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> Instant.now();<br>System.out.println(now);<br><br><span class="hljs-comment">// 将时间字符串解析成Instant对象</span><br><span class="hljs-type">String</span> <span class="hljs-variable">timestampString</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;202-08-17T15:30:00Z&quot;</span>;<br><span class="hljs-type">Instant</span> <span class="hljs-variable">timestamp</span> <span class="hljs-operator">=</span> Instant.parse(timestampString);<br>System.out.println(timestamp);<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>Duration类示例：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 计算两个时间的间隔</span><br><span class="hljs-type">LocalTime</span> <span class="hljs-variable">time1</span> <span class="hljs-operator">=</span> LocalTime.of(<span class="hljs-number">10</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br><span class="hljs-type">LocalTime</span> <span class="hljs-variable">time2</span> <span class="hljs-operator">=</span> LocalTime.of(<span class="hljs-number">11</span>, <span class="hljs-number">30</span>, <span class="hljs-number">0</span>);<br><span class="hljs-type">Duration</span> <span class="hljs-variable">duration</span> <span class="hljs-operator">=</span> Duration.between(time1, time2);<br><span class="hljs-type">long</span> <span class="hljs-variable">minutes</span> <span class="hljs-operator">=</span> duration.toMinutes();<br>System.out.println(minutes);<br></code></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>StopWatch</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">StopWatch</span> <span class="hljs-variable">stopWatch</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StopWatch</span>();<br>stopWatch.start();<br><br><span class="hljs-comment">// 这里是需要计时的方法调用</span><br>Thread.sleep(<span class="hljs-number">3000</span>);<br><br>stopWatch.stop();<br><span class="hljs-type">long</span> <span class="hljs-variable">time</span> <span class="hljs-operator">=</span> stopWatch.getTotalTimeMillis();<br>System.out.println(time + <span class="hljs-string">&quot; ms&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>上述代码中，调用<code>stopWatch.start()</code>开始计时，调用<code>stopWatch.stop()</code>结束计时，通过<code>getTotalTimeMillis()</code>获取计时过程总共耗费的时间，时间单位为毫秒。</p>
+<h2 id="LocalDate-java-time"><a href="#LocalDate-java-time" class="headerlink" title="LocalDate - java.time"></a>LocalDate - java.time</h2><h1 id="Collection-–-java-util"><a href="#Collection-–-java-util" class="headerlink" title="Collection – java.util"></a>Collection – java.util</h1><h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>List、Set、Map都是接口，前两个继承至Collection接口，Map为独立接口<br>Set下有HashSet，LinkedHashSet，TreeSet<br>List下有ArrayList、Vector、LinkedList<br>Map下有HashTable、LinkHashMap、HashMap、TreeMap<br>Collection接口下还有个Queue接口，有PriorityQueue类</p>
+<hr>
+<p><img src="https://img-blog.csdnimg.cn/20190814163336520.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMjE3MzYz,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/aa.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/aaa.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Rango_kjc/article/details/98609268">(1条消息) Collection接口架构图以及常用类介绍_collection结构图_Rango_kjc的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42217363/article/details/99582926">(6条消息) Java集合中List,Set以及Map的所有子类及实现等集合体系详细解析和框架图展示（最详细）_list set map 类有哪些 至少两个子类_心之所向-的博客-CSDN博客</a></p>
+<p>接口，定义集合的共有方法</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421091819780.png" srcset="/img/loading.gif" lazyload alt="image-20230421091819780"></p>
+<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><p>一、List有序，可重复</p>
+<p>ArrayList<br>优点：底层数据结构是数组，查询快，增删慢。</p>
+<p>缺点：线程不安全，效率高</p>
+<p>Vector<br>优点：底层数据结构是数组，查询快。增删慢。</p>
+<p>缺点：线程安全，效率低</p>
+<p>Stack继承自Vector，实现一个后进先出的堆栈。</p>
+<p>LinkedList<br>优点：底层数据结构是链表，查询慢，增删快。</p>
+<p>缺点：线程不安全，效率高</p>
+<p>List集合特有的一些方法，如sort默认实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">sort</span><span class="hljs-params">(Comparator&lt;? <span class="hljs-built_in">super</span> E&gt; c)</span> &#123;<br>    <span class="hljs-comment">// 转为数组</span><br>    Object[] a = <span class="hljs-built_in">this</span>.toArray();<br>    <span class="hljs-comment">// 数组排序</span><br>    Arrays.sort(a, (Comparator) c);<br>    ListIterator&lt;E&gt; i = <span class="hljs-built_in">this</span>.listIterator();<br>    <span class="hljs-comment">// 数组复制到集合</span><br>    <span class="hljs-keyword">for</span> (Object e : a) &#123;<br>        i.next();<br>        i.set((E) e);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102923677.png" srcset="/img/loading.gif" lazyload alt="image-20230421102923677"></p>
+<h3 id="AbstractList"><a href="#AbstractList" class="headerlink" title="AbstractList"></a>AbstractList</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102910290.png" srcset="/img/loading.gif" lazyload alt="image-20230421102910290"></p>
+<h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><p>二、Set无序，唯一 (排序就用TreeSet或者LinkeHashSet 否则就HashSet)</p>
+<p>HashSet (无序，唯一)<br>是哈希表实现的，HashSet中的数据是无序的，可以放入null，但只能放入一个null，两者中的值都不能重复，就如数据库中唯一约束 。</p>
+<p>LinkeedHashSet （FIFO插入有序，唯一）<br>使用链表扩展实现HashSet类,支持对元素的排序</p>
+<p>1.由链表保证元素有序<br>2.由哈希表保证元素唯一<br>TreeSet （唯一，有序）<br>是红黑树实现的，Treeset中的数据是自动排好序的，不允许放入null值 。</p>
+<p>如何保证元素排序的呢？</p>
+<p>自然排序</p>
+<p>比较器排序</p>
+<p>2.如何保证元素唯一性的呢？</p>
+<p>根据比较的返回值是否是0来决定</p>
+<h3 id="AbstractSet"><a href="#AbstractSet" class="headerlink" title="AbstractSet"></a>AbstractSet</h3><p>只是重写equals、hashCode、removeAll方法；每个子类的实现逻辑不一样</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 移除集合中的元素 -- Set独有</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">removeAll</span><span class="hljs-params">(Collection&lt;?&gt; c)</span> &#123;<br>    Objects.requireNonNull(c);<br>    <span class="hljs-type">boolean</span> <span class="hljs-variable">modified</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br><br>    <span class="hljs-keyword">if</span> (size() &gt; c.size()) &#123;<br>        <span class="hljs-keyword">for</span> (Iterator&lt;?&gt; i = c.iterator(); i.hasNext(); )<br>            modified |= remove(i.next());<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">for</span> (Iterator&lt;?&gt; i = iterator(); i.hasNext(); ) &#123;<br>            <span class="hljs-keyword">if</span> (c.contains(i.next())) &#123;<br>                <span class="hljs-comment">// 防止fail-fast机制 用迭代器的remove方法</span><br>                i.remove();<br>                modified = <span class="hljs-literal">true</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> modified;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102556800.png" srcset="/img/loading.gif" lazyload alt="image-20230421102556800"></p>
+<h3 id="SortSet"><a href="#SortSet" class="headerlink" title="SortSet"></a>SortSet</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102336945.png" srcset="/img/loading.gif" lazyload alt="image-20230421102336945"></p>
+<h3 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h3><p>继承自</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421102416154.png" srcset="/img/loading.gif" lazyload alt="image-20230421102416154"></p>
+<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HashSet</span>&lt;E&gt;<br>    <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractSet</span>&lt;E&gt;<br>    <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Set</span>&lt;E&gt;, Cloneable, java.io.Serializable<br>&#123;<br>    <span class="hljs-comment">// 都是基于HashMap的操作</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> HashMap&lt;E,Object&gt; map;<br>    HashSet(<span class="hljs-type">int</span> initialCapacity, <span class="hljs-type">float</span> loadFactor, <span class="hljs-type">boolean</span> dummy) &#123;<br>        map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedHashMap</span>&lt;&gt;(initialCapacity, loadFactor);<br>    &#125;<br>	 <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">add</span><span class="hljs-params">(E e)</span> &#123;<br>        <span class="hljs-keyword">return</span> map.put(e, PRESENT)==<span class="hljs-literal">null</span>;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">remove</span><span class="hljs-params">(Object o)</span> &#123;<br>        <span class="hljs-keyword">return</span> map.remove(o)==PRESENT;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>底层使用HashMap的key作为存入的值，保证不重复</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421091531975.png" srcset="/img/loading.gif" lazyload alt="image-20230421091531975"></p>
+<h3 id="LinkedHashSet"><a href="#LinkedHashSet" class="headerlink" title="LinkedHashSet"></a>LinkedHashSet</h3><p>继承自HashSet，维护双向列表</p>
+<p>目的：HashSet不保存元素的存取顺序，元素存取无序；LinkedHashSet则保存，元素存取有序。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/set.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h2><h1 id="Map-–-java-util"><a href="#Map-–-java-util" class="headerlink" title="Map – java.util"></a>Map – java.util</h1><h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>三、Map键值对（TreeMap是有序的，HashMap和HashTable是无序的。Hashtable的方法是同步的，HashMap的方法不是同步的。Hashtable是线程安全的，HashMap不是线程安全的HashMap效率较高，Hashtable效率较低。）</p>
+<p>HashMap<br>存储数据采用的哈希表结构，元素的存取顺序不能保证一致。由于要保证键的唯一、不重复，需要重写键的hashCode()方法、equals()方法。</p>
+<p>Hashtable<br>Hashtable是线程安全的，其他的和HashMap相似。</p>
+<p>LinkedHashMap<br>保存了记录的插入顺序，在用Iteraor遍历LinkedHashMap时，先得到的记录肯定是先插入的，在遍历的时候会比HashMap慢，有HashMap的全部特性。通过哈希表结构可以保证的键的唯一、不重复，需要重写键的hashCode()方法、equals()方法。</p>
+<p>TreeMap–&gt;SortedMap</p>
+<p> TreeMap实现SortMap接口，能够把它保存的记录根据键排序，默认是按键值的升序排序（自然顺序），也可以指定排序的比较器，当用Iterator遍历TreeMap时，得到的记录是排过序的。不允许key值为空，非同步的；</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421093453501.png" srcset="/img/loading.gif" lazyload alt="image-20230421093453501"></p>
+<h2 id="Entry"><a href="#Entry" class="headerlink" title="Entry"></a>Entry</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421093513565.png" srcset="/img/loading.gif" lazyload alt="image-20230421093513565"></p>
+<h2 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h2><p>实现LRU - 最近最久未使用</p>
+<p>关键：</p>
+<p>遍历从head &#x3D;&#x3D; &gt; tail， 但是当size不够，可以实现 removeEldestEntry()  &#x3D;&gt;返回为true，会将head删除</p>
+<p>accessOrder &#x3D; true   （for access-order）  保持访问顺序</p>
+<p>​	get会将Node放置到链表的tail, </p>
+<p>accessOrder &#x3D; false  （for insertion-order.） 保持插入顺序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.LinkedHashMap;<br><span class="hljs-keyword">import</span> java.util.Map;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 简单用LinkedHashMap来实现的LRU算法的缓存</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCache</span>&lt;K, V&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LinkedHashMap</span>&lt;K, V&gt; &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> cacheSize;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">LRUCache</span><span class="hljs-params">(<span class="hljs-type">int</span> cacheSize)</span> &#123;<br>        <span class="hljs-comment">// 				true 插入顺序排序</span><br>        <span class="hljs-built_in">super</span>(<span class="hljs-number">16</span>, (<span class="hljs-type">float</span>) <span class="hljs-number">0.75</span>, <span class="hljs-literal">true</span>);<br>        <span class="hljs-built_in">this</span>.cacheSize = cacheSize;<br>    &#125;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">removeEldestEntry</span><span class="hljs-params">(Map.Entry&lt;K, V&gt; eldest)</span> &#123;<br>        <span class="hljs-keyword">return</span> size() &gt; cacheSize;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">import</span> org.slf4j.Logger;<br><span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCacheTest</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Logger</span> <span class="hljs-variable">log</span> <span class="hljs-operator">=</span> LoggerFactory.getLogger(LRUCacheTest.class);<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> LRUCache&lt;String, Integer&gt; cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LRUCache</span>&lt;&gt;(<span class="hljs-number">10</span>);<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;<br>			cache.put(<span class="hljs-string">&quot;k&quot;</span> + i, i);<br>		&#125;<br>		log.info(<span class="hljs-string">&quot;all cache :&#x27;&#123;&#125;&#x27;&quot;</span>,cache);<br>		cache.get(<span class="hljs-string">&quot;k3&quot;</span>);<br>		log.info(<span class="hljs-string">&quot;get k3 :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>		cache.get(<span class="hljs-string">&quot;k4&quot;</span>);<br>		log.info(<span class="hljs-string">&quot;get k4 :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>		cache.get(<span class="hljs-string">&quot;k4&quot;</span>);<br>		log.info(<span class="hljs-string">&quot;get k4 :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>		cache.put(<span class="hljs-string">&quot;k&quot;</span> + <span class="hljs-number">10</span>, <span class="hljs-number">10</span>);<br>		log.info(<span class="hljs-string">&quot;After running the LRU algorithm cache :&#x27;&#123;&#125;&#x27;&quot;</span>, cache);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>小顶锥 + hash实现 LFU 最近最少使用算法  frequency-频率</p>
+<h2 id="Java内存模型操作"><a href="#Java内存模型操作" class="headerlink" title="Java内存模型操作"></a>Java内存模型操作</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/luanmousheng/article/details/73188544">(1条消息) Java内存模型_yimuss的博客-CSDN博客</a></p>
+<p>lock(锁定)：作用于主内存的变量，它把一条变量标记为本线程所独占的。</p>
+<p>unlock(解锁)：作用于主内存的变量，它把一条处于锁定状态的变量释放出来，其他线程才可以继续锁定该变量。</p>
+<p>read(读取)：作用于主内存的变量，它把一条变量从主内存传输到线程的工作内存中，以便随后的load动作使用。</p>
+<p>load(载入)：作用于工作内存的变量，它把read操作从主内存得到的值放入工作内存的变量副本中。</p>
+<p>use(使用)：作用于工作内存的变量，它把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量值的字节码指令时会执行这个操作。</p>
+<p>assign(赋值)：作用于工作内存的变量，它把从执行引擎接收到的值赋值给工作内存的变量，每当虚拟机遇到一个需要给变量赋值的字节码指令时会执行这个操作。</p>
+<p>store(存储)：作用于工作内存的变量，它把工作内存中的变量传送到主内存，以便随后的write操作使用。</p>
+<p>write(写入)：作用主内存的变量，它把store操作从工作内存得到的值放入主内存的变量中。</p>
+<p>如果需要把一个变量从主内存复制到工作内存中，按顺序操作read、load，不需要连续操作</p>
+<p>如果需要把一个变量从工作内存复制到主内存中，按顺序操作store、write，不需要连续操作</p>
+<h1 id="iterator-java-util"><a href="#iterator-java-util" class="headerlink" title="iterator - java.util"></a>iterator - java.util</h1><p>迭代器，用于集合的遍历</p>
+<h2 id="Iterable-java-lang"><a href="#Iterable-java-lang" class="headerlink" title="Iterable - java.lang"></a>Iterable - java.lang</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Iterable</span>&lt;T&gt; &#123;<br>	Iterator&lt;T&gt; <span class="hljs-title function_">iterator</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * @implSpec</span><br><span class="hljs-comment">     * &lt;p&gt;The default implementation behaves as if:</span><br><span class="hljs-comment">     * &lt;pre&gt;&#123;@code</span><br><span class="hljs-comment">     *     for (T t : this)</span><br><span class="hljs-comment">     *         action.accept(t);</span><br><span class="hljs-comment">     * &#125;&lt;/pre&gt;</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * @param action The action to be performed for each element</span><br><span class="hljs-comment">     * @throws NullPointerException if the specified action is null</span><br><span class="hljs-comment">     * @since 1.8</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">forEach</span><span class="hljs-params">(Consumer&lt;? <span class="hljs-built_in">super</span> T&gt; action)</span> &#123;<br>        Objects.requireNonNull(action);<br>        <span class="hljs-keyword">for</span> (T t : <span class="hljs-built_in">this</span>) &#123;<br>            action.accept(t);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Creates a &#123;<span class="hljs-doctag">@link</span> Spliterator&#125; over the elements described by this</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Iterable&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@implSpec</span></span><br><span class="hljs-comment">     * The default implementation creates an</span><br><span class="hljs-comment">     * &lt;em&gt;&lt;a href=&quot;Spliterator.html#binding&quot;&gt;early-binding&lt;/a&gt;&lt;/em&gt;</span><br><span class="hljs-comment">     * spliterator from the iterable&#x27;s &#123;<span class="hljs-doctag">@code</span> Iterator&#125;.  The spliterator</span><br><span class="hljs-comment">     * inherits the &lt;em&gt;fail-fast&lt;/em&gt; properties of the iterable&#x27;s iterator.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@implNote</span></span><br><span class="hljs-comment">     * The default implementation should usually be overridden.  The</span><br><span class="hljs-comment">     * spliterator returned by the default implementation has poor splitting</span><br><span class="hljs-comment">     * capabilities, is unsized, and does not report any spliterator</span><br><span class="hljs-comment">     * characteristics. Implementing classes can nearly always provide a</span><br><span class="hljs-comment">     * better implementation.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> a &#123;<span class="hljs-doctag">@code</span> Spliterator&#125; over the elements described by this</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Iterable&#125;.</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@since</span> 1.8</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">default</span> Spliterator&lt;T&gt; <span class="hljs-title function_">spliterator</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> Spliterators.spliteratorUnknownSize(iterator(), <span class="hljs-number">0</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Fast-Fail"><a href="#Fast-Fail" class="headerlink" title="Fast-Fail"></a>Fast-Fail</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_46343559/article/details/119774426">(7条消息) java中集合的的fast-fall机制_泥坑腕豪的博客-CSDN博客</a></p>
+<p>ArrayList、HashMap等非并发集合的fast-fail机制</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ccgjava/p/6347425.html">fail-fast机制 - 永不止步！ - 博客园 (cnblogs.com)</a></p>
+<h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><p>集合迭代</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230505090506099.png" srcset="/img/loading.gif" lazyload alt="image-20230505090506099"></p>
+<h2 id="Spliterator"><a href="#Spliterator" class="headerlink" title="Spliterator"></a>Spliterator</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sl1992/article/details/100149187">(7条消息) Java8中Spliterator详解_LifeIsForSharing的博客-CSDN博客</a></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230505090408579.png" srcset="/img/loading.gif" lazyload alt="image-20230505090408579"></p>
+<h1 id="java-util-concurrent"><a href="#java-util-concurrent" class="headerlink" title="java.util.concurrent"></a>java.util.concurrent</h1><p><a href="JUC.md">JUC</a></p>
+<h1 id="函数式接口-–-java-util-function"><a href="#函数式接口-–-java-util-function" class="headerlink" title="函数式接口 – java.util.function"></a>函数式接口 – java.util.function</h1><h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><h3 id="一"><a href="#一" class="headerlink" title="一"></a>一</h3><p>问题：内部类 访问 外部类 局部变量</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44299027/article/details/117333043">(8条消息) 【Java异常】Variable used in lambda expression should be final or effectively final_No8g攻城狮的博客-CSDN博客</a></p>
+<p>jdk1.7 时，如果匿名内部类访问局部变量，会报错</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">Variable used in lambda expression <span class="hljs-keyword">should </span><span class="hljs-keyword">be </span>final <span class="hljs-keyword">or </span>effectively final<br></code></pre></td></tr></table></figure>
+
+<p>jdk1.8后，编译器会自动加上final修饰，所以不会报错，但是不能修改局部变量的值（因为为final）</p>
+<p>为 Java 8 之后，在匿名类或 Lambda 表达式中访问的局部变量，如果不是 final 类型的话，编译器自动加上 final 修饰符，即Java8新特性：effectively final。</p>
+<h3 id="二"><a href="#二" class="headerlink" title="二"></a>二</h3><p>问题：为什么，内部类 访问 外部类 局部变量必须为final</p>
+<p>因为不允许内部类改变局部变量的值，原因: 内部类的作用域在栈中，外部类的作用域在堆中，如果栈中修改堆中 数据，堆中数据变为垃圾，但是，栈的存活时间比堆短，</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs actionscript">前面一直说 Lambda 表达式或者匿名内部类不能访问非 <span class="hljs-keyword">final</span> 的局部变量，这是为什么呢？<br><br>首先思考外部的局部变量finalI和匿名内部类里面的finalI是否是同一个变量？<br><br>我们知道，每个方法在执行的同时都会创建一个栈帧用于存储局部变量表、操作数栈、动态链接，方法出口等信息，每个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程（《深入理解Java虚拟机》第<span class="hljs-number">2.2</span><span class="hljs-number">.2</span>节 Java虚拟机栈）。<br><br>就是说在执行方法的时候，局部变量会保存在栈中，方法结束局部变量也会出栈，随后会被垃圾回收掉，而此时，内部类对象可能还存在，如果内部类对象这时直接去访问局部变量的话就会出问题，因为外部局部变量已经被回收了，解决办法就是把匿名内部类要访问的局部变量复制一份作为内部类对象的成员变量，查阅资料或者通过反编译工具对代码进行反编译会发现，底层确实定义了一个新的变量，通过内部类构造函数将外部变量复制给内部类变量。<br><br>为何还需要用<span class="hljs-keyword">final</span>修饰？<br>其实复制变量的方式会造成一个数据不一致的问题，在执行方法的时候局部变量的值改变了却无法通知匿名内部类的变量，随着程序的运行，就会导致程序运行的结果与预期不同，于是使用<span class="hljs-keyword">final</span>修饰这个变量，使它成为一个常量，这样就保证了数据的一致性。<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">java.util.<span class="hljs-keyword">function</span><br>https:<span class="hljs-regexp">//</span>blog.csdn.net<span class="hljs-regexp">/hbdhaj/</span>article<span class="hljs-regexp">/details/</span><span class="hljs-number">119564310</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Supplier接口"><a href="#Supplier接口" class="headerlink" title="Supplier接口"></a>Supplier接口</h2><p>Supplier&lt; T &gt;：包含一个无参的方法</p>
+<p>T get()：获得结果<br>该方法不需要参数，他会按照某种实现逻辑（由Lambda表达式实现）返回一个数据<br>Supplier&lt; T &gt;接口也被称为生产型接口，如果我们指定了接口的泛型是什么类型，那么接口中的get方法就会产生什么类型的数据供我们使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Supplier</span>&lt;T&gt; &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Gets a result.</span><br><span class="hljs-comment">     */</span><br>    T <span class="hljs-title function_">get</span><span class="hljs-params">()</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Consumer接口"><a href="#Consumer接口" class="headerlink" title="Consumer接口"></a>Consumer接口</h2><p>Consumer&lt; T &gt;：包含两个方法</p>
+<p>void accept(T t)：对给定的参数执行此操作<br>default Consumer &lt; T &gt; andThen(Consumer after)：返回一个组合的Consumer，依次执行此操作，然后执行after操作<br>Consumer&lt; T &gt;接口也被称为消费型接口，它消费的数据类型由泛型指定</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Consumer</span>&lt;T&gt; &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Performs this operation on the given argument.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> t the input argument</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">accept</span><span class="hljs-params">(T t)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Returns a composed &#123;<span class="hljs-doctag">@code</span> Consumer&#125; that performs, in sequence, this</span><br><span class="hljs-comment">     * operation followed by the &#123;<span class="hljs-doctag">@code</span> after&#125; operation. If performing either</span><br><span class="hljs-comment">     * operation throws an exception, it is relayed to the caller of the</span><br><span class="hljs-comment">     * composed operation.  If performing this operation throws an exception,</span><br><span class="hljs-comment">     * the &#123;<span class="hljs-doctag">@code</span> after&#125; operation will not be performed.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> after the operation to perform after this operation</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> a composed &#123;<span class="hljs-doctag">@code</span> Consumer&#125; that performs in sequence this</span><br><span class="hljs-comment">     * operation followed by the &#123;<span class="hljs-doctag">@code</span> after&#125; operation</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> NullPointerException if &#123;<span class="hljs-doctag">@code</span> after&#125; is null</span><br><span class="hljs-comment">     //        con1.accept(name);</span><br><span class="hljs-comment">	//        con2.accept(name);</span><br><span class="hljs-comment">    //		返回一个组合的Consumer</span><br><span class="hljs-comment">    con1.andThen(con2)	-- 封装为一个Consumer = .accept(name); -- 接收参数</span><br><span class="hljs-comment">    	// 将两个Consumer封装为一个Consumer，</span><br><span class="hljs-comment">    	// 在一个Consumer中调用两个的accept(t)，传递参数</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">default</span> Consumer&lt;T&gt; <span class="hljs-title function_">andThen</span><span class="hljs-params">(Consumer&lt;? <span class="hljs-built_in">super</span> T&gt; after)</span> &#123;<br>        Objects.requireNonNull(after);<br>        <span class="hljs-keyword">return</span> (T t) -&gt; &#123; accept(t); after.accept(t); &#125;;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Predicate接口"><a href="#Predicate接口" class="headerlink" title="Predicate接口"></a>Predicate接口</h2><p>Predicate&lt; T &gt;：常用的四个方法</p>
+<p>boolean test(T t)：对给定的参数进行判断（判断逻辑由Lambda表达式实现），返回一个布尔值<br>default Predicate&lt; T &gt; negate()：返回一个逻辑的否定，对应逻辑非<br>default Predicate&lt; T &gt; and()：返回一个组合判断，对应短路与<br>default Predicate&lt; T &gt; or()：返回一个组合判断，对应短路或<br>isEqual()：测试两个参数是否相等<br>Predicate&lt; T &gt;：接口通常用于判断参数是否满足指定的条件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Predicate</span>&lt;T&gt; &#123;<br><br>    <span class="hljs-comment">// 重写判断方法，返回true，false</span><br>    <span class="hljs-type">boolean</span> <span class="hljs-title function_">test</span><span class="hljs-params">(T t)</span>;<br>	<span class="hljs-comment">// 所有的 方法都是封装Predicate为 新的 Predicate ，然后 &amp; | ！三种操纵，</span><br>   	<span class="hljs-comment">// &amp;</span><br>    <span class="hljs-keyword">default</span> Predicate&lt;T&gt; <span class="hljs-title function_">and</span><span class="hljs-params">(Predicate&lt;? <span class="hljs-built_in">super</span> T&gt; other)</span> &#123;<br>        Objects.requireNonNull(other);<br>        <span class="hljs-keyword">return</span> (t) -&gt; test(t) &amp;&amp; other.test(t);<br>    &#125;<br>	<span class="hljs-comment">// ！</span><br>    <span class="hljs-keyword">default</span> Predicate&lt;T&gt; <span class="hljs-title function_">negate</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> (t) -&gt; !test(t);<br>    &#125;<br><br>   	<span class="hljs-comment">// |</span><br>    <span class="hljs-keyword">default</span> Predicate&lt;T&gt; <span class="hljs-title function_">or</span><span class="hljs-params">(Predicate&lt;? <span class="hljs-built_in">super</span> T&gt; other)</span> &#123;<br>        Objects.requireNonNull(other);<br>        <span class="hljs-keyword">return</span> (t) -&gt; test(t) || other.test(t);<br>    &#125;<br>	<span class="hljs-comment">// 判断相等</span><br>    <span class="hljs-keyword">static</span> &lt;T&gt; Predicate&lt;T&gt; <span class="hljs-title function_">isEqual</span><span class="hljs-params">(Object targetRef)</span> &#123;<br>        <span class="hljs-keyword">return</span> (<span class="hljs-literal">null</span> == targetRef)<br>                ? Objects::isNull<br>                : object -&gt; targetRef.equals(object);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Function接口"><a href="#Function接口" class="headerlink" title="Function接口"></a>Function接口</h2><p>Function&lt;T,R&gt;：常用的两个方法</p>
+<p>R apply(T t)：将此函数应用于给定的参数<br>default&lt; V &gt;：Function andThen(Function after)：返回一个组合函数，首先将该函数应用于输入，然后将after函数应用于结果<br>Function&lt;T,R&gt;：接口通常用于对参数进行处理，转换（处理逻辑由Lambda表达式实现），然后返回一个新值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@FunctionalInterface</span><br><span class="hljs-comment">// 两个参数 T为传入参数，R为 返回值参数</span><br><span class="hljs-comment">// Target Return</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Function</span>&lt;T, R&gt; &#123;<br>	<span class="hljs-comment">// 带返回值</span><br>    R <span class="hljs-title function_">apply</span><span class="hljs-params">(T t)</span>;<br><br>    <span class="hljs-comment">// 接收先前的 Function的返回值，进行运用</span><br>    <span class="hljs-keyword">default</span> &lt;V&gt; Function&lt;V, R&gt; <span class="hljs-title function_">compose</span><span class="hljs-params">(Function&lt;? <span class="hljs-built_in">super</span> V, ? extends T&gt; before)</span> &#123;<br>        Objects.requireNonNull(before);<br>        <span class="hljs-keyword">return</span> (V v) -&gt; apply(before.apply(v));<br>    &#125;<br>	<span class="hljs-comment">// 接收当前的 Function的返回值，进行运用</span><br>    <span class="hljs-keyword">default</span> &lt;V&gt; Function&lt;T, V&gt; <span class="hljs-title function_">andThen</span><span class="hljs-params">(Function&lt;? <span class="hljs-built_in">super</span> R, ? extends V&gt; after)</span> &#123;<br>        Objects.requireNonNull(after);<br>        <span class="hljs-keyword">return</span> (T t) -&gt; after.apply(apply(t));<br>    &#125;<br><br>    <span class="hljs-comment">// 返回给定值</span><br>    <span class="hljs-keyword">static</span> &lt;T&gt; Function&lt;T, T&gt; <span class="hljs-title function_">identity</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> t -&gt; t;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="Optional-java-util"><a href="#Optional-java-util" class="headerlink" title="Optional - java.util"></a>Optional - java.util</h1><p>java.util包</p>
+<p>用于处理可能为null的判断 — 封装为一个方法</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230505080931154.png" srcset="/img/loading.gif" lazyload alt="image-20230505080931154"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Optional</span>&lt;T&gt; &#123;<br>    <span class="hljs-comment">//Null指针的封装</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> java.util.Optional&lt;?&gt; EMPTY = <span class="hljs-keyword">new</span> <span class="hljs-title class_">java</span>.util.Optional&lt;&gt;();<br>    <span class="hljs-comment">//内部包含的值对象</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> T value;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title function_">Optional</span><span class="hljs-params">()</span> ;<br>    <span class="hljs-comment">//返回EMPTY对象</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span>&lt;T&gt; java.util.Optional&lt;T&gt; <span class="hljs-title function_">empty</span><span class="hljs-params">()</span> ;<br>    <span class="hljs-comment">//构造函数，但是value为null，会报NPE</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title function_">Optional</span><span class="hljs-params">(T value)</span>;<br>    <span class="hljs-comment">//静态工厂方法，但是value为null，会报NPE</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;T&gt; java.util.Optional&lt;T&gt; <span class="hljs-title function_">of</span><span class="hljs-params">(T value)</span>;<br>    <span class="hljs-comment">//静态工厂方法，value可以为null</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;T&gt; java.util.Optional&lt;T&gt; <span class="hljs-title function_">ofNullable</span><span class="hljs-params">(T value)</span> ;<br>    <span class="hljs-comment">//获取value，但是value为null，会报NoSuchElementException</span><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">get</span><span class="hljs-params">()</span> ;<br>    <span class="hljs-comment">//返回value是否为null</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isPresent</span><span class="hljs-params">()</span>;<br>    <span class="hljs-comment">//如果value不为null，则执行consumer式的函数，为null不做事</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">ifPresent</span><span class="hljs-params">(Consumer&lt;? <span class="hljs-built_in">super</span> T&gt; consumer)</span> ;<br>     <span class="hljs-comment">//过滤，如果value不为null，则根据条件过滤，为null不做事</span><br>    <span class="hljs-keyword">public</span> java.util.Optional&lt;T&gt; <span class="hljs-title function_">filter</span><span class="hljs-params">(Predicate&lt;? <span class="hljs-built_in">super</span> T&gt; predicate)</span> ;<br>     <span class="hljs-comment">//转换，在其外面封装Optional，如果value不为null，则map转换，为null不做事</span><br>    <span class="hljs-keyword">public</span>&lt;U&gt; java.util.Optional&lt;U&gt; <span class="hljs-title function_">map</span><span class="hljs-params">(Function&lt;? <span class="hljs-built_in">super</span> T, ? extends U&gt; mapper)</span>;<br>     <span class="hljs-comment">//转换，如果value不为null，则map转换，为null不做事</span><br>    <span class="hljs-keyword">public</span>&lt;U&gt; java.util.Optional&lt;U&gt; <span class="hljs-title function_">flatMap</span><span class="hljs-params">(Function&lt;? <span class="hljs-built_in">super</span> T, java.util.Optional&lt;U&gt;&gt; mapper)</span> ;<br>    <span class="hljs-comment">//value为null时，默认提供other值</span><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">orElse</span><span class="hljs-params">(T other)</span>;<br>      <span class="hljs-comment">//value为null时，默认提供other值</span><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">orElseGet</span><span class="hljs-params">(Supplier&lt;? extends T&gt; other)</span>;<br>      <span class="hljs-comment">//value为null时，默认提供other值</span><br>    <span class="hljs-keyword">public</span> &lt;X <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Throwable</span>&gt; T <span class="hljs-title function_">orElseThrow</span><span class="hljs-params">(Supplier&lt;? extends X&gt; exceptionSupplier)</span> ;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="IO-–-java-io"><a href="#IO-–-java-io" class="headerlink" title="IO – java.io"></a>IO – java.io</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25418336">Java IO学习整理 - 知乎 (zhihu.com)</a></p>
+<h2 id="IO流基本类"><a href="#IO流基本类" class="headerlink" title="IO流基本类"></a><strong>IO流基本类</strong></h2><p>(通过适配器的方式，将InputStream的实现类，转为其他资源模式， InputStreamReader 将 InputStream转为 Reader实现类，OutputStreamWriter将OutputStream转为 Writer的实现类)</p>
+<p>File – 文件类</p>
+<p>RandomAccessFile – 随机存储文件类</p>
+<p>InputStream – 字节输入流</p>
+<p>OutputStream – 字节输出流</p>
+<p>Reader – 字符输入流</p>
+<p>Writer – 字符输出流</p>
+<p><img src="https://pic1.zhimg.com/80/v2-53c6d6002d06005a8be8a6219fe2ae24_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="InputStream"><a href="#InputStream" class="headerlink" title="InputStream"></a>InputStream</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422085820960.png" srcset="/img/loading.gif" lazyload alt="image-20230422085820960"></p>
+<h3 id="ObjectInputStream"><a href="#ObjectInputStream" class="headerlink" title="ObjectInputStream"></a>ObjectInputStream</h3><p>ObjectOutputStream</p>
+<p>对象序列化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> Object <span class="hljs-title function_">readObject0</span><span class="hljs-params">(<span class="hljs-type">boolean</span> unshared)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-type">boolean</span> <span class="hljs-variable">oldMode</span> <span class="hljs-operator">=</span> bin.getBlockDataMode();<br>    <span class="hljs-keyword">if</span> (oldMode) &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">remain</span> <span class="hljs-operator">=</span> bin.currentBlockRemaining();<br>        <span class="hljs-keyword">if</span> (remain &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OptionalDataException</span>(remain);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (defaultDataEnd) &#123;<br>            <span class="hljs-comment">/*</span><br><span class="hljs-comment">             * Fix for 4360508: stream is currently at the end of a field</span><br><span class="hljs-comment">             * value block written via default serialization; since there</span><br><span class="hljs-comment">             * is no terminating TC_ENDBLOCKDATA tag, simulate</span><br><span class="hljs-comment">             * end-of-custom-data behavior explicitly.</span><br><span class="hljs-comment">             */</span><br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OptionalDataException</span>(<span class="hljs-literal">true</span>);<br>        &#125;<br>        bin.setBlockDataMode(<span class="hljs-literal">false</span>);<br>    &#125;<br><br>    <span class="hljs-type">byte</span> tc;<br>    <span class="hljs-keyword">while</span> ((tc = bin.peekByte()) == TC_RESET) &#123;<br>        bin.readByte();<br>        handleReset();<br>    &#125;<br><br>    depth++;<br>    totalObjectRefs++;<br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-comment">// 通过不同的方式解析 InputStream转化为类对象</span><br>        <span class="hljs-keyword">switch</span> (tc) &#123;<br>            <span class="hljs-keyword">case</span> TC_NULL:<br>                <span class="hljs-keyword">return</span> readNull();<br><br>            <span class="hljs-keyword">case</span> TC_REFERENCE:<br>                <span class="hljs-keyword">return</span> readHandle(unshared);<br><br>            <span class="hljs-keyword">case</span> TC_CLASS:<br>                <span class="hljs-keyword">return</span> readClass(unshared);<br><br>            <span class="hljs-keyword">case</span> TC_CLASSDESC:<br>            <span class="hljs-keyword">case</span> TC_PROXYCLASSDESC:<br>                <span class="hljs-keyword">return</span> readClassDesc(unshared);<br><br>            <span class="hljs-keyword">case</span> TC_STRING:<br>            <span class="hljs-keyword">case</span> TC_LONGSTRING:<br>                <span class="hljs-keyword">return</span> checkResolve(readString(unshared));<br><br>            <span class="hljs-keyword">case</span> TC_ARRAY:<br>                <span class="hljs-keyword">return</span> checkResolve(readArray(unshared));<br><br>            <span class="hljs-keyword">case</span> TC_ENUM:<br>                <span class="hljs-keyword">return</span> checkResolve(readEnum(unshared));<br><br>            <span class="hljs-keyword">case</span> TC_OBJECT:<br>                <span class="hljs-keyword">return</span> checkResolve(readOrdinaryObject(unshared));<br><br>            <span class="hljs-keyword">case</span> TC_EXCEPTION:<br>                <span class="hljs-type">IOException</span> <span class="hljs-variable">ex</span> <span class="hljs-operator">=</span> readFatalException();<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WriteAbortedException</span>(<span class="hljs-string">&quot;writing aborted&quot;</span>, ex);<br><br>            <span class="hljs-keyword">case</span> TC_BLOCKDATA:<br>            <span class="hljs-keyword">case</span> TC_BLOCKDATALONG:<br>                <span class="hljs-keyword">if</span> (oldMode) &#123;<br>                    bin.setBlockDataMode(<span class="hljs-literal">true</span>);<br>                    bin.peek();             <span class="hljs-comment">// force header read</span><br>                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OptionalDataException</span>(<br>                        bin.currentBlockRemaining());<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StreamCorruptedException</span>(<br>                        <span class="hljs-string">&quot;unexpected block data&quot;</span>);<br>                &#125;<br><br>            <span class="hljs-keyword">case</span> TC_ENDBLOCKDATA:<br>                <span class="hljs-keyword">if</span> (oldMode) &#123;<br>                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OptionalDataException</span>(<span class="hljs-literal">true</span>);<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StreamCorruptedException</span>(<br>                        <span class="hljs-string">&quot;unexpected end of block data&quot;</span>);<br>                &#125;<br><br>            <span class="hljs-keyword">default</span>:<br>                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StreamCorruptedException</span>(<br>                    String.format(<span class="hljs-string">&quot;invalid type code: %02X&quot;</span>, tc));<br>        &#125;<br>    &#125; <span class="hljs-keyword">finally</span> &#123;<br>        depth--;<br>        bin.setBlockDataMode(oldMode);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425145612255.png" srcset="/img/loading.gif" lazyload alt="image-20230425145612255"></p>
+<h2 id="OutputStream"><a href="#OutputStream" class="headerlink" title="OutputStream"></a>OutputStream</h2><h3 id="Flushable"><a href="#Flushable" class="headerlink" title="Flushable"></a>Flushable</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Flushable</span> &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Flushes this stream by writing any buffered output to the underlying</span><br><span class="hljs-comment">     * stream.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">flush</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090807781.png" srcset="/img/loading.gif" lazyload alt="image-20230422090807781"></p>
+<h2 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a>Reader</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090545110.png" srcset="/img/loading.gif" lazyload alt="image-20230422090545110"></p>
+<h2 id="Writer"><a href="#Writer" class="headerlink" title="Writer"></a>Writer</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090522062.png" srcset="/img/loading.gif" lazyload alt="image-20230422090522062"></p>
+<h2 id="AutoCloseable"><a href="#AutoCloseable" class="headerlink" title="AutoCloseable"></a>AutoCloseable</h2><p>当 IO 模式的资源（InputStream，FileInputStream，OutputStream，Writer，Reader等）实现类该接口，则可以用通过</p>
+<p>try - with - resource 语句块，进行自动关闭资源的操作（资源在语句块中定义 ）</p>
+<p>但是 NIO 模式的资源，功能会失效</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/* The &#123;@link #close()&#125; method of an &#123;@code AutoCloseable&#125;</span><br><span class="hljs-comment"> * object is called automatically when exiting a &#123;@code</span><br><span class="hljs-comment"> * try&#125;-with-resources block for which the object has been declared in</span><br><span class="hljs-comment"> * the resource specification header.*/</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">AutoCloseable</span> &#123;<br>	<span class="hljs-keyword">void</span> <span class="hljs-title function_">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425145011749.png" srcset="/img/loading.gif" lazyload alt="image-20230425145011749"></p>
+<h2 id="CharSequence"><a href="#CharSequence" class="headerlink" title="CharSequence"></a>CharSequence</h2><p>用于</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422091310688.png" srcset="/img/loading.gif" lazyload alt="image-20230422091310688"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425144509705.png" srcset="/img/loading.gif" lazyload alt="image-20230425144509705"></p>
+<h2 id="Appendable"><a href="#Appendable" class="headerlink" title="Appendable"></a>Appendable</h2><p>对AbstractStringBuilder，CharBuffer，Writer，PrintStream</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Appendable</span> &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Appends the specified character sequence to this &lt;tt&gt;Appendable&lt;/tt&gt;.</span><br><span class="hljs-comment">     */</span><br>    Appendable <span class="hljs-title function_">append</span><span class="hljs-params">(CharSequence csq)</span> <span class="hljs-keyword">throws</span> IOException;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Appends a subsequence of the specified character sequence to this</span><br><span class="hljs-comment">     * &lt;tt&gt;Appendable&lt;/tt&gt;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * &lt;p&gt; An invocation of this method of the form &lt;tt&gt;out.append(csq, start,</span><br><span class="hljs-comment">     * end)&lt;/tt&gt; when &lt;tt&gt;csq&lt;/tt&gt; is not &lt;tt&gt;null&lt;/tt&gt;, behaves in</span><br><span class="hljs-comment">     * exactly the same way as the invocation</span><br><span class="hljs-comment">     */</span><br>    Appendable <span class="hljs-title function_">append</span><span class="hljs-params">(CharSequence csq, <span class="hljs-type">int</span> start, <span class="hljs-type">int</span> end)</span> <span class="hljs-keyword">throws</span> IOException;<br><br>    Appendable <span class="hljs-title function_">append</span><span class="hljs-params">(<span class="hljs-type">char</span> c)</span> <span class="hljs-keyword">throws</span> IOException;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425144354116.png" srcset="/img/loading.gif" lazyload alt="image-20230425144354116"></p>
+<h2 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230422090926125.png" srcset="/img/loading.gif" lazyload alt="image-20230422090926125"></p>
+<h2 id="获取流"><a href="#获取流" class="headerlink" title="获取流"></a>获取流</h2><p>File，URI </p>
+<h2 id="IOStream"><a href="#IOStream" class="headerlink" title="IOStream"></a>IOStream</h2><h3 id="Charset-字符集"><a href="#Charset-字符集" class="headerlink" title="Charset - 字符集"></a><strong>Charset - 字符集</strong></h3><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs vbnet"><span class="hljs-type">Byte</span> <span class="hljs-type">byte</span> <span class="hljs-type">Char</span> <span class="hljs-type">char</span> <span class="hljs-type">String</span><br><br>encode - 编码， decode - 解码<br></code></pre></td></tr></table></figure>
+
+<h5 id="StringCoding"><a href="#StringCoding" class="headerlink" title="StringCoding"></a>StringCoding</h5><p>通过byte [] 数组 初始化String，需要通过StringCoding进行 decode解码</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230402113730016.png" srcset="/img/loading.gif" lazyload alt="image-20230402113730016"></p>
+<h5 id="Buffer-1"><a href="#Buffer-1" class="headerlink" title="Buffer"></a>Buffer</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Invariants: mark &lt;= position &lt;= limit &lt;= capacity</span><br><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">mark</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Buffer <span class="hljs-title function_">mark</span><span class="hljs-params">()</span> -&gt; mark = position; 	<span class="hljs-comment">// 标记 当前写到位置</span><br><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">position</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Buffer <span class="hljs-title function_">reset</span><span class="hljs-params">()</span> -&gt;&gt; position = mark; <span class="hljs-comment">// 重新写</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Buffer <span class="hljs-title function_">rewind</span><span class="hljs-params">()</span> -&gt; position = <span class="hljs-number">0</span>;	<span class="hljs-comment">// 重写</span><br><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> limit;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Buffer <span class="hljs-title function_">flip</span><span class="hljs-params">()</span> -&gt;  <span class="hljs-comment">// 限定 读边界 重新读</span><br>        limit = position, position = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> capacity;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-title function_">remaining</span><span class="hljs-params">()</span> -&gt; <span class="hljs-comment">// 剩余可 写/读 容量</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Buffer <span class="hljs-title function_">clear</span><span class="hljs-params">()</span> -&gt; <span class="hljs-comment">// 所有参数初始化，重新写</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h3><p>InputStream + OutputStream</p>
+<h3 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h3><p>Reader + Writer</p>
+<h1 id="java-util-stream"><a href="#java-util-stream" class="headerlink" title="java.util.stream"></a>java.util.stream</h1><p>理解：流处理：即通过将传入的filter，map等lambda内部类在AbstractPipelineHelper中形成执行链，通过继承 Consumer的方法accept，将上一次的结果作为下一次的条件，进行传递调用，从而实现流处理数据的过程。</p>
+<p>IntPipeline分为 Head — source，Stateful – 有状态的流处理，Stateless — 无状态的流处理</p>
+<p>Spliterator用于将 集合分割为小的区间（task），进行并行运行</p>
+<h2 id="问："><a href="#问：" class="headerlink" title="问："></a>问：</h2><p>PipelineHelper所用方法和作用，Spiterator的作用，BaseStream与MapReduce思想关系，IntPipeline和DoublePipeline、LongPipeline的区别，BaseStream + PipelineHelper的共同作用，他们的具体使用场景有哪些</p>
+<p>PipelineHelper是Java 8 Stream API 中的一个工具类，用于为流操作提供一些辅助方法。它的作用包括创建Stream、终止Stream操作等等。</p>
+<p>Spliterator是Java 8中新增的接口，主要用于对集合进行迭代，通过遍历元素并将其分割成多个部分来支持高效并行处理的任务分解框架。它的作用在于提供了一种在迭代过程中同时处理多个数据项的能力。</p>
+<p>BaseStream是所有Stream流的基类，它定义了许多通用方法，如filter、map、reduce等，用于支持流的中间操作和结束操作。MapReduce思想是函数式编程中广泛使用的一种数据处理思路，即将处理过程分为map和reduce两个部分，其中map将输入转换为中间结果，reduce将中间结果合并为最终输出，与BaseStream的各种方法的运用都贴近了这种思想。</p>
+<p>IntPipeline、DoublePipeline、LongPipeline是基本数据类型的流，它们与普通的对象流相比，可以避免底层自动装箱和拆箱的开销，提供更高效的性能和更小的内存占用。</p>
+<p>BaseStream和PipelineHelper的共同作用在于实现流操作。BaseStream提供了丰富的中间操作和结束操作，而PipelineHelper则提供了创建流、终止流等帮助方法。它们的具体使用场景包括对于大数据集的处理、并行计算以及实现复杂的数据转换逻辑等等。通过它们可以实现高效且易于维护的代码，提高软件开发的效率和速度。</p>
+<h2 id="BaseStream"><a href="#BaseStream" class="headerlink" title="BaseStream"></a>BaseStream</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425090523430.png" srcset="/img/loading.gif" lazyload alt="image-20230425090523430"></p>
+<h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><p>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs java">Stream<br>Builder<br>filter<br>map<br>mapToInt<br>mapToLong<br>mapToDouble<br>flatMap<br>flatMapToInt<br>flatMapToLong<br>flatMapToDouble<br>distinct<br>sorted<br>sorted<br>peek<br>limit<br>skip<br>forEach<br>forEachOrdered<br>toArray<br>toArray<br>reduce<br>reduce<br>reduce<br>collect<br>collect<br>min<br>max<br>count<br>anyMatch<br>allMatch<br>noneMatch<br>findFirst<br>findAny<br>builder<br>empty<br>of<br>of<br>iterate<br>generate<br>concat<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230406155355103.png" srcset="/img/loading.gif" lazyload alt="image-20230406155355103"></p>
+<h2 id="PipelineHelper"><a href="#PipelineHelper" class="headerlink" title="PipelineHelper"></a>PipelineHelper</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31865983/article/details/106303660">(8条消息) Java8 Stream API 之 IntPipeline（一） 源码解析_孙大圣666的博客-CSDN博客</a></p>
+<p>用于创建流和终止流</p>
+<p>PipelineHelper是Java 8 Stream API 中的一个工具类，用于为流操作提供一些辅助方法。它的源码解读如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java">java复制代码<span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">PipelineHelper</span>&lt;S&gt; &#123;<br><br>    <span class="hljs-keyword">public</span> StreamShape <span class="hljs-title function_">getSourceShape</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getStreamAndOpFlags</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> &lt;P_IN&gt; Node&lt;P_IN&gt; <span class="hljs-title function_">evaluate</span><span class="hljs-params">(</span><br><span class="hljs-params">            Spliterator&lt;P_IN&gt; spliterator,</span><br><span class="hljs-params">            <span class="hljs-type">boolean</span> flatten,</span><br><span class="hljs-params">            IntFunction&lt;PipelineHelper&lt;Long&gt;&gt; longToIntFunction)</span>;<br><br>    <span class="hljs-keyword">public</span> &lt;P_IN, S_OUT&gt; Node&lt;S_OUT&gt; <span class="hljs-title function_">evaluateToNode</span><span class="hljs-params">(</span><br><span class="hljs-params">            Spliterator&lt;P_IN&gt; spliterator,</span><br><span class="hljs-params">            <span class="hljs-type">boolean</span> flatten,</span><br><span class="hljs-params">            IntFunction&lt;PipelineHelper&lt;Long&gt;&gt; longToIntFunction)</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">long</span> <span class="hljs-title function_">exactOutputSizeIfKnown</span><span class="hljs-params">(Spliterator&lt;?&gt; spliterator)</span>;<br><br>    <span class="hljs-keyword">public</span> Comparator&lt;? <span class="hljs-built_in">super</span> S&gt; getComparator();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>getSourceShape()</code> 方法的作用是返回输入源的形状，例如，输入源可能是数组、集合、文件等。</li>
+<li><code>getStreamAndOpFlags()</code> 方法返回一个整数，其中包含有关当前流以及正在应用的操作的标志信息。</li>
+<li><code>evaluate()</code> 方法将指定的 Spliterator 转换为中间节点，并执行所有中间操作和终止操作以生成结果 Stream。 参数flatten表示是否需要进行扁平化以减少内部数据依赖性，参数longToIntFunction是从long值到PipelineHelper对象的函数。</li>
+<li><code>evaluateToNode()</code> 方法与evaluate()方法类似，但其不会创建完整的Stream流并返回最终结果，而是返回中间节点的有限表示，以进行下一步计算。</li>
+<li><code>exactOutputSizeIfKnown()</code> 方法估计已知Spliterator的精确输出大小。</li>
+<li><code>getComparator()</code> 方法返回一个该流所使用的比较器，如果没有定义，则返回 null。</li>
+</ul>
+<p>下面为每个方法提供一个具体的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;Integer&gt; list = Arrays.asList(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>);<br>PipelineHelper&lt;Integer&gt; pipelineHelper = ((Stream&lt;Integer&gt;)list.stream()).spliterator();<br>System.out.println(pipelineHelper.getSourceShape()); <span class="hljs-comment">// 输出：REFERENCE</span><br><br><span class="hljs-type">int</span> <span class="hljs-variable">flags</span> <span class="hljs-operator">=</span> pipelineHelper.getStreamAndOpFlags();<br><span class="hljs-type">boolean</span> <span class="hljs-variable">parallel</span> <span class="hljs-operator">=</span> StreamOpFlag.SHORT_CIRCUIT.isKnown(flags) &amp;&amp; StreamOpFlag.NOT_ORDERED.isKnown(flags);<br>System.out.println(<span class="hljs-string">&quot;Parallel: &quot;</span> + parallel); <span class="hljs-comment">// 输出：Parallel: false</span><br><br>Node&lt;Integer&gt; node = pipelineHelper.evaluate(list.spliterator(), <span class="hljs-literal">true</span>, (size) -&gt; <span class="hljs-literal">null</span>);<br>node.forEach(System.out::println); <span class="hljs-comment">// 输出：1, 2, 3, 4, 5</span><br><br>Node&lt;String&gt; node2 = pipelineHelper.evaluateToNode(list.spliterator(), <span class="hljs-literal">true</span>, (size) -&gt; <span class="hljs-literal">null</span>);<br>node2.forEach(System.out::println); <span class="hljs-comment">// 输出：IntPipeline$Head@ea26995</span><br><br><span class="hljs-type">long</span> <span class="hljs-variable">size</span> <span class="hljs-operator">=</span> pipelineHelper.exactOutputSizeIfKnown(list.spliterator());<br>System.out.println(size); <span class="hljs-comment">// 输出：5</span><br><br>Comparator&lt;Integer&gt; comparator = pipelineHelper.getComparator();<br>System.out.println(comparator); <span class="hljs-comment">// 输出：null</span><br></code></pre></td></tr></table></figure>
+
+<p>在以上代码中，我们首先创建了一个包含数值的列表 list。然后通过 stream() 方法获取一个 Stream 流，并将其转换为 PipelineHelper 对象。接着使用 getStreamAndOpFlags() 方法获取当前流的标志信息，使用 evaluate() 方法执行所有中间操作和终止操作以生成结果 Stream，使用 evaluateToNode() 方法返回中间节点的有限表示进行下一步计算，使用 exactOutputSizeIfKnown() 方法估计已知Spliterator的精确输出大小，使用 getComparator() 方法获取该流所使用的比较器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// @param &lt;P_OUT&gt; type of output elements from the pipeline</span><br><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PipelineHelper</span>&lt;P_OUT&gt; &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Gets the stream shape for the source of the pipeline segment.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> the stream shape for the source of the pipeline segment.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span> StreamShape <span class="hljs-title function_">getSourceShape</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Gets the combined stream and operation flags for the output of the described</span><br><span class="hljs-comment">     * pipeline.  This will incorporate stream flags from the stream source, all</span><br><span class="hljs-comment">     * the intermediate operations and the terminal operation.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> the combined stream and operation flags</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@see</span> StreamOpFlag</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getStreamAndOpFlags</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Returns the exact output size of the portion of the output resulting from</span><br><span class="hljs-comment">     * applying the pipeline stages described by this &#123;<span class="hljs-doctag">@code</span> PipelineHelper&#125; to</span><br><span class="hljs-comment">     * the the portion of the input described by the provided</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Spliterator&#125;, if known.  If not known or known infinite, will</span><br><span class="hljs-comment">     * return &#123;<span class="hljs-doctag">@code</span> -1&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@apiNote</span></span><br><span class="hljs-comment">     * The exact output size is known if the &#123;<span class="hljs-doctag">@code</span> Spliterator&#125; has the</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> SIZED&#125; characteristic, and the operation flags</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@link</span> StreamOpFlag#SIZED&#125; is known on the combined stream and operation</span><br><span class="hljs-comment">     * flags.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> spliterator the spliterator describing the relevant portion of the</span><br><span class="hljs-comment">     *        source data</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> the exact size if known, or -1 if infinite or unknown</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span>&lt;P_IN&gt; <span class="hljs-type">long</span> <span class="hljs-title function_">exactOutputSizeIfKnown</span><span class="hljs-params">(Spliterator&lt;P_IN&gt; spliterator)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Applies the pipeline stages described by this &#123;<span class="hljs-doctag">@code</span> PipelineHelper&#125; to</span><br><span class="hljs-comment">     * the provided &#123;<span class="hljs-doctag">@code</span> Spliterator&#125; and send the results to the provided</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Sink&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@implSpec</span></span><br><span class="hljs-comment">     * The implementation behaves as if:</span><br><span class="hljs-comment">     * &lt;pre&gt;&#123;<span class="hljs-doctag">@code</span></span><br><span class="hljs-comment">     *     intoWrapped(wrapSink(sink), spliterator);</span><br><span class="hljs-comment">     * &#125;&lt;/pre&gt;</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> sink the &#123;<span class="hljs-doctag">@code</span> Sink&#125; to receive the results</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> spliterator the spliterator describing the source input to process</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span>&lt;P_IN, S <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sink</span>&lt;P_OUT&gt;&gt; S <span class="hljs-title function_">wrapAndCopyInto</span><span class="hljs-params">(S sink, Spliterator&lt;P_IN&gt; spliterator)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Pushes elements obtained from the &#123;<span class="hljs-doctag">@code</span> Spliterator&#125; into the provided</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Sink&#125;.  If the stream pipeline is known to have short-circuiting</span><br><span class="hljs-comment">     * stages in it (see &#123;<span class="hljs-doctag">@link</span> StreamOpFlag#SHORT_CIRCUIT&#125;), the</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@link</span> Sink#cancellationRequested()&#125; is checked after each</span><br><span class="hljs-comment">     * element, stopping if cancellation is requested.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@implSpec</span></span><br><span class="hljs-comment">     * This method conforms to the &#123;<span class="hljs-doctag">@code</span> Sink&#125; protocol of calling</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Sink.begin&#125; before pushing elements, via &#123;<span class="hljs-doctag">@code</span> Sink.accept&#125;, and</span><br><span class="hljs-comment">     * calling &#123;<span class="hljs-doctag">@code</span> Sink.end&#125; after all elements have been pushed.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> wrappedSink the destination &#123;<span class="hljs-doctag">@code</span> Sink&#125;</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> spliterator the source &#123;<span class="hljs-doctag">@code</span> Spliterator&#125;</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span>&lt;P_IN&gt; <span class="hljs-keyword">void</span> <span class="hljs-title function_">copyInto</span><span class="hljs-params">(Sink&lt;P_IN&gt; wrappedSink, Spliterator&lt;P_IN&gt; spliterator)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Pushes elements obtained from the &#123;<span class="hljs-doctag">@code</span> Spliterator&#125; into the provided</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Sink&#125;, checking &#123;<span class="hljs-doctag">@link</span> Sink#cancellationRequested()&#125; after each</span><br><span class="hljs-comment">     * element, and stopping if cancellation is requested.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@implSpec</span></span><br><span class="hljs-comment">     * This method conforms to the &#123;<span class="hljs-doctag">@code</span> Sink&#125; protocol of calling</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> Sink.begin&#125; before pushing elements, via &#123;<span class="hljs-doctag">@code</span> Sink.accept&#125;, and</span><br><span class="hljs-comment">     * calling &#123;<span class="hljs-doctag">@code</span> Sink.end&#125; after all elements have been pushed or if</span><br><span class="hljs-comment">     * cancellation is requested.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> wrappedSink the destination &#123;<span class="hljs-doctag">@code</span> Sink&#125;</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> spliterator the source &#123;<span class="hljs-doctag">@code</span> Spliterator&#125;</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span> &lt;P_IN&gt; <span class="hljs-keyword">void</span> <span class="hljs-title function_">copyIntoWithCancel</span><span class="hljs-params">(Sink&lt;P_IN&gt; wrappedSink, Spliterator&lt;P_IN&gt; spliterator)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Takes a &#123;<span class="hljs-doctag">@code</span> Sink&#125; that accepts elements of the output type of the</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@code</span> PipelineHelper&#125;, and wrap it with a &#123;<span class="hljs-doctag">@code</span> Sink&#125; that accepts</span><br><span class="hljs-comment">     * elements of the input type and implements all the intermediate operations</span><br><span class="hljs-comment">     * described by this &#123;<span class="hljs-doctag">@code</span> PipelineHelper&#125;, delivering the result into the</span><br><span class="hljs-comment">     * provided &#123;<span class="hljs-doctag">@code</span> Sink&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> sink the &#123;<span class="hljs-doctag">@code</span> Sink&#125; to receive the results</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> a &#123;<span class="hljs-doctag">@code</span> Sink&#125; that implements the pipeline stages and sends</span><br><span class="hljs-comment">     *         results to the provided &#123;<span class="hljs-doctag">@code</span> Sink&#125;</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span>&lt;P_IN&gt; Sink&lt;P_IN&gt; <span class="hljs-title function_">wrapSink</span><span class="hljs-params">(Sink&lt;P_OUT&gt; sink)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> spliterator</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> &lt;P_IN&gt;</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span>&lt;P_IN&gt; Spliterator&lt;P_OUT&gt; <span class="hljs-title function_">wrapSpliterator</span><span class="hljs-params">(Spliterator&lt;P_IN&gt; spliterator)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Constructs a @&#123;link Node.Builder&#125; compatible with the output shape of</span><br><span class="hljs-comment">     * this &#123;<span class="hljs-doctag">@code</span> PipelineHelper&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> exactSizeIfKnown if &gt;=0 then a builder will be created that has a</span><br><span class="hljs-comment">     *        fixed capacity of exactly sizeIfKnown elements; if &lt; 0 then the</span><br><span class="hljs-comment">     *        builder has variable capacity.  A fixed capacity builder will fail</span><br><span class="hljs-comment">     *        if an element is added after the builder has reached capacity.</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> generator a factory function for array instances</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> a &#123;<span class="hljs-doctag">@code</span> Node.Builder&#125; compatible with the output shape of this</span><br><span class="hljs-comment">     *         &#123;<span class="hljs-doctag">@code</span> PipelineHelper&#125;</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span> Node.Builder&lt;P_OUT&gt; <span class="hljs-title function_">makeNodeBuilder</span><span class="hljs-params">(<span class="hljs-type">long</span> exactSizeIfKnown,</span><br><span class="hljs-params">                                                 IntFunction&lt;P_OUT[]&gt; generator)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Collects all output elements resulting from applying the pipeline stages</span><br><span class="hljs-comment">     * to the source &#123;<span class="hljs-doctag">@code</span> Spliterator&#125; into a &#123;<span class="hljs-doctag">@code</span> Node&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@implNote</span></span><br><span class="hljs-comment">     * If the pipeline has no intermediate operations and the source is backed</span><br><span class="hljs-comment">     * by a &#123;<span class="hljs-doctag">@code</span> Node&#125; then that &#123;<span class="hljs-doctag">@code</span> Node&#125; will be returned (or flattened</span><br><span class="hljs-comment">     * and then returned). This reduces copying for a pipeline consisting of a</span><br><span class="hljs-comment">     * stateful operation followed by a terminal operation that returns an</span><br><span class="hljs-comment">     * array, such as:</span><br><span class="hljs-comment">     * &lt;pre&gt;&#123;<span class="hljs-doctag">@code</span></span><br><span class="hljs-comment">     *     stream.sorted().toArray();</span><br><span class="hljs-comment">     * &#125;&lt;/pre&gt;</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> spliterator the source &#123;<span class="hljs-doctag">@code</span> Spliterator&#125;</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> flatten if true and the pipeline is a parallel pipeline then the</span><br><span class="hljs-comment">     *        &#123;<span class="hljs-doctag">@code</span> Node&#125; returned will contain no children, otherwise the</span><br><span class="hljs-comment">     *        &#123;<span class="hljs-doctag">@code</span> Node&#125; may represent the root in a tree that reflects the</span><br><span class="hljs-comment">     *        shape of the computation tree.</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> generator a factory function for array instances</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> the &#123;<span class="hljs-doctag">@code</span> Node&#125; containing all output elements</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">abstract</span>&lt;P_IN&gt; Node&lt;P_OUT&gt; <span class="hljs-title function_">evaluate</span><span class="hljs-params">(Spliterator&lt;P_IN&gt; spliterator,</span><br><span class="hljs-params">                                        <span class="hljs-type">boolean</span> flatten,</span><br><span class="hljs-params">                                        IntFunction&lt;P_OUT[]&gt; generator)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="StreamShape"><a href="#StreamShape" class="headerlink" title="StreamShape"></a>StreamShape</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">enum</span> <span class="hljs-title class_">StreamShape</span> &#123;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * The shape specialization corresponding to &#123;<span class="hljs-doctag">@code</span> Stream&#125; and elements</span><br><span class="hljs-comment">     * that are object references.</span><br><span class="hljs-comment">     */</span><br>    REFERENCE,<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * The shape specialization corresponding to &#123;<span class="hljs-doctag">@code</span> IntStream&#125; and elements</span><br><span class="hljs-comment">     * that are &#123;<span class="hljs-doctag">@code</span> int&#125; values.</span><br><span class="hljs-comment">     */</span><br>    INT_VALUE,<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * The shape specialization corresponding to &#123;<span class="hljs-doctag">@code</span> LongStream&#125; and elements</span><br><span class="hljs-comment">     * that are &#123;<span class="hljs-doctag">@code</span> long&#125; values.</span><br><span class="hljs-comment">     */</span><br>    LONG_VALUE,<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * The shape specialization corresponding to &#123;<span class="hljs-doctag">@code</span> DoubleStream&#125; and</span><br><span class="hljs-comment">     * elements that are &#123;<span class="hljs-doctag">@code</span> double&#125; values.</span><br><span class="hljs-comment">     */</span><br>    DOUBLE_VALUE<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Sink"><a href="#Sink" class="headerlink" title="Sink"></a>Sink</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425153432179.png" srcset="/img/loading.gif" lazyload alt="image-20230425153432179"></p>
+<h3 id="AbstractPipeline"><a href="#AbstractPipeline" class="headerlink" title="AbstractPipeline"></a>AbstractPipeline</h3><p>接口的具体实现，所有的Strea最终都由 Int，Long，Double的管道实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/* @param &lt;E_IN&gt;  type of input elements</span><br><span class="hljs-comment"> * @param &lt;E_OUT&gt; type of output elements</span><br><span class="hljs-comment"> * @param &lt;S&gt; type of the subclass implementing &#123;@code BaseStream&#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractPipeline</span>&lt;E_IN, E_OUT, S <span class="hljs-keyword">extends</span> <span class="hljs-title class_">BaseStream</span>&lt;E_OUT, S&gt;&gt;<br>        <span class="hljs-keyword">extends</span> <span class="hljs-title class_">PipelineHelper</span>&lt;E_OUT&gt; <span class="hljs-keyword">implements</span> <span class="hljs-title class_">BaseStream</span>&lt;E_OUT, S&gt; &#123;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 初始的包含待处理元素的流</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@SuppressWarnings(&quot;rawtypes&quot;)</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> AbstractPipeline sourceStage;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 上一个流处理动作，如果当前实例是第一个流处理动作，则该属性为null</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@SuppressWarnings(&quot;rawtypes&quot;)</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> AbstractPipeline previousStage;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 当前流处理动作的操作标识</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> sourceOrOpFlags;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 当前流处理动作的下一个流处理动作</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@SuppressWarnings(&quot;rawtypes&quot;)</span><br>    <span class="hljs-keyword">private</span> AbstractPipeline nextStage;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 非终止类型的流处理动作的个数</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> depth;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 在此之前的流处理动作包括当前流处理的所有操作标识</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> combinedFlags;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 当前流处理对应的Spliterator</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> Spliterator&lt;?&gt; sourceSpliterator;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * The source supplier. Only valid for the head pipeline. Before the</span><br><span class="hljs-comment">     * pipeline is consumed if non-null then &#123;<span class="hljs-doctag">@code</span> sourceSpliterator&#125; must be</span><br><span class="hljs-comment">     * null. After the pipeline is consumed if non-null then is set to null.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> Supplier&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Spliterator</span>&lt;?&gt;&gt; sourceSupplier;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 表示流处理是否已经开始</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> linkedOrConsumed;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * True if there are any stateful ops in the pipeline; only valid for the</span><br><span class="hljs-comment">     * source stage.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> sourceAnyStateful;<br><br>    <span class="hljs-keyword">private</span> Runnable sourceCloseAction;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 是否并行流处理</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> parallel;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425090631846.png" srcset="/img/loading.gif" lazyload alt="image-20230425090631846"></p>
+<h4 id="DoublePipeline"><a href="#DoublePipeline" class="headerlink" title="DoublePipeline"></a>DoublePipeline</h4><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425090529658.png" srcset="/img/loading.gif" lazyload alt="image-20230425090529658"></p>
+<h4 id="RefrencePipeline"><a href="#RefrencePipeline" class="headerlink" title="RefrencePipeline"></a>RefrencePipeline</h4><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230406155732251.png" srcset="/img/loading.gif" lazyload alt="image-20230406155732251"></p>
+<h5 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h5><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230425153408914.png" srcset="/img/loading.gif" lazyload alt="image-20230425153408914"></p>
+<h3 id="StreamOpFlag"><a href="#StreamOpFlag" class="headerlink" title="StreamOpFlag"></a>StreamOpFlag</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 与流和操作的特征相对应的标志。流框架利用标志来控制、专门化或优化计算。</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">StreamOpFlag</span> &#123;<br><br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">     * Each characteristic takes up 2 bits in a bit set to accommodate</span><br><span class="hljs-comment">     * preserving, clearing and setting/injecting information.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * This applies to stream flags, intermediate/terminal operation flags, and</span><br><span class="hljs-comment">     * combined stream and operation flags. Even though the former only requires</span><br><span class="hljs-comment">     * 1 bit of information per characteristic, is it more efficient when</span><br><span class="hljs-comment">     * combining flags to align set and inject bits.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * Characteristics belong to certain types, see the Type enum. Bit masks for</span><br><span class="hljs-comment">     * the types are constructed as per the following table:</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     *                        DISTINCT  SORTED  ORDERED  SIZED  SHORT_CIRCUIT</span><br><span class="hljs-comment">     *          SPLITERATOR      01       01       01      01        00</span><br><span class="hljs-comment">     *               STREAM      01       01       01      01        00</span><br><span class="hljs-comment">     *                   OP      11       11       11      10        01</span><br><span class="hljs-comment">     *          TERMINAL_OP      00       00       10      00        01</span><br><span class="hljs-comment">     * UPSTREAM_TERMINAL_OP      00       00       10      00        00</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * 01 = set/inject</span><br><span class="hljs-comment">     * 10 = clear</span><br><span class="hljs-comment">     * 11 = preserve</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * Construction of the columns is performed using a simple builder for</span><br><span class="hljs-comment">     * non-zero values.</span><br><span class="hljs-comment">     */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="IntStream"><a href="#IntStream" class="headerlink" title="IntStream"></a>IntStream</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31865983/article/details/106443244">(11条消息) Java8 Stream API 之 IntStream 用法全解_孙大圣666的博客-CSDN博客</a></p>
+<h1 id="Reflect-反射-java-lang"><a href="#Reflect-反射-java-lang" class="headerlink" title="Reflect - 反射 - java.lang"></a>Reflect - 反射 - java.lang</h1><h3 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h3><p>获取一个类的Class对象的三种方法，对应的通过Class对象创建类实例也有三种方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 1</span><br>Class&lt;TestClass&gt; class = Class.forName(<span class="hljs-string">&quot;com.zkw.TestClass&quot;</span>);<br><span class="hljs-comment">// 2</span><br>Clas&lt;TestClass&gt; class = TestClass.class;<br><span class="hljs-comment">// 3</span><br><span class="hljs-type">TestClass</span> <span class="hljs-variable">tc</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TestClass</span>();<br>Class&lt;TestClass&gt; class = tc.getClass();<br> <br><span class="hljs-comment">// 通过Class对象创建类实例</span><br><span class="hljs-type">TestClass</span> <span class="hljs-variable">testClass</span> <span class="hljs-operator">=</span> class.newInstance();<br></code></pre></td></tr></table></figure>
+
+<p><strong>Class##ReflectionData</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ReflectionData</span>&lt;T&gt; &#123;<br><span class="hljs-keyword">volatile</span> Field[] declaredFields;<br><span class="hljs-keyword">volatile</span> Field[] publicFields;<br><span class="hljs-keyword">volatile</span> Method[] declaredMethods;<br><span class="hljs-keyword">volatile</span> Method[] publicMethods;<br><span class="hljs-keyword">volatile</span> Constructor&lt;T&gt;[] declaredConstructors;<br><span class="hljs-keyword">volatile</span> Constructor&lt;T&gt;[] publicConstructors;<br><span class="hljs-comment">// Intermediate results for getFields and getMethods</span><br><span class="hljs-keyword">volatile</span> Field[] declaredPublicFields;<br><span class="hljs-keyword">volatile</span> Method[] declaredPublicMethods;<br><span class="hljs-keyword">volatile</span> Class&lt;?&gt;[] interfaces;<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="Construct"><a href="#Construct" class="headerlink" title="Construct"></a><strong>Construct</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">ConstructorAccessor#newInstance()<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230402092343076.png" srcset="/img/loading.gif" lazyload alt="image-20230402092343076"></p>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">Class内部类 MethodArray <br>	 <span class="hljs-keyword">private</span> Method[] methods;<br>MethodAccessor#invoke() <br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230402092507991.png" srcset="/img/loading.gif" lazyload alt="image-20230402092507991"></p>
+<h4 id="Field"><a href="#Field" class="headerlink" title="Field"></a>Field</h4><h4 id="Annotation"><a href="#Annotation" class="headerlink" title="Annotation"></a>Annotation</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">Class内部类：AnnotationData<br>AnnotationType<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Class</span>.</span></span><span class="hljs-keyword">for</span><span class="hljs-constructor">Name(<span class="hljs-params">className</span>)</span>方法，内部实际调用的方法是  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Class</span>.</span></span><span class="hljs-keyword">for</span><span class="hljs-constructor">Name(<span class="hljs-params">className</span>,<span class="hljs-params">true</span>,<span class="hljs-params">classloader</span>)</span>;<br><br>第<span class="hljs-number">2</span>个boolean参数表示类是否需要初始化，  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Class</span>.</span></span><span class="hljs-keyword">for</span><span class="hljs-constructor">Name(<span class="hljs-params">className</span>)</span>默认是需要初始化。一旦初始化，就会触发目标对象的 static块代码执行，static参数也也会被再次初始化。<br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ClassLoader</span>.</span></span>load<span class="hljs-constructor">Class(<span class="hljs-params">className</span>)</span>方法，内部实际调用的方法是  <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">ClassLoader</span>.</span></span>load<span class="hljs-constructor">Class(<span class="hljs-params">className</span>,<span class="hljs-params">false</span>)</span>;<br>第<span class="hljs-number">2</span>个 boolean参数，表示目标对象是否进行链接，<span class="hljs-literal">false</span>表示不进行链接，由上面介绍可以，不进行链接意味着不进行包括初始化等一些列步骤，那么静态块和静态对象就不会得到执行<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="类加载器-java-lang"><a href="#类加载器-java-lang" class="headerlink" title="类加载器 - java.lang"></a>类加载器 - java.lang</h1><p>很深：</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7011400048785227806">深入理解JVM（十八）一一 再谈类的加载器 - 掘金 (juejin.cn)</a></p>
+<h3 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h3><ul>
+<li>SecureClassLoader：扩展了ClassLoader，并为定义具有相关代码源和权限的类提供了额外支持，这些代码源和权限默认情况下由系统策略检索。</li>
+<li>URLClassLoader：继承自SecureClassLoader，支持从jar文件和文件夹中获取class，继承于classload，加载时首先去classload里判断是否由启动类加载器加载过。</li>
+</ul>
+<p>Class.forName()与ClassLoader.loadClass()</p>
+<ul>
+<li>Class.forName():是一个<em>静态方法</em>,最常用的是Class.forName(String className);根据传入的类的全限定名返回一个Class 对象。该方法在将Class文件加载到内存的同时,*会执行类的初始化<clinit>*。如:Class.forName(“com.atguigu.java.Helloworld”);</li>
+<li>ClassLoader.loadClass():这是一个<em>实例方法</em>,需要一个ClassLoader对象来调用该方法。该方法将Class文件加载到内存时,<em>并不会执行类的初始化</em>,直到这个类第一次使用时才进行初始化。该方法因为需要得到一个ClassLoader对象,所以可以根据需要指定使用哪个类加载器.如:ClassLoader cl&#x3D;XX;cl.loadClass(“com.ljw.ava.Helloworld” );</li>
+</ul>
+<h2 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h2><h3 id="ClassLoader的主要方法"><a href="#ClassLoader的主要方法" class="headerlink" title="ClassLoader的主要方法"></a>ClassLoader的主要方法</h3><ul>
+<li>抽象类classLoader的主要方法:(内部没有抽象方法)<ul>
+<li>public final classLoader getParent():返回该类加载器的超类加载器</li>
+</ul>
+</li>
+<li>public class&lt;?&gt; loadClass(string name) throws ClassNotFoundException<ul>
+<li>加载名称为name的类，返回结果为java.lang .Class类的实例。如果找不到类，则返回ClassNotFoundException异常。<em>该方法中的逻辑就是双亲委派模式的实现</em>。</li>
+</ul>
+</li>
+<li>protected class&lt;?&gt; findclass(String name) throws ClassNotFoundException<ul>
+<li>查找二进制名称为name的类，返回结果为java.lang.Class类的实例。这是一个受保护的方法，JVM鼓励我们重写此方法，需要自定义加载器遵循双亲委托机制，该方法会在检查完父类加载器之后被loadclass()方法调用。</li>
+<li>在DK1.2之前，在自定义类加载时，总会去继承ClassLoader类并重写loadClass方法，从而实现自定义的类加载类。但是在JDK1.2之后已不再建议用户去覆盖loadClass()方法，而是建议把自定义的类加载逻辑写在findClass()方法中，从前面的分析可知，findClass()方法是在loadClass()方法中被调用的，当loadClass()方法中父加载器加载失败后，则会调用自己的findClass()方法来完成类加载，这样就可以保证自定义的类加载器也符合双亲委托模式。</li>
+<li>需要注意的是ClassLoader类中并没有实现findClass()方法的具体代码逻辑，取而代之的是抛出ClassNotFoundException异常，同时应该知道的是findClass方法通常是和defineClass方法一起使用的。一般情况下，在自定义类加载器时，会直接覆盖ClassLoader的findClass()方法并编写加载规则，取得要加载类的字节码后转换成流，然后调用defineClass()方法生成类的Class对象。</li>
+</ul>
+</li>
+<li>protected final Class&lt;?&gt;defineClass(String name，byte[] b, int off, int len)根据给定的字节数组b转换为Class的实例，off和1en参数表示实际Class信息在byte数组中的位置和长度，其中byte数组b是ClassLoader从外部获取的。这是受保护的方法，只有在自定义ClassLoader子类中可以使用。<ul>
+<li>defineClass()方法是用来将byte字节流解析成JVM能够识别的Class对象(ClassLoader中己实现该方法逻辑)，通过这个方法不仅能够通过class文件实例化class对象，也可以通过其他方式实例化class对象，如通过网络接收一个类的字节码,然后转换为byte字节流创建对应的Class对象。</li>
+<li>defineClass()方法通常与findClass()方法一起使用，一般情况下，在自定义类加载器时，会直接覆盖ClassLoader的FindClass()方法并编写加载规则，取得要加载类的字节码后转换成流，然后调用defineClass()方法生成类的Class对象</li>
+</ul>
+</li>
+<li>protected final void resolveclass(class&lt;?&gt; c)<ul>
+<li>链接指定的一个Java类。使用该方法可以使用类的Class对象创建完成的同时也被解析。前面我们说链接阶段主要是对字节码进行验证，为类变量分配内存并设置初始值同时将字节码文件中的符号引用转换为直接引用。</li>
+</ul>
+</li>
+<li>protected final class&lt;?&gt; findLoadedclass(string name)<ul>
+<li>查找名称为name的已经被加载过的类，返回结果为java.lang.Class类的实例。这个方法是final方法，无法被修改。</li>
+</ul>
+</li>
+<li>private final ClassLoader parent;<ul>
+<li>它也是一个ClassLoader的实例，这个字段所表示的ClassLoader也称为这个ClassLoader的双亲。在类加载的过程中,classLoader可能会将某些请求交予自己的双亲处理。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ClassLoader</span> &#123;<br>    <span class="hljs-comment">// 执行一次</span><br>    <span class="hljs-keyword">static</span> &#123;<br>        registerNatives();<br>    &#125;<br>    <span class="hljs-comment">// 注册本地方法</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">registerNatives</span><span class="hljs-params">()</span>;<br><br><br>    <span class="hljs-comment">// The parent class loader for delegation</span><br>    <span class="hljs-comment">// Note: VM hardcoded the offset of this field, thus all new fields</span><br>    <span class="hljs-comment">// must be added *after* it.</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ClassLoader parent;<br>    <span class="hljs-comment">// 用于类加载 ---双亲委派机制，不建议重写</span><br>     <span class="hljs-keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="hljs-keyword">throws</span> ClassNotFoundException &#123;<br>        <span class="hljs-keyword">return</span> loadClass(name, <span class="hljs-literal">false</span>);<br>    &#125;<br>    <br>    <span class="hljs-keyword">protected</span> Class&lt;?&gt; loadClass(String name, <span class="hljs-type">boolean</span> resolve)<br>        <span class="hljs-keyword">throws</span> ClassNotFoundException<br>    &#123;<br>        <span class="hljs-keyword">synchronized</span> (getClassLoadingLock(name)) &#123;<br>            <span class="hljs-comment">// First, check if the class has already been loaded</span><br>            Class&lt;?&gt; c = findLoadedClass(name);<br>            <span class="hljs-keyword">if</span> (c == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-type">long</span> <span class="hljs-variable">t0</span> <span class="hljs-operator">=</span> System.nanoTime();<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-keyword">if</span> (parent != <span class="hljs-literal">null</span>) &#123;<br>                        <span class="hljs-comment">// 委派父加载器 parent加载</span><br>                        c = parent.loadClass(name, <span class="hljs-literal">false</span>);<br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        c = findBootstrapClassOrNull(name);<br>                    &#125;<br>                &#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>                    <span class="hljs-comment">// ClassNotFoundException thrown if class not found</span><br>                    <span class="hljs-comment">// from the non-null parent class loader</span><br>                &#125;<br>				<span class="hljs-comment">// 如果 父加载器不能加载，则交给当前加载器加载（用于重写加载器）</span><br>                <span class="hljs-keyword">if</span> (c == <span class="hljs-literal">null</span>) &#123;<br>                    <span class="hljs-comment">// If still not found, then invoke findClass in order</span><br>                    <span class="hljs-comment">// to find the class.</span><br>                    <span class="hljs-type">long</span> <span class="hljs-variable">t1</span> <span class="hljs-operator">=</span> System.nanoTime();<br>                    <br>                    <span class="hljs-comment">// 调用子类的自定义的类加载器方法</span><br>                    c = findClass(name);<br><br>                    <span class="hljs-comment">// this is the defining class loader; record the stats</span><br>                    sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);<br>                    sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);<br>                    sun.misc.PerfCounter.getFindClasses().increment();<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (resolve) &#123;<br>                resolveClass(c);<br>            &#125;<br>            <span class="hljs-keyword">return</span> c;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 建议子类重写 实现自定义类加载器机制</span><br>    <span class="hljs-keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="hljs-keyword">throws</span> ClassNotFoundException &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassNotFoundException</span>(name);<br>    &#125;<br>    <br>    <span class="hljs-comment">// 被ExtClassLoader 的static方法调用</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">registerAsParallelCapable</span><span class="hljs-params">()</span> &#123;<br>        Class&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ClassLoader</span>&gt; callerClass =<br>            Reflection.getCallerClass().asSubclass(ClassLoader.class);<br>        <span class="hljs-keyword">return</span> ParallelLoaders.register(callerClass);<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="ParallelLoaders"><a href="#ParallelLoaders" class="headerlink" title="ParallelLoaders"></a>ParallelLoaders</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ParallelLoaders</span> &#123;<br>        <span class="hljs-keyword">private</span> <span class="hljs-title function_">ParallelLoaders</span><span class="hljs-params">()</span> &#123;&#125;<br><br>        <span class="hljs-comment">// the set of parallel capable loader types</span><br>        <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Set&lt;Class&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ClassLoader</span>&gt;&gt; loaderTypes =<br>            Collections.newSetFromMap(<br>                <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakHashMap</span>&lt;Class&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ClassLoader</span>&gt;, Boolean&gt;());<br>        <span class="hljs-keyword">static</span> &#123;<br>            <span class="hljs-comment">// 静态代码块，用于添加类加载器类型</span><br>            <span class="hljs-keyword">synchronized</span> (loaderTypes) &#123; loaderTypes.add(ClassLoader.class); &#125;<br>        &#125;<br><br>        <span class="hljs-comment">/**</span><br><span class="hljs-comment">         * Registers the given class loader type as parallel capabale.</span><br><span class="hljs-comment">         将给定的 类加载器（AppClassLoader，ExtClassLoader） 注册为可并行</span><br><span class="hljs-comment">         * Returns &#123;<span class="hljs-doctag">@code</span> true&#125; is successfully registered; </span><br><span class="hljs-comment">         	如果父类加载器为注册，返回false</span><br><span class="hljs-comment">         	&#123;<span class="hljs-doctag">@code</span> false&#125; if loader&#x27;s super class is not registered.</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">register</span><span class="hljs-params">(Class&lt;? extends ClassLoader&gt; c)</span> &#123;<br>            <span class="hljs-keyword">synchronized</span> (loaderTypes) &#123;<br>                <span class="hljs-keyword">if</span> (loaderTypes.contains(c.getSuperclass())) &#123;<br>                    <span class="hljs-comment">// register the class loader as parallel capable</span><br>                    <span class="hljs-comment">// if and only if all of its super classes are.</span><br>                    <span class="hljs-comment">// Note: given current classloading sequence, if</span><br>                    <span class="hljs-comment">// the immediate super class is parallel capable,</span><br>                    <span class="hljs-comment">// all the super classes higher up must be too.</span><br>                    loaderTypes.add(c);<br>                    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>                &#125;<br>            &#125;<br>        &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h3><p>双亲委派机制的作用：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">避免同一类被多次加载：双亲委派机制的作用在于这样可以避免类的冲突和数据不一致问题。例如，在一个<span class="hljs-keyword">Java应用程序中，如果同一个类被不同的类加载器加载，可能会导致不同的版本存在，从而导致运行时错误。通过双亲委派机制，Java虚拟机会保证同一个类只会被加载一次，这样可以避免这种错误的发生。</span><br><span class="hljs-keyword"></span><br>提高类加载的效率：因为在加载一个类时，<span class="hljs-keyword">Java虚拟机会优先查找父类加载器中是否已经加载了该类，如果已经加载，则直接返回已经加载的类对象。这样可以减少重复加载的开销，提高类加载的效率</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/9jGkYWndSvUAPs6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="SecureClassLoader"><a href="#SecureClassLoader" class="headerlink" title="SecureClassLoader"></a>SecureClassLoader</h2><p>SecureClassLoader与沙箱安全机制</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">SecurityClassLoader是<span class="hljs-keyword">Java中的一个类加载器，它主要用于实现Java安全管理。在Java沙箱机制中，每个应用程序都有自己的安全上下文，在这个上下文中定义了该应用程序所能够执行的操作和访问的资源。SecurityClassLoader可以为每个应用程序提供一个独立的类加载器，确保应用程序只能够访问到其安全上下文中被授权的类和资源。</span><br><span class="hljs-keyword"></span><br>具体来说，当一个应用程序需要加载一些类时，SecurityClassLoader会首先检查该类是否在应用程序的安全上下文中被授权。如果是，就使用SecurityClassLoader自身的加载机制进行加载，否则抛出SecurityException异常。<br><br>总的来说，SecurityClassLoader与<span class="hljs-keyword">Java沙箱机制密切相关，它通过提供独立的类加载器来保证应用程序的安全性，防止应用程序越权访问系统资源。</span><br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2009649">JVM系列（四）：沙箱安全机制笔记 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/*这个类扩展了ClassLoader，为定义具有关联代码源和默认情况下由系统策略检索的权限的类提供了额外的支持。*/</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SecureClassLoader</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ClassLoader</span> &#123;<br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">     * If initialization succeed this is set to true and security checks will</span><br><span class="hljs-comment">     * succeed. Otherwise the object is not initialized and the object is</span><br><span class="hljs-comment">     * useless.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">boolean</span> initialized;<br><br>    <span class="hljs-comment">// HashMap that maps CodeSource to ProtectionDomain</span><br>    <span class="hljs-comment">// @GuardedBy(&quot;pdcache&quot;)</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> HashMap&lt;CodeSource, ProtectionDomain&gt; pdcache =<br>                        <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;(<span class="hljs-number">11</span>);<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Debug</span> <span class="hljs-variable">debug</span> <span class="hljs-operator">=</span> Debug.getInstance(<span class="hljs-string">&quot;scl&quot;</span>);<br><br>    <span class="hljs-keyword">static</span> &#123;<br>        ClassLoader.registerAsParallelCapable();<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-4392601/138fc517709511231762df57d4a2e428.png?imageView2/2/w/2560/h/7000" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="URLClassLoader"><a href="#URLClassLoader" class="headerlink" title="URLClassLoader"></a>URLClassLoader</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1674553">类加载器之URLClassLoader - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">URLClassLoader</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">SecureClassLoader</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Closeable</span> &#123;<br>    <span class="hljs-comment">/* The search path for classes and resources  -- 类和资源 搜索路径*/</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> URLClassPath ucp;<br>    <span class="hljs-comment">/* The context to be used when loading classes and resources </span><br><span class="hljs-comment">    	加载类和资源时使用的上下文</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> AccessControlContext acc;<br> 	<span class="hljs-keyword">static</span> &#123;<br>        sun.misc.SharedSecrets.setJavaNetAccess (<br>            <span class="hljs-keyword">new</span> <span class="hljs-title class_">sun</span>.misc.JavaNetAccess() &#123;<br>                <span class="hljs-keyword">public</span> URLClassPath <span class="hljs-title function_">getURLClassPath</span> <span class="hljs-params">(URLClassLoader u)</span> &#123;<br>                    <span class="hljs-keyword">return</span> u.ucp;<br>                &#125;<br><br>                <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getOriginalHostName</span><span class="hljs-params">(InetAddress ia)</span> &#123;<br>                    <span class="hljs-keyword">return</span> ia.holder.getOriginalHostName();<br>                &#125;<br>            &#125;<br>        );<br>        <span class="hljs-comment">// 注册为并行类加载器</span><br>        ClassLoader.registerAsParallelCapable();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421110253881.png" srcset="/img/loading.gif" lazyload alt="image-20230421110253881"></p>
+<h2 id="Launcher"><a href="#Launcher" class="headerlink" title="Launcher"></a>Launcher</h2><p>ExtClassLoader，AppClassLoader  - &gt;URLClassLoader</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Launcher</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">URLStreamHandlerFactory</span> <span class="hljs-variable">factory</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Launcher</span>.Factory();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">Launcher</span> <span class="hljs-variable">launcher</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Launcher</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-variable">bootClassPath</span> <span class="hljs-operator">=</span> System.getProperty(<span class="hljs-string">&quot;sun.boot.class.path&quot;</span>);<br>    <span class="hljs-keyword">private</span> ClassLoader loader;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> URLStreamHandler fileHandler;<br>    <br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppClassLoader</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">URLClassLoader</span> &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">URLClassPath</span> <span class="hljs-variable">ucp</span> <span class="hljs-operator">=</span> SharedSecrets.getJavaNetAccess().getURLClassPath(<span class="hljs-built_in">this</span>);<br>        <span class="hljs-keyword">static</span> &#123;<br>            ClassLoader.registerAsParallelCapable();<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ExtClassLoader</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">URLClassLoader</span> &#123;<br>        <span class="hljs-keyword">static</span> &#123;<br>            ClassLoader.registerAsParallelCapable();<br>        &#125;<br><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Launcher.ExtClassLoader <span class="hljs-title function_">getExtClassLoader</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>            <span class="hljs-comment">/// 获取路径，用于加载jdk文件夹的扩展文件 jar</span><br>            <span class="hljs-keyword">final</span> File[] var0 = getExtDirs();<br>            <span class="hljs-comment">/// xxxxx</span><br>        &#125;<br>        <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> File[] getExtDirs() &#123;<br>            <span class="hljs-type">String</span> <span class="hljs-variable">var0</span> <span class="hljs-operator">=</span> System.getProperty(<span class="hljs-string">&quot;java.ext.dirs&quot;</span>);<br>            File[] var1;<br>            <span class="hljs-keyword">if</span> (var0 != <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-type">StringTokenizer</span> <span class="hljs-variable">var2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringTokenizer</span>(var0, File.pathSeparator);<br>                <span class="hljs-type">int</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> var2.countTokens();<br>                var1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>[var3];<br><br>                <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">var4</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; var4 &lt; var3; ++var4) &#123;<br>                    var1[var4] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(var2.nextToken());<br>                &#125;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                var1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>[<span class="hljs-number">0</span>];<br>            &#125;<br><br>            <span class="hljs-keyword">return</span> var1;<br>        &#125;<br>    &#125;<br>    <br>     <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BootClassPathHolder</span> &#123;<br>        <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> URLClassPath bcp;<br><br>        <span class="hljs-keyword">private</span> <span class="hljs-title function_">BootClassPathHolder</span><span class="hljs-params">()</span> &#123;<br>        &#125;<br><br>        <span class="hljs-keyword">static</span> &#123;<br>            URL[] var0;<br>            <span class="hljs-keyword">if</span> (Launcher.bootClassPath != <span class="hljs-literal">null</span>) &#123;<br>                var0 = (URL[])AccessController.doPrivileged(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PrivilegedAction</span>&lt;URL[]&gt;() &#123;<br>                    <span class="hljs-keyword">public</span> URL[] run() &#123;<br>                        File[] var1 = Launcher.getClassPath(Launcher.bootClassPath);<br>                        <span class="hljs-type">int</span> <span class="hljs-variable">var2</span> <span class="hljs-operator">=</span> var1.length;<br>                        <span class="hljs-type">HashSet</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashSet</span>();<br><br>                        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">var4</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; var4 &lt; var2; ++var4) &#123;<br>                            <span class="hljs-type">File</span> <span class="hljs-variable">var5</span> <span class="hljs-operator">=</span> var1[var4];<br>                            <span class="hljs-keyword">if</span> (!var5.isDirectory()) &#123;<br>                                var5 = var5.getParentFile();<br>                            &#125;<br><br>                            <span class="hljs-keyword">if</span> (var5 != <span class="hljs-literal">null</span> &amp;&amp; var3.add(var5)) &#123;<br>                                MetaIndex.registerDirectory(var5);<br>                            &#125;<br>                        &#125;<br><br>                        <span class="hljs-keyword">return</span> Launcher.pathToURLs(var1);<br>                    &#125;<br>                &#125;);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                var0 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>[<span class="hljs-number">0</span>];<br>            &#125;<br><br>            bcp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLClassPath</span>(var0, Launcher.factory, (AccessControlContext)<span class="hljs-literal">null</span>);<br>            bcp.initLookupCache((ClassLoader)<span class="hljs-literal">null</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230421111446826.png" srcset="/img/loading.gif" lazyload alt="image-20230421111446826"></p>
+<p>​	</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/7000.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="Tomcat自定类加载器"><a href="#Tomcat自定类加载器" class="headerlink" title="Tomcat自定类加载器"></a>Tomcat自定类加载器</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230401225412176.png" srcset="/img/loading.gif" lazyload alt="image-20230401225412176"></p>
+<h2 id="沙箱机制"><a href="#沙箱机制" class="headerlink" title="沙箱机制"></a>沙箱机制</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_30336433/article/details/83268945">(1条消息) java中的安全模型(沙箱机制)_java 安全模型_改变ing的博客-CSDN博客</a></p>
+<h4 id="沙箱安全机制的基本组件"><a href="#沙箱安全机制的基本组件" class="headerlink" title="沙箱安全机制的基本组件"></a><strong>沙箱安全机制的基本组件</strong></h4><h5 id="5-1-字节码校验器-bytecode-verifier"><a href="#5-1-字节码校验器-bytecode-verifier" class="headerlink" title="5.1 字节码校验器(bytecode verifier)"></a><strong>5.1 字节码校验器(bytecode verifier)</strong></h5><p>确保lava类文件遵循lava语言规范。这样可以帮助Java程序实现内存保护。但并不是所有的类文件都会经过字节码校验，比如核心类。</p>
+<h5 id="5-2-类装载器-class-loader"><a href="#5-2-类装载器-class-loader" class="headerlink" title="5.2 类装载器(class loader)"></a><strong>5.2 类装载器(class loader)</strong></h5><ul>
+<li>防止恶意代码去干涉善意的代码，比如：双亲委派机制</li>
+<li>守护了被信任的类库边界;</li>
+<li>将代码归入保护域，确定了代码的权限范围可以进行哪些资源操作</li>
+</ul>
+<h5 id="5-3-存取控制器-access-controller"><a href="#5-3-存取控制器-access-controller" class="headerlink" title="5.3 存取控制器(access controller)"></a><strong>5.3 存取控制器(access controller)</strong></h5><p>存取控制器可以控制核心API对操作系统的存取权限，用户可以设定控制策略。</p>
+<h5 id="5-4-安全管理器-security-manager"><a href="#5-4-安全管理器-security-manager" class="headerlink" title="5.4 安全管理器(security manager)"></a><strong>5.4 安全管理器(security manager)</strong></h5><p>安全管理器主要是核心API和操作系统之间的主要接口。比如实现权限控制，比存取控制器优先级高。</p>
+<h5 id="5-5-安全软件包-security-package"><a href="#5-5-安全软件包-security-package" class="headerlink" title="5.5 安全软件包(security package) :"></a><strong>5.5 安全软件包(security package) :</strong></h5><p>java.security下的类和扩展包下的类，允许用户为应用增加所需要安全特性：安全提供者、消息摘要、数字签名keytools、加密、鉴别。</p>
+<h1 id="Throwable-–-java-lang-Throwable"><a href="#Throwable-–-java-lang-Throwable" class="headerlink" title="Throwable  – java.lang.Throwable"></a>Throwable  – java.lang.Throwable</h1><h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h2><p>错误</p>
+<h2 id="Exception"><a href="#Exception" class="headerlink" title="Exception"></a>Exception</h2><p>异常</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/java/" class="category-chain-item">java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/">#java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java基础</div>
+      <div>http://example.com/2023/06/01/Java精通/Java基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/Java%E7%B2%BE%E9%80%9A/Javaweb/" title="JavaWeb">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JavaWeb</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E8%AE%BA%E6%96%87/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" title="分布式系统">
+                        <span class="hidden-mobile">分布式系统</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,749 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Go项目Go的前景分析选择go的原因： 简单易学：Go的语法简洁明了，容易理解并学习，适合新手快速上手。  并发编程优势：Go内置支持并发编程，通过goroutine和channel等特性实现高效率、低成本的并发。  高效性能：Go语言被称为“编译型语言中最快的一种”，其编译速度快，内存消耗少。  可移植性：Go语言支持跨平台编译，并且Go程序只需要一个可执行文件，不需要依赖其他库文件。  开发效">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go项目">
+<meta property="og:url" content="http://example.com/2023/06/01/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/Go%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Go项目Go的前景分析选择go的原因： 简单易学：Go的语法简洁明了，容易理解并学习，适合新手快速上手。  并发编程优势：Go内置支持并发编程，通过goroutine和channel等特性实现高效率、低成本的并发。  高效性能：Go语言被称为“编译型语言中最快的一种”，其编译速度快，内存消耗少。  可移植性：Go语言支持跨平台编译，并且Go程序只需要一个可执行文件，不需要依赖其他库文件。  开发效">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.345Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Go项目 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Go项目"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Go项目</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Go项目"><a href="#Go项目" class="headerlink" title="Go项目"></a>Go项目</h1><h1 id="Go的前景分析"><a href="#Go的前景分析" class="headerlink" title="Go的前景分析"></a>Go的前景分析</h1><h2 id="选择go的原因："><a href="#选择go的原因：" class="headerlink" title="选择go的原因："></a>选择go的原因：</h2><ol>
+<li><p>简单易学：Go的语法简洁明了，容易理解并学习，适合新手快速上手。</p>
+</li>
+<li><p>并发编程优势：Go内置支持并发编程，通过goroutine和channel等特性实现高效率、低成本的并发。</p>
+</li>
+<li><p>高效性能：Go语言被称为“编译型语言中最快的一种”，其编译速度快，内存消耗少。</p>
+</li>
+<li><p>可移植性：Go语言支持跨平台编译，并且Go程序只需要一个可执行文件，不需要依赖其他库文件。</p>
+</li>
+<li><p>开发效率高：Go语言提供了许多开发工具和标准库，这些都是为了提高开发效率。</p>
+</li>
+<li><p>对于大型项目的管理和维护：Go语言的静态类型检查和清晰明了的语法使得大型项目更加容易管理和维护。</p>
+</li>
+</ol>
+<h2 id="Go的使用者："><a href="#Go的使用者：" class="headerlink" title="Go的使用者："></a>Go的使用者：</h2><p>Go语言已经被很多大公司广泛使用，包括Google、Uber、Docker、Twitch和Netflix等。</p>
+<p>国内对于Go语言的看法和使用场景：</p>
+<p>国内互联网企业中，Go语言的使用率越来越高。特别是在高并发、高负载场景下，如分布式系统、云计算和后端服务开发等领域，Go语言优势明显。</p>
+<h2 id="Go的使用场景："><a href="#Go的使用场景：" class="headerlink" title="Go的使用场景："></a>Go的使用场景：</h2><ol>
+<li><p>高并发、高性能的Web应用程序</p>
+</li>
+<li><p>分布式系统</p>
+</li>
+<li><p>云计算、网络编程等</p>
+</li>
+<li><p>系统编程和网络编程</p>
+</li>
+<li><p>数据库或数据存储系统</p>
+</li>
+</ol>
+<h2 id="Go的学习路线"><a href="#Go的学习路线" class="headerlink" title="Go的学习路线:"></a>Go的学习路线:</h2><ol>
+<li><p>入门语法：了解变量、函数、数据类型、流程控制等基础概念</p>
+</li>
+<li><p>并发编程：学习goroutine、channel等特性</p>
+</li>
+<li><p>标准库：熟悉Go语言标准库的使用</p>
+</li>
+<li><p>Web开发：学习Web框架、HTTP库、模板系统等</p>
+</li>
+<li><p>数据库和存储：学习Go语言中的数据库和存储相关库等</p>
+</li>
+</ol>
+<h2 id="Go的框架学习推荐："><a href="#Go的框架学习推荐：" class="headerlink" title="Go的框架学习推荐："></a>Go的框架学习推荐：</h2><ol>
+<li><p>Gin：轻量级Web框架，具有优秀的性能和易用性</p>
+</li>
+<li><p>Beego：基于MVC模式的全功能Web框架，集成了ORM、日志和配置等功能</p>
+</li>
+<li><p>Echo：高性能、易用的Web框架</p>
+</li>
+<li><p>Revel：全功能Web框架，支持热部署和自定义命令等特性</p>
+</li>
+</ol>
+<h2 id="Go和其他语言的对比："><a href="#Go和其他语言的对比：" class="headerlink" title="Go和其他语言的对比："></a>Go和其他语言的对比：</h2><ol>
+<li>Go VS Java：</li>
+</ol>
+<p>Go相比Java更加轻量级，编译速度更快，更适合高并发和分布式场景。但是Java有更加丰富的生态系统和更多成熟的开源框架。</p>
+<ol start="2">
+<li>Go VS C++：</li>
+</ol>
+<p>Go的内存管理和GC更加高效，代码更加简洁。C++具有更好的底层控制能力和更广泛的使用领域。</p>
+<ol start="3">
+<li>Go VS Python：</li>
+</ol>
+<p>Go更加适合高并发和网络编程场景，性能优势明显。Python则更加适合科学计算、数据分析和人工智能等领域。同时，Python的生态系统更加成熟。</p>
+<h2 id="Go的优势和劣势："><a href="#Go的优势和劣势：" class="headerlink" title="Go的优势和劣势："></a>Go的优势和劣势：</h2><p>优势：</p>
+<ol>
+<li><p>并发编程优秀。</p>
+</li>
+<li><p>高效性能。</p>
+</li>
+<li><p>简单易学。</p>
+</li>
+<li><p>可移植性好。</p>
+</li>
+<li><p>开发效率高。</p>
+</li>
+<li><p>对于大型项目的管理和维护。</p>
+</li>
+</ol>
+<p>劣势：</p>
+<ol>
+<li><p>对于一些复杂的业务场景，Go语言有时候需要一些折中方案。</p>
+</li>
+<li><p>生态系统和其他编程语言相比尚不够成熟。</p>
+</li>
+<li><p>Go语言在一些领域的开发成本可能较高。</p>
+</li>
+</ol>
+<h2 id="面向方法编程-面向对象编程"><a href="#面向方法编程-面向对象编程" class="headerlink" title="面向方法编程 - 面向对象编程"></a>面向方法编程 - 面向对象编程</h2><p>Go不是一个纯面向过程的编程语言，也不是一个纯面向对象的编程语言。Go可以看作是一种面向方法编程的语言。</p>
+<p>Go语言中没有类和继承机制。程序员可以通过定义函数，对数据类型进行操作。方法是与数据类型绑定的函数，用于对数据类型进行操作。Go语言中的方法和函数都可以接收参数和返回值。方法可以被继承，也可以实现接口。</p>
+<p>面向方法编程在一定程度上简化了代码的维护和编写，同时也使得代码更加灵活，程序员可以很方便地修改和扩展方法，而不需要担心对其他代码的影响。</p>
+<p>与面向对象相比，面向方法编程更加注重对数据类型的操作，可以有效地减少不必要的代码冗余。同时，由于没有类和继承机制，面向方法编程也不需要考虑继承的复杂性、类的层次结构等问题，使得代码更加简洁、易读易懂。</p>
+<p>但是，面向方法编程也有一些限制。由于缺乏类和继承机制，一些与对象相关的功能需要以函数库的形式提供，而不是通过继承的方式实现。这也导致了Go生态系统相对不够成熟，在一些领域的应用需要进行一定的折中和尝试。</p>
+<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">Go项目通常遵循以下结构：<br><br>```<br>project-name/<br>  ├── cmd/<br>  │   ├── main.go<br>  │   ├── ...<br>  │   └── cmd1/<br>  │       ├── main.go<br>  │       └── ...<br>  ├── internal/<br>  │   ├── pkg1/<br>  │   │   ├── file1.go<br>  │   │   ├── ...<br>  │   │   └── fileN.go<br>  │   └── pkg2/<br>  │       ├── file1.go<br>  │       ├── ...<br>  │       └── fileN.go<br>  ├── pkg/<br>  │   ├── pkg1/<br>  │   │   ├── file1.go<br>  │   │   ├── ...<br>  │   │   └── fileN.go<br>  │   └── pkg2/<br>  │       ├── file1.go<br>  │       ├── ...<br>  │       └── fileN.go<br>  ├── vendor/<br>  ├── config/<br>  ├── resources/<br>  ├── scripts/<br>  ├── test/<br>  ├── Dockerfile<br>  ├── Makefile<br>  ├── README.md<br>  └── go.mod<br>```<br><br>- `cmd/` 目录存放项目的主要应用程序和命令行工具。每个子目录都应该以一个单独的可执行文件来结尾。<br>- `internal/` 目录包含仅限于该项目内部使用的模块。这些模块不应被第三方引用，不应该放入`pkg/`目录。<br>- `pkg/` 目录包含可重用的库代码，这些库可供其他项目使用。可以通过向`go.mod`添加`replace`语句来覆盖`pkg`目录中的库。<br>- `vendor/` 目录包含项目依赖项的完整副本，通常使用依赖管理工具(如Go Modules)自动管理。<br>- `resources/` 目录包含项目中为应用程序提供资源(如图像、HTML/CSS、JSON、YAML等)的文件。<br>- `config/` 目录包含应用程序的配置文件。<br>- `scripts/` 目录包含与构建、安装和运行项目有关的脚本。<br>- `test/` 目录包含项目的测试代码。<br>- `Dockerfile` 是构建Docker镜像的文件。<br>- `Makefile` 包含make指令，用于流程自动化。<br>- `README.md` 包含项目相关说明。<br>- `go.mod` 包含项目的依赖项和版本规范。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><p>在 Go 的 Web 项目中，通常会将配置文件放在项目的根目录或某个 config 子目录中。配置文件的文件名可以自定义，常见的有 config.json、config.toml、config.yaml 等。</p>
+<p>例如，将配置文件放在根目录下，并且以 JSON 格式进行配置，可以在代码中使用以下的代码来读取配置：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;encoding/json&quot;</span><br>    <span class="hljs-string">&quot;os&quot;</span><br>)<br><br><span class="hljs-keyword">type</span> Config <span class="hljs-keyword">struct</span> &#123;<br>    Database <span class="hljs-keyword">struct</span> &#123;<br>        Host     <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;host&quot;`</span><br>        Port     <span class="hljs-type">int</span>    <span class="hljs-string">`json:&quot;port&quot;`</span><br>        User     <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;user&quot;`</span><br>        Password <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;password&quot;`</span><br>        Name     <span class="hljs-type">string</span> <span class="hljs-string">`json:&quot;name&quot;`</span><br>    &#125; <span class="hljs-string">`json:&quot;database&quot;`</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">loadConfig</span><span class="hljs-params">()</span></span> (Config, <span class="hljs-type">error</span>) &#123;<br>    <span class="hljs-keyword">var</span> config Config<br>    configFile, err := os.Open(<span class="hljs-string">&quot;config.json&quot;</span>)<br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        <span class="hljs-keyword">return</span> config, err<br>    &#125;<br>    <span class="hljs-keyword">defer</span> configFile.Close()<br>    err = json.NewDecoder(configFile).Decode(&amp;config)<br>    <span class="hljs-keyword">return</span> config, err<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在上述代码中，loadConfig 函数用于读取配置文件。配置信息包含了数据库的连接信息，以及其他的配置项。配置文件的路径为相对路径，表示在项目根目录下，有一个名为 config.json 的配置文件。</p>
+<h1 id="Beego"><a href="#Beego" class="headerlink" title="Beego"></a>Beego</h1><h2 id="Beego-ORM"><a href="#Beego-ORM" class="headerlink" title="Beego ORM"></a>Beego ORM</h2>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/" class="category-chain-item">Go入门到精通</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Go/">#Go</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Go项目</div>
+      <div>http://example.com/2023/06/01/Go入门到精通/Go项目/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/Makefile/" title="Makefile">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Makefile</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/Spring%E5%AE%B6%E6%97%8F/Spring%20Web/" title="Spring Web模块">
+                        <span class="hidden-mobile">Spring Web模块</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

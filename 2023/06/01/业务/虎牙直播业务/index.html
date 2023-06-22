@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="虎牙直播业务业务1 - 视频弹幕自动避让英雄人物关于虎牙LOL直播中实现 视频弹幕自动避让英雄人物 虎牙LOL直播中实现视频弹幕自动避让英雄人物主要涉及到以下的业务逻辑、技术分析和使用分析：  业务逻辑分析  在虎牙LOL直播中，为了不影响游戏体验，弹幕需要避开英雄人物的位置。具体的实现方式是，弹幕的位置和大小需要实时根据当前英雄人物的位置和大小进行调整，以确保弹幕不会挡住英雄人物的视线。  技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虎牙直播业务">
+<meta property="og:url" content="http://example.com/2023/06/01/%E4%B8%9A%E5%8A%A1/%E8%99%8E%E7%89%99%E7%9B%B4%E6%92%AD%E4%B8%9A%E5%8A%A1/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="虎牙直播业务业务1 - 视频弹幕自动避让英雄人物关于虎牙LOL直播中实现 视频弹幕自动避让英雄人物 虎牙LOL直播中实现视频弹幕自动避让英雄人物主要涉及到以下的业务逻辑、技术分析和使用分析：  业务逻辑分析  在虎牙LOL直播中，为了不影响游戏体验，弹幕需要避开英雄人物的位置。具体的实现方式是，弹幕的位置和大小需要实时根据当前英雄人物的位置和大小进行调整，以确保弹幕不会挡住英雄人物的视线。  技术">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.361Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="业务">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>虎牙直播业务 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="虎牙直播业务"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">虎牙直播业务</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="虎牙直播业务"><a href="#虎牙直播业务" class="headerlink" title="虎牙直播业务"></a>虎牙直播业务</h1><h2 id="业务1-视频弹幕自动避让英雄人物"><a href="#业务1-视频弹幕自动避让英雄人物" class="headerlink" title="业务1 - 视频弹幕自动避让英雄人物"></a>业务1 - 视频弹幕自动避让英雄人物</h2><p>关于虎牙LOL直播中实现 视频弹幕自动避让英雄人物</p>
+<p>虎牙LOL直播中实现视频弹幕自动避让英雄人物主要涉及到以下的业务逻辑、技术分析和使用分析：</p>
+<ol>
+<li>业务逻辑分析</li>
+</ol>
+<p>在虎牙LOL直播中，为了不影响游戏体验，弹幕需要避开英雄人物的位置。具体的实现方式是，弹幕的位置和大小需要实时根据当前英雄人物的位置和大小进行调整，以确保弹幕不会挡住英雄人物的视线。</p>
+<ol start="2">
+<li>技术分析</li>
+</ol>
+<p>虎牙LOL直播中实现视频弹幕自动避让英雄人物需要使用计算机视觉和图像处理等技术。具体的实现方式是，首先需要对直播视频进行截帧，并使用计算机视觉技术对每一帧中的英雄人物进行识别。然后，利用弹幕的大小、位置和运动速度等参数，计算得到弹幕和英雄人物之间的距离，并根据距离大小调整弹幕位置和大小。</p>
+<ol start="3">
+<li>使用分析</li>
+</ol>
+<p>为了实现虎牙LOL直播中视频弹幕自动避让英雄人物的功能，我们可以利用 HTML5 的 canvas 元素实现视频和弹幕的绘制，同时使用计算机视觉和图像处理库，如 OpenCV 和 PIL，实现视频截帧、英雄人物识别功能。</p>
+<ol start="4">
+<li>示例代码</li>
+</ol>
+<p>下面是一个简单的示例代码，用于实现虎牙LOL直播中视频弹幕自动避让英雄人物功能：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 获取画布和视频元素</span><br><span class="hljs-keyword">const</span> canvas = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;canvas&#x27;</span>);<br><span class="hljs-keyword">const</span> video = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;video&#x27;</span>);<br><span class="hljs-keyword">const</span> ctx = canvas.<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);<br><br><span class="hljs-comment">// 监听视频元素的时间更新事件</span><br>video.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;timeupdate&#x27;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-comment">// 在画布上绘制当前视频帧</span><br>  ctx.<span class="hljs-title function_">drawImage</span>(video, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, canvas.<span class="hljs-property">width</span>, canvas.<span class="hljs-property">height</span>);<br>  <br>  <span class="hljs-comment">// 获取当前英雄位置和大小</span><br>  <span class="hljs-keyword">const</span> heroX = ...; <span class="hljs-comment">// 获取英雄的 X 坐标</span><br>  <span class="hljs-keyword">const</span> heroY = ...; <span class="hljs-comment">// 获取英雄的 Y 坐标</span><br>  <span class="hljs-keyword">const</span> heroWidth = ...; <span class="hljs-comment">// 获取英雄的宽度</span><br>  <span class="hljs-keyword">const</span> heroHeight = ...; <span class="hljs-comment">// 获取英雄的高度</span><br>  <br>  <span class="hljs-comment">// 遍历弹幕列表，调整弹幕的位置和大小</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> bullet <span class="hljs-keyword">of</span> bulletList) &#123;<br>    <span class="hljs-comment">// 计算弹幕和英雄之间的距离</span><br>    <span class="hljs-keyword">const</span> distance = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sqrt</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(heroX - bullet.<span class="hljs-property">x</span>, <span class="hljs-number">2</span>) + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(heroY - bullet.<span class="hljs-property">y</span>, <span class="hljs-number">2</span>));<br>    <br>    <span class="hljs-comment">// 计算弹幕和英雄之间的最小距离</span><br>    <span class="hljs-keyword">const</span> minDistance = (heroWidth + bullet.<span class="hljs-property">size</span>) / <span class="hljs-number">2</span>;<br>    <br>    <span class="hljs-comment">// 根据距离调整弹幕位置和大小</span><br>    <span class="hljs-keyword">if</span> (distance &lt;<span class="hljs-title class_">Distance</span>) &#123;<br>      <span class="hljs-comment">// 弹幕和英雄相交了，需要调整弹幕位置和大小</span><br>      bullet.<span class="hljs-property">size</span> = bullet.<span class="hljs-property">size</span> - (minDistance - distance);<br>      <br>      <span class="hljs-keyword">if</span> (bullet.<span class="hljs-property">x</span> &lt;X) &#123;<br>        bullet.<span class="hljs-property">x</span> = heroX - heroWidth / <span class="hljs-number">2</span> - bullet.<span class="hljs-property">size</span> / <span class="hljs-number">2</span>;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        bullet.<span class="hljs-property">x</span> = heroX + heroWidth / <span class="hljs-number">2</span> + bullet.<span class="hljs-property">size</span> / <span class="hljs-number">2</span>;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>上述代码中，我们首先获取了视频画布和视频元素，并监听视频元素的 timeupdate 事件，用于获取当前视频帧。然后，我们使用计算机视觉技术获取当前英雄的位置和大小，遍历弹幕列表，计算弹幕和英雄之间的距离，根据距离调整弹幕位置和大小，确保弹幕不会挡住英雄人物的视线。</p>
+<p>需要注意的是，上述示例代码中的计算并非完整的逻辑，并且仅供参考。实际的视频弹幕自动避让英雄人物功能需要考虑到更多的因素和情况，如弹幕的颜色、透明度、与其他游戏元素之间的关系等，需要结合实际情况进行细化和完善。</p>
+<h2 id="业务2-直播视频上插入实时的数据信息"><a href="#业务2-直播视频上插入实时的数据信息" class="headerlink" title="业务2 - 直播视频上插入实时的数据信息"></a>业务2 - 直播视频上插入实时的数据信息</h2><p>鼠标悬浮到直播视频中的某个地方，能够在直播视频上插入实时的数据信息，包括当前选手信息插入是如何实现的</p>
+<p>鼠标悬浮到直播视频中的某个地方，在直播视频上插入实时的数据信息有多种实现方法，以下是其中一种常见的实现方式：</p>
+<ul>
+<li>在直播视频上叠加一个透明的图层。</li>
+<li>监听鼠标事件，当鼠标移动到透明图层上时，获取鼠标位置。</li>
+<li>使用视频的时序信息和得到的鼠标位置，计算出相应的时间点。</li>
+<li>在时间点处插入实时的数据信息，如选手信息等。</li>
+</ul>
+<p>假设我们要实现直播视频上插入当前选手信息的功能，其中选手信息是需要从后台获取的动态数据，具体的实现步骤如下：</p>
+<ul>
+<li>编写后台接口，用于获取当前选手信息，如选手姓名、战队等。</li>
+<li>在前端页面上，预留一个位置用于显示当前选手信息，如一个 div 元素。</li>
+<li>使用前述的透明图层技术，在直播视频上叠加一个透明的 div 元素。</li>
+<li>监听鼠标发生事件，当鼠标移动到透明 div 上时，获取鼠标位置。</li>
+<li>根据鼠标位置计算得到时间点，在时间点处调用后台接口获取当前选手信息，更新前端页面上的选手信息 div 元素。</li>
+</ul>
+<p>下面是示例代码和业务逻辑分析：</p>
+<ol>
+<li>HTML 代码：</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;player-info&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;video-overlay&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>JavaScript 代码：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 获取直播视频和选手信息 div 元素</span><br><span class="hljs-keyword">const</span> videoEl = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.live-video&#x27;</span>);<br><span class="hljs-keyword">const</span> playerInfoEl = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#player-info&#x27;</span>);<br><span class="hljs-comment">// 定义获取当前选手信息的接口地址和参数</span><br><span class="hljs-keyword">const</span> playerInfoUrl = <span class="hljs-string">&#x27;http://api.example.com/playerInfo&#x27;</span>;<br><span class="hljs-keyword">const</span> playerInfoParams = &#123; <span class="hljs-attr">gameId</span>: <span class="hljs-string">&#x27;1234&#x27;</span>, <span class="hljs-attr">time</span>: <span class="hljs-number">0</span> &#125;;<br><br><span class="hljs-comment">// 监听鼠标事件</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> &#123;<br>  <span class="hljs-keyword">const</span> x = event.<span class="hljs-property">pageX</span>;<br>  <span class="hljs-keyword">const</span> y = event.<span class="hljs-property">pageY</span>;<br>  <br>  <span class="hljs-comment">// 计算得到所在时间点</span><br>  <span class="hljs-keyword">const</span> time = <span class="hljs-title function_">getTimeAtPosition</span>(videoEl, x, y);<br>  <br>  <span class="hljs-comment">// 调用获取当前选手信息的接口</span><br>  playerInfo.<span class="hljs-property">time</span> = time;<br>  <span class="hljs-title function_">fetch</span>(playerInfoUrl, &#123; <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>, <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(playerInfoParams) &#125;)<br>    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> response.<span class="hljs-title function_">json</span>())<br>    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> &#123;<br>      <span class="hljs-comment">// 更新选手信息 div 元素</span><br>      playerInfoEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">`<span class="hljs-subst">$&#123;data.name&#125;</span>, <span class="hljs-subst">$&#123;data.team&#125;</span>`</span>;<br>   ((.<span class="hljs-title function_">error</span>(error));<br>&#125;);<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 根据鼠标位置和视频元素，计算得到所在时间点</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">HTMLVideoElement</span>&#125; videoEl 视频元素</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number</span>&#125; mouseX 鼠标 X 坐标</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number</span>&#125; mouseY 鼠标 Y 坐标</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@returns</span> &#123;<span class="hljs-type">number</span>&#125; 所在时间点</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">getTimeAtPosition</span>(<span class="hljs-params">videoEl, mouseX, mouseY</span>) &#123;<br>  <span class="hljs-comment">// 计算得到视频位置和尺寸</span><br>  <span class="hljs-keyword">const</span> &#123; left, top, width, height &#125; = videoEl.<span class="hljs-title function_">getBoundingClientRect</span>();<br>  <span class="hljs-comment">// 计算得到鼠标在视频中的相对位置</span><br>  <span class="hljs-keyword">const</span> relativeX = mouseX - left;<br>  <span class="hljs-keyword">const</span> relativeY = mouseY - top;<br>  <span class="hljs-comment">// 计算得到时间点</span><br>  <span class="hljs-keyword">const</span> time = videoEl.<span class="hljs-property">duration</span> * (relativeX / width);<br>  <span class="hljs-keyword">return</span> time;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述代码中，我们首先定义了 HTML 元素和后台接口的地址和参数，然后使用 document.addEventListener 监听鼠标事件，在事件响应函数中计算得到所在时间点，发起 AJAX 请求获取当前选手信息，最后更新选手信息 div 元素。getTimeAtPosition 函数用于计算得到鼠标位置所在的时间点。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%B8%9A%E5%8A%A1/" class="category-chain-item">业务</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B8%9A%E5%8A%A1/">#业务</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>虎牙直播业务</div>
+      <div>http://example.com/2023/06/01/业务/虎牙直播业务/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/%E7%94%B5%E5%95%86%E4%B8%9A%E5%8A%A1/" title="电商业务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">电商业务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/%E7%BB%84%E4%BB%B6%E9%80%89%E6%8B%A9/" title="组件选择">
+                        <span class="hidden-mobile">组件选择</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

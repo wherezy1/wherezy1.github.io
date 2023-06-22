@@ -1,0 +1,920 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式理论CAP理论Consistency Availability Partition tolerance  一致性 (Consistency)：一个写操作返回成功，那么之后的读请求都必须读到这个新数据；如果返回失败，那么所有读操作都不能读到这个数据。所有节点访问同一份最新的数据。 可用性 (Availability)：对数据更新具备高可用性，请求能够及时处理，不会一直等待，即使出现节点失效。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式理论">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="分布式理论CAP理论Consistency Availability Partition tolerance  一致性 (Consistency)：一个写操作返回成功，那么之后的读请求都必须读到这个新数据；如果返回失败，那么所有读操作都不能读到这个数据。所有节点访问同一份最新的数据。 可用性 (Availability)：对数据更新具备高可用性，请求能够及时处理，不会一直等待，即使出现节点失效。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-2c0d971fcca713a8e045a93d7881aedc_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-a6cd35d4045134b703f9d125b1ce9671_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-8d4eaf5fdeb145e8bdf5e3bb1af408c9_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-ac7e4a827f77dc57d316c77ae95e1940_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-3ae48cb81d39079022666ccb35821c71_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-931f9487900f0f002867c9e116dec255_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-0e18b29659367076ff1c0156ae46eca0_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-e5cd197abc9c922ca4ca91c3df74fa70_1440w.webp">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.705Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式理论">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-2c0d971fcca713a8e045a93d7881aedc_1440w.webp">
+  
+  
+  
+  <title>分布式理论 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式理论"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          15k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          123 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式理论</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="分布式理论"><a href="#分布式理论" class="headerlink" title="分布式理论"></a>分布式理论</h1><h1 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h1><p>Consistency Availability Partition tolerance</p>
+<ul>
+<li>一致性 (Consistency)：一个写操作返回成功，那么之后的读请求都必须读到这个新数据；如果返回失败，那么所有读操作都不能读到这个数据。所有节点访问同一份最新的数据。</li>
+<li>可用性 (Availability)：对数据更新具备高可用性，请求能够及时处理，不会一直等待，即使出现节点失效。</li>
+<li>分区容错性 (Partition tolerance)：能容忍网络分区，在网络断开的情况下，被分隔的节点仍能正常对外提供服务。</li>
+</ul>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>理解CAP理论最简单的方式是想象两个副本处于分区两侧，即两个副本之间的网络断开，不能通信。</p>
+<ul>
+<li>如果允许其中一个副本更新，则会导致数据不一致，即丧失了C性质。</li>
+<li>如果为了保证一致性，将分区某一侧的副本设置为不可用，那么又丧失了A性质。</li>
+<li>除非两个副本可以互相通信，才能既保证C又保证A，这又会导致丧失P性质。</li>
+</ul>
+<h2 id="平衡"><a href="#平衡" class="headerlink" title="平衡"></a>平衡</h2><p>在CAP理论提出十二年之后，其作者又出来辟谣。“三选二”的公式一直存在着误导性，它会过分简单化各性质之间的相互关系：</p>
+<ul>
+<li>首先，由于分区很少发生，那么在系统不存在分区的情况下没什么理由牺牲C或A。</li>
+<li>其次，C与A之间的取舍可以在同一系统内以非常细小的粒度反复发生，而每一次的决策可能因为具体的操作，乃至因为牵涉到特定的数据或用户而有所不同。</li>
+<li>最后，这三种性质都可以在程度上衡量，并不是非黑即白的有或无。可用性显然是在0%到100%之间连续变化的，一致性分很多级别，连分区也可以细分为不同含义，如系统内的不同部分对于是否存在分区可以有不一样的认知。</li>
+</ul>
+<p>所以一致性和可用性并不是水火不容，非此即彼的。Paxos、Raft等分布式一致性算法就是在一致性和可用性之间做到了很好的平衡的见证。</p>
+<h1 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a>一致性模型</h1><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1015442">分布式系统一致性分类，你知道几种？ - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<p>学术界的一致性模型主要从两个角度去分类：</p>
+<p>以<strong>数据为中心</strong>的一致性模型；</p>
+<p>以<strong>客户为中心</strong>的一致性模型。</p>
+<h2 id="以数据为中心的一致性模型"><a href="#以数据为中心的一致性模型" class="headerlink" title="以数据为中心的一致性模型"></a>以数据为中心的一致性模型</h2><p><strong>a.严格一致性（Strict Consistency）</strong></p>
+<p>严格一致性要求任何写操作都能立刻同步到其他所有进程，任何读操作都能读取到最新的修改。要实现这一点，要求存在一个全局时钟，但是，在分布式场景下很难做到，所以严格一致性在实际生产环境中目前无法实现。</p>
+<p><strong>b.顺序一致性（Sequential Consistency）</strong></p>
+<p>既然全局时钟导致严格一致性很难实现，顺序一致性放弃了全局时钟的约束，改为分布式逻辑时钟实现。顺序一致性是指所有的进程以相同的顺序看到所有的修改。读操作未必能及时得到此前其他进程对同一数据的写更新。但是每个进程读到的该数据的不同值的顺序是一致的。</p>
+<p><strong>c.因果一致性（Causal Consistency）</strong></p>
+<p>因果关系是指Lamport在分布式时钟事件序论文中描述的happen-before关系及其传递闭包。因果一致性是一种弱化的顺序一致性。所有进程必须以相同的顺序看到具有潜在因果关系的写操作。不同进程可以以不同的顺序看到并发的写操作。</p>
+<p><strong>d.FIFO一致性（FIFO Consistency）</strong></p>
+<p>在因果一致性模型上的进一步弱化，FIFO一致性要求所有进程以某个单一进程提出写操作的顺序看到这些写操作，但是不同进程可以以不同的顺序看到不同的进程提出的写操作。通俗来讲，就是要求在一个进程内，所有的写操作必须对外可以被看到的时候，必须是一致的，但是两个进程的写操作的顺序被看到是时候可以不同，是不受保证的，就算是有因果关系也不保证。</p>
+<h2 id="以用户为中心的一致性模型"><a href="#以用户为中心的一致性模型" class="headerlink" title="以用户为中心的一致性模型"></a>以用户为中心的一致性模型</h2><p>在实际业务要求中，很多时候并不要求系统内所有的数据都保持一致，例如在线的日记本，业务只要求基于这一个用户满足一致性即可，不需要关心整体。这就是所谓的以用户为中心的一致性。</p>
+<p><strong>a.单调读一致性（Monotonic-read Consistency）</strong></p>
+<p>单调读一致性是指如果一个进程读取数据项a的值，那么该进程对a执行的任何后续读操作总是得到第一次读取的那个值或更新的值。</p>
+<p><strong>b.单调写一致性（Monotonic-write Consistency）</strong></p>
+<p>单调写一致性是指一个进程对数据项a执行的写操作必须在该进程对a执行任何后续写操作前完成。</p>
+<p><strong>c.写后读一致性（Read-your-writes Consistency）</strong></p>
+<p>写后读一致性是指一个进程对数据项a执行一次写操作的结果总是会被该进程对a执行的后续读操作看见。</p>
+<p><strong>d.读后写一致性（Writes-follow-reads Consistency）</strong></p>
+<p>读后写一致性是指同一进程对数据项a执行的读操作之后的写操作，保证发生在于a读取值相同或比其更新的值上。</p>
+<h2 id="业界常用的一致性模型"><a href="#业界常用的一致性模型" class="headerlink" title="业界常用的一致性模型"></a>业界常用的一致性模型</h2><p>上面两个分类主要从学术角度进行分类，在实际情况中，大家简化了分类，主要分成了如下三个分类。</p>
+<p><strong>弱一致性（Weak）</strong>：写入一个数据a成功后，在数据副本上可能读出来，也可能读不出来。不能保证多长时间之后每个副本的数据一定是一致的。</p>
+<p><strong>最终一致性（Eventually）</strong>：写入一个数据a成功后，在其他副本有可能读不到a的最新值，但在某个时间窗口之后保证最终能读到。可以看做弱一致性的一个特例。这里面的重点是这个时间窗口。</p>
+<p><strong>强一致性（Strong）</strong>：数据a一旦写入成功，在任意副本任意时刻都能读到a的最新值。</p>
+<p>最终一致性还可以继续细分，大家更喜欢把除了弱一致性和强一致性的其他一致性全部归为最终一致性。</p>
+<p>弱一致性和最终一致性的副本同步是采用异步的方式，而强一致性一般要求同步更新副本，然后才能返回成功，否则很难满足任意副本任意时刻都能读到最新值，异步的通常意味着更好的吞吐量，但也意味着更复杂的架构，更复杂的开发、调试。同步意味着简单，但也意味着响应时间更长，吞吐量的更低。</p>
+<h1 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a><strong>BASE理论</strong></h1><p>BASE是Basically Available（基本可用）、Soft state（软状态）和Eventually consistent（最终一致性）三个短语的简写，BASE是对CAP中一致性和可用性权衡的结果，其来源于对大规模互联网系统分布式实践的结论，是基于CAP定理逐步演化而来的，其核心思想是即使无法做到强一致性（Strong consistency），但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性（Eventual consistency）。</p>
+<h3 id="基本可用"><a href="#基本可用" class="headerlink" title="基本可用"></a><strong>基本可用</strong></h3><p>基本可用是指分布式系统在出现不可预知故障的时候，允许损失部分可用性——但请注意，这绝不等价于系统不可用，以下两个就是“基本可用”的典型例子。</p>
+<ul>
+<li>响应时间上的损失：正常情况下，一个在线搜索引擎需要0.5秒内返回给用户相应的查询结果，但由于出现异常（比如系统部分机房发生断电或断网故障），查询结果的响应时间增加到了1~2秒。</li>
+<li>功能上的损失：正常情况下，在一个电子商务网站上进行购物，消费者几乎能够顺利地完成每一笔订单，但是在一些节日大促购物高峰的时候，由于消费者的购物行为激增，为了保护购物系统的稳定性，部分消费者可能会被引导到一个降级页面。</li>
+</ul>
+<h3 id="软状态"><a href="#软状态" class="headerlink" title="软状态"></a><strong>软状态</strong></h3><p>也称为弱状态，和硬状态相对，是指允许系统中的数据存在中间状态，并认为该中间状态的存在不会影响系统的整体可用性，即允许系统在不同节点的数据副本之间进行数据听不的过程存在延时。</p>
+<h3 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a><strong>最终一致性</strong></h3><p>最终一致性强调的是系统中所有的数据副本，在经过一段时间的同步后，最终能够达到一个一致的状态。因此，最终一致性的本质是需要系统保证最终数据能够达到一致，而不需要实时保证系统数据的强一致性。</p>
+<h1 id="Quorum机制"><a href="#Quorum机制" class="headerlink" title="Quorum机制"></a>Quorum机制</h1><p>读、写阶段策略</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sqf">对于ZAB和RAFT，Quorum机制只在正常的<span class="hljs-built_in">Leader</span>任期（广播阶段）内有效，对于同步/读阶段，两者都是以自身的Proposal为准，而不会关注其它机器的情况，其中ZAB是因为自身拥有了最新的Proposal，所以不需要关心；对于Paxos协议，Quorum机制在读阶段和写阶段（相当于ZAB的广播阶段）都有效，因而在读阶段需要和其它Acceptor进行沟通，以确认哪些该提交，哪些该作废。<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Quorum机制是“抽屉原理”的一个应用。"><a href="#Quorum机制是“抽屉原理”的一个应用。" class="headerlink" title="Quorum机制是“抽屉原理”的一个应用。"></a><strong>Quorum机制是“抽屉原理”的一个应用</strong>。</h3><p>定义如下：假设有N个副本，更新操作wi 在W个副本中更新成功之后，才认为此次更新操作wi 成功。称成功提交的更新操作对应的数据为：“成功提交的数据”。对于读操作而言，至少需要读R个副本才能读到此次更新的数据。<strong>其中，W+R&gt;N ，即W和R有重叠。</strong>一般，W+R&#x3D;N+1。</p>
+<p>假设系统中有5个副本，W&#x3D;3，R&#x3D;3。初始时数据为(V1，V1，V1，V1，V1）–成功提交的版本号为1，当某次更新操作在3个副本上成功后，就认为此次更新操作成功。数据变成：(V2，V2，V2，V1，V1）–成功提交后，版本号变成2，因此，最多只需要读3个副本，一定能够读到V2(此次更新成功的数据)。而在后台，可对剩余的V1 同步到V2，而不需要让Client知道。</p>
+<h3 id="Quorum机制分析"><a href="#Quorum机制分析" class="headerlink" title="Quorum机制分析"></a><strong>Quorum机制分析</strong></h3><p>Quorum机制无法保证强一致性</p>
+<p>所谓强一致性就是：任何时刻任何用户或节点都可以读到<strong>最近一次成功提交的副本数据</strong>。强一致性是程度最高的一致性要求，也是实践中最难以实现的一致性。</p>
+<p>因为，仅仅通过Quorum机制无法确定最新已经成功提交的版本号。</p>
+<p>比如，上面的V2 成功提交后（已经写入W&#x3D;3份），尽管读取3个副本时一定能读到V2，如果刚好读到的是(V2，V2，V2），则此次读取的数据是最新成功提交的数据，因为W&#x3D;3，而此时刚好读到了3份V2。如果读到的是（V2，V1，V1），则无法确定是一个成功提交的版本，还需要继续再读，直到读到V2的达到3份为止，这时才能确定V2 就是已经成功提交的最新的数据。</p>
+<p>如何读取最新的数据？—在已经知道最近成功提交的数据版本号的前提下，最多读R个副本就可以读到最新的数据了。</p>
+<p>如何确定 最高版本号 的数据是一个成功提交的数据？—继续读其他的副本，直到读到的 最高版本号副本 出现了W次。</p>
+<p>基于Quorum机制选择 primary</p>
+<p>中心节点(服务器)读取R个副本，<strong>选择R个副本中版本号最高的副本作为新的primary</strong>。</p>
+<p>新选出的primary<strong>不能</strong>立即提供服务，还需要与至少与W个副本<em>完成同步</em>后，才能提供服务—为了保证Quorum机制的规则：W+R&gt;N</p>
+<p>至于如何处理同步过程中冲突的数据，则需要视情况而定。</p>
+<p>比如，(V2，V2，V1，V1，V1），R&#x3D;3，如果读取的3个副本是：(V1，V1，V1)则高版本的 V2需要丢弃。</p>
+<p>如果读取的3个副本是（V2，V1，V1），则低版本的V1需要同步到V2。</p>
+<h1 id="多副本状态机"><a href="#多副本状态机" class="headerlink" title="多副本状态机"></a>多副本状态机</h1><p>将多副本管理的模型抽象出来，可得到一个通用的模型：多副本状态机 (Replicated State Machine) 。</p>
+<p>多副本状态机是指多台机器具有完全相同的状态，并且运行完全相同的确定性状态机。</p>
+<p>通过使用这样的状态机，可以解决很多分布式系统中的容错问题。因为多副本状态机通常可以容忍半数节点故障，且所有正常运行的副本节点状态都完全一致，所以可以使用多副本状态机来实现需要<strong>避免单点故障的组件</strong>。</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gcode">多副本状态机在分布式系统中被用于解决各种容错问题。如集中式的选主或是互斥算法中的协调者 <span class="hljs-comment">(Coordinator)</span>。集中式的领导者或互斥算法逻辑简单，但最大的问题是协调者的单点故障问题，通过采用多副本状态机来实现协调者实现了高可用的“单点”，回避了单点故障。<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="分布式协议"><a href="#分布式协议" class="headerlink" title="分布式协议"></a>分布式协议</h1><h2 id="问："><a href="#问：" class="headerlink" title="问："></a>问：</h2><h3 id="一："><a href="#一：" class="headerlink" title="一："></a>一：</h3><p>CP和AP的协议有哪些，请具体描述一下所有协议，和区别</p>
+<p>CP（Consistency Protocol）和AP（Availability and Partition Tolerance）是分布式系统中两种不同的数据一致性协议。CP协议注重数据的强一致性，而AP协议则强调可用性和分区容忍性。</p>
+<p>常见的CP协议包括：</p>
+<ol>
+<li>2PC（Two-Phase Commitment）：这是一种集中式的事务管理协议，通过协调器进行提交或回滚操作来实现所有节点的数据强一致性。</li>
+<li>Paxos：这是一种去中心化的一致性协议，它保证系统能够在故障情况下仍然能够保持一致性。Paxos算法使用多个阶段（Proposal、Prepare和Accept）来达成一致，并且可以处理多个提案。</li>
+<li>RAFT：RAFT也是一种去中心化的一致性协议，与Paxos类似。它将状态机复制为一组日志条目，并确保在节点发生故障时继续运行。</li>
+</ol>
+<p>常见的AP协议包括：</p>
+<ol>
+<li>BASE（Basically Available, Soft State, Eventually Consistent）：基本上可用、软状态、最终一致性。这种架构通过放松一致性要求以换取高可用性来实现系统的设计。在此方案下，更新可能需要更长时间才能在整个系统上进行传播，但最终系统将保持一致。</li>
+<li>Gossip协议：这是一种去中心化的协议，它使用节点之间的随机沟通来传播信息和更新。在这种方案下，不同节点的状态可能会有所不同，但最终会达到一致性。</li>
+<li>NoSQL数据库：NoSQL数据库强调高可用性和分区容忍性，并且通常放松了数据一致性的要求。例如，Cassandra数据库使用基于时间戳的多版本并发控制（MVCC）来实现最终一致性。</li>
+</ol>
+<p>总之，CP协议注重数据的强一致性，而AP协议则强调可用性和分区容忍性。具体选择哪种协议取决于系统设计者的需求和目标。</p>
+<h2 id="CP"><a href="#CP" class="headerlink" title="CP"></a>CP</h2><h2 id="1、Paxos协议"><a href="#1、Paxos协议" class="headerlink" title="1、Paxos协议"></a>1、Paxos协议</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31780743">Paxos算法详解 - 知乎 (zhihu.com)</a></p>
+<p><strong>Basic Paxos、Fast Paxos、Multi-Paxos</strong>  –  Proposal ID（一致性保证）</p>
+<h3 id="二、Paxos算法流程"><a href="#二、Paxos算法流程" class="headerlink" title="二、Paxos算法流程"></a>二、Paxos算法流程</h3><p>Paxos算法解决的问题正是分布式一致性问题，即一个分布式系统中的各个进程如何就某个值（决议）达成一致。</p>
+<p>Paxos算法运行在允许宕机故障的异步系统中，不要求可靠的消息传递，可容忍消息丢失、延迟、乱序以及重复。它利用大多数 (Majority) 机制保证了2F+1的容错能力，即2F+1个节点的系统最多允许F个节点同时出现故障。</p>
+<p>一个或多个提议进程 (Proposer) 可以发起提案 (Proposal)，Paxos算法使所有提案中的某一个提案，在所有进程中达成一致。系统中的多数派同时认可该提案，即达成了一致。最多只针对一个确定的提案达成一致。</p>
+<p>Paxos将系统中的角色分为提议者 (Proposer)，决策者 (Acceptor)，和最终决策学习者 (Learner):</p>
+<ul>
+<li><strong>Proposer</strong>: 提出提案 (Proposal)。Proposal信息包括提案编号 (Proposal ID) 和提议的值 (Value)。</li>
+<li><strong>Acceptor</strong>：参与决策，回应Proposers的提案。收到Proposal后可以接受提案，若Proposal获得多数Acceptors的接受，则称该Proposal被批准。</li>
+<li><strong>Learner</strong>：不参与决策，从Proposers&#x2F;Acceptors学习最新达成一致的提案（Value）。</li>
+</ul>
+<p>在多副本状态机中，每个副本同时具有Proposer、Acceptor、Learner三种角色。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-2c0d971fcca713a8e045a93d7881aedc_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Paxos算法中的角色</p>
+<p>Paxos算法通过一个决议分为两个阶段（Learn阶段之前决议已经形成）：</p>
+<ol>
+<li>第一阶段：Prepare阶段。Proposer向Acceptors发出Prepare请求，Acceptors针对收到的Prepare请求进行Promise承诺。</li>
+<li>第二阶段：Accept阶段。Proposer收到多数Acceptors承诺的Promise后，向Acceptors发出Propose请求，Acceptors针对收到的Propose请求进行Accept处理。</li>
+<li>第三阶段：Learn阶段。Proposer在收到多数Acceptors的Accept之后，标志着本次Accept成功，决议形成，将形成的决议发送给所有Learners。</li>
+</ol>
+<p><img src="https://pic2.zhimg.com/80/v2-a6cd35d4045134b703f9d125b1ce9671_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Paxos算法流程</p>
+<p>Paxos算法流程中的每条消息描述如下：</p>
+<ul>
+<li><strong>Prepare</strong>: Proposer生成全局唯一且递增的Proposal ID (可使用时间戳加Server ID)，向所有Acceptors发送Prepare请求，这里无需携带提案内容，只携带Proposal ID即可。</li>
+<li><strong>Promise</strong>: Acceptors收到Prepare请求后，做出“两个承诺，一个应答”。</li>
+</ul>
+<p>两个承诺：</p>
+<p>\1. 不再接受Proposal ID小于等于（注意：这里是&lt;&#x3D; ）当前请求的Prepare请求。</p>
+<p>\2. 不再接受Proposal ID小于（注意：这里是&lt; ）当前请求的Propose请求。</p>
+<p>一个应答：</p>
+<p>不违背以前作出的承诺下，回复已经Accept过的提案中Proposal ID最大的那个提案的Value和Proposal ID，没有则返回空值。</p>
+<ul>
+<li><strong>Propose</strong>: Proposer 收到多数Acceptors的Promise应答后，从应答中选择Proposal ID最大的提案的Value，作为本次要发起的提案。如果所有应答的提案 均为空值，则可以自己随意决定提案Value。然后携带当前Proposal ID，向所有Acceptors发送Propose请求。</li>
+<li><strong>Accept</strong>: Acceptor收到Propose请求后，在不违背自己之前作出的承诺下，接受并持久化当前Proposal ID和提案Value。</li>
+<li><strong>Learn</strong>: Proposer收到多数Acceptors的Accept后，决议形成，将形成的决议发送给所有Learners。</li>
+</ul>
+<p>Paxos算法伪代码描述如下：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-8d4eaf5fdeb145e8bdf5e3bb1af408c9_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Paxos算法伪代码</p>
+<ol>
+<li>获取一个Proposal ID n，为了保证Proposal ID唯一，可采用时间戳+Server ID生成；</li>
+<li>Proposer向所有Acceptors广播Prepare(n)请求；</li>
+<li>Acceptor比较n和minProposal，如果n&gt;minProposal，minProposal&#x3D;n，并且将 acceptedProposal 和 acceptedValue 返回；</li>
+<li>Proposer接收到过半数回复后，如果发现有acceptedValue返回，将所有回复中acceptedProposal最大的acceptedValue作为本次提案的value，否则可以任意决定本次提案的value；</li>
+<li>到这里可以进入第二阶段，广播Accept (n,value) 到所有节点；</li>
+<li>Acceptor比较n和minProposal，如果n&gt;&#x3D;minProposal，则acceptedProposal&#x3D;minProposal&#x3D;n，acceptedValue&#x3D;value，本地持久化后，返回；否则，返回minProposal。</li>
+<li>提议者接收到过半数请求后，如果发现有返回值result &gt;n，表示有更新的提议，跳转到1；否则value达成一致。</li>
+</ol>
+<p>下面举几个例子，实例1如下图：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-ac7e4a827f77dc57d316c77ae95e1940_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Paxos算法实例1</p>
+<p>图中P代表Prepare阶段，A代表Accept阶段。3.1代表Proposal ID为3.1，其中3为时间戳，1为Server ID。X和Y代表提议Value。</p>
+<p>实例1中P 3.1达成多数派，其Value(X)被Accept，然后P 4.5学习到Value(X)，并Accept。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-3ae48cb81d39079022666ccb35821c71_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Paxos算法实例2</p>
+<p>实例2中P 3.1没有被多数派Accept（只有S3 Accept），但是被P 4.5学习到，P 4.5将自己的Value由Y替换为X，Accept（X）。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-931f9487900f0f002867c9e116dec255_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Paxos算法实例3</p>
+<p>实例3中P 3.1没有被多数派Accept（只有S1 Accept），同时也没有被P 4.5学习到。由于P 4.5 Propose的所有应答，均未返回Value，则P 4.5可以Accept自己的Value (Y)。后续P 3.1的Accept (X) 会失败，已经Accept的S1，会被覆盖。</p>
+<p>Paxos算法可能形成活锁而永远不会结束，如下图实例所示：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-0e18b29659367076ff1c0156ae46eca0_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Paxos算法形成活锁</p>
+<p>回顾两个承诺之一，Acceptor不再应答Proposal ID小于等于当前请求的Prepare请求。意味着需要应答Proposal ID大于当前请求的Prepare请求。</p>
+<p>两个Proposers交替Prepare成功，而Accept失败，形成活锁（Livelock）。</p>
+<h3 id="三、Multi-Paxos算法"><a href="#三、Multi-Paxos算法" class="headerlink" title="三、Multi-Paxos算法"></a>三、Multi-Paxos算法</h3><p>原始的Paxos算法（Basic Paxos）只能对一个值形成决议，决议的形成至少需要两次网络来回，在高并发情况下可能需要更多的网络来回，极端情况下甚至可能形成活锁。如果想连续确定多个值，Basic Paxos搞不定了。因此Basic Paxos几乎只是用来做理论研究，并不直接应用在实际工程中。</p>
+<p>实际应用中几乎都需要连续确定多个值，而且希望能有更高的效率。Multi-Paxos正是为解决此问题而提出。Multi-Paxos基于Basic Paxos做了两点改进：</p>
+<ol>
+<li>针对每一个要确定的值，运行一次Paxos算法实例（Instance），形成决议。每一个Paxos实例使用唯一的Instance ID标识。</li>
+<li>在所有Proposers中选举一个Leader，由Leader唯一地提交Proposal给Acceptors进行表决。这样没有Proposer竞争，解决了活锁问题。在系统中仅有一个Leader进行Value提交的情况下，Prepare阶段就可以跳过，从而将两阶段变为一阶段，提高效率。</li>
+</ol>
+<p><img src="https://pic1.zhimg.com/80/v2-e5cd197abc9c922ca4ca91c3df74fa70_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Multi-Paxos流程</p>
+<p>Multi-Paxos首先需要选举Leader，Leader的确定也是一次决议的形成，所以可执行一次Basic Paxos实例来选举出一个Leader。选出Leader之后只能由Leader提交Proposal，在Leader宕机之后服务临时不可用，需要重新选举Leader继续服务。在系统中仅有一个Leader进行Proposal提交的情况下，Prepare阶段可以跳过。</p>
+<p>Multi-Paxos通过改变Prepare阶段的作用范围至后面Leader提交的所有实例，从而使得Leader的连续提交只需要执行一次Prepare阶段，后续只需要执行Accept阶段，将两阶段变为一阶段，提高了效率。为了区分连续提交的多个实例，每个实例使用一个Instance ID标识，Instance ID由Leader本地递增生成即可。</p>
+<p>Multi-Paxos允许有多个自认为是Leader的节点并发提交Proposal而不影响其安全性，这样的场景即退化为Basic Paxos。</p>
+<p><strong>Chubby</strong>和<strong>Boxwood</strong>均使用Multi-Paxos。ZooKeeper使用的<strong>Zab</strong>也是Multi-Paxos的变形。</p>
+<h2 id="2、ZAB"><a href="#2、ZAB" class="headerlink" title="2、ZAB"></a>2、ZAB</h2><ul>
+<li>Zookeeper Atomic Broadcast</li>
+<li>Zookeeper 原子广播协议  – AP  &#x3D;&#x3D; ZXID（一致性保证</li>
+</ul>
+<p>读 - </p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sqf">绝大多数的书和博客都没明确指出的是：对于ZooKeeper来说，Quorum机制只在一个<span class="hljs-built_in">Leader</span>的广播阶段有效，对于新旧<span class="hljs-built_in">Leader</span>的变更期间是无效的！对于发现和同步阶段，不同的算法，基于不同的考量，会选择不同的机制。由参考博客<span class="hljs-number">5</span>可知，对于RAFT算法，在读阶段（相当于ZAB的发现和同步），即便前一任<span class="hljs-built_in">Leader</span>提出的Proposal已经被半数的机器所接受，只要还没被commit，在极端情况下，都有可能被覆盖掉。因为新<span class="hljs-built_in">Leader</span>只关注自身还没被commit的Proposal，而不关心其它机器的未commit的Proposal。<br><br>实际上，对于分布式数据的一致性问题，如果站在调用者（客户端）的角度来思考，当客户端发出的写操作请求，在集群执行该请求期间，恰巧发生了<span class="hljs-built_in">Leader</span>更换，那么客户端最终收到的返回一定是一个不确定的结果（可能成功，也可能失败）。因而对于集群本身来讲，针对具体的业务场景，是采用消极的全部丢弃，还是采用积极地全部内部补偿，或者是介于消极和积极之间的某种策略，我认为都是合理的。但总的来说，无论这些算法采用什么样的策略，保证集群数据的一致性是必要的前提。<br></code></pre></td></tr></table></figure>
+
+
+
+<p>如果集群中的 Learner 节点收到客户端的事务请求，那么这些 Learner 会将请求转发给 Leader 服务器。然后再执行如下的具体过程：</p>
+<ol>
+<li>Leader 接收到事务请求后，为事务赋予一个全局唯一的 64 位自增 id，即 zxid，通过 zxid 的大小比较即可实现事务的有序性管理，然后将事务封装为一个 Proposal。</li>
+<li>Leader 根据 Follower 列表获取到所有 Follower，然后再将 Proposal 通过这些 Follower 的 队列将提案发送给各个 Follower。</li>
+<li>当 Follower 接收到提案后，会先将提案的 zxid 与本地记录的事务日志中的最大的 zxid 进行比较。若当前提案的 zxid 大于最大 zxid，则将当前提案记录到本地事务日志中，并 向 Leader 返回一个 ACK。</li>
+<li>当 Leader 接收到过半的 ACKs 后，Leader 就会向所有 Follower 的队列发送 COMMIT 消息，向所有 Observer 的队列发送 Proposal。</li>
+<li>当 Follower 收到 COMMIT 消息后，就会将日志中的事务正式更新到本地。当 Observer 收到 Proposal 后，会直接将事务更新到本地。</li>
+<li>无论是 Follower 还是 Observer，在同步完成后都需要向 Leader 发送成功 ACK。</li>
+</ol>
+<h2 id="3、Raft"><a href="#3、Raft" class="headerlink" title="3、Raft"></a>3、Raft</h2><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6907151199141625870#heading-23">深度解析 Raft 分布式一致性协议 - 掘金 (juejin.cn)</a></p>
+<p><a href="MyRaftReadme.md">Raft详解</a></p>
+<p>CP	– term（一致性保证）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">名词：选举，心跳，<br></code></pre></td></tr></table></figure>
+
+<h3 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h3><p><strong>Raft 核心算法其实就是由这三个子问题组成的：选主（Leader election）、日志复制（Log replication）、安全性（Safety）。这三部分共同实现了 Raft 核心的共识和容错机制。</strong></p>
+<h3 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h3><p>Raft 也提供了几个工程实践中必须面对<strong>问题的解决方案</strong>。</p>
+<p>第一个是关于<strong>日志无限增长的问题</strong>。Raft 将操作包装成为了日志，集群每个节点都维护了一个不断增长的日志序列，状态机只有通过重放日志序列来得到。但由于这个日志序列可能会随着时间流逝不断增长，因此我们必须有一些办法来避免无休止的磁盘占用和过久的日志重放。这一部分叫<strong>日志压缩</strong>（<strong>Log compaction</strong>）。</p>
+<p>第二个是关于<strong>集群成员变更的问题</strong>。一个 Raft 集群不太可能永远是固定几个节点，总有扩缩容的需求，或是节点宕机需要替换的时候。直接更换集群成员可能会导致严重的<strong>脑裂</strong>问题。Raft 给出了一种安全变更集群成员的方式。这一部分叫<strong>集群成员变更</strong>（<strong>Cluster membership change</strong>）。</p>
+<p>此外，我们还会额外讨论<strong>线性一致性</strong>的定义、为什么 <strong>Raft 不能与线性一致划等号</strong>、如何<strong>基于 Raft 实现线性一致</strong>，以及在如何<strong>保证线性一致的前提下进行读性能优化</strong>。</p>
+<h3 id="安全限制限制"><a href="#安全限制限制" class="headerlink" title="安全限制限制"></a>安全限制限制</h3><p>保证日志复制的一致性</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">选举限制：<br>每个 candidate 必须在 RequestVote RPC 中携带自己本地日志的最新 (term, <span class="hljs-keyword">index</span>)，如果 follower 发现这个 <br>candidate 的日志还没有自己的新，则拒绝投票给该 candidate。（日志可以未<span class="hljs-keyword">commit</span>）<br>提交限制：<br>**Leader 只允许 <span class="hljs-keyword">commit</span> 包含当前 term 的日志。**<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="线性一致性"><a href="#线性一致性" class="headerlink" title="线性一致性"></a>线性一致性</h3><p><strong>Commit Index 和 Apply Index</strong></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">一个提案只要被 leader <span class="hljs-keyword">commit</span> 就可以响应客户端了，Raft 并没有限定提案结果在返回给客户端前必须先应用到状态机。所以从客户端视角当我们的某个写操作执行成功后，下一次读操作可能还是会读到旧值。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="ZAB、RAFT、PAXOS核心区别"><a href="#ZAB、RAFT、PAXOS核心区别" class="headerlink" title="ZAB、RAFT、PAXOS核心区别"></a>ZAB、RAFT、PAXOS核心区别</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1903522">multi-paxos、raft和zab协议的核心区别 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<p>由此，本文总结了这三种算法的三个核心的区别（欢迎拍砖）：</p>
+<ul>
+<li><strong>Leader候选机器的差异</strong></li>
+</ul>
+<p>ZAB是具有<strong>最大ZXID编号（包括未commit的Proposal）</strong>的机器才有资格成为新的Leader；而RAFT则是具有<strong>最大已commit编号（不包括未commit的Proposal）</strong>的机器才有资格成为新的Leader；PAXOS则是<strong>任意机器</strong>都可以成为新的Leader。由此可见，对于ZAB协议，新任Leader无需考虑自身还未被commit的Proposal是该被舍弃还是该被继续提交（因为全都需要被继续提交，积极策略）；对于RAFT协议，新的Leader只会关心自身机器上还未commit的Proposal，因而即使某一个Proposal已经被其它半数以上的机器确认，也可能会被覆盖（消极策略）；对于PAXOS，由于任意机器都可以成为新的Leader，因而新的Leader需要和其它Acceptor进行通信，以确认哪些Proposal该提交，哪些该舍弃（本质上新旧Leader相当于同时有多个Leader的场景，介于积极和消极之间）。</p>
+<ul>
+<li><strong>Quorum机制的作用范围差异</strong></li>
+</ul>
+<p>对于ZAB和RAFT，Quorum机制只在正常的Leader任期（广播阶段）内有效，对于同步&#x2F;读阶段，两者都是以自身的Proposal为准，而不会关注其它机器的情况，其中ZAB是因为自身拥有了最新的Proposal，所以不需要关心；对于Paxos协议，Quorum机制在读阶段和写阶段（相当于ZAB的广播阶段）都有效，因而在读阶段需要和其它Acceptor进行沟通，以确认哪些该提交，哪些该作废。</p>
+<ul>
+<li><strong>Leader数量的差异（不考虑极端情况）</strong></li>
+</ul>
+<p>ZAB和RAFT都是单Leader，而PAXOS则支持多Leader（当然，工业应用中，绝大多数还是采用单Leader策略）。</p>
+<ul>
+<li><strong>新Leader处理旧Leader还未commit消息的差异</strong></li>
+</ul>
+<p>《ZooKeeper Distributed Process COORDINATION》这本书说到，当新的Leader在恢复阶段，会尝试将本服务器上还未同步的消息同步给所有Follower，不过同步时使用的epoch将不再是旧Leader的epoch，而是新Leader的epoch，这意味着新的Leader需要修改自身的日志记录中的epoch值；相反，RAFT论文中说到，新的Leader不会直接将本服务器上旧term的未commit消息直接同步给Follower，而是通过将本服务器上新term的<strong>新的消息</strong>同步给Follower并最终commit的机制，来<strong>间接提交</strong>旧term的未commit的消息（Raft never commits log entries from previous terms by counting replicas. Only log entries from the leader’s current term are committed by counting replicas; once an entry from the current term has been committed in this way, then all prior entries are committed indirectly because of the Log Matching Property）。当然，RAFT不用新term提交旧消息的另一个原因是用旧的term便于进行日志追踪（reason about）。</p>
+<h2 id="AP"><a href="#AP" class="headerlink" title="AP"></a>AP</h2><h2 id="1、Distro"><a href="#1、Distro" class="headerlink" title="1、Distro"></a>1、Distro</h2><p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/899504">nacos的一致性协议distro介绍-阿里云开发者社区 (aliyun.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1697338">一致性算法 - Distro协议在Nacos的实践 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<h3 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h3><p>distro协议网上的资料比较少，因为它是阿里“自创的协议“，通过源码总结一下distro协议的关键点：</p>
+<ul>
+<li>distro协议是为了注册中心而创造出的协议；</li>
+<li>客户端与服务端有两个重要的交互，服务注册与心跳发送；</li>
+<li>客户端以服务为维度向服务端注册，注册后每隔一段时间向服务端发送一次心跳，心跳包需要带上注册服务的全部信息，在客户端看来，服务端节点对等，所以请求的节点是随机的；</li>
+<li>客户端请求失败则换一个节点重新发送请求；</li>
+<li>服务端节点都存储所有数据，但每个节点只负责其中一部分服务，在接收到客户端的“写“（注册、心跳、下线等）请求后，服务端节点判断请求的服务是否为自己负责，如果是，则处理，否则交由负责的节点处理；</li>
+<li>每个服务端节点主动发送健康检查到其他节点，响应的节点被该节点视为健康节点；</li>
+<li>服务端在接收到客户端的服务心跳后，如果该服务不存在，则将该心跳请求当做注册请求来处理；</li>
+<li>服务端如果长时间未收到客户端心跳，则下线该服务；</li>
+<li>负责的节点在接收到服务注册、服务心跳等写请求后将数据写入后即返回，后台异步地将数据同步给其他节点；</li>
+<li>节点在收到读请求后直接从本机获取后返回，无论数据是否为最新。</li>
+</ul>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>通过几个特殊场景来加深一下理解</p>
+<ul>
+<li>某服务一段时间未发生心跳，被服务端摘除，该服务恢复后继续发送心跳，重新被注册；</li>
+<li>服务端某节点宕机，不回复其他服务端节点的健康检查请求，则会被其他节点从健康节点列表中剔除，其他节点重新分配负责节点，依靠客户端的心跳重新建立完整的服务数据；</li>
+<li>A机房部署2节点，B机房部署3节点，组成一个集群，5个节点分别负责相应的服务，某时刻，两机房网络不通，导致A机房两个节点组成一个集群，B机房三个节点组成一个集群，即“脑裂问题”，在强一致性协议中，此时只可能A机房可用，B机房不可用，distro协议不处理脑裂问题，这种情况需要再细分两种：（1）客户端与A、B机房都联通，则一段时间随机请求的心跳之后，A、B集群中仍然有全量的服务，A、B正常（2）部分客户端与A联通，部分客户端与B联通，则部分服务注册到A，部分注册到B，A内部可以调用，B内部也可以调用，AB不可相互调用，这种极端情况比起强一致的情况要好一些，强一致协议会导致与A连通的服务可用，与B联通的服务不可用，A也调用不了B。</li>
+</ul>
+<h2 id="2、Gossip"><a href="#2、Gossip" class="headerlink" title="2、Gossip"></a>2、Gossip</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/364459815">分布式原理：一文了解 Gossip 协议 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a4b2507051ef">一致性算法-Gossip协议详解一 - 简书 (jianshu.com)</a></p>
+<h1 id="集群部署"><a href="#集群部署" class="headerlink" title="集群部署"></a>集群部署</h1><h2 id="ChatGPT"><a href="#ChatGPT" class="headerlink" title="ChatGPT"></a>ChatGPT</h2><h3 id="一：集群"><a href="#一：集群" class="headerlink" title="一：集群"></a>一：集群</h3><p>多节点集群部署方案有哪些，Redis，MySQL，ElasticSearch，Eureka，Nacos，Zookeeper等组件集群部署的区别有哪些</p>
+<p>多节点集群部署是实现高可用性、负载均衡和容错性的重要手段之一。以下是一些常见的组件集群部署方案：</p>
+<ol>
+<li>Redis：Redis支持主从复制、哨兵模式和Cluster模式等多种部署方式，其中Cluster模式是最具代表性的分布式部署方式，可以在不同节点上运行多个Redis实例，构成一个逻辑上的集群。Redis Cluster采用哈希槽分片算法，将数据存储到不同的节点上，并提供了自动故障迁移和重新平衡的功能。</li>
+<li>MySQL：MySQL可以使用主从复制、多主互备、MySQL Group Replication和MySQL NDB Cluster等方式进行部署。其中主从复制和多主互备都是基于异步复制机制，可以实现读写分离和高可用性；而MySQL Group Replication则是基于事务日志复制的半同步复制，提供更高的数据一致性和可靠性；MySQL NDB Cluster则是一个完全分布式的高性能互联网数据库，支持内存中数据存储和并行查询处理等高级特性。</li>
+<li>Elasticsearch：Elasticsearch可以使用多节点、分片和副本等机制实现集群部署，从而实现数据分布式存储和搜索。在分布式场景下，每个索引会被分成多个分片，每个分片可以独立地搜索和路由查询请求，并支持多个副本机制提供高可用性和容错性。</li>
+<li>Eureka：Eureka是Netflix开源的服务注册中心，支持单节点、多节点和高可用部署。在多节点场景下，Eureka使用集群方式管理服务注册信息，并提供自我保护机制以避免网络分区造成的数据不一致问题。</li>
+<li>Nacos：Nacos是阿里巴巴开源的注册中心和配置中心，支持Server-Server模式和Client-Server模式。在Server-Server模式下，Nacos使用Raft协议实现选举和复制机制，确保在故障或者节点变更时能够自动同步元数据；在模式下，则是通过客户端向服务器注册、发现和配置服务。</li>
+<li>Zookeeper：Zookeeper是一个分布式的协调服务，可以用于分布式锁、配置管理、命名服务等功能。Zookeeper基于Paxos算法实现分布式一致性，将数据存储在内存中，并提供强一致性和高可用性。</li>
+</ol>
+<p>组件集群部署的区别主要体现在数据一致性、性能、可靠性和可扩展性等方面。不同的应用场景可能需要考虑这些因素的权衡，选择合适的部署方式。</p>
+<h3 id="二："><a href="#二：" class="headerlink" title="二："></a>二：</h3><h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p><a href="%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1.md">分布式事务</a></p>
+<h1 id="RPC协议"><a href="#RPC协议" class="headerlink" title="RPC协议"></a>RPC协议</h1><p><a href="%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.md">计算机网络</a></p>
+<p>汲取</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA/">#分布式理论</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式理论</div>
+      <div>http://example.com/2023/06/01/分布式系统-大数据/分布式理论/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" title="分布式事务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式事务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F/" title="分布式架构设计模式">
+                        <span class="hidden-mobile">分布式架构设计模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

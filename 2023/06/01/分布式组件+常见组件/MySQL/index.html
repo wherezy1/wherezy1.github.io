@@ -1,0 +1,849 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MySQLMVCC （multi-version-concurrency-control） MVCC–多版本并发控制机制 - 数据是宝 - 博客园 (cnblogs.com) 四个基本数据库 - schame(4条消息) MySQL中自带的数据库表相关介绍（持续更新）_mysql的mysql库里的表都是干嘛的_啊荻～的博客-CSDN博客 123456789101112131415161718inf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/MySQL/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="MySQLMVCC （multi-version-concurrency-control） MVCC–多版本并发控制机制 - 数据是宝 - 博客园 (cnblogs.com) 四个基本数据库 - schame(4条消息) MySQL中自带的数据库表相关介绍（持续更新）_mysql的mysql库里的表都是干嘛的_啊荻～的博客-CSDN博客 123456789101112131415161718inf">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-04b4a496ab53eccc5feba150bf9fb7ea_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-211aaba883221c81d5d7578783a80764_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-e92ce90a6c810a238e709760ed67daaf_1440w.webp">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:01:41.196Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic3.zhimg.com/80/v2-04b4a496ab53eccc5feba150bf9fb7ea_1440w.webp">
+  
+  
+  
+  <title>MySQL - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MySQL"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          12k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          103 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MySQL</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><p>MVCC （multi-version-concurrency-control）</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/axing-articles/p/11415763.html">MVCC–多版本并发控制机制 - 数据是宝 - 博客园 (cnblogs.com)</a></p>
+<h2 id="四个基本数据库-schame"><a href="#四个基本数据库-schame" class="headerlink" title="四个基本数据库 - schame"></a>四个基本数据库 - schame</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_16268979/article/details/108935663">(4条消息) MySQL中自带的数据库表相关介绍（持续更新）_mysql的mysql库里的表都是干嘛的_啊荻～的博客-CSDN博客</a></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">information<span class="hljs-emphasis">_schema</span><br><span class="hljs-emphasis">INFORMATION_SCHEMA提供对数据库元数据的访问 ，有关MySQL服务器的信息，例如数据库或表的名称，列的数据类型或访问权限。有时用于此信息的其他术语是数据字典和系统目录。</span><br><span class="hljs-emphasis">在INFORMATION_</span>SCHEMA中，有数个只读表。它们实际上是视图，而不是基本表，因此，你将无法看到与之相关的任何文件<br><br>performance<span class="hljs-emphasis">_schema</span><br><span class="hljs-emphasis">MySQL 5.5开始新增一个数据库：PERFORMANCE_SCHEMA，主要用于收集数据库服务器性能参数。并且库里表的存储引擎均为PERFORMANCE_SCHEMA，而用户是不能创建存储引擎为PERFORMANCE_</span>SCHEMA的表。<br><br>mysql<br>mysql库是核心数据库，类似于sql server中的master表，主要负责存储数据库的用户（账户）信息、权限设置、关键字等mysql自己需要使用的控制和管理信息。不可以删除，如果对mysql不是很了解，也不要轻易修改这个数据库里面的表信息。<br>常用举例：在mysql.user表中修改root用户的密码<br><br>sys<br>sys库是MySQL 5.7增加的系统数据库，这个库是通过视图的形式把information<span class="hljs-emphasis">_schema和performance_schema结合起来，查询出更加令人容易理解的数据。</span><br><span class="hljs-emphasis">sys数据库里面包含了一系列的存储过程、自定义函数以及视图来帮助我们快速的了解系统的元数据信息。</span><br><span class="hljs-emphasis">sys库所有的数据源来自：performance_schema。目标是把performance_</span>schema的把复杂度降低，让DBA能更好的阅读这个库里的内容。让DBA更快的了解DB的运行情况。<br><br><span class="hljs-bullet">** </span>test<br>早先版本系统自动创建的测试数据库，是一个空数据库，没有任何表，可以删除。5.7版官方已经删除了test数据库。<br></code></pre></td></tr></table></figure>
+
+<h2 id="执行顺序"><a href="#执行顺序" class="headerlink" title="执行顺序"></a>执行顺序</h2><p>select * from table where “” group by having order by limit page, pagesize;</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">selct * <span class="hljs-keyword">from</span> table1 <span class="hljs-keyword">join</span> table2 <span class="hljs-keyword">on</span> table1.x == table2.x<br><br>​	<span class="hljs-keyword">where</span> xx == “” , <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> xxx <span class="hljs-keyword">having</span> () <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> xxx <span class="hljs-keyword">limit</span> ;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sas"><span class="hljs-keyword">from</span> .. <span class="hljs-keyword">on</span>.. join.. <span class="hljs-keyword">where</span> .. <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> .. <span class="hljs-keyword">having</span> ..<span class="hljs-keyword">select</span> <span class="hljs-keyword">distinct</span> ...<span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> ..  limit..<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">0.</span> <span class="hljs-keyword">from</span><br><span class="hljs-number">1.</span>执行<span class="hljs-keyword">where</span> xx对全表数据做筛选，返回第<span class="hljs-number">1</span>个结果集。  <span class="hljs-keyword">where</span><br><span class="hljs-number">2.</span>针对第<span class="hljs-number">1</span>个结果集使用<span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span>分组，返回第<span class="hljs-number">2</span>个结果集。 <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span><br><span class="hljs-number">3.</span>针对第<span class="hljs-number">2</span>个结果集中的每<span class="hljs-number">1</span>组数据执行<span class="hljs-keyword">select</span> xx，有几组就执行几次，返回第<span class="hljs-number">3</span>个结果集。  <span class="hljs-keyword">select</span><br><span class="hljs-number">4.</span>针对第<span class="hljs-number">3</span>个结集执行<span class="hljs-keyword">having</span> xx进行筛选，返回第<span class="hljs-number">4</span>个结果集。  <span class="hljs-keyword">having</span><br><span class="hljs-number">5.</span>针对第<span class="hljs-number">4</span>个结果集排序。 <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span><br><span class="hljs-number">6.</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>select xx from xx的记录集合用where进行筛选，然后再使用group by 对筛选后的结果进行分组。 </p>
+<p>having字句对分组后的结果进行筛选</p>
+<h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><h3 id="直接连接"><a href="#直接连接" class="headerlink" title="直接连接"></a>直接连接</h3><p>select * from table1, table2 - 笛卡尔积</p>
+<h3 id="等值连接-x2F-自然连接"><a href="#等值连接-x2F-自然连接" class="headerlink" title="等值连接 &#x2F; 自然连接"></a>等值连接 &#x2F; 自然连接</h3><p>区别：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs">自然连接去重，等值连接不去重<br>自然连接 一定是 等值连接<br>等值连接的相等属性不一定是公有的， 自然连接相等属性一定是公有的<br></code></pre></td></tr></table></figure>
+
+<p>select  * from table1, table2 where table.x &#x3D;&#x3D; table2.x</p>
+<h3 id="内连接"><a href="#内连接" class="headerlink" title="内连接"></a>内连接</h3><p>select * from table1 (inner) join table2  table1.x &#x3D;&#x3D; table2.x</p>
+<h3 id="外连接"><a href="#外连接" class="headerlink" title="外连接"></a>外连接</h3><h4 id="左外连"><a href="#左外连" class="headerlink" title="左外连"></a>左外连</h4><p>select * from table1 left join table2 table1.x &#x3D;&#x3D; table2.x</p>
+<h4 id="右外连"><a href="#右外连" class="headerlink" title="右外连"></a>右外连</h4><p>select * from table1 right join table2 table1.x &#x3D;&#x3D; table2.x</p>
+<h2 id="UNIQUE"><a href="#UNIQUE" class="headerlink" title="UNIQUE"></a>UNIQUE</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sql">假设我们有一个 <span class="hljs-keyword">user</span> 表，其中包含以下字段：<br><br>```<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">user</span> (<br>  id <span class="hljs-type">INT</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>  username <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>),<br>  password <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>),<br>  email <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>),<br>  ...<br>);<br>```<br><br>现在我们需要为这个表添加一个索引，以保证 username、password 和 email 这三个字段的唯一性。我们可以通过以下语句在这个表上创建一个唯一索引：<br><br>```<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">UNIQUE</span> INDEX idx_username_password_email <span class="hljs-keyword">ON</span> <span class="hljs-keyword">user</span> (username, password, email);<br>```<br><br>基于这个索引，每行数据的组合值 (username, password, email) 都必须是唯一的。也就是说，假如有两行数据 (A,B,C) 和 (A,B,D)，那它们就是合法的；而如果有一行数据 (A,B,C) 和另一行数据 (A,B,C)，那么这两行数据就会违反唯一性约束，并导致数据库抛出唯一性错误。<br><br>因此，这个索引保证了 <span class="hljs-keyword">user</span> 表中的每一个数据行，在 (username, password, email) 这三个字段上的取值都必须是唯一的。索引的查找效率也更高，因为可以使用索引直接查找这三个字段来获取数据，在数据量较大的情况下可以极大提高查询效率。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Explain"><a href="#Explain" class="headerlink" title="Explain"></a>Explain</h1><h1 id="搜索引擎"><a href="#搜索引擎" class="headerlink" title="搜索引擎"></a>搜索引擎</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/53619907">MySQL引擎介绍 - 知乎 (zhihu.com)</a></p>
+<h1 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/121084592">Mysql性能优化：什么是索引下推？ - 知乎 (zhihu.com)</a></p>
+<ul>
+<li>在开始之前先先准备一张用户表(user)，其中主要几个字段有：id、name、age、address。建立联合索引（name，age）。</li>
+<li>假设有一个需求，要求匹配姓名第一个为陈的所有用户，sql语句如下：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span>  name <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;陈%&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>根据 “最佳左前缀” 的原则，这里使用了联合索引（name，age）进行了查询，性能要比全表扫描肯定要高。</li>
+<li>问题来了，如果有其他的条件呢？假设又有一个需求，要求匹配姓名第一个字为陈，年龄为20岁的用户，此时的sql语句如下：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span>  name <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;陈%&#x27;</span> <span class="hljs-keyword">and</span> age<span class="hljs-operator">=</span><span class="hljs-number">20</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>这条sql语句应该如何执行呢？下面对Mysql5.6之前版本和之后版本进行分析。</li>
+</ul>
+<h3 id="Mysql5-6之前的版本"><a href="#Mysql5-6之前的版本" class="headerlink" title="Mysql5.6之前的版本"></a><strong>Mysql5.6之前的版本</strong></h3><ul>
+<li>5.6之前的版本是没有索引下推这个优化的，因此执行的过程如下图：</li>
+</ul>
+<p><img src="https://pic3.zhimg.com/80/v2-04b4a496ab53eccc5feba150bf9fb7ea_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>会忽略age这个字段，直接通过name进行查询，在(name,age)这课树上查找到了两个结果，id分别为2,1，然后拿着取到的id值一次次的回表查询，因此这个过程需要<strong>回表两次</strong>。</li>
+</ul>
+<h3 id="Mysql5-6及之后版本"><a href="#Mysql5-6及之后版本" class="headerlink" title="Mysql5.6及之后版本"></a><strong>Mysql5.6及之后版本</strong></h3><ul>
+<li>5.6版本添加了索引下推这个优化，执行的过程如下图：</li>
+</ul>
+<p><img src="https://pic1.zhimg.com/80/v2-211aaba883221c81d5d7578783a80764_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>InnoDB并没有忽略age这个字段，而是在索引内部就判断了age是否等于20，对于不等于20的记录直接跳过，因此在(name,age)这棵索引树中只匹配到了一个记录，此时拿着这个id去主键索引树中回表查询全部数据，这个过程只需要回表一次。</li>
+</ul>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a><strong>实践</strong></h3><ul>
+<li>当然上述的分析只是原理上的，我们可以实战分析一下，因此陈某装了Mysql5.6版本的Mysql，解析了上述的语句，如下图：</li>
+</ul>
+<p><img src="https://pic4.zhimg.com/80/v2-e92ce90a6c810a238e709760ed67daaf_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>根据explain解析结果可以看出Extra的值为<strong>Using index condition</strong>，表示已经使用了索引下推。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><ul>
+<li>索引下推在<strong>非主键索引</strong>上的优化，可以有效减少回表的次数，大大提升了查询的效率。</li>
+<li>关闭索引下推可以使用如下命令，配置文件的修改不再讲述了，毕竟这么优秀的功能干嘛关闭呢：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">set</span> optimizer_switch<span class="hljs-operator">=</span><span class="hljs-string">&#x27;index_condition_pushdown=off&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><h2 id="锁种类"><a href="#锁种类" class="headerlink" title="锁种类"></a>锁种类</h2><p>MySQL中提供了多种锁机制，可以控制并发访问数据库的数据操作、保证数据的一致性和完整性，避免数据在事务或并发操作下出现不同步或冲突的问题。常用的MySQL锁包括：</p>
+<ol>
+<li><p>共享锁（Shared Locks）：也称读锁。多个事务同时获取该锁，可以同时读取同一资源，并进行读操作，但不能进行写操作，直到所有共享锁被释放。</p>
+</li>
+<li><p>排它锁（Exclusive Locks）：也称写锁。只允许一个事务获取该锁，可以进行读写操作，其他事务无法对该资源进行任何操作，直到排它锁被释放。</p>
+</li>
+<li><p>行锁（Row Locks）：在对一行进行操作时，仅对该行进行锁定，相对于表级锁或页级锁，减少了锁的粒度，提高并发性能。</p>
+</li>
+<li><p>间隙锁（Gap Locks）：使用间隙锁可以锁定索引但不存在的键值，防止其他事务插入相应的键值，在某些情况下可以用于保证数据的完整性。</p>
+</li>
+<li><p>共享意向锁（Shared Intent Locks）和排它意向锁（Exclusive Intent Locks）：当事务准备获取一定数量的共享锁或排它锁时，可以先获取对应的意向锁，以提高锁的效率和并发性。</p>
+</li>
+<li><p>Auto-In – 主键锁</p>
+</li>
+<li><p>表锁</p>
+</li>
+</ol>
+<p>MySQL还支持多种锁策略，如锁等待、锁超时、悲观锁、乐观锁等，可以根据不同的业务需求和场景选择不同的锁策略。</p>
+<p>总之，在使用MySQL数据库时，需要理解各种锁的特点和使用方法，合理选取锁策略，确保数据一致性和并发安全性。</p>
+<h3 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/185003485">详解 MySql InnoDB 中意向锁的作用 - 知乎 (zhihu.com)</a></p>
+<p>MySQL的意向锁是一种用于控制表级别锁定的机制，其主要目的是提高并发操作时的性能和效率。它是一种辅助锁机制，用于协调多个事务之间的并发读写操作，并且不会阻止其他事务对同一表进行读取或修改。</p>
+<p>其功能介绍如下：</p>
+<ol>
+<li>提高并发操作时的性能和效率：通过使用意向锁，可以避免因为排他锁而导致的资源争用和等待，从而提高并发操作时的性能和效率。</li>
+<li>控制事务的锁定状态：在多个事务同时对一个表进行读写操作时，可以使用意向锁来控制每个事务的锁定状态，以保证数据的一致性和完整性。</li>
+<li>减少死锁的风险：通过使用意向锁，可以减少死锁的风险，从而提高系统的可靠性和稳定性。</li>
+</ol>
+<p>使用场景包括但不限于：</p>
+<ol>
+<li>高并发读写操作：在需要进行高并发读写操作时，可以通过使用意向锁来提高系统的性能和效率。</li>
+<li>多线程操作：在需要进行多线程操作时，可以使用意向锁来协调各个线程之间的读写操作，防止出现数据冲突和死锁问题。</li>
+</ol>
+<p>使用方式：</p>
+<ol>
+<li>在进行数据读取或修改操作前，先对表进行意向锁定，表明该事务有可能需要读写该表。</li>
+<li>如果其他事务对同一表进行了排他锁定，则当前事务可以等待，或者选择放弃锁定操作。</li>
+<li>当锁被释放后，该事务再次检查是否需要对该表进行读写操作。如果需要，则进行相应的操作，并在完成后释放意向锁。</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>以下是举例说明MySQL锁机制在具体应用场景中的应用：</p>
+<ol>
+<li>共享锁</li>
+</ol>
+<p>例如，在发起一次普通的查询时，可以使用共享锁(SHARE MODE)来锁定表或行，防止其他事务对表或行进行修改或删除。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> orders <span class="hljs-keyword">WHERE</span> client_id<span class="hljs-operator">=</span><span class="hljs-number">1</span> LOCK <span class="hljs-keyword">IN</span> SHARE MODE;<br></code></pre></td></tr></table></figure>
+
+<p>在执行查询操作时，获取共享锁来锁定表或行，其他事务可以同时读取该资源，但不能进行任何修改或删除。</p>
+<ol start="2">
+<li>排他锁</li>
+</ol>
+<p>例如，在新增或修改数据时，使用排它锁来保证只有一个事务可以修改或写入数据。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">BEGIN</span>;<br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> orders <span class="hljs-keyword">WHERE</span> client_id<span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">UPDATE</span>;<br><br>...进行相关数据修改操作...<br><br><span class="hljs-keyword">COMMIT</span>;<br></code></pre></td></tr></table></figure>
+
+<p>在执行修改或写入操作时，获取排它锁来锁定表或行，其他事务将被阻塞，直到当前事务回滚或提交操作。</p>
+<ol start="3">
+<li>行锁</li>
+</ol>
+<p>例如，在高并发订单系统中，使用行锁来避免资金冻结和出错的情况。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">BEGIN</span>;<br><span class="hljs-keyword">SELECT</span> account_balance <span class="hljs-keyword">FROM</span> accounts <span class="hljs-keyword">WHERE</span> account_id<span class="hljs-operator">=</span><span class="hljs-number">1000</span> <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">UPDATE</span>;<br><br><span class="hljs-keyword">UPDATE</span> accounts <span class="hljs-keyword">SET</span> account_balance <span class="hljs-operator">=</span> account_balance <span class="hljs-operator">-</span> <span class="hljs-number">100.00</span><br><span class="hljs-keyword">WHERE</span> account_id <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>;<br><br><span class="hljs-keyword">COMMIT</span>;<br></code></pre></td></tr></table></figure>
+
+<p>在执行订单操作时，通过获取行锁来锁定对应的账户信息行，保证其他订单事务无法修改该行信息，避免同一账户出现资金不足或超额等问题。</p>
+<ol start="4">
+<li>间隙锁</li>
+</ol>
+<p>例如，在高并发修改大量订单状态的场景中，使用间隙锁来避免其他事务在修改过程中对订单进行插入或修改。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">BEGIN</span>;<br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> orders <span class="hljs-keyword">WHERE</span> order_status<span class="hljs-operator">=</span><span class="hljs-number">0</span> <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">UPDATE</span>;<br><br><span class="hljs-keyword">UPDATE</span> orders <span class="hljs-keyword">SET</span> order_status<span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-keyword">WHERE</span> order_status<span class="hljs-operator">=</span><span class="hljs-number">0</span>;<br><br><span class="hljs-keyword">COMMIT</span>;<br></code></pre></td></tr></table></figure>
+
+<p>在执行订单状态修改时，通过获取间隙锁来锁定订单状态为0的区间范围，防止其他事务在该范围内插入或删除订单记录，保证修改的数据完整和安全性。</p>
+<p>以上是MySQL锁机制在具体应用场景中的示例，不同的业务需求和数据操作类型需要针对选取合适的锁机制和锁级别，以提高数据的一致性和并发性能。</p>
+<h1 id="SQL操作"><a href="#SQL操作" class="headerlink" title="SQL操作"></a>SQL操作</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/391552199">SQL语言：DDL、DML、DQL、DCL详解 - 知乎 (zhihu.com)</a></p>
+<p>DDL ：Data Definite Language</p>
+<p>DDL全称是Data Definition Language，即数据定义语言，定义语言就是定义关系模式、删除关系、修改关系模式以及创建数据库中的各种对象，比如表、聚簇、索引、视图、函数、存储过程和触发器等等。</p>
+<p>DML：Data Manipulation Language</p>
+<p>数据操纵语言全程是Data Manipulation Language，主要是进行插入元组、删除元组、修改元组的操作。主要有insert、update、delete语法组成。</p>
+<p>DQL：Data Query Language</p>
+<p>数据查询语言全称是Data Query Language，所以是用来进行数据库中数据的查询的，即最常用的select语句</p>
+<p>DCL：Data Controller Language</p>
+<p>数据控制语言：Data Control Language。用来授权或回收访问数据库的某种特权，并控制数据库操纵事务发生的时间及效果，能够对数据库进行监视。</p>
+<h2 id="数据库中创建过程、函数、包、触发器分别如何调用"><a href="#数据库中创建过程、函数、包、触发器分别如何调用" class="headerlink" title="数据库中创建过程、函数、包、触发器分别如何调用"></a>数据库中创建过程、函数、包、触发器分别如何调用</h2><p>在中函数编写和调用。下面分别给出实例代码和调用示例：</p>
+<h3 id="创建过程并调用："><a href="#创建过程并调用：" class="headerlink" title="创建过程并调用："></a>创建过程并调用：</h3><p>创建一个简单的示例过程，实现将传入的两个整数相加并返回结果：</p>
+<p>创建过程：</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs oxygene"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> REPLACE <span class="hljs-keyword">PROCEDURE</span> <span class="hljs-title function_">add_numbers</span> <span class="hljs-params">(num1 <span class="hljs-keyword">IN</span> NUMBER, num2 <span class="hljs-keyword">IN</span> NUMBER, <span class="hljs-keyword">result</span> <span class="hljs-keyword">OUT</span> NUMBER)</span><br><span class="hljs-title function_">IS</span><br><span class="hljs-title function_">BEGIN</span><br>    <span class="hljs-title function_">result</span> := num1 + num2<span class="hljs-punctuation">;</span><br><span class="hljs-keyword">END</span><span class="hljs-punctuation">;</span><br>/<br></code></pre></td></tr></table></figure>
+
+<p>调用过程：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span><br>    res NUMBER;<br><span class="hljs-keyword">BEGIN</span><br>    add_numbers(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, res);<br>    DBMS_OUTPUT.PUT_LINE(<span class="hljs-string">&#x27;Result: &#x27;</span> <span class="hljs-operator">||</span> res);<br><span class="hljs-keyword">END</span>;<br><span class="hljs-operator">/</span><br></code></pre></td></tr></table></figure>
+
+<p>在上述代码中，我们定义了一个过程 <code>add_numbers</code>，该过程接受两个整数参数，将它们相加并将结果存储在输出参数 <code>result</code> 中。然后我们调用该过程，并传递参数 3 和 4。最后，我们使用 <code>DBMS_OUTPUT</code> 语句将结果打印到控制台上。</p>
+<h3 id="创建函数并调用："><a href="#创建函数并调用：" class="headerlink" title="创建函数并调用："></a>创建函数并调用：</h3><p>创建一个简单的示例函数，实现将传入的两个整数相加并返回结果：</p>
+<p>创建函数：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> REPLACE <span class="hljs-keyword">FUNCTION</span> add_numbersnum1 <span class="hljs-keyword">IN</span> NUMBER, num2 <span class="hljs-keyword">IN</span> NUMBER) <span class="hljs-keyword">RETURN</span> NUMBER<br><span class="hljs-keyword">IS</span><br><span class="hljs-keyword">BEGIN</span><br>    <span class="hljs-keyword">RETURN</span> num1 <span class="hljs-operator">+</span> num2;<br><span class="hljs-keyword">END</span>;<br><span class="hljs-operator">/</span><br></code></pre></td></tr></table></figure>
+
+<p>调用函数：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span><br>    res NUMBER;<br><span class="hljs-keyword">BEGIN</span><br>    res :<span class="hljs-operator">=</span> add_numbers(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>);<br>    DBMS_OUTPUT.PUT_LINE(<span class="hljs-string">&#x27;Result: &#x27;</span> <span class="hljs-operator">||</span> res);<br><span class="hljs-keyword">END</span>;<br><span class="hljs-operator">/</span><br></code></pre></td></tr></table></figure>
+
+<p>在上述代码中，我们定义了一个函数 <code>add_numbers</code>，该函数接受两个整数参数，将它们相加并返回结果。我们调用该函数，并传递参数 3 和 4，然后将返回值存储在变量 <code>res</code> 中。最后，我们使用 <code>DBMS_OUTPUT</code> 语句将结果打印到控制台上。</p>
+<h3 id="创建包并调用："><a href="#创建包并调用：" class="headerlink" title="创建包并调用："></a>创建包并调用：</h3><p>创建一个示例包，并调用该包中的过程和函数：</p>
+<p>创建包：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> REPLACE PACKAGE my_package <span class="hljs-keyword">IS</span><br>    <span class="hljs-keyword">PROCEDURE</span> add_numbers (num1 <span class="hljs-keyword">IN</span> NUMBER, num2 <span class="hljs-keyword">IN</span> NUMBER, <span class="hljs-keyword">result</span> <span class="hljs-keyword">OUT</span> NUMBER);<br>    <span class="hljs-keyword">FUNCTION</span> multiply_numbers (num1 <span class="hljs-keyword">IN</span> NUMBER, num2 <span class="hljs-keyword">IN</span> NUMBER) <span class="hljs-keyword">RETURN</span> NUMBER;<br><span class="hljs-keyword">END</span> my_package;<br><span class="hljs-operator">/</span><br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> REPLACE PACKAGE BODY my_package <span class="hljs-keyword">IS</span><br>    <span class="hljs-keyword">PROCEDURE</span> add_numbers (num1 <span class="hljs-keyword">IN</span> NUMBER, num2 <span class="hljs-keyword">IN</span> NUMBER, <span class="hljs-keyword">result</span> <span class="hljs-keyword">OUT</span> NUMBER)<br>    <span class="hljs-keyword">IS</span><br>    <span class="hljs-keyword">BEGIN</span><br>        <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> num1 <span class="hljs-operator">+</span> num2;<br>    <span class="hljs-keyword">END</span>;<br><br>    <span class="hljs-keyword">FUNCTION</span> multiply_numbers (num1 <span class="hljs-keyword">IN</span> NUMBER, num2 <span class="hljs-keyword">IN</span> NUMBER) <span class="hljs-keyword">RETURN</span> NUMBER<br>    <span class="hljs-keyword">IS</span><br>    <span class="hljs-keyword">BEGIN</span><br>        <span class="hljs-keyword">RETURN</span> num1<br>    <span class="hljs-keyword">END</span>;<br><span class="hljs-keyword">END</span> my_package调```<br><span class="hljs-keyword">DECLARE</span><br>    res1 NUMBER;<br>    res2 NUMBER;<br><span class="hljs-keyword">BEGIN</span><br>    my_package.add_numbers(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, res1);<br>    my_package.multiply_numbers(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, res2);<br>    DBMS_OUTPUT.PUT_LINE(<span class="hljs-string">&#x27;Result of add: &#x27;</span> <span class="hljs-operator">||</span> res1);<br>    DBMS_OUTPUT.PUT_LINE(<span class="hljs-string">&#x27;Result of multiply: &#x27;</span> <span class="hljs-operator">||</span> res2);<br><span class="hljs-keyword">END</span>;<br><span class="hljs-operator">/</span><br></code></pre></td></tr></table></figure>
+
+<p>在上述代码中，我们定义了一个名为 “my_package” 的，并在包中创建了一个 “add_numbers” 过程和一个 “multiply_numbers” 函数。我们在声明部分声明了两个变量“res1”和“res2”，然后在开始部分分别调用了包中的过程和函数，并将结果存储在这两个变量中。最后，我们使用 <code>DBMS_OUTPUT</code> 语句打印了两个结果值。</p>
+<h3 id="创建触发器并调用："><a href="#创建触发器并调用：" class="headerlink" title="创建触发器并调用："></a>创建触发器并调用：</h3><p>创建一个触发器，当一个新的行插入到测试表中时，自动将当前日期插入到另一个指定的日期列中。示例代码：</p>
+<p>创建触发器：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">OR</span> REPLACE <span class="hljs-keyword">TRIGGER</span> my_trigger<br>BEFORE <span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">ON</span> my_table<br><span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-type">ROW</span><br><span class="hljs-keyword">BEGIN</span><br>    :NEW.date_column :<span class="hljs-operator">=</span> SYSDATE;<br><span class="hljs-keyword">END</span>;<br><span class="hljs-operator">/</span><br></code></pre></td></tr></table></figure>
+
+<p>在上述代码中，我们创建了一个名为 “my_trigger” 的触发器，它会在新记录插入my 的表中时被调用。当触发器被激活时，它系统日期填充到名为 “date_column” 的列中。</p>
+<p>由于触发器不是通过显式调用来执行的，因此在此示例中无法提供对触发器的调用代码。触发器是在满足其定义条件时自动触发的，具体条件在示例代码中显示。</p>
+<p>总之，创建过程、函数、包和触发器可以提高编程效率，使数据库应用程序更加强大和灵活。具体的调用方式取决于它们各自的特性和定义条件。</p>
+<h3 id="一"><a href="#一" class="headerlink" title="一"></a>一</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs">题目：正确认识全球能源安全形势<br><br>内容摘要：<br>在当今世界中，能源是一个非常重要的话题。随着全球人口的不断增加和城市化的快速发展，相应地对能源的需求也日益增加。能源是现代社会的支柱，它涉及各个领域，包括交通、制造业、医疗、教育、采矿等等。能源的供求关系和安全问题越来越被人们所重视。本文将对全球能源安全形势进行分析，旨在正确认识能源安全的重要性、特点以及对全球经济、政治和社会的影响。<br><br>关键词：能源安全、全球、供需关系、风险、政策推动<br><br>一、全球能源安全的重要性<br>能源安全是指能源的供应、储备和利用不会因战争、短缺、涨价、灾害等原因出现中断和不安全等情况的状态。全球能源安全的保障直接涉及到企业、国家、政府以及个人的利益。能源是世界上最基本的生产要素，没有能源，先进的制造技术和高水平的创新都没有用武之地。能源是调动社会生产力和维护社会稳定的重要支撑。在能源紧缺的情况下，工业生产无法正常进行，交通运输无法保持正常运营，社会大众生活状况也将受到影响。<br><br>二、全球能源安全的挑战和风险<br>能源供需的严峻形势是当前全球能源安全面临的主要挑战。全球经济和能源消费的增长率显然超过了能源产量和供应的速度，这导致了全球上涨的油价、能源储备的短缺，以及难以控制的能源消费增长速度。例如，中国和印度的经济增长已经超过30年，人口快速增加且消费的能源不断增加，这导致了全球能源市场受到巨大的压力。此外，政治和地缘策略的因素也对全球能源安全产生了不小的影响，例如石油和天然气的管道或出口国家之间的紧张关系、恶劣气候和能源设施遭受的自然灾害等。<br><br>三、政策推动全球能源安全<br>全球能源安全不仅在政治、经济和社会层面上有着重要的影响，在国际公共卫生、环保和海洋保护等方面也有着巨大的挑战。为此，面对严峻的能源安全形势，政府和各利益相关方应该通过一系列政策措施来推动全球能源安全。对于各国政府而言，应该优先考虑保障国民的能源安全需求，同时也要打造绿色的能源体系，争取在全球新能源资源的开发方面取得领先地位。另外，应该加大对能源互联网和能源储存技术的支持力度，促进能源生产和消费之间的平衡，推动全球能源合作与创新。<br><br>在企业层面上，应该通过技术创新和发展，实现能源的可持续利用，保证生产运转的流畅和创新发展的推动。此外，还应该加强对员工的培训和意识教育，强化能源安全的意识并有效控制企业能源消耗。<br><br>四、未来展望<br>随着能源需求的不断增加，全球能源安全问题将会更加突出且复杂。为了确保全球能源的供应、储备和利用的可持续性和安全性，各国政府和利益相关方将不断采取政策措施来推动全球能源安全。此外，未来还会出现更多的新能源技术，例如太阳能、风能、地热能和水能等，这将为全球能源安全问题的解决提供更好的选择和可能性。同时，在应对全球气候变化问题的过程中，可再生能源的使用和推广也将成为全球能源安全的主要方向。<br><br>总之，全球能源安全问题是一个真正的全球性挑战，需要政府和各利益相关方共同参与，推动能源的绿色、可持续发展，并加强能源安全意识，积极应对全球能源安全面临的复杂形势。<br></code></pre></td></tr></table></figure>
+
+<h3 id="二"><a href="#二" class="headerlink" title="二"></a>二</h3><p>题目：正确认识全球能源安全形势</p>
+<p>内容摘要： 随着全球经济的快速发展，能源安全已经成为了各国政府高度关注的问题。本文将从以下几个方面来分析全球能源安全形势：第一，全球能源安全的概念与意义；第二，全球能源资源的供应与需求现状；第三，全球能源市场的竞争格局；第四，面临的挑战与解决途径；最后，未来的走向和建议。</p>
+<p>关键词：能源安全，全球能源，供需现状，竞争格局，挑战与解决途径，未来走向</p>
+<p>一：全球能源安全的概念与意义 能源安全是指保障一个国家或地区的能源可靠供应，以满足经济和社会发展所需的能量的安全状态。能源安全对于一个国家的经济、社会、政治稳定和国际地位都具有重要影响。如果缺乏能源安全，将会带来诸多不利的后果，如经济衰退、社会动荡、国际竞争力下降等。</p>
+<p>二：全球能源资源的供应与需求现状 随着全球人口的持续增长和经济的快速发展，对能源的需求也在不断增加。同时，能源的供给却面临着许多挑战，如能源资源的有限性、环境污染和气候变化等。目前，全球主要能源消耗国家之一的中国，对于能源的需求已经超过了自身生产能力，需要依赖进口。而在全球范围内，化石能源（如石油、天然气和煤炭）仍是主要的能源来源，但随着可再生能源（如太阳能、风能和水能）的广泛应用，未来能源需求结构将会发生重大变化。</p>
+<p>三：全球能源市场的竞争格局 在争夺全球能源市场上，各个国家都在积极推动能源行业的发展。尤其是在中东地区，拥有丰富的石油资源，成为全球石油市场的主要供应国。而在欧洲、美洲以及亚洲地区，都有强大的能源需求国家，这些国家也在积极争夺全球能源市场的话语权。此外，可再生能源的崛起也给全球能源市场带来了新的竞争格局。</p>
+<p>四：面临的挑战与解决途径 全球能源面临的主要挑战包括：一是能源的高消耗和高浪费；二是化石能源的有限性和环境问题；三是国际政治环境和供应风险等。为了应对这些挑战，各个国家需要采取一系列措施，如加强能源技术创新、促进能源节约与效率提升、发展可再生能源等。此外，应加强国际合作，共同应对全球能源安全的挑战。</p>
+<p>五：未来的走向和建议 未来全球能源发展将会面临更多的变数，需要各个国家共同应对。在未来，可再生能源将会成为全球能源供给体系中的重要组成部分。同时，各个国家也应该在制定相关政策时注重环保、节约、高效等方面的考虑。建议各个国家加强合作，共同研究新能源技术，推动能源领域的创新与发展，实现全球能源安全的可持续发展。</p>
+<p>总结： 本文从全球能源安全的概念与意义、全球能源资源的供应与需求现状、全球能源市场的竞争格局、面临的挑战与解决途径和未来的走向和建议等方面进行了分析。全球能源安全是全球各个国家必须共同关注的问题，需要采取综合措施应对。只有真正实现全球能源安全，才能保障全球的经济和社会发展，并且让人们享受到更加美好的生活。</p>
+<h3 id="三"><a href="#三" class="headerlink" title="三"></a>三</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs markdown">题目：正确认识全球能源安全形势<br><br>内容摘要：<br>随着全球经济的快速发展和人口的不断增加，能源已成为现代社会的基础源求关系和越来越引府和企业的重视。为了深入认识全球能源安全形势，本文从能源安全的概念和特点、全球能源安全的挑战，以及推动全球能源安全的政策措施等方面进行了研究分析，旨在推动全球能源安全的发展。<br><br>关键词：能源安全、全球、供给与需求、挑战、政策推动<br><br>一、能源安全的概念与特点<br>能源安全是指能源的供应、储备和利用不受威胁和干扰的状态。能源安全是现代社会发展的重要基础，它是人类经济社会持续发展和全球可持续发展的键要素。能源主要特点包括：<br><br><span class="hljs-bullet">1.</span> 稳定安全性：保证能源的供应和储备的稳定性，不受短期风险和威胁的干扰。<br><br><span class="hljs-bullet">2.</span> 经济性源，济发展和社会稳定。<br><br><span class="hljs-bullet">3.</span> 环保性：能源开采的过程环境、人类健康造成的负面影响得到有效控制。<br><br><span class="hljs-bullet">4.</span> 可持续性：充分考虑能源储备的可持续性，推广和发展绿色、清洁、可再生能源。<br><br>二、全球能源安全的挑战和问题<br>全球能源安全问题与发展阶段、经济体系、国家和地缘政治等因素有关。随着全球人口的增加和城市化的快速发展、新兴市场和发展起能源供应压力持续大。下面将探讨全球能源安全面临的挑战。<br><br><span class="hljs-bullet">1.</span> 供需矛盾日益加剧：济的飞速增长推动了对能源的需求迅速增加，但能源供依旧难以满足需致全球能源市场的矛盾日益加剧。<br><br><span class="hljs-bullet">2.</span> 能源气候变化：人类活动导致的二氧化碳排放和全球气温上升，加剧了能源气候变化的问题，增加了全球能源供应的不稳定性。<br><br><span class="hljs-bullet">3.</span> 地缘政治的影响：能源生产国、中转国和消费国之间的竞争和关系对全球能源安全产生了不小的影响，能源市场的稳定也使全球能源安全面临风险。<br><br><span class="hljs-bullet">4.</span> 能源安全的技术挑战：能源生产和储存技术的发展是关键，然而搞气化、油页岩开采以及天然气水合物等技术也面临着技术成本高和环境污染等问题。<br><br>三、推动全球能源安全的政策措施<br>为了应对全球能源安全面临的挑战和问题，采取有效的政策措施是非常必要的。在此过程中，需要各国政府、企业和各利益相关方共同努力、推动全球能源安全发展。具体的措施如下：<br><br><span class="hljs-bullet">1.</span> 推广可持续能源，促进绿色和清洁能源的发展，开发和利用可再生能源，减少对传统能源的依赖。<br><br><span class="hljs-bullet">2.</span> 采用新的技术手段，例如提高能源效率，降低能源消耗；并加强新的技术研发，例如能源互联网、先进燃气轮机等，以提高能源生产、储存和供应的效率和稳定性。<br><br><span class="hljs-bullet">3.</span> 改善能源市场的定价机制，实行市场化改革，提高市场透明度和公平性，降低能源市场的风险和波动性。<br><br><span class="hljs-bullet">4.</span> 发挥国际合作的重要作用，国际合作既可以促进全球能源稳定供应，也可以实现能源安全性和环境保护的目标。<br><br>四、推动全球能源安全的政策措施<br>为了应对全球能源安全面临的挑战和问题，采取有效的政策措施是非常必要的。在此过程中，需要各国政府、企业和各利益相关方共同努力、推动全球能源安全发展。具体的措施如下：<br><br><span class="hljs-bullet">1.</span> 推广可持续能源，促进绿色和清洁能源的发展，开发和利用可再生能源，减少对传统能源的依赖。<br><br><span class="hljs-bullet">2.</span> 采用新的技术手段，例如提高能源效率，降低能源消耗；并加强新的技术研发，例如能源互联网、先进燃气轮机等，以提高能源生产、储存和供应的效率和稳定性。<br><br><span class="hljs-bullet">3.</span> 改善能源市场的定价机制，实行市场化改革，提高市场透明度和公平性，降低能源市场的风险和波动性。<br><br><span class="hljs-bullet">4.</span> 发挥国际合作的重要作用，国际合作既可以促进全球能源稳供应，也可以实现能源安全性和环境保护的目标。<br><br>五、未来展望<br>展望未来，应在政策层面上加强对能源安全的重视，进一步推动全球能源可持续发展。可以通过采用包括采取节能、降低能耗、加强管理和利用可再生能源等在内的多种策略，非减空气污染和控制二氧化碳排放等，推动全球能源生产、消费和供应之间的平衡，实现能源持续、稳定、可靠的发展。<br><br>在技术创新方面，可以引进更多的科学技术，推广先进技术，完善技术体系并加强能源安全领域的科研投入，实现能源生产和消费的高效和可持续。<br><br>此外，国际合作能够促进国际贸易、本地产业以及全球性的政策措施变革。各国可以加强能源之间的合作，共享技术、人才和经验，共同应对全球能源安全问题。例如，可以加强国际能源协会等的发展，共同制定行业标准和规范，增强国际能源界组织以及企业之间的信息交流等。<br><br>结语：<br>本文回顾了全球能源安全的挑战和相关政策措施，并提出了全球能源安全的解决方案。随着全球化的深入发展和全球能源需求的不断增加，各国政府、企业和个人都应高度重视全球能源安全形势，加强合作，创新发展，实现能源可持续发展，保障经济社会的持续稳定发展。<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MySQL</div>
+      <div>http://example.com/2023/06/01/分布式组件+常见组件/MySQL/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/MyBatis/" title="负载均衡">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">负载均衡</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Nacos/" title="Nacos">
+                        <span class="hidden-mobile">Nacos</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

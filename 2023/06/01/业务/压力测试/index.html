@@ -1,0 +1,777 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="压力测试性能指标说明吞吐量（put）吞吐量指的是系统或应用程序处理的单位时间内的数据、请求或事务数，通常用每秒处理量（TPS）或每秒查询量（QPS）来表示。吞吐量是一个非常重要的性能指标，反映了系统在高负载、高并发下的处理能力。吞吐量通常越高，表示系统性能越好。 TPS（Transactions Per Second）TPS 指每秒钟处理完成的事务数量，事务可以是数据库的操作、HTTP 请求等，一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="压力测试">
+<meta property="og:url" content="http://example.com/2023/06/01/%E4%B8%9A%E5%8A%A1/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="压力测试性能指标说明吞吐量（put）吞吐量指的是系统或应用程序处理的单位时间内的数据、请求或事务数，通常用每秒处理量（TPS）或每秒查询量（QPS）来表示。吞吐量是一个非常重要的性能指标，反映了系统在高负载、高并发下的处理能力。吞吐量通常越高，表示系统性能越好。 TPS（Transactions Per Second）TPS 指每秒钟处理完成的事务数量，事务可以是数据库的操作、HTTP 请求等，一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.441Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="业务">
+<meta property="article:tag" content="测试">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>压力测试 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="压力测试"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">压力测试</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h1><h1 id="性能指标说明"><a href="#性能指标说明" class="headerlink" title="性能指标说明"></a>性能指标说明</h1><h2 id="吞吐量（put）"><a href="#吞吐量（put）" class="headerlink" title="吞吐量（put）"></a>吞吐量（put）</h2><p>吞吐量指的是系统或应用程序处理的单位时间内的数据、请求或事务数，通常用每秒处理量（TPS）或每秒查询量（QPS）来表示。吞吐量是一个非常重要的性能指标，反映了系统在高负载、高并发下的处理能力。吞吐量通常越高，表示系统性能越好。</p>
+<h2 id="TPS（Transactions-Per-Second）"><a href="#TPS（Transactions-Per-Second）" class="headerlink" title="TPS（Transactions Per Second）"></a>TPS（Transactions Per Second）</h2><p>TPS 指每秒钟处理完成的事务数量，事务可以是数据库的操作、HTTP 请求等，一般用于衡量系统的处理能力。TPS 值越高，表示系统在单位时间内的处理能力越强，而且系统稳定性好，性能伸缩性高。</p>
+<h2 id="QPS（Queries-Per-Second）"><a href="#QPS（Queries-Per-Second）" class="headerlink" title="QPS（Queries Per Second）"></a>QPS（Queries Per Second）</h2><p>QPS 指每秒钟处理的查询数量，查询可以是数据库查询、网络请求等，一般用于衡量系统的性能。QPS 值越高，表示系统在单位时间内的处理能力越强，系统响应速度快，但也可能导致系统负载过大，性能瓶颈或资源不足。</p>
+<p>在实际测试中，吞吐量、TPS、QPS 通常都会随着系统负载和并发的增加而增加，但当系统达到最大负载或处理能力时，这些指标会稳定在一个峰值或上限。具体的数值会受到多种因素的影响，如硬件配置、系统架构、测试用例设计等，难以给出通用的低、中、高性能对应的大概数值，需要根据具体测试环境和需求进行评估。 一般认为：QPS 在 5k-10k 左右是中等性能，超过 10k 则是高性能；TPS 在 500-1000 左右是中等性能，超过 1000 则是高性能；吞吐量最基本的要求应当是能够达到应用最大负载的要求。</p>
+<h2 id="响应时间（Response-Time）"><a href="#响应时间（Response-Time）" class="headerlink" title="响应时间（Response Time）"></a>响应时间（Response Time）</h2><p>响应时间是指客户端发起请求到获取到反馈的时间。响应时间通常包括客户端发送请求、服务器接收和处理请求、服务器发送响应、客户端接收和处理响应的耗时。响应时间是一个重要的指标，反映了系统的响应速度和用户体验。</p>
+<h2 id="并发数（Concurrency）"><a href="#并发数（Concurrency）" class="headerlink" title="并发数（Concurrency）"></a>并发数（Concurrency）</h2><p>并发数是指系统同时处理的请求数量，或者说是系统支持的最大并发访问用户数。并发数通常受制于硬件资源、网络带宽、系统架构等因素，超过系统承载能力时可能会导致系统崩溃或性能下降。</p>
+<h2 id="资源利用率（Utilization）"><a href="#资源利用率（Utilization）" class="headerlink" title="资源利用率（Utilization）"></a>资源利用率（Utilization）</h2><p>资源利用率是指系统使用各种资源的效率，比如 CPU、内存、磁盘 I&#x2F;O 等。资源利用率是评估系统性能和效率的一个重要指标，反映了系统的资源利用水平和瓶颈。</p>
+<h2 id="错误率（Error-Rate）"><a href="#错误率（Error-Rate）" class="headerlink" title="错误率（Error Rate）"></a>错误率（Error Rate）</h2><p>错误率是指系统处理请求时发生错误的比例，包括客户端错误、服务器错误、网络错误等。错误率高可能导致系统无法正常运行，影响用户体验，也需要及时优化。</p>
+<h2 id="数据传输速率（Data-Transfer-Rate）"><a href="#数据传输速率（Data-Transfer-Rate）" class="headerlink" title="数据传输速率（Data Transfer Rate）"></a>数据传输速率（Data Transfer Rate）</h2><p>数据传输速率是指数据在设备或网络中传输的速度，通常以 MB&#x2F;s 或 Mbps 表示。数据传输速率是一个重要的性能指标，影响数据上传下载速度和处理效率。</p>
+<h2 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h2><p>以下是一些常见性能指标及其参考数值范围（仅供参考）：</p>
+<ol>
+<li><p>响应时间：良好的系统响应时间应该在几百毫或更短，大约在 100 毫秒以下为优秀，100 毫秒至 500 毫秒为一般，500 毫秒以上为较慢。对于某些应用程序，快速的响应时间可能非常关键，如金融、电商等。</p>
+</li>
+<li><p>吞吐量：吞吐量是一个相对的指标，通常需要与系统配置和用户需求进行比较。对于 Web 服务器，每秒处理 1,000 个请求可以视为中等性能，每秒处理 10,000 个请求可以视为高性能。对于数据库服务器，每秒处理 1,000-2,000 个查询可以视为中等性能，每秒处理 10,000 个查询可以视为高性能。</p>
+</li>
+<li><p>并发数：对于 Web 服务器，在同一时间内处理 100-500 个并发请求可以视为中等性能，处理 1,000-5,000 个并发请求可以视为高性能。对于数据库服务器，支持 50-100 个并发连接可以视为中等性能，支持 1,000 个并发连接可以视为高性能。</p>
+</li>
+<li><p>资源利用率：对于 CPU 和内存，服务器的使用率应该尽可能地接近 100%，可以留出一定的缓冲区。对于磁盘 I&#x2F;O，每秒处理 300-500 的硬盘读写操作可以视为中等性能，每秒处理 2,000 以上的读写操作可以视为高性能。</p>
+</li>
+<li><p>错误率：错误率通常需要维持在很低的水平，如小于 0.1% 或更低，否则可能导致系统不能正常运行。</p>
+</li>
+<li><p>数据传输速率：对于网络带宽，可以参考 100 Mbps 为中等性能，1 Gbps 以上为高性能。</p>
+</li>
+</ol>
+<h1 id="JMeter压力测试"><a href="#JMeter压力测试" class="headerlink" title="JMeter压力测试"></a>JMeter压力测试</h1><p>在 JMeter 测试中，测试结果包括了很多指标，以下是一些常用指标的详细介绍：</p>
+<ol>
+<li><strong>输入指标</strong></li>
+</ol>
+<ul>
+<li>线程组数（Thread Group Count）：JMeter 线程组启动的线程数量。</li>
+<li>持续时间（Duration）：JMeter 测试运行的时间 启动时间（J所有线程- 请求数量（）：JMeter期间发出的请求数量。</li>
+<li>随机数生成器种子（Random Seed）：JMeter 使用的随机数生成器的种子。</li>
+</ul>
+<ol start="2">
+<li><strong>输出指标</strong></li>
+</ol>
+<ul>
+<li>成功事务数（Successful Transactions）：JMeter 测试期间成功完成的事务数量。</li>
+<li>失败事务数（Failed Transactions）：JMeter 测试期间失败的事务数量。</li>
+<li>响应时间（Response Time）：JMeter 测试期间的平均响应时间、最小响应时间、最大响应时间等。</li>
+<li>吞吐量（Throughput）：JMeter 测试期间的平均吞吐量，单位通常为每秒请求数（Requests per Second，RPS）。</li>
+<li>错误率（Error Rate）：JMeter 测试期间的错误率，通常以百分比表示。</li>
+<li>平均并发用户数（Average Concurrent Users）：JMeter 测试期间的平均并发用户数，通常以用户数量表示。</li>
+<li>基准带宽（Basic Bandwidth）：JMeter 测试期间的平均数据传输速率，通常以千字节每秒（KB&#x2F;s）或兆字节每秒（MB&#x2F;s）表示。</li>
+</ul>
+<p>除了上述指标，还有评分方法：</p>
+<ul>
+<li>性能系数（Performance Index，PI）：性能系数是基于一个简单的比率计算的，即成功的请求数量与持续时间的比率，单位为每秒成功的请求数（Successful Requests per Second，SRPS）。</li>
+<li>性能等级（Performance Grade）：性能等级是根据吞吐量和响应时间计算得出的，可以用于评估系统性能的质量。通常使用 A、B、C、D、E、F 这六个等级进行评分。</li>
+</ul>
+<p>在分析和解释 JMeter 测试结果时，需要注意指标之间的关联和影响，以及与实际应用场景的对比和评估。</p>
+<h1 id="其他压力测试工具"><a href="#其他压力测试工具" class="headerlink" title="其他压力测试工具"></a>其他压力测试工具</h1><p>除了 JMeter，还有许多其他的压力测试工具可以使用。这些工具可以根据不同的功能和目标进行分类，以下是其中一些常见的压力测试工具及其主要特点，使用场景和测试输入&#x2F;输出参数的详细介绍：</p>
+<h2 id="Apache-Bench-ab"><a href="#Apache-Bench-ab" class="headerlink" title="Apache Bench (ab)"></a>Apache Bench (ab)</h2><p>Apache Bench 是一款非常简单易用的命令行压力测试工具，主要用于测试 Web 服务器的性能。它的特点是使用简单，支持并发测试，并且可以在需要的时候调整测试条件。ab 测试主要包括以下输入参数和输出指标：</p>
+<ul>
+<li><p>输入参数：</p>
+<ul>
+<li>测试的 URL 地址和端口号</li>
+<li>并发请求数和总请求数</li>
+<li>测试的时间长度和超时时间</li>
+<li>其他对测试参数的设置</li>
+</ul>
+</li>
+<li><p>输出指标：</p>
+<ul>
+<li>完成的请求数和失败的请求数</li>
+<li>请求的响应时间和吞吐量</li>
+<li>请求的平均处理时间和最大处理时间</li>
+<li>请求的错误率和错误类型</li>
+</ul>
+</li>
+</ul>
+<p>使用场景：测试 Web 服务器性能、开发测试脚本等。</p>
+<h2 id="LoadRunner"><a href="#LoadRunner" class="headerlink" title="LoadRunner"></a>LoadRunner</h2><p>LoadRunner 是一款功能强大的压力测试工具，支持多种不同类型的应用程序和协议的测试。它的特点是比较全面、规范、灵活、可扩展，适用于大规模负载测试和分布式测试环境。LoadRunner 测试主要包括以下输入参数和输出指标：</p>
+<ul>
+<li><p>输入参数：</p>
+<ul>
+<li>测试脚本的设计和设置</li>
+<li>调试信息和错误报告</li>
+<li>性能监控和管理</li>
+</ul>
+</li>
+<li><p>输出指标：</p>
+<ul>
+<li>虚拟用户数和负载情况</li>
+<li>平均响应时间、最大响应时间、吞吐量等</li>
+<li>错误率、错误类型和错误原因</li>
+<li>服务器性能指标和负载均衡情况</li>
+</ul>
+</li>
+</ul>
+<p>使用场景：测试各种应用程序和协议、进行大规模负载测试、测试分布式环境等。</p>
+<h2 id="Gatling"><a href="#Gatling" class="headerlink" title="Gatling"></a>Gatling</h2><p>Gatling 是一款基于 Scala 语言开发的高性能压力测试工具，主要用于测试 Web 应用程序的性能。它的特点是使用灵活、易扩展、支持多种协议和场景模拟，同时具有友好的交互式控制台和详细的测试报告。Gatling 测试主要包括以下输入参数和输出指标：</p>
+<ul>
+<li><p>输入参数：</p>
+<ul>
+<li>测试脚本和场景设计</li>
+<li>并发用户数量、请求比例、持续时间等</li>
+<li>测试配置文件和参数设置</li>
+</ul>
+</li>
+<li><p>输出指标：</p>
+<ul>
+<li>请求响应时间、吞吐量等性能指标</li>
+<li>用户请求数、失败请求数等统计信息</li>
+<li>错误率、错误类型、错误详情等报告信息</li>
+</ul>
+</li>
+</ul>
+<p>使用场景：测试 Web 应用程序性能、高并发场景模拟、测试报告分析等。</p>
+<h2 id="Silk-Performer"><a href="#Silk-Performer" class="headerlink" title="Silk Performer"></a>Silk Performer</h2><p>Silk Performer 是一款高性能的压力测试工具，可以用于测试许多不类型的企业应用程序。它的特点是使用方便、适于多种场景测试、支持多种协议和技术，同时可以进行实时监控和性能优化。Silk Performer 测试主要包括以下输入参数和输出指标：</p>
+<ul>
+<li><p>输入参数：</p>
+<ul>
+<li>测试计划和场景设计</li>
+<li>测试协议和技术的设置</li>
+<li>实时监控和性能分析</li>
+</ul>
+</li>
+<li><p>输出指标：</p>
+<ul>
+<li>服务器性能指标和负载状况</li>
+<li>响应时间、吞吐量、错误率等性能指标</li>
+<li>详细的测试报告和结果分析</li>
+</ul>
+</li>
+</ul>
+<p>使用场景：测试企业级应用程序、多种协议和技术、实时监控和性能优化。</p>
+<p>总之，不同类型的压力测试工具有不同的功能和使用场景，并且具有各种输入参数和输出指标。根据实际测试需求和特点来选择合适的压力测试工具是非常重要的。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%B8%9A%E5%8A%A1/" class="category-chain-item">业务</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B8%9A%E5%8A%A1/">#业务</a>
+      
+        <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>压力测试</div>
+      <div>http://example.com/2023/06/01/业务/压力测试/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/Spring%E5%BC%80%E5%8F%91%E4%B8%9A%E5%8A%A1/" title="Spring开发业务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Spring开发业务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/API%E7%BD%91%E5%85%B3/" title="API网关">
+                        <span class="hidden-mobile">API网关</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

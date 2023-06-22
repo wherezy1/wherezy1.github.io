@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="编程思想编程方式在现代编程语言中，常见的编程方式包括：  命令式编程（Imperative Programming）命令式编程是基于状态变量和语句一步一步执行的编程方式，开发者需要明确指定每一步应该做什么，并通过控制语句（如if、while、for等）来控制程序的执行流程。最常用的编程方式之一，适用于逻辑清晰、流程确定的程序设计场景。  面向对象编程（Object Oriented Program">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编程思想">
+<meta property="og:url" content="http://example.com/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="编程思想编程方式在现代编程语言中，常见的编程方式包括：  命令式编程（Imperative Programming）命令式编程是基于状态变量和语句一步一步执行的编程方式，开发者需要明确指定每一步应该做什么，并通过控制语句（如if、while、for等）来控制程序的执行流程。最常用的编程方式之一，适用于逻辑清晰、流程确定的程序设计场景。  面向对象编程（Object Oriented Program">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.852Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="模式">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>编程思想 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="编程思想"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          49 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">编程思想</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="编程思想"><a href="#编程思想" class="headerlink" title="编程思想"></a>编程思想</h1><h2 id="编程方式"><a href="#编程方式" class="headerlink" title="编程方式"></a>编程方式</h2><p>在现代编程语言中，常见的编程方式包括：</p>
+<ol>
+<li><p>命令式编程（Imperative Programming）<br>命令式编程是基于状态变量和语句一步一步执行的编程方式，开发者需要明确指定每一步应该做什么，并通过控制语句（如if、while、for等）来控制程序的执行流程。最常用的编程方式之一，适用于逻辑清晰、流程确定的程序设计场景。</p>
+</li>
+<li><p>面向对象编程（Object Oriented Programming）<br>面向对象编程是一种基于对象和类的编程方式，通过封装、继承、多态等多种方式来处理复杂的系统。开发者通过定义类和对象，将行为和数据进行组织，这使得代码更加可读、可复用和可维护。</p>
+</li>
+<li><p>函数式编程（Functional Programming）<br>函数式编程是一种以函数为基础的编程模型，在这种模型下，函数是独立的且不依赖于状态的计算单元。函数式编程中的函数可以作为参数进行传递和返回，这种方式使得代码更加简洁，易于测试和重构，在并发编程场景中更有优势。</p>
+</li>
+<li><p>声明式编程（Declarative Programming）<br>声明式编程是一种描述问题解决方法的编程模型，开发者通过定义问题的规则和条件来解决问题，而不是通过计算机指令的一步一步执行。声明式编程的优点在于能够强化代码的可复用性和可维护性，代码更加清晰和易于阅读。</p>
+</li>
+<li><p>响应式编程（Reactive Programming）<br>响应式编程是一种基于事件和变化的编程模型，在响应式编程模型中，开发者通过定义某个数据对象的变化，当数据发生变化时程序会自动地响应和处理这些变化。该编程模型适用于高可扩展性和高并发性的系统，如分布式系统和实时系统。</p>
+</li>
+<li><p>并发编程（Concurrent Programming）<br>并发编程是一种利用计算机处理多个任务的编程模型，用于设计处理并行和并发问题的复杂系统。并发编程的优点在于可以使用多线程、进程、协程等多种方式来处理任务，从而提升代码的执行效率。</p>
+</li>
+</ol>
+<p>以上是一些常见的编程模型和方式示例，程序员们可以根据实际情况选择合适的编程方式。</p>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><ol>
+<li>命令式编程示例代码（使用 Python 语言）：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 计算1到100的整数和</span><br><span class="hljs-built_in">sum</span> = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">101</span>):<br>    <span class="hljs-built_in">sum</span> += i<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;1到100的整数和为：&quot;</span>, <span class="hljs-built_in">sum</span>)<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>面向对象编程示例代码（使用 Java 语言）：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 定义一个简单的汽车类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Car</span> &#123;<br>    <span class="hljs-keyword">private</span> String brand;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> price;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Car</span><span class="hljs-params">(String brand, <span class="hljs-type">int</span> price)</span> &#123;<br>        <span class="hljs-built_in">this</span>.brand = brand;<br>        <span class="hljs-built_in">this</span>.price = price;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getBrand</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> brand;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getPrice</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> price;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setPrice</span><span class="hljs-params">(<span class="hljs-type">int</span> price)</span> &#123;<br>        <span class="hljs-built_in">this</span>.price = price;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">displayInfo</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;This car&#x27;s brand is &quot;</span> + brand + <span class="hljs-string">&quot; and the price is &quot;</span> + price);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 测试类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestCar</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">Car</span> <span class="hljs-variable">car</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Car</span>(<span class="hljs-string">&quot;Toyota&quot;</span>, <span class="hljs-number">20000</span>);<br>        car.displayInfo();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>函数式编程示例代码（使用 JavaScript 语言）：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 使用 map 函数实现对数组中每个元素进行加1操作</span><br><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];<br><span class="hljs-keyword">const</span> newArray = arr.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x + <span class="hljs-number">1</span>); <br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(newArray);  <span class="hljs-comment">// 输出[2, 3, 4, 5]</span><br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>声明式编程示例代码（使用 SQL 语言）：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 查询所有年龄大于18岁的用户</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> age <span class="hljs-operator">&gt;</span> <span class="hljs-number">18</span>;<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>响应式编程示例代码（使用 Java 语言和 RxJava 库）：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 使用 RxJava 库实现一个简单的事件流</span><br>Observable&lt;Integer&gt; observable = Observable.create(emitter -&gt; &#123;<br>    emitter.onNext(<span class="hljs-number">1</span>);<br>    emitter.onNext(<span class="hljs-number">2</span>);<br>    emitter.onNext(<span class="hljs-number">3</span>);<br>    emitter.onComplete();<br>&#125;);<br><br>observable.subscribe(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Observer</span>&lt;Integer&gt;() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onSubscribe</span><span class="hljs-params">(Disposable disposable)</span> &#123;<br>        <span class="hljs-comment">// do something on subscribe</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onNext</span><span class="hljs-params">(Integer integer)</span> &#123;<br>        System.out.println(integer);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onError</span><span class="hljs-params">(Throwable throwable)</span> &#123;<br>        <span class="hljs-comment">// handle the exception</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onComplete</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Complete&quot;</span>);<br>    &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>并发编程示例代码（使用 Java 语言和多线程实现）：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 创建两个线程来对数组中的元素进行平方运算</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SquareThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span>[] arr;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">SquareThread</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr)</span> &#123;<br>        <span class="hljs-built_in">this</span>.arr = arr;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; arr.length; i++) &#123;<br>            arr[i] = arr[i] * arr[i];<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestSquareThread</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">int</span>[] arr = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br>        <span class="hljs-type">SquareThread</span> <span class="hljs-variable">thread1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SquareThread</span>(Arrays.copyOfRange(arr, <span class="hljs-number">0</span>, arr.length / <span class="hljs-number">2</span>));<br>        <span class="hljs-type">SquareThread</span> <span class="hljs-variable">thread2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SquareThread</span>(Arrays.copyOfRange(arr, arr.length / <span class="hljs-number">2</span>, arr.length));<br><br>        thread1.start();<br>        thread2.start();<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            thread1.join();<br>            thread2.join();<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br><br>        System.out.println(Arrays.toString(arr));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上是几个常用编程方式的示例代码，可以在实际编程中进行参考和借鉴。</p>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><p><strong>响应式编程</strong>和<strong>命令式编程</strong> (编程模型)，它们之间有以下对比：</p>
+<ol>
+<li>编程模型不同：</li>
+</ol>
+<p>命令式编程是指以程序状态及语句一步一步执行为基础，开发者需要对执行过程和状态进行处理；而响应式编程是一种声明式的编程模型，开发者只需要定义应用程序的状态和规则，当状态变化时，程序可以自动或异步地响应这些变化。</p>
+<ol start="2">
+<li>对异步编程的支持不同：</li>
+</ol>
+<p>命令式编程方式中，我们需要手动管理异步事件的处理，如使用回调、Promise 等方式管理异步事件流；而响应式编程提供了更加丰富和统一的异步编程机制，如使用 Observables 和 Flowables 等数据类型来处理事件。</p>
+<ol start="3">
+<li>代码复杂度不同：</li>
+</ol>
+<p>命令式编程中，需要编写大量的控制流代码（if&#x2F;else、for、while、try&#x2F;catch 等语句），代码的复杂度和可读性随着程序的复杂度而增加；而响应式编程通过声明式的方式，避免大量的控制流代码，使代码简洁易读。</p>
+<ol start="4">
+<li>代码维护和复用不同：</li>
+</ol>
+<p>由于思想上的差别，命令式编程方式中需要处理每个状态变化，不易维护；而响应式编程利用声明式和响应式有机结合，一旦规则定义好了，任何数据输入都能按照规则顺利流转，可维护性更强、复用性更好。</p>
+<p>总之，响应式编程和命令式编程方式是两种不同的编程模型，<strong>响应式编程主要应用于异步事件的处理，具有更好的代码复用性、可维护性和可读性。</strong>而<strong>命令式编程方式主要应用于搜索、遍历，递归等控制流程的处理方式，具有对程序的精细控制、局部分析、精准预测的优势</strong>。</p>
+<p>但随着程序的变得越来越复杂，增加了代码的维护和阅读的难度，导致了响应式编程的发展和流行。响应式编程可以更好地处理异步事件和多线程并发，使代码更简洁、易读，同时利于代码组件化及代码复用等方面的优势，使得越来越多的开发者开始使用响应式编程开发程序。与此同时，随着 RxJava、Reactor 等响应式编程库的发展和完善，响应式编程将更加普及化，成为开发高性能应用程序必不可少的编程范式之一。</p>
+<h2 id="命令式编程"><a href="#命令式编程" class="headerlink" title="命令式编程"></a>命令式编程</h2><p>命令式编程是指以程序状态及语句一步一步执行为基础，开发者需要对执行过程和状态进行处理的一种编程方式。在命令式编程中，开发者需要明确指定每一步应该做什么，并通过控制语句（如if、while、for等）来控制程序的执行流程。</p>
+<p>命令式编程通常采用的是顺序执行的程序设计模型，程序的主要部分是由一系列的指令顺序组成。在执行过程中，计算机会逐行分析程序中的指令，依次执行每一条指令，从而达到程序目标。</p>
+<p>命令式编程中通常使用变量、表达式、函数等来处理程序状态和流程控制。开发者需要细心地管理程序状态和流程控制，避免产生不必要的错误和问题。</p>
+<p>一般而言，命令式编程更适用于一些逻辑简单、控制流程明确的程序设计场景。同时，命令式编程还具有可操作性强、编写门槛低等特点，这使得它在一些小型应用程序开发中比较流行。</p>
+<p>常见的命令式编程语言包括C、C++、Java、Python等。虽然命令式编程相对于其他编程方式有着一些缺点，但是它在目前计算机科学发展史中占据了重要地位，并在一些应用场景中发挥了重要作用。</p>
+<h2 id="响应式编程"><a href="#响应式编程" class="headerlink" title="响应式编程"></a>响应式编程</h2><p>以下是响应式编程在一些实际场景中的具体应用和使用方式：</p>
+<ol>
+<li>Vue.js</li>
+</ol>
+<p>Vue.js 是一个流行的前端框架，可以使用响应式编程来处理用户界面UI的展示和操作。Vue.js 2.0版本就提供了对响应式编程的支持，采用了数据绑定方式来处理数据，当数据发生变化时，界面也会自动地更新。</p>
+<p>实现方式：Vue.js中的数据绑定机制主要包括模板元素指令、计算属性、watchers等机制。当数据模型中的数据发生变化，Vue.js会自动地更新UI界面上与该数据模型相关联的视图组件。</p>
+<ol start="2">
+<li>Netty</li>
+</ol>
+<p>Netty 是一个异步事件驱动的网络编程框架，它采用响应式编程来处理网络连接和数据流处理。通过使用 Netty，我们可以实现高效的、稳定的、可扩展的异步网络通讯应用。</p>
+<p>实现方式：Netty 在实现网络通讯中采用了 EventLoop、Channel、Future等机制，并提供了类似 RxJava 的响应式编程工具包 Netty-Reactive-Streams ，它可以通过 Reactive APIs 来简化异步编程。</p>
+<ol start="3">
+<li>Spring Gateway</li>
+</ol>
+<p>Spring Gateway 是 Spring Cloud 生态圈中的一个网关服务，提供了路由、负载均衡、限流等功能，采用响应式编程实现异步I&#x2F;O操作，提高了网关的并发能力。</p>
+<p>实现方式：Spring Gateway 通过使用 Spring WebFlux 框架，提供了 Reactive Http Server 和 Reactive Http Client，使得 Web 应用的开发可以采用基于响应式编程模型的思想。</p>
+<ol start="4">
+<li>Spring WebFlux</li>
+</ol>
+<p>Spring WebFlux 是 Spring Framework 5.0 中新增的 Web 响应式编程框架，提供了响应式编程的支持，并支持使用 Netty、Undertow 等嵌入式 Web 服务器实现高效的异步 I&#x2F;O 操作。</p>
+<p>实现方式：在 Spring WebFlux 中，使用 Flux 和 Mono 代替了 SpringMVC 中的 List 和 Object 类型，Flux 和 Mono 都是 Reactive Stream 的规范，采用基于响应式编程的开发模式，更好地处理异步事件流程。</p>
+<ol start="5">
+<li>React Native</li>
+</ol>
+<p>React Native 是 Facebook 开源的一款跨平台移动应用开发框架，采用响应式编程来处理界面和用户事件，通过组件化快速实现 iOS 和 Android 客户端应用开发。</p>
+<p>实现方式：React Native 使用 JSX 语法和 Virtual DOM 技术来实现跨平台应用开发，它采用响应式编程模型来处理界面和用户交互，当数据模型发生变化时，React Native 会自动更新对应视图组件，快速实现高效的跨平台应用开发。</p>
+<p>总之，响应式编程不仅仅局限于某个框架和游戏，如 Vue.js、React Native，采用响应式编程的框架和库还包括 Netty、Spring Gateway、Spring WebFlux 等。通过采用响应式编程的方式，我们可以更好地处理异步事件、提高程序的性能和响应速度，在开发过程中可以提高代码的可读性和复用性，更方便的实现逻辑复杂、并发度高、性能要求高的应用程序开发。 另外，近年来随着云计算、物联网、大数据等技术的快速发展，响应式编程也越来越得到了人们的关注，将会成为未来编程模型的一个趋势，带来更加高效、安全、稳定的应用程序开发模式。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%A8%A1%E5%BC%8F/" class="category-chain-item">模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%A8%A1%E5%BC%8F/">#模式</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>编程思想</div>
+      <div>http://example.com/2023/06/01/模式-思想/编程思想/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F/" title="分布式架构设计模式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式架构设计模式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/%E8%BD%AF%E4%BB%B6%E6%A8%A1%E5%BC%8F/" title="软件模式">
+                        <span class="hidden-mobile">软件模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

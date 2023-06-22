@@ -1,0 +1,842 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MyBatisJDBC流程(12条消息) 操作数据库的三种选择_mybatis gpa_A minor的博客-CSDN博客 Java DataBase Connectivity  — java 数据库连接 1、加载驱动Driver，通过类加载机制 执行static代码 进行 xx 2、获取连接 – （连接池） 3、创建sql 4、statement参数设置 5、statement.execute(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="负载均衡">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/MyBatis/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="MyBatisJDBC流程(12条消息) 操作数据库的三种选择_mybatis gpa_A minor的博客-CSDN博客 Java DataBase Connectivity  — java 数据库连接 1、加载驱动Driver，通过类加载机制 执行static代码 进行 xx 2、获取连接 – （连接池） 3、创建sql 4、statement参数设置 5、statement.execute(">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210224004738540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210224004659826.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210224004419476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210224004548557.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/8fe20952a06846598bb18b852ba8eeaf.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/ee569ac3873a497b9adb53ea0503b55b.jpeg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/1304a4a5a04e4b6eb2514ef8ca25f5be.jpeg#pic_center">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/xx.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/251ca41836c04485b12058b4d205685a.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/c59c925063504f20b185ab181b5588c7.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/743d3ae6c5eb4b3fb0a0b5cd59f382c2.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330175452764.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330175508388.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210505001329562.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.710Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210224004738540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70">
+  
+  
+  
+  <title>负载均衡 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="负载均衡"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          72 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">负载均衡</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h1><h2 id="JDBC流程"><a href="#JDBC流程" class="headerlink" title="JDBC流程"></a>JDBC流程</h2><p><a target="_blank" rel="noopener" href="https://yzhyaa.blog.csdn.net/article/details/111185236">(12条消息) 操作数据库的三种选择_mybatis gpa_A minor的博客-CSDN博客</a></p>
+<p>Java DataBase Connectivity  — java 数据库连接</p>
+<p>1、加载驱动Driver，通过类加载机制 执行static代码 进行 xx</p>
+<p>2、获取连接 – （连接池）</p>
+<p>3、创建sql</p>
+<p>4、statement参数设置</p>
+<p>5、statement.execute()</p>
+<p>6、处理返回集信息</p>
+<h2 id="Mybatis执行流程"><a href="#Mybatis执行流程" class="headerlink" title="Mybatis执行流程"></a>Mybatis执行流程</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43935927/article/details/111247930">(10条消息) 【MyBatis】执行原理（一）：创建会话工厂(SqlSessionFactory) –配置解析源码分析_A minor的博客-CSDN博客</a></p>
+<h3 id="配置类解析"><a href="#配置类解析" class="headerlink" title="配置类解析"></a>配置类解析</h3><p>在这一步，我们主要完成了config配置文件、Mapper文件、Mapper接口上的注解的解析。<br>我们得到了一个最重要的对象Configuration，这里面存放了全部的配置信息，它在属性里面还有各种各样的容器。<br>最后，返回了一个DefaultSqlSessionFactory，里面持有了Configuration的实例。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210224004738540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43935927/article/details/111269578">(10条消息) 【MyBatis】执行原理（二）：创建会话(SqlSession) 源码分析_sqlsession addbatch_A minor的博客-CSDN博客</a></p>
+<h3 id="创建会话"><a href="#创建会话" class="headerlink" title="创建会话"></a>创建会话</h3><p>SimpleExecutor：每执行一次update或select，就开启一个Statement对象，用完立刻关闭Statement对象。<br>ReuseExecutor：执行 update 或 select，以 sql 作为 key查找 Statement 对象，存在就使用，不存在就创建，用完后，不关闭 Statement 对象，而是放置于 Map 内，供下一次使用。简言之，就是重复使用Statement对象。</p>
+<p>BatchExecutor：执行 update（没有select，JDBC 批处理不支持 select），将所有 sql 都添加到批处理中（addBatch()），等待统一执行（executeBatch()），它缓存了多个Statement 对象，每个Statement 对象都是 addBatch()完毕后，等待逐一执行executeBatch()批处理。与JDBC批处理相同。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210224004659826.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="创建代理对象"><a href="#创建代理对象" class="headerlink" title="创建代理对象"></a>创建代理对象</h3><p><a target="_blank" rel="noopener" href="https://yzhyaa.blog.csdn.net/article/details/111269526">(12条消息) 【MyBatis】执行原理（三）：获取代理对象(MapperProxy) 源码分析_A minor的博客-CSDN博客</a></p>
+<p>获得Mapper对象的过程，实质上是获取了一个 MapperProxy 的代理对象。MapperProxy 中有 sqlSession、mapperInterface、methodCache。</p>
+<p>MapperProxy -&gt; InvocationHandler  （JDK动态代理 – 通过接口）</p>
+<p><img src="https://img-blog.csdnimg.cn/20210224004419476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h3 id="执行Executor"><a href="#执行Executor" class="headerlink" title="执行Executor"></a>执行Executor</h3><p><a target="_blank" rel="noopener" href="https://yzhyaa.blog.csdn.net/article/details/111269659">(12条消息) 【MyBatis】执行原理（四）：Executor 执行SQL源码分析_sqlsessionfactory execute sql_A minor的博客-CSDN博客</a></p>
+<img src="https://img-blog.csdnimg.cn/20210224004548557.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述" style="zoom: 200%;" />
+
+
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testMapper</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123; <br>	<span class="hljs-comment">// 全局配置文件（在resource目录下）</span><br>    <span class="hljs-type">String</span> <span class="hljs-variable">resource</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;mybatis-config.xml&quot;</span>; <br>    <span class="hljs-type">InputStream</span> <span class="hljs-variable">inputStream</span> <span class="hljs-operator">=</span> Resources. getResourceAsStream(resource); <br>    <span class="hljs-comment">// 1.SqlSessionFatoryBuilder，根据全局配置文件创建 SqlSessionFactory</span><br>    <span class="hljs-type">SqlSessionFactory</span> <span class="hljs-variable">sqlSessionFactory</span> <span class="hljs-operator">=</span>  newSqlSessionFactoryBuilder().build(inputStream); <br>    <br>    <span class="hljs-comment">// 2.SqlSessionFactory，在SQLSessionFactory中拿到一个SqlSession</span><br>	<span class="hljs-type">SqlSession</span> <span class="hljs-variable">session</span> <span class="hljs-operator">=</span> sqlSessionFactory.openSession(); <br>	<br>    <span class="hljs-keyword">try</span> &#123; <br>        <span class="hljs-comment">// 3.SqlSession，通过statementId（nameSpace+id）找到具体sql，通过SqlSession方法执行</span><br>        <span class="hljs-comment">// 注：1.这种硬编码方式，可以给mapper.xml的namespace任意命名</span><br>        <span class="hljs-comment">//    2.selectOne 是 SqlSession 的方法（另外还有insert，delete），实际调用的是执行器 Executor 的 doQuery() </span><br>        <span class="hljs-comment">//    3.若是增删改，最后要提交 session.commit()	</span><br>        <span class="hljs-type">Blog</span> <span class="hljs-variable">blog</span> <span class="hljs-operator">=</span> session.selectOne(<span class="hljs-string">&quot;blog.findUserById&quot;</span>,<span class="hljs-number">1</span>);<br>        System.out.println(blog); <br>    &#125; <span class="hljs-keyword">finally</span> &#123; <br>        <span class="hljs-comment">// 4.关闭当前会话（连接）SqlSesion</span><br>        session.close();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h3><p>Mapper代理模式。通过接口来代理一个 mapper.xml 的执行，这个接口全路径必须跟 Mapper.xml 里面的 namespace 对应起来，方法也要跟 StatementID一一对应。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">BlogMapper</span> &#123;<br>     Blog <span class="hljs-title function_">selectBlogById</span><span class="hljs-params">(<span class="hljs-type">int</span> id)</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testMapper</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123; <br>    <span class="hljs-type">String</span> <span class="hljs-variable">resource</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;mybatis-config.xml&quot;</span>; <br>    <span class="hljs-type">InputStream</span> <span class="hljs-variable">inputStream</span> <span class="hljs-operator">=</span> Resources. getResourceAsStream(resource); <br>    <span class="hljs-comment">// 1.SqlSessionFatoryBuilder，根据全局配置文件创建SqlSessionFactory</span><br>    <span class="hljs-type">SqlSessionFactory</span> <span class="hljs-variable">sqlSessionFactory</span> <span class="hljs-operator">=</span> newSqlSessionFactoryBuilder().build(inputStream);<br>    <br>    <span class="hljs-comment">// 2.SqlSessionFatory，在SQLSessionFactory中拿到一个SqlSession</span><br>	<span class="hljs-type">SqlSession</span> <span class="hljs-variable">session</span> <span class="hljs-operator">=</span> sqlSessionFactory.openSession(); <br>	<br>    <span class="hljs-keyword">try</span> &#123; <br>        <span class="hljs-comment">// 3.SqlSession，通过接口类拿到相应Mapper</span><br>        <span class="hljs-comment">// 注：1.mapper.xml的namespace=接口相对路径</span><br>        <span class="hljs-comment">//     2.mapper.xml的statementId=接口方法名</span><br>        <span class="hljs-type">BlogMapper</span> <span class="hljs-variable">mapper</span> <span class="hljs-operator">=</span> session.getMapper(BlogMapper.class); <br>        <br>        <span class="hljs-comment">// 4.Mapper，通过Mapper调用mapper.xml中的sql</span><br>        <span class="hljs-comment">// 相当于上面硬编码一行代码做的事，这里需要两行</span><br>        <span class="hljs-type">Blog</span> <span class="hljs-variable">blog</span> <span class="hljs-operator">=</span> mapper.selectBlogById(<span class="hljs-number">1</span>); <br>        System.out.println(blog); <br>    &#125; <span class="hljs-keyword">finally</span> &#123; <br>        <span class="hljs-comment">// 5.关闭当前会话（连接）SqlSesion</span><br>        session.close();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<p> #{}：占位符号，好处防止sql注入 ${}：sql拼接符号 </p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Murphy_H/article/details/126483796">(1条消息) MyBatis源码解析(二)——执行流程_mybati执行代码_爱看雲的雲的博客-CSDN博客</a></p>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/8fe20952a06846598bb18b852ba8eeaf.jpeg" srcset="/img/loading.gif" lazyload alt="Mybatis架构图"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/ee569ac3873a497b9adb53ea0503b55b.jpeg" srcset="/img/loading.gif" lazyload alt="MyBatis层级架构图"></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">MyBatis层级结构如上图所示，先简单介绍一下各个组件：<br><br>SqlSession：它是 MyBatis 的核心API，主要用来执行命令，获取映射，管理事务。接收开发人员提供的StatementId和参数，并返回操作结果。<br>Executor：执行器，是 MyBatis 调度的核心，负责<span class="hljs-keyword">SQL</span>语句的生成以及查询缓存的维护。<br>StatementHandler：用于封装JDBC中<span class="hljs-keyword">Statement</span>的操作。即声明<span class="hljs-keyword">SQL</span>、设置参数、执行<span class="hljs-keyword">SQL</span>等。通常一次<span class="hljs-keyword">SQL</span>执行完之后就要关闭它，最多它的生命周期也不会超过一次事务的范围。<br>ParameterHandler：负责对用户传递过来的参数转换成JDBC <span class="hljs-keyword">Statement</span>所需要的参数。<br>ResultSetHandler：负责将 JDBC 返回的ResultSet结果集对象转换成List类型的集合。<br>TypeHandler：用于 Java类型和 JDBC类型之间的转换。<br>BoundSql：表示动态生成的 <span class="hljs-keyword">SQL</span>语句以及相应的参数信息。<br>MappedStatement：动态<span class="hljs-keyword">SQL</span> 的封装，存储了一个 <span class="hljs-keyword">SQL</span>所有的信息。<br>SqlSource：表示从 <span class="hljs-type">XML</span>文件或注解方法读取的映射语句的内容，它创建将从用户接收的输入参数传递给数据库的<span class="hljs-keyword">SQL</span>。<br><span class="hljs-keyword">Configuration</span>：MyBatis 所有的配置信息都维持在 <span class="hljs-keyword">Configuration</span> 对象中。<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img-blog.csdnimg.cn/1304a4a5a04e4b6eb2514ef8ca25f5be.jpeg#pic_center" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">先通过 Resource 读取 MyBatis 配置文件（mybatis-config.xml），将其转换成输入流。<br>将输入流传入 SqlSession工厂构建器（SqlSessionFactoryBuilder），调用 build方法传入输入流生成 XML配置文件构造器（XMLConfigBuilder）。<br>XMLConfigBuilder 会解析 mybatis-config.xml 文件中的所有标签，其中最重要的就是解析标签，加载的所有配置都会保存在 Configuration 对象中。<br>遍历 mapper 标签，根据资源标识类型进行不同的操作，对于资源标识为 package 和 <span class="hljs-keyword">class</span> 的，使用<span class="hljs-symbol">configuration</span> 的 <span class="hljs-symbol">addMappers</span> 和 <span class="hljs-symbol">addMapper</span> 方法解析；资源标识为 <span class="hljs-symbol">resource</span> 和 <span class="hljs-symbol">url</span> 的，新建一个 <span class="hljs-symbol">mapper</span>映射文件构造器（<span class="hljs-symbol">XMLMapperBuilder</span>）去解析对应的 <span class="hljs-symbol">mapper</span> 映射文件。<br>先看 <span class="hljs-symbol">Configuration</span> 对象的 <span class="hljs-symbol">addMappers</span>，调用 <span class="hljs-symbol">mapper</span> 注册器（<span class="hljs-symbol">MapperRegistry</span>）的 <span class="hljs-symbol">addMappers</span> 方法。<span class="hljs-symbol">mapper</span> 注册器解析流程为：资源标识为 <span class="hljs-symbol">package</span>，获取配置包下的所有 <span class="hljs-symbol">mapper</span> 映射文件，再获取文件中指向的 <span class="hljs-symbol">mapper</span> 接口 <span class="hljs-symbol">Class</span> 对象集合，遍历解析 <span class="hljs-symbol">Class</span> 对象。资源标识为 <span class="hljs-symbol">class</span>，则直接解析 <span class="hljs-symbol">Class</span> 对象。调用 <span class="hljs-symbol">mapper</span> 注解构造器（<span class="hljs-symbol">MapperAnnotationBuilder</span>）的 <span class="hljs-symbol">parse</span> 方法解析 <span class="hljs-symbol">Class</span> 对象。<br><span class="hljs-symbol">mapper</span>注解构造器主要分为两个步骤，一是调用 <span class="hljs-symbol">XMLMapperBuilder</span> 解析 <span class="hljs-symbol">mapper</span>接口对应的 <span class="hljs-symbol">mapper</span>映射文件，这里和解析资源标识为 <span class="hljs-symbol">resource</span> 和 <span class="hljs-symbol">url</span> 的 <span class="hljs-symbol">mapper</span> 标签，殊途同归了；二是解析 <span class="hljs-symbol">mapper</span> 接口方法上的<span class="hljs-symbol">SQL</span>语句，生成对应的 <span class="hljs-symbol">MappedStatement</span> 对象。<br><span class="hljs-symbol">mapper</span>映射文件构造器先解析 <span class="hljs-symbol">mapper</span> 映射文件中的 <span class="hljs-symbol">resultMap</span>、<span class="hljs-symbol">sql</span> 等标签，然后调用 <span class="hljs-symbol">mapper</span> 映射文件声明构造器（<span class="hljs-symbol">XMLStatementBuilder</span>）解析<span class="hljs-symbol">CRUD</span>标签（<span class="hljs-symbol">select</span>、<span class="hljs-symbol">insert</span>、<span class="hljs-symbol">update</span>、<span class="hljs-symbol">delete</span>），遍历这些标签，然后封装为<span class="hljs-symbol">SqlSource</span>，最后调用 <span class="hljs-symbol">MappedStatement</span> 创建助手（<span class="hljs-symbol">MapperBuilderAssistant</span>）封装成<span class="hljs-symbol">MappedStatement</span> 对象，一个 <span class="hljs-symbol">CRUD</span> 标签生成一个 <span class="hljs-symbol">MappedStatement</span> 对象。<br>最后将 <span class="hljs-symbol">MappedStatement</span> 添加到 <span class="hljs-symbol">Configuration</span> 对象的 <span class="hljs-symbol">mappedStatements</span> 属性中。<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/xx.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/251ca41836c04485b12058b4d205685a.jpeg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="Mybatis关键类"><a href="#Mybatis关键类" class="headerlink" title="Mybatis关键类"></a>Mybatis关键类</h2><table>
+<thead>
+<tr>
+<th>对象</th>
+<th>相关对象</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Configuration</td>
+<td>MapperRegistry TypeAliasRegistry TypeHandlerRegistry</td>
+<td>包含了 MyBatis 的所有的配置信息</td>
+</tr>
+<tr>
+<td>SqlSession</td>
+<td>SqlSessionFactory DefaultSqlSession</td>
+<td>对操作数据库的增删改査的 API 进行了封装，提供给应用层使用</td>
+</tr>
+<tr>
+<td>Executor</td>
+<td>BaseExecutor SimpleExecutor BatchExecutor ReuseExecutor</td>
+<td>MyBatis 执行器 ， 是 MyBatis 调度的核心， 负责SQL语句的生成和查询缓存的维护</td>
+</tr>
+<tr>
+<td>StatementHandler</td>
+<td>BaseStatementHandler SimpleStatementHandler PreparedStatementHandler CallableStatementHandler</td>
+<td>封装了 JDBC Statement 操作，负责对 JDBC Statement 的操作，<br/>如设置参数、将Statement结果转换为List集合</td>
+</tr>
+<tr>
+<td>ParameterHandler</td>
+<td>DefaultParameterHandler</td>
+<td>把用户传递的参数转换成 JDBC Statement 所需要的参数</td>
+</tr>
+<tr>
+<td>MapperProxy</td>
+<td>MapperProxyFactory</td>
+<td>代理对象，用于代理 Mapper 接口方法</td>
+</tr>
+<tr>
+<td>MappedStatement</td>
+<td>SqlSource BoundSql</td>
+<td>MappedStatement 维护了一条 〈select 丨 update丨 delete丨 insert〉节点的封装，包括了 SQL 信息、入参信息、出参信息</td>
+</tr>
+</tbody></table>
+<h2 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/c59c925063504f20b185ab181b5588c7.jpeg" srcset="/img/loading.gif" lazyload alt="Executor类图"></p>
+<p>BaseExecutor:</p>
+<p>ReuseExecutor: 缓存sql，直接再次使用</p>
+<p>SimpleExecutor ： 普通的Executor 准备Handler，</p>
+<p>​														– 获取连接，准备statement，调用Hanlder，</p>
+<p>​														– 调用Handler的query() </p>
+<h2 id="StatementHandler"><a href="#StatementHandler" class="headerlink" title="StatementHandler"></a>StatementHandler</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/743d3ae6c5eb4b3fb0a0b5cd59f382c2.jpeg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="Statement"><a href="#Statement" class="headerlink" title="Statement"></a>Statement</h2><h3 id="PrepareStatementWrapper"><a href="#PrepareStatementWrapper" class="headerlink" title="PrepareStatementWrapper"></a>PrepareStatementWrapper</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330175452764.png" srcset="/img/loading.gif" lazyload alt="image-20230330175452764"></p>
+<h3 id="ClientPraparedStatement"><a href="#ClientPraparedStatement" class="headerlink" title="ClientPraparedStatement"></a>ClientPraparedStatement</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230330175508388.png" srcset="/img/loading.gif" lazyload alt="image-20230330175508388"></p>
+<h2 id="插件plugin"><a href="#插件plugin" class="headerlink" title="插件plugin"></a>插件plugin</h2><h3 id="增强Executor"><a href="#增强Executor" class="headerlink" title="增强Executor"></a>增强Executor</h3><p>在初始 Executor的时候，会调用Configuration的newExecutor() 方法，执行插件执行链</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// ## Configuraiton</span><br><span class="hljs-keyword">public</span> Executor <span class="hljs-title function_">newExecutor</span><span class="hljs-params">(Transaction transaction, ExecutorType executorType)</span> &#123;<br>    executorType = executorType == <span class="hljs-literal">null</span> ? <span class="hljs-built_in">this</span>.defaultExecutorType : executorType;<br>    executorType = executorType == <span class="hljs-literal">null</span> ? ExecutorType.SIMPLE : executorType;<br>    Object executor;<br>    <span class="hljs-keyword">if</span> (ExecutorType.BATCH == executorType) &#123;<br>        executor = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BatchExecutor</span>(<span class="hljs-built_in">this</span>, transaction);<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ExecutorType.REUSE == executorType) &#123;<br>        executor = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReuseExecutor</span>(<span class="hljs-built_in">this</span>, transaction);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        executor = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleExecutor</span>(<span class="hljs-built_in">this</span>, transaction);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.cacheEnabled) &#123;<br>        executor = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CachingExecutor</span>((Executor)executor);<br>    &#125;<br>	<span class="hljs-comment">// 初始化</span><br>    <span class="hljs-type">Executor</span> <span class="hljs-variable">executor</span> <span class="hljs-operator">=</span> (Executor)<span class="hljs-built_in">this</span>.interceptorChain.pluginAll(executor);<br>    <span class="hljs-keyword">return</span> executor;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="增强Handler"><a href="#增强Handler" class="headerlink" title="增强Handler"></a>增强Handler</h3><p>在初始化Handler的时候，会进入Configuration中，调用newStatementHandler() ,其中会调用 插件执行链进行增强操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Executor  - doQuery() / doQueryCursor()</span><br><span class="hljs-keyword">protected</span> &lt;E&gt; Cursor&lt;E&gt; <span class="hljs-title function_">doQueryCursor</span><span class="hljs-params">(MappedStatement ms, Object parameter, RowBounds rowBounds, BoundSql boundSql)</span> <span class="hljs-keyword">throws</span> SQLException &#123;<br>    <span class="hljs-type">Configuration</span> <span class="hljs-variable">configuration</span> <span class="hljs-operator">=</span> ms.getConfiguration();<br>    <span class="hljs-comment">/// 初始化 Handler调用插件</span><br>    <span class="hljs-type">StatementHandler</span> <span class="hljs-variable">handler</span> <span class="hljs-operator">=</span> configuration.newStatementHandler(<span class="hljs-built_in">this</span>.wrapper, ms, parameter, rowBounds, (ResultHandler)<span class="hljs-literal">null</span>, boundSql);<br>    <span class="hljs-type">Statement</span> <span class="hljs-variable">stmt</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.prepareStatement(handler, ms.getStatementLog());<br>    Cursor&lt;E&gt; cursor = handler.queryCursor(stmt);<br>    stmt.closeOnCompletion();<br>    <span class="hljs-keyword">return</span> cursor;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Configuration</span><br><span class="hljs-keyword">public</span> StatementHandler <span class="hljs-title function_">newStatementHandler</span><span class="hljs-params">(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql)</span> &#123;<br>    <span class="hljs-type">StatementHandler</span> <span class="hljs-variable">statementHandler</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RoutingStatementHandler</span>(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);<br>    <span class="hljs-type">StatementHandler</span> <span class="hljs-variable">statementHandler</span> <span class="hljs-operator">=</span> <br>        			<span class="hljs-comment">// 调用插件 -- 增强Handler</span><br>        (StatementHandler)<span class="hljs-built_in">this</span>.interceptorChain.pluginAll(statementHandler);<br>    <span class="hljs-keyword">return</span> statementHandler;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img-blog.csdnimg.cn/20210505001329562.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzkzNTkyNw==,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​							</p>
+<h2 id="Spring整合MyBatis"><a href="#Spring整合MyBatis" class="headerlink" title="Spring整合MyBatis"></a>Spring整合MyBatis</h2><p>mybatis关键对象，SqlSessionFactory（创建SqlSession）， SqlSession， MapperProxy（接口代理）， Configuration（配置类封装）</p>
+<p>步骤：</p>
+<p>1、将工厂注入到容器  —- 通过实现 FactoryBean实现自定义 工厂创建逻辑 （需要加载Configuration 等）</p>
+<p>2、SqlSession的默认实现DefalutSqlSession 生命周期为 （请求 &#x2F; 连接），线程不安全，需要通过 SqlSessionTemplate，每一次请求创建一个DefalutSqlSession ，然后调用对应方法</p>
+<p>3、Mapper接口注入为BeanDefinition，通过MapperScanner实现 扫描类路径，逻辑类似于 AnnotatedApplicationContext的 ClassPathBeanDefinitionScanner，用于类路径扫描并加载为BeanDefinition</p>
+<p>4、Mapper是接口，需要生成对应的代理对象，Spring 中实现FactoryBean，为每个Mapper的BeanDefinition创建能够调用方法的代理对象MaperProxy</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>生命周期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SqlSessionTemplate</td>
+<td>Spring 中 SqlSession 的替代品，是线程安全的，通过代理的方式调用 DefaultSqlSession 的方法</td>
+</tr>
+<tr>
+<td>SqlSessionInterceptor（内部类）</td>
+<td>代理对象，用来代理 DefaultSqlSession，在 SqlSessionTemplate 中使用</td>
+</tr>
+<tr>
+<td>SqlSessionDaoSupport</td>
+<td>用于获取 SqlSessionTemplate，只要继承它即可 MapperFactoryBean 注册到 IOC 容器中替换接口类，继承了 SqlSessionDaoSupport 用来获取 SqlSessionTemplate，因为注入接口的时候，就会调用它的 getObject()方法</td>
+</tr>
+<tr>
+<td>SqlSessionHolder</td>
+<td>控制 SqlSession 和事务</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FactoryBean</td>
+<td>getObject()</td>
+<td>返回由 FactoryBean 创建的 Bean 实例</td>
+</tr>
+<tr>
+<td>InitializingBean</td>
+<td>afterPropertiesSet()</td>
+<td>bean 属性初始化完成后添加操作</td>
+</tr>
+<tr>
+<td>BeanDefinitionRegistryPostProcessor</td>
+<td>postProcessBeanDefinitionRegistry()</td>
+<td>注入 BeanDefination 时添加操作</td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>负载均衡</div>
+      <div>http://example.com/2023/06/01/分布式组件+常见组件/MyBatis/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/ElastciStack/" title="ElasticSearch">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ElasticSearch</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/MySQL/" title="MySQL">
+                        <span class="hidden-mobile">MySQL</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

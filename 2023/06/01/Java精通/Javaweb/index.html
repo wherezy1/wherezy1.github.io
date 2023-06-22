@@ -1,0 +1,968 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="JavaWeb12345public interface RequestDispatcher &amp;#123;    void forward(ServletRequest var1, ServletResponse var2) throws ServletException, IOException;    void include(ServletRequest var1, ServletRespo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaWeb">
+<meta property="og:url" content="http://example.com/2023/06/01/Java%E7%B2%BE%E9%80%9A/Javaweb/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="JavaWeb12345public interface RequestDispatcher &amp;#123;    void forward(ServletRequest var1, ServletResponse var2) throws ServletException, IOException;    void include(ServletRequest var1, ServletRespo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414234950712.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/i-beta/1691302/202003/1691302-20200305215857712-294684813.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414231318801.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414232003262.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414232102264.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414231840747.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414231813426.png">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-964e9c1377091aadb205412e4426b6f8_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415092046776.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210223214304103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MzM0MTY1Nw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415111159975.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415113150468.png">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-f8fe9bc9b11d0c16d42636fdcb04d905_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-0e74669d54831f1f750c72e7cd028217_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415155722946.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415155158737.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415114210008.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415114642720.png">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-8b6049d2bfffc7cdeea56cca7fc0fb83_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-5cf6f36354af90307f12dca7e3e38cca_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-b6036b8f04623320f5e1c1015c157ded_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415092331279.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415092342531.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415074618633.png">
+<meta property="article:published_time" content="2023-06-01T09:20:01.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:40.703Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414234950712.png">
+  
+  
+  
+  <title>JavaWeb - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JavaWeb"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 17:20" pubdate>
+          2023年6月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          26k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          220 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JavaWeb</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">RequestDispatcher</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">forward</span><span class="hljs-params">(ServletRequest var1, ServletResponse var2)</span> <span class="hljs-keyword">throws</span> ServletException, IOException;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">include</span><span class="hljs-params">(ServletRequest var1, ServletResponse var2)</span> <span class="hljs-keyword">throws</span> ServletException, IOException;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//ApplicationDispatcher ## forward()  ## doForword() ## processRequest() ## invoke() ## </span><br><span class="hljs-comment">// ApplicationFilterChain ## doFilter() ##  internalDoFilter()</span><br><span class="hljs-comment">// Filter ## doFilter()</span><br><span class="hljs-comment">// ApplicationDispatcher ## invoke() ## </span><br><span class="hljs-comment">// servlet ## service()</span><br><span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ApplicationDispatcher</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">AsyncDispatcher</span>, RequestDispatcher &#123;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414234950712.png" srcset="/img/loading.gif" lazyload alt="image-20230414234950712"></p>
+<h1 id="Servlet容器主要组件："><a href="#Servlet容器主要组件：" class="headerlink" title="Servlet容器主要组件："></a>Servlet容器主要组件：</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/niujifei/p/15107721.html">JavaWeb 之 Servlet 体系结构 - 格物致知_Tony - 博客园 (cnblogs.com)</a></p>
+<p>Serlvet  — GenericServlet - HttpServlet </p>
+<p>ServletContext ServletConfig</p>
+<p>Filter </p>
+<p>Cookie Session </p>
+<p>RequestDispatcher AsyncDispatcher</p>
+<p>Listener </p>
+<h2 id="继承体系"><a href="#继承体系" class="headerlink" title="继承体系"></a>继承体系</h2><p><img src="https://img2020.cnblogs.com/i-beta/1691302/202003/1691302-20200305215857712-294684813.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/niujifei/p/15107721.html">JavaWeb 之 Servlet 体系结构 - 格物致知_Tony - 博客园 (cnblogs.com)</a></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414231318801.png" srcset="/img/loading.gif" lazyload alt="image-20230414231318801"></p>
+<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Servlet</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">(ServletConfig var1)</span> <span class="hljs-keyword">throws</span> ServletException;<br><br>    ServletConfig <span class="hljs-title function_">getServletConfig</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">service</span><span class="hljs-params">(ServletRequest var1, ServletResponse var2)</span> <span class="hljs-keyword">throws</span> ServletException, IOException;<br><br>    String <span class="hljs-title function_">getServletInfo</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroy</span><span class="hljs-params">()</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="HttpServlet"><a href="#HttpServlet" class="headerlink" title="HttpServlet"></a>HttpServlet</h3><p>所以，HttpServlet 主要做了两件事：</p>
+<p>　　　　　　<strong>（1）重写了父类的 service() 方法；</strong></p>
+<p>　　　　　　<strong>（2）重载了 service() 方法，完成分发处理；</strong></p>
+<p>　　　　　　在我们自定义 Servlet 程序时只需要继承HttpServlet 类，然后根据业务重写 doGet() 与 doPost() 方法即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">service</span><span class="hljs-params">(ServletRequest req, ServletResponse res)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>    HttpServletRequest request;<br>    HttpServletResponse response;<br>    <span class="hljs-keyword">try</span> &#123;<br>        request = (HttpServletRequest)req;<br>        response = (HttpServletResponse)res;<br>    &#125; <span class="hljs-keyword">catch</span> (ClassCastException var6) &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServletException</span>(lStrings.getString(<span class="hljs-string">&quot;http.non_http&quot;</span>));<br>    &#125;<br><br>    <span class="hljs-built_in">this</span>.service(request, response);<br>&#125;<br><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">service</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">method</span> <span class="hljs-operator">=</span> req.getMethod();<br>        <span class="hljs-type">long</span> lastModified;<br>        <span class="hljs-keyword">if</span> (method.equals(<span class="hljs-string">&quot;GET&quot;</span>)) &#123;<br>            lastModified = <span class="hljs-built_in">this</span>.getLastModified(req);<br>            <span class="hljs-keyword">if</span> (lastModified == -<span class="hljs-number">1L</span>) &#123;<br>                <span class="hljs-built_in">this</span>.doGet(req, resp);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-type">long</span> ifModifiedSince;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    ifModifiedSince = req.getDateHeader(<span class="hljs-string">&quot;If-Modified-Since&quot;</span>);<br>                &#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException var9) &#123;<br>                    ifModifiedSince = -<span class="hljs-number">1L</span>;<br>                &#125;<br><br>                <span class="hljs-keyword">if</span> (ifModifiedSince &lt; lastModified / <span class="hljs-number">1000L</span> * <span class="hljs-number">1000L</span>) &#123;<br>                    <span class="hljs-built_in">this</span>.maybeSetLastModified(resp, lastModified);<br>                    <span class="hljs-built_in">this</span>.doGet(req, resp);<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    resp.setStatus(<span class="hljs-number">304</span>);<br>                &#125;<br>            &#125;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.equals(<span class="hljs-string">&quot;HEAD&quot;</span>)) &#123;<br>            lastModified = <span class="hljs-built_in">this</span>.getLastModified(req);<br>            <span class="hljs-built_in">this</span>.maybeSetLastModified(resp, lastModified);<br>            <span class="hljs-built_in">this</span>.doHead(req, resp);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.equals(<span class="hljs-string">&quot;POST&quot;</span>)) &#123;<br>            <span class="hljs-built_in">this</span>.doPost(req, resp);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.equals(<span class="hljs-string">&quot;PUT&quot;</span>)) &#123;<br>            <span class="hljs-built_in">this</span>.doPut(req, resp);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.equals(<span class="hljs-string">&quot;DELETE&quot;</span>)) &#123;<br>            <span class="hljs-built_in">this</span>.doDelete(req, resp);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.equals(<span class="hljs-string">&quot;OPTIONS&quot;</span>)) &#123;<br>            <span class="hljs-built_in">this</span>.doOptions(req, resp);<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (method.equals(<span class="hljs-string">&quot;TRACE&quot;</span>)) &#123;<br>            <span class="hljs-built_in">this</span>.doTrace(req, resp);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-type">String</span> <span class="hljs-variable">errMsg</span> <span class="hljs-operator">=</span> lStrings.getString(<span class="hljs-string">&quot;http.method_not_implemented&quot;</span>);<br>            Object[] errArgs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[]&#123;method&#125;;<br>            errMsg = MessageFormat.format(errMsg, errArgs);<br>            resp.sendError(<span class="hljs-number">501</span>, errMsg);<br>        &#125;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414232003262.png" srcset="/img/loading.gif" lazyload alt="image-20230414232003262"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414232102264.png" srcset="/img/loading.gif" lazyload alt="image-20230414232102264"></p>
+<p>ServletConfig</p>
+<p>ServletContext</p>
+<h2 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414231840747.png" srcset="/img/loading.gif" lazyload alt="image-20230414231840747"></p>
+<h2 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230414231813426.png" srcset="/img/loading.gif" lazyload alt="image-20230414231813426"></p>
+<h1 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/260044529">牛逼！硬核图解 Tomcat 整体架构 - 知乎 (zhihu.com)</a></p>
+<h2 id="核心功能："><a href="#核心功能：" class="headerlink" title="核心功能："></a>核心功能：</h2><ul>
+<li>处理 socket 连接，负责将网络字节流与 Request 和 Response 对象的转化；</li>
+<li>加载和管理 Servlet，以及具体处理 Request 请求；</li>
+</ul>
+<p>Tomcat 支持的 io 模型有 NIO、NIO2、APR，Tomcat 支持的应用层协议有 http1.1 ajp http2.0。</p>
+<p>Tomcat 最顶层是 server，一个 server 有多个 service，一个 service 有多个连接器和一个容器，连接器和容器之间通过 ServletRequest 和 ServletResponse 通信。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-964e9c1377091aadb205412e4426b6f8_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>通过组合模式、模板方法、观察者模式和骨架抽象类，tomcat 定义了基类 LifeCycleBean 实现 LifeCycle 接口，把公共的逻辑，生命周期状态转变和维护、生命事件的触发和监听器的添加删除，子类负责实现自己的 init、stop 和 start 等方法。</p>
+<ul>
+<li>tomcat 自定义了监听器；</li>
+<li>@WebListener 注解，定义自己的监听器；</li>
+</ul>
+<p>StandardServer、StandardService 等是 Server 和 Service 组件的具体实现类，它们都继承了 LifecycleBase。</p>
+<p>StandardEngine、StandardHost、StandardContext 和 StandardWrapper 是相应容器组件的具体实现类，因为它们都是容器，所以继承了 ContainerBase 抽象基类，而 ContainerBase 实现了 Container 接口，也继承了 LifecycleBase 类，它们的生命周期管理接口和功能接口是分开的。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415092046776.png" srcset="/img/loading.gif" lazyload alt="image-20230415092046776"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210223214304103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MzM0MTY1Nw==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Lifecycle</span> &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">BEFORE_INIT_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;before_init&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">AFTER_INIT_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;after_init&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">START_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;start&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">BEFORE_START_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;before_start&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">AFTER_START_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;after_start&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">STOP_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;stop&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">BEFORE_STOP_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;before_stop&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">AFTER_STOP_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;after_stop&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">AFTER_DESTROY_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;after_destroy&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">BEFORE_DESTROY_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;before_destroy&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">PERIODIC_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;periodic&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">CONFIGURE_START_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;configure_start&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">CONFIGURE_STOP_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;configure_stop&quot;</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">addLifecycleListener</span><span class="hljs-params">(LifecycleListener var1)</span>;<br><br>    LifecycleListener[] findLifecycleListeners();<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">removeLifecycleListener</span><span class="hljs-params">(LifecycleListener var1)</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException;<br>	<span class="hljs-comment">// WebappClassLoaderBase ##  WebResource[] classesResources = this.resources.getResources(&quot;/WEB-INF/classes&quot;);  --  用于加载jar包</span><br>    <span class="hljs-comment">// LifecycleBase ## this.startInternal();  -- 调用子类的startInternal() -- Service</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">start</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">stop</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroy</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException;<br><br>    LifecycleState <span class="hljs-title function_">getState</span><span class="hljs-params">()</span>;<br><br>    String <span class="hljs-title function_">getStateName</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">SingleUse</span> &#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415111159975.png" srcset="/img/loading.gif" lazyload alt="image-20230415111159975"></p>
+<h3 id="LifeCycleBase"><a href="#LifeCycleBase" class="headerlink" title="LifeCycleBase"></a>LifeCycleBase</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LifecycleBase</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Lifecycle</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Log</span> <span class="hljs-variable">log</span> <span class="hljs-operator">=</span> LogFactory.getLog(LifecycleBase.class);<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">StringManager</span> <span class="hljs-variable">sm</span> <span class="hljs-operator">=</span> StringManager.getManager(LifecycleBase.class);<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> List&lt;LifecycleListener&gt; lifecycleListeners = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CopyOnWriteArrayList</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> LifecycleState state;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> throwOnFailure;<br>    <span class="hljs-comment">// 子类实现 -- 抽象方法，只有类可以继承实现 --  </span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initInternal</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">startInternal</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">stopInternal</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415113150468.png" srcset="/img/loading.gif" lazyload alt="image-20230415113150468"></p>
+<h3 id="执行顺序："><a href="#执行顺序：" class="headerlink" title="执行顺序："></a>执行顺序：</h3><p>Lifecycle 的 init() , start() , destory()</p>
+<p>LifycycleBase 实现三个方法通过调用 转发调用  initInternal() , startInternal() , destoryInternal()</p>
+<p>LifecycleBase的子类 StandardXXX 各种容器，Connector连接器，XXXBase 实现方法</p>
+<p>StandardXXX 各种容器 ：</p>
+<h2 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">StandardServer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LifecycleMBeanBase</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Server</span> &#123;<br>    <span class="hljs-comment">// 调用service的init() 方法 </span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initInternal</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException &#123;<br>        Service[] var10 = <span class="hljs-built_in">this</span>.services;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">var11</span> <span class="hljs-operator">=</span> var10.length;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">var12</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; var12 &lt; var11; ++var12) &#123;<br>            <span class="hljs-type">Service</span> <span class="hljs-variable">service</span> <span class="hljs-operator">=</span> var10[var12];<br>            service.init();<br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-comment">// 调用service的start() 方法 </span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">startInternal</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException &#123;<br>        <span class="hljs-built_in">this</span>.fireLifecycleEvent(<span class="hljs-string">&quot;configure_start&quot;</span>, (Object)<span class="hljs-literal">null</span>);<br>        <span class="hljs-built_in">this</span>.setState(LifecycleState.STARTING);<br>        <span class="hljs-built_in">this</span>.globalNamingResources.start();<br>        <span class="hljs-comment">// 同步 </span><br>        <span class="hljs-keyword">synchronized</span>(<span class="hljs-built_in">this</span>.servicesLock) &#123;<br>            Service[] var2 = <span class="hljs-built_in">this</span>.services;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> var2.length;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">var4</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) &#123;<br>                <span class="hljs-keyword">if</span> (var4 &gt;= var3) &#123;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>				<span class="hljs-comment">// 启动</span><br>                <span class="hljs-type">Service</span> <span class="hljs-variable">service</span> <span class="hljs-operator">=</span> var2[var4];<br>                service.start();<br>                ++var4;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.periodicEventDelay &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">this</span>.monitorFuture = <span class="hljs-built_in">this</span>.getUtilityExecutor().scheduleWithFixedDelay(() -&gt; &#123;<br>                <span class="hljs-built_in">this</span>.startPeriodicLifecycleEvent();<br>            &#125;, <span class="hljs-number">0L</span>, <span class="hljs-number">60L</span>, TimeUnit.SECONDS);<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 调用service的destroy() 方法 </span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroyInternal</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException &#123;<br>        Service[] var1 = <span class="hljs-built_in">this</span>.services;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">var2</span> <span class="hljs-operator">=</span> var1.length;<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; var3 &lt; var2; ++var3) &#123;<br>            <span class="hljs-type">Service</span> <span class="hljs-variable">service</span> <span class="hljs-operator">=</span> var1[var3];<br>            service.destroy();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">StandardService</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LifecycleMBeanBase</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Service</span> &#123;<br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">     * service的名称</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>	<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">StringManager</span> <span class="hljs-variable">sm</span> <span class="hljs-operator">=</span> StringManager.getManager(<span class="hljs-string">&quot;org.apache.catalina.core&quot;</span>);<br>	<span class="hljs-comment">// Service所属的Server</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">Server</span> <span class="hljs-variable">server</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>	<span class="hljs-comment">//组件对属性改变的支持</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">PropertyChangeSupport</span> <span class="hljs-variable">support</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyChangeSupport</span>(<span class="hljs-built_in">this</span>);<br>	<span class="hljs-comment">//跟这个Service相关联的Connector集合</span><br>    <span class="hljs-keyword">protected</span> Connector connectors[] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Connector</span>[<span class="hljs-number">0</span>];<br>	<span class="hljs-comment">/// Connector的锁</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Object</span> <span class="hljs-variable">connectorsLock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>	<span class="hljs-comment">// 线程池</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> ArrayList&lt;Executor&gt; executors = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>	<span class="hljs-comment">//Servlet的引擎</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">Engine</span> <span class="hljs-variable">engine</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>	<span class="hljs-comment">// </span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">ClassLoader</span> <span class="hljs-variable">parentClassLoader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>	<span class="hljs-comment">// Mapper</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Mapper</span> <span class="hljs-variable">mapper</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Mapper</span>();<br>	<span class="hljs-comment">// Mapper 监听器</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">MapperListener</span> <span class="hljs-variable">mapperListener</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MapperListener</span>(<span class="hljs-built_in">this</span>);<br>    <br>    <br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">startInternal</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> LifecycleException &#123;<br>        <span class="hljs-keyword">if</span> (log.isInfoEnabled()) &#123;<br>            log.info(sm.getString(<span class="hljs-string">&quot;standardService.start.name&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[]&#123;<span class="hljs-built_in">this</span>.name&#125;));<br>        &#125;<br><br>        <span class="hljs-built_in">this</span>.setState(LifecycleState.STARTING);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.engine != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">synchronized</span>(<span class="hljs-built_in">this</span>.engine) &#123;<br>                <span class="hljs-comment">// 启动引擎 StandardEngine.startInternal()</span><br>                <span class="hljs-built_in">this</span>.engine.start();<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">synchronized</span>(<span class="hljs-built_in">this</span>.executors) &#123;<br>            <span class="hljs-type">Iterator</span> <span class="hljs-variable">var2</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.executors.iterator();<br>            <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) &#123;<br>                <span class="hljs-keyword">if</span> (!var2.hasNext()) &#123;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>                <span class="hljs-type">Executor</span> <span class="hljs-variable">executor</span> <span class="hljs-operator">=</span> (Executor)var2.next();<br>                <span class="hljs-comment">// 启动线程池  </span><br>                executor.start();<br>            &#125;<br>        &#125;<br>		<span class="hljs-comment">// 发布 事件</span><br>        <span class="hljs-built_in">this</span>.mapperListener.start();<br>        <span class="hljs-keyword">synchronized</span>(<span class="hljs-built_in">this</span>.connectorsLock) &#123;<br>            Connector[] var10 = <span class="hljs-built_in">this</span>.connectors;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">var11</span> <span class="hljs-operator">=</span> var10.length;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">var4</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; var4 &lt; var11; ++var4) &#123;<br>                <span class="hljs-type">Connector</span> <span class="hljs-variable">connector</span> <span class="hljs-operator">=</span> var10[var4];<br>                <span class="hljs-keyword">if</span> (connector.getState() != LifecycleState.FAILED) &#123;<br>                    <span class="hljs-comment">// 启动连接  Connector.startInternal()</span><br>                    connector.start();<br>                &#125;<br>            &#125;<br><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="连接器-Connector"><a href="#连接器-Connector" class="headerlink" title="**连接器 Connector"></a>**连接器 Connector</h2><p>连接器进一步细化：</p>
+<ul>
+<li>监听网络端口；</li>
+<li>接受网络请求；</li>
+<li>读取网络字节流；</li>
+<li>根据应用层协议解析字节流，生成统一的 tomcat request 和 tomcat response 对象；</li>
+<li>将 tomcat request 对象转成 servletRequest；</li>
+<li>调用 servlet 容器，得到 servletResponse；</li>
+<li>将 servletResponse 转成 tomcat response；</li>
+<li>将 tomcat response 转成网络字节流；</li>
+<li>将响应字节流写回给浏览器；</li>
+</ul>
+<p>按照高内聚的功能划分：</p>
+<ul>
+<li>网络通信；</li>
+<li>应用层协议解析；</li>
+<li>tomcat request&#x2F;response 与 servlet request&#x2F;response 的转换；</li>
+</ul>
+<p>组件通过接口交互，好处是封装变化。Endpoint 负责提供字节流给 Processor，Processor 负责提供 tomcat request 对象给 Adapter，Adapter负责提供 Servlet Request 给容器。</p>
+<p>其中 Endpoint 和 Processor 抽象组装在一起形成了 ProtocolHandler 组件。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-f8fe9bc9b11d0c16d42636fdcb04d905_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="ProtocolHandler"><a href="#ProtocolHandler" class="headerlink" title="ProtocolHandler"></a><strong>ProtocolHandler</strong></h3><h3 id="Endpoint"><a href="#Endpoint" class="headerlink" title="Endpoint"></a><strong>Endpoint</strong></h3><p>接口，抽象实现类是 AbstractEndpoint，具体子类在 NioEndpoint 和 Nio2Endpoint，其中两个重要组件：Acceptor 和 SocketProcessor。</p>
+<p>Acceptor 用于监听 Socket 连接请求，SocketProcessor 用于处理收到的 Socket 请求，提交到线程池 Executor 处理。</p>
+<h3 id="Processor"><a href="#Processor" class="headerlink" title="Processor"></a><strong>Processor</strong></h3><p>接收 Endpoint 的 socket，读取字节流解析成 tomcat request 和 response，通过 adapter 将其提交到容器处理。Processor 的具体实现类 AjpProcessor、Http11Processor 实现了特定协议的解析方法和请求处理方式。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-0e74669d54831f1f750c72e7cd028217_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Endpoint 接收到 socket 连接后，生成一个 socketProcessor 交给线程池处理，run 方法会调用 Processor 解析应用层协议，生成 tomcat request 后，调用 adapter 的 service 方法。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415155722946.png" srcset="/img/loading.gif" lazyload alt="image-20230415155722946"></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415155158737.png" srcset="/img/loading.gif" lazyload alt="image-20230415155158737"></p>
+<h3 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a><strong>Adapter</strong></h3><p>ProtocolHandler 接口负责解析请求生成 tomcat requst，CoyoteAdapter 的 service 方法，将 Tomcat Request 对象，转成 ServletRequest，再调用 service 方法。</p>
+<h2 id="容器-Container"><a href="#容器-Container" class="headerlink" title="容器 Container"></a><strong>容器 Container</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 实现接口，设置 Container</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Contained</span> &#123;<br>    Container <span class="hljs-title function_">getContainer</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">setContainer</span><span class="hljs-params">(Container var1)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415114210008.png" srcset="/img/loading.gif" lazyload alt="image-20230415114210008"></p>
+<h3 id="ContainerBase"><a href="#ContainerBase" class="headerlink" title="ContainerBase"></a>ContainerBase</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ContainerBase</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LifecycleMBeanBase</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Container</span> &#123;<br>    <span class="hljs-comment">// 保存当前容器的子容器 （1 -- n）</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> HashMap&lt;String, Container&gt; children = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">int</span> <span class="hljs-variable">backgroundProcessorDelay</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">protected</span> ScheduledFuture&lt;?&gt; backgroundProcessorFuture;<br>    <span class="hljs-keyword">protected</span> ScheduledFuture&lt;?&gt; monitorFuture;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> List&lt;ContainerListener&gt; listeners = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CopyOnWriteArrayList</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">Cluster</span> <span class="hljs-variable">cluster</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">ReadWriteLock</span> <span class="hljs-variable">clusterLock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantReadWriteLock</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-comment">// 当前容器的父容器</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">Container</span> <span class="hljs-variable">parent</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">ClassLoader</span> <span class="hljs-variable">parentClassLoader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-comment">// 管理子容器的执行顺序 ---Value， Basic</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Pipeline</span> <span class="hljs-variable">pipeline</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StandardPipeline</span>(<span class="hljs-built_in">this</span>);<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">Realm</span> <span class="hljs-variable">realm</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">ReadWriteLock</span> <span class="hljs-variable">realmLock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantReadWriteLock</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">StringManager</span> <span class="hljs-variable">sm</span> <span class="hljs-operator">=</span> StringManager.getManager(<span class="hljs-string">&quot;org.apache.catalina.core&quot;</span>);<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">startChildren</span> <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">PropertyChangeSupport</span> <span class="hljs-variable">support</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyChangeSupport</span>(<span class="hljs-built_in">this</span>);<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">AccessLog</span> <span class="hljs-variable">accessLog</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">accessLogScanComplete</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">startStopThreads</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">protected</span> ExecutorService startStopExecutor;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415114642720.png" srcset="/img/loading.gif" lazyload alt="image-20230415114642720"></p>
+<h3 id="容器的层次结构"><a href="#容器的层次结构" class="headerlink" title="容器的层次结构"></a><strong>容器的层次结构</strong></h3><p>父子关系的 Engine、Host、Context、Wrapper 和 Servlet。</p>
+<p>Context 表示 web 应用程序、  </p>
+<p>wrapper 表示 servlet、</p>
+<p>context 有多个 wrapper，</p>
+<p>host 也有多个 context。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-8b6049d2bfffc7cdeea56cca7fc0fb83_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Host 代表的是一个虚拟主机，或者说一个站点，可以给 Tomcat 配置多个虚拟主机地址，而一个虚拟主机下可以部署多个 Web 应用程序；Engine 表示引擎，用来管理多个虚拟站点，一个 Service 最多只能有一个 Engine。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-5cf6f36354af90307f12dca7e3e38cca_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>容器通过 Pipeline-Valve 责任链，对请求一次处理，invoke 处理方法，每个容器都有一个 Pipeline，触发第一个 Valve，这个容器的 valve 都会被调到，不同容器之间通过 Pipeline 的 getBasic 方法，负责调用下层容器的第一个 Valve。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-b6036b8f04623320f5e1c1015c157ded_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>整个调用连由连接器中的 adapter 触发，调用 engine 中的第一个 Valve。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Calling the container</span><br>connector.getService().getContainer().getPipeline().getFirst().invoke(request, response);<br></code></pre></td></tr></table></figure>
+
+<p>wrapper 容器的最后一个 valve 创建一个 filter 链，并调用 doFilter 方法，最终会调用到 servlet 的 service 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs java"> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">StandardWrapperValve</span><br>     <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ValveBase</span> &#123;<br> <br>    <span class="hljs-meta">@Override</span><br>       <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">invoke</span><span class="hljs-params">(Request request, Response response)</span><br>           <span class="hljs-keyword">throws</span> IOException, ServletException &#123;<br>           <span class="hljs-comment">// ...</span><br> <br>           <span class="hljs-type">ApplicationFilterChain</span> <span class="hljs-variable">filterChain</span> <span class="hljs-operator">=</span><br>                ApplicationFilterFactory.createFilterChain(request, wrapper, servlet);<br><br>        <span class="hljs-comment">// Call the filter chain for this request</span><br>        <span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> This also calls the servlet&#x27;s service() method</span><br>        <span class="hljs-type">Container</span> <span class="hljs-variable">container</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.container;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">if</span> ((servlet != <span class="hljs-literal">null</span>) &amp;&amp; (filterChain != <span class="hljs-literal">null</span>)) &#123;<br>                <span class="hljs-comment">// Swallow output if needed</span><br>                <span class="hljs-keyword">if</span> (context.getSwallowOutput()) &#123;<br>                    <span class="hljs-keyword">try</span> &#123;<br>                        SystemLogHandler.startCapture();<br>                        <span class="hljs-keyword">if</span> (request.isAsyncDispatching()) &#123;<br>                            request.getAsyncContextInternal().doInternalDispatch();<br>                        &#125; <span class="hljs-keyword">else</span> &#123;<br><br>                        <span class="hljs-comment">// dofilter</span><br>                            filterChain.doFilter(request.getRequest(),<br>                                    response.getResponse());<br>                        &#125;<br>                    &#125; <span class="hljs-keyword">finally</span> &#123;<br>                        <span class="hljs-type">String</span> <span class="hljs-variable">log</span> <span class="hljs-operator">=</span> SystemLogHandler.stopCapture();<br>                        <span class="hljs-keyword">if</span> (log != <span class="hljs-literal">null</span> &amp;&amp; log.length() &gt; <span class="hljs-number">0</span>) &#123;<br>                            context.getLogger().info(log);<br>                        &#125;<br>                    &#125;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    <span class="hljs-keyword">if</span> (request.isAsyncDispatching()) &#123;<br>                        request.getAsyncContextInternal().doInternalDispatch();<br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        <span class="hljs-comment">// dofilter</span><br>                        filterChain.doFilter<br>                            (request.getRequest(), response.getResponse());<br>                    &#125;<br>                &#125;<br><br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span>() &#123;<br>        <span class="hljs-comment">// ...</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>ServletContext 是 tomcat 中的一个成员变量，spring 中的 ApplicationContext 是 servlet 规范中的 ServletContext 属性。</p>
+<h2 id="Value"><a href="#Value" class="headerlink" title="Value"></a>Value</h2><p>容器的链保存，通过invoke()方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Valve</span> &#123;<br>    Valve <span class="hljs-title function_">getNext</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">setNext</span><span class="hljs-params">(Valve var1)</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">backgroundProcess</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">invoke</span><span class="hljs-params">(Request var1, Response var2)</span> <span class="hljs-keyword">throws</span> IOException, ServletException;<br><br>    <span class="hljs-type">boolean</span> <span class="hljs-title function_">isAsyncSupported</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ValveBase</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LifecycleMBeanBase</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Contained</span>, Valve &#123;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">StringManager</span> <span class="hljs-variable">sm</span> <span class="hljs-operator">=</span> StringManager.getManager(ValveBase.class);<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">boolean</span> asyncSupported;<br>    <span class="hljs-comment">// 当前容器</span><br>    <span class="hljs-keyword">protected</span> Container container;<br>    <span class="hljs-keyword">protected</span> Log containerLog;<br>    <span class="hljs-comment">// 下一个容器</span><br>    <span class="hljs-keyword">protected</span> Valve next;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><h3 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h3><p>接口，用于管理容器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Container</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Lifecycle</span> &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">ADD_CHILD_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;addChild&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">ADD_VALVE_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;addValve&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">REMOVE_CHILD_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;removeChild&quot;</span>;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">REMOVE_VALVE_EVENT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;removeValve&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415092331279.png" srcset="/img/loading.gif" lazyload alt="image-20230415092331279"></p>
+<h3 id="ContainerBase-1"><a href="#ContainerBase-1" class="headerlink" title="ContainerBase"></a>ContainerBase</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ContainerBase</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">LifecycleMBeanBase</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Container</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Log</span> <span class="hljs-variable">log</span> <span class="hljs-operator">=</span> LogFactory.getLog(ContainerBase.class);<br>    <span class="hljs-comment">// 当前容器的 子容器集合 （1 -- n）</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> HashMap&lt;String, Container&gt; children = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">int</span> <span class="hljs-variable">backgroundProcessorDelay</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">protected</span> ScheduledFuture&lt;?&gt; backgroundProcessorFuture;<br>    <span class="hljs-keyword">protected</span> ScheduledFuture&lt;?&gt; monitorFuture;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> List&lt;ContainerListener&gt; listeners = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CopyOnWriteArrayList</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">Log</span> <span class="hljs-variable">logger</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">String</span> <span class="hljs-variable">logName</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">Cluster</span> <span class="hljs-variable">cluster</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">ReadWriteLock</span> <span class="hljs-variable">clusterLock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantReadWriteLock</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">Container</span> <span class="hljs-variable">parent</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">ClassLoader</span> <span class="hljs-variable">parentClassLoader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Pipeline</span> <span class="hljs-variable">pipeline</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StandardPipeline</span>(<span class="hljs-built_in">this</span>);<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">Realm</span> <span class="hljs-variable">realm</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">ReadWriteLock</span> <span class="hljs-variable">realmLock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantReadWriteLock</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">StringManager</span> <span class="hljs-variable">sm</span> <span class="hljs-operator">=</span> StringManager.getManager(<span class="hljs-string">&quot;org.apache.catalina.core&quot;</span>);<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">startChildren</span> <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">PropertyChangeSupport</span> <span class="hljs-variable">support</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PropertyChangeSupport</span>(<span class="hljs-built_in">this</span>);<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">AccessLog</span> <span class="hljs-variable">accessLog</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">accessLogScanComplete</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">startStopThreads</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// 线程池</span><br>    <span class="hljs-keyword">protected</span> ExecutorService startStopExecutor;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415092342531.png" srcset="/img/loading.gif" lazyload alt="image-20230415092342531"></p>
+<p>StandardContext</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230415074618633.png" srcset="/img/loading.gif" lazyload alt="image-20230415074618633"></p>
+<h1 id="Servlet规范"><a href="#Servlet规范" class="headerlink" title="Servlet规范"></a>Servlet规范</h1><h2 id="一、Servlet规范介绍："><a href="#一、Servlet规范介绍：" class="headerlink" title="一、Servlet规范介绍："></a>一、Servlet规范介绍：</h2><p>1.JavaEE规范中的一种。<br>2.作用：<br>1）在servlet规范中，指定【动态资源文件】开发步骤<br>2）在servlet规范中，指定Http服务器调用动态资源文件的规则<br>3）在servlet规范中，指定Http服务器管理动态资源文件实例对象规则</p>
+<h2 id="二、Servlet接口实现类："><a href="#二、Servlet接口实现类：" class="headerlink" title="二、Servlet接口实现类："></a>二、Servlet接口实现类：</h2><p>1.Servlet接口是Servlet规范下的一个接口，这个接口存在Http服务器jar包<br>2.Tomcat服务器下lib文件中有Servlet规范的jar包 （javax.servlet.Servlet接口）<br>3.Servlet规范中，http服务器能调用的【动态资源文件】必须为一个servlet接口实现类。</p>
+<h2 id="三、Servlet接口实现类开发步骤："><a href="#三、Servlet接口实现类开发步骤：" class="headerlink" title="三、Servlet接口实现类开发步骤："></a>三、Servlet接口实现类开发步骤：</h2><p>第一步：创建一个java类继承于HttpServlet父类，使其成为Servlet接口的实现类<br>第二步：重写HttpServlet中两个方法，doGet和doPost</p>
+<p>浏览器———–&gt;oneServle.doGet();</p>
+<p>第三步：将Servlet接口实现类信息【注册】到Tomcat服务器。</p>
+<p>【网站】———-&gt;【web】———&gt;【WEB-INF】———&gt;web.xml</p>
+<pre><code class="hljs">&lt;!---将Servlet接口实现类类路径的地址交给Tomcat---&gt;
+ &lt;servlet&gt;
+      &lt;servlet-name&gt;mm&lt;/servlet-name&gt;&lt;!----声明一个变量存储servlet接口实现类类路径---&gt;
+      &lt;servlet-class&gt;com.servlettext.controller.OneServlet&lt;/servlet-class&gt;&lt;!-----声明servlet接口实现类类路径--&gt;
+</code></pre>
+   </servlet>
+
+ <!---为了降低用户访问Servlet接口实现类难度，需要设置简短请求别名--->
+ <servlet-mapping>
+         <servlet-name>mmm</servlet-name>
+         <url-pattern>/one</url-pattern> <!-设置简短请求别名，别名书写时必须以/开头-->
+ </servlet-mapping>
+ http://localhost:8080/myWeb/one
+
+<h2 id="四、Servlet对象的生命周期："><a href="#四、Servlet对象的生命周期：" class="headerlink" title="四、Servlet对象的生命周期："></a>四、Servlet对象的生命周期：</h2><p>1.网站中所有Servlet接口实现类实例对象，只能由HTTP服务器负责创建，开发人员不能手动去创建Servlet接口实现类的实例对象<br>2.在默认没情况下，Http服务器接受到对于当前Servlet接口实现类第一次请求时，自动创建这个Servlet接口实现类的实例对象。在手动配置的情况下，要求Http服务器在启动时自动创建某个Servlet接口实现类的实例对象。</p>
+ <servlet>
+          <servlet-name>mm</servlet-name><!----声明一个变量存储servlet接口实现类类路径--->
+          <servlet-class>com.servlettext.controller.OneServlet</servlet-class><!-----声明servlet接口实现类类路径-->
+          <load-on-startup>30</load-on-startup><!--填写一个大于0的整数-->
+   </servlet>
+1
+2
+3
+4
+5
+3.在Http服务器运行期间一个Servlet接口实现类只能被创建出一个实例对象。
+4.在Http服务器关闭时，自动将网站中所有Servlet对象进行销毁。
+
+<h2 id="五、HttpServletResponse接口："><a href="#五、HttpServletResponse接口：" class="headerlink" title="五、HttpServletResponse接口："></a>五、HttpServletResponse接口：</h2><h3 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1.介绍:"></a>1.介绍:</h3><p>1)HttpServletResponse接口来自于Servlet规范中，在Tomcat中存在servlet-api.jar</p>
+<p>2)HttpServletResponse接口实现类由Http服务器负责提供</p>
+<p>3)HttpServletResponse接口负责将doGet&#x2F;doPost方法执行结果写入到【响应体】交给浏览器</p>
+<p>4)开发人员习惯于将HttpServletResponse接口修饰的对象称为【响应对象】</p>
+<h3 id="2-主要功能："><a href="#2-主要功能：" class="headerlink" title="2.主要功能："></a>2.主要功能：</h3><p>1）将执行结果以二进制形式写入响应体<br>2）设置响应头中【content-type】属性值，从而控制浏览器使用对应编译器将响应体二进制数据编译为【文字、图片、视频】<br>3）设置响应头中【location】属性，将一个请求地址赋值给location，从而控制浏览器向指定服务器发送请求</p>
+<h2 id="六、HttpServletRequest接口："><a href="#六、HttpServletRequest接口：" class="headerlink" title="六、HttpServletRequest接口："></a>六、HttpServletRequest接口：</h2><h3 id="1-介绍-1"><a href="#1-介绍-1" class="headerlink" title="1.介绍:"></a>1.介绍:</h3><p>1)HttpServletRequest接口来自于Servlet规范中，在Tomcat中存在servlet-api.jar<br>2)HttpServletRequest接口实现类由Http服务器负责提供<br>3)HttpServletRequest接口负责在doGet&#x2F;doPost方法运行时读取Http请求协议包中信息<br>4)开发人员习惯于将HttpServletRequest接口修饰的对象称为【请求对象】</p>
+<h3 id="2-作用："><a href="#2-作用：" class="headerlink" title="2.作用："></a>2.作用：</h3><p>1）可以读取Http请求协议包中【请求行】信息 2）读取保存在Http请求协议包中【请求头】或者【请求体】中的请求参数信息<br>3）代替浏览器向Http服务器申请资源文件调用</p>
+<h2 id="七、请求对象和响应对象生命周期"><a href="#七、请求对象和响应对象生命周期" class="headerlink" title="七、请求对象和响应对象生命周期"></a>七、请求对象和响应对象生命周期</h2><p>在Http服务器接收到浏览器发送的【Http请求协议包】之后，自动的为当前的【Http请求协议包】生成一个【请求对象】和一个【响应对象】<br>在Http服务器调用doGet&#x2F;doPost方法，负责将<br>【请求对象】和【响应对象】作为实参传递到方法，确保doGet&#x2F;doPost正确执行<br>在Http服务器准备推送Http响应协议包之前负责将本次请求关联的【请求对象】和【响应对象】销毁<br>【请求对象】和【响应对象】生命周期贯穿一次请求的处理过程中</p>
+<h2 id="八、欢迎资源文件"><a href="#八、欢迎资源文件" class="headerlink" title="八、欢迎资源文件"></a>八、欢迎资源文件</h2><p>1.默认欢迎资源文件：<br>用户发送了一个针对某个网站的【默认请求】时，此时由Http服务器自动从当前网站返回的资源文件。<br>正常请求：<a target="_blank" rel="noopener" href="http://localhost:8080/myWeb/index.html">http://localhost:8080/myWeb/index.html</a><br>默认请求：<a target="_blank" rel="noopener" href="http://localhost:8080/myWeb/">http://localhost:8080/myWeb/</a></p>
+<p>2.Tomcat对于默认欢迎资源文件定位规则<br>1)规则位置：Tomcat安装位置&#x2F;conf&#x2F;web.xml<br>2)规则命令：</p>
+<welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+1
+2
+3
+4
+5
+3.设置当前网站的默认欢迎资源文件规则
+1）规则位置：网站/web/web-inf/web.xml
+2)规则命令：
+
+<welcome-file-list>
+        <welcome-file>login.html</welcome-file>
+    </welcome-file-list>
+1
+2
+3
+3)网站设置自定义默认文件定位规则，此时Tomcatt自带的定位规则将消失。
+
+<h2 id="九、Http状态码"><a href="#九、Http状态码" class="headerlink" title="九、Http状态码"></a>九、Http状态码</h2><h3 id="1-介绍："><a href="#1-介绍：" class="headerlink" title="1.介绍："></a>1.介绍：</h3><p>1）由三位数字组成的符号<br>2）Http服务器在推送响应包之前，根据本次请求处理情况将Http状态码写入到响应包中【状态行】上<br>3）作用：如果Http服务器针对本次请求，返回了对应的资源文件。通过Http状态码通知浏览器应该如何处理这个结果<br>如果iHttp服务器针对本次请求，无法返回对应的资源文件通过Http状态码向浏览器解释不能提供服务的原因</p>
+<h3 id="2-分类："><a href="#2-分类：" class="headerlink" title="2.分类："></a>2.分类：</h3><p>1）组成 100—-599 分为五大类<br>2）1xx：<br>(最有特征)100：通知浏览器本次返回的资源文件并不是一个独立的资源文件，需要浏览器在接受响应包之后，继续向Http服务器索要依赖的其他资源文件。<br>3）2xx:<br>(最有特征)200：通知浏览器本次返回的是一个完整的独立资源文件，浏览器接受之后不需要去索要其他关联文件<br>4）3xx:<br>(最有特征)302：通知浏览器本次返回的不是一个资源文件的内容，而是资源文件的地址需要浏览器根据这个地址自动发起请求来索要这个资源文件。<br>response.sendRedirect(“资源文件地址”)写入到响应头中location,这个行为导致Tomcat将302状态码写入到状态行<br>5）4XX:<br>404:通知浏览器，由于在服务端没有定位到被访问的资源文件因此无法提供服务<br>405:通知浏览器，在服务端已经定位到被访问的资源文件（servlet）。但是这个Servlet对于浏览器采取的请求方式不能处理<br>6）5xx:<br>500:通知浏览器，在服务端已经定位到被访问的资源文件（Servlet）.这个servlet可以接收浏览器采用请求方式，但是servlet在处理请求期间，由于java异常导致处理失败</p>
+<h2 id="十、多个servlet之间调用规则："><a href="#十、多个servlet之间调用规则：" class="headerlink" title="十、多个servlet之间调用规则："></a>十、多个servlet之间调用规则：</h2><h3 id="1-前提条件："><a href="#1-前提条件：" class="headerlink" title="1.前提条件："></a>1.前提条件：</h3><p>某些来自于浏览器发送请求，往往需要服务端中多个servlet进行协同处理，但是浏览器一次只能访问一个servlet,导致客户需要手动通过浏览器发起多次请求才能得到服务。这样增加客户获得服务难度，客户选择放弃访问此网站。</p>
+<h3 id="2-提高用户使用感受规则："><a href="#2-提高用户使用感受规则：" class="headerlink" title="2.提高用户使用感受规则："></a>2.提高用户使用感受规则：</h3><p>无论本次请求涉及到多少个Servlet，用户只需要【手动】通知浏览器发起一次请求即可。</p>
+<h3 id="3-实现方案："><a href="#3-实现方案：" class="headerlink" title="3.实现方案："></a>3.实现方案：</h3><p>1）重定向解决方案 2）请求转发解决方案</p>
+<ol>
+<li>重定向解决方案：<br>工作原理：</li>
+</ol>
+<p>用户第一次通过手动的方式通知浏览器访问OneServlet，oneServlet工作完毕后，将TwoServlet地址写入到响应头的location属性中，导致Tomcat将302的状态码写入到状态行中，在浏览器接收到响应包之后，读取到302状态码，此时浏览器自动根据响应头中location属性地址发起第二次请求，访问TwoServlet去完成请求中剩余的任务</p>
+<p>实现命令：<br>response.sendRedirect(请求地址);降低至写入到响应包的响应头中location属性<br>特征：</p>
+<p>1）请求地址：<br>即可以把当前网站（&#x2F;网站名&#x2F;资源文件名）内部的资源文件地址发送给浏览器，也可以把其他网站（<a href="http://ip地址：端口号/网站名/资源文件名）资源文件地址发送给浏览器。">http://ip地址：端口号/网站名/资源文件名）资源文件地址发送给浏览器。</a><br>2）请求次数： 浏览器至少发送两次请求，只有第一次是用户手动发送的，后续请求是浏览器自动发送的。<br>3）请求方式：<br>重定向解决方案是通过地址栏发起下一次请求，因此通过重定向解决方案调用的资源文件接受的请求方式一定是【Get】</p>
+<p>缺点：<br>重定向解决方案需要在浏览器与服务器之间进行多次往返，大量时间消耗在往返次数上，增加用户等待服务时间</p>
+<p>2.请求转发解决方案：<br>原理：</p>
+<p>用户第一次通过手动的方式要求浏览器访问OneServlet，oneServlet工作完毕后，通过当前的请求对象代替浏览器向Tomcat发送请求，申请调用TwoServlet。Tomcat在接收到这个请求之后，自动调用TwoServlet完成剩余任务</p>
+<p>实现命令：</p>
+<p>请求对象代替浏览器向Tomcat发送请求<br>&#x2F;&#x2F;1.通过当前请求对象生成资源文件申请报告对象<br>RequestDispatcher  report&#x3D;request.getRequestDispatcher(:” &#x2F;资源文件名称”);<br>   &#x2F;&#x2F;2.将报告对象发送给Tomcat<br> report.forward(当前请求对象，当前响应对象);<br>1<br>2<br>3<br>4<br>5<br>优点：<br>1）无论本次请求涉及到多少个Servlet,用户只需要手动向浏览器发送一次请求<br>2）Servlet之间调用发生在服务端计算器，节省浏览器与服务端之间的往返次数。增加处理服务的速度<br>特征：</p>
+<p>1）请求次数： 在请求转发过程中，浏览器只发送一次请求<br>2）请求地址 只能向Tomcat服务器申请调用当前网站下的资源文件地址<br>request.getRequestDispathcer(“&#x2F;资源文件名”); 不能写网站名**<br>3）请求方式请求转发过程中，浏览器只发送了一个Http请求协议包,参与本次请求的所有Servlet共享同一个请求协议包，因此这些Servlet接受的请求方式与浏览器的请求方式保持一致。</p>
+<h2 id="十一、多个Servlet之间数据共享实现方案："><a href="#十一、多个Servlet之间数据共享实现方案：" class="headerlink" title="十一、多个Servlet之间数据共享实现方案："></a>十一、多个Servlet之间数据共享实现方案：</h2><p>数据共享：<br>OneServlet工作完毕后，将产生的数据交给TwoServlet使用</p>
+<p>Servlet规范中提供四种数据共享方案<br>1）ServletContext接口 2）Cookie类 3）HttpSession接口 4）HttpServletRequest接口</p>
+<h3 id="1-ServletContext接口"><a href="#1-ServletContext接口" class="headerlink" title="1.ServletContext接口"></a>1.ServletContext接口</h3><h4 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h4><p>1）来自于Servlet规范中的一个接口。在Tomcat中存在servlet-api.jar在Tomcat中负责提供接口的实现类<br>2）如果两个Servlet来自于同一个网站。彼此之间通过网站的ServletContext实例对象实现数据共享<br>3）ServletContext实例对象称为【全局作用域对象】</p>
+<h4 id="工作原理："><a href="#工作原理：" class="headerlink" title="工作原理："></a>工作原理：</h4><p>每个网站都存在一个全局作用域对象。【相当于】一个Map集合。在这个网站中OneServlet可以将一个数据存入到全局作用域对象中，当前网站中其他Servlet此时都可以从全局作用域对象中得到这个数据进行使用</p>
+<p>全局作用域对象生命周期：<br>1）在Http服务器启动过程中，自动为当前网站内存中创建一个全局作用域对象<br>2）在Http服务器运行期间，一个网站只有一个全局作用域对象<br>3）在Http服务器运行期间，全局作用域对象一直存活状态<br>4）在Http服务器准备关闭时，将当前网站中全局作用域对象进行销毁</p>
+<p>全局作用域对象生命周期贯穿于网站整个运行期间</p>
+<p>命令的实现：同一个网站中,OneServlet将数据共享给TwoServlet</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java">OneServlet&#123;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest  request,HttpServletResponse response)</span>&#123;<br><br>		<span class="hljs-comment">//1.通过【请求对象】向Tomcat索要当前网站中【全局作用域对象】</span><br>		ServletContext  application=request.getServletContext();	<br>		<span class="hljs-comment">//2.将数据添加到全局作用域对象作为【共享数据】</span><br>		application.setAttribute(<span class="hljs-string">&quot; key1&quot;</span>,数据);<br><br><br>		&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><br>TwoServlet&#123;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest  request,HttpServletResponse response)</span>&#123;<br><br>		<span class="hljs-comment">//1.通过【请求对象】向Tomcat索要当前网站中【全局作用域对象】</span><br>		ServletContext  application=request.getServletContext();	<br>		<span class="hljs-comment">//2.从全局作用域对象得到指定关键字对应数据</span><br>		Object 数据= application.getAttribute(<span class="hljs-string">&quot; key1&quot;</span>);<br><br>​	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-Cookie"><a href="#2-Cookie" class="headerlink" title="2.Cookie"></a>2.Cookie</h3><p>介绍：<br>1）Coookie来自于Servlet规范中的一个工具类，存在于Tomcat提供的servlet-api.jar包<br>2）如果两个Servlet来自于同一个网站，并且为同一个浏览器&#x2F;用户提供服务，此时借助于Cookie对象进行数据共享<br>3）Cookie存放的当前用户的私人数据，在共享数据的过程中提高服务质量</p>
+<h4 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h4><p>用户通过浏览器第一次向myweb网站发送请求申请OneServlet,OneServlet在运行期间创建一个Cookie存储当前用户相关数据，OneServlet工作完毕后，【将Cookie写入到响应头中】交还给当前浏览器。<br>浏览器收到响应包之后，将Cookie存储在浏览器的缓存中，一段时间后，用户通过同一个浏览器再次向myweb发送请求申请TwoServlet时，浏览器需要无条件将myweb网站之前推送过来的Cookie,写入到请求头中，发送过去。此时TwoServlet在运行时通过读取请求头中的Cookie中信息，得到OneServlet提供的共享数据。</p>
+<p>实现命令：同一个网站中的OneServlet与TwoServlet借助于Cookie实现数据共享<br>OneServlet{<br>public void doGet(HttpServletRequest  request,HttpServletResponse response){<br>        &#x2F;&#x2F;1.创建一个Cookie对象保存共享数据（当前用户数据）<br>        Cookie  card&#x3D;new  Cookie(“key1”,”abc“);	<br>        Cookie  card&#x3D;new  Cookie(“key2”,”efg“);	<br>        &#x2F;&#x2F;cookie相当于Map<br>        &#x2F;&#x2F;一个Cookie对象存放一个键值对<br>        &#x2F;&#x2F;键值对中的value只能是String<br>        &#x2F;&#x2F;键值对中的key不能是中文<br>        &#x2F;&#x2F;2。将cookie写入到响应头，交给浏览器<br>        response.addCookie(card);<br>        response.addCookie(card2);<br>        }<br>}</p>
+<p>TwoServlet{<br>public void doGet(HttpServletRequest  request,HttpServletResponse response){<br>        &#x2F;&#x2F;1.调用请求对象从请求头得到浏览器返回的cookie<br>        Cookie cookieArray[ ]&#x3D;request.getCookies();<br>        &#x2F;&#x2F;2。循环遍历数据得到每一个Cookie的key与value<br>        for(Cookie card; cookieArray){<br>        String key&#x3D;card.getName();&#x2F;&#x2F;读取key  “key1”<br>        Strng value&#x3D;card.getValue();&#x2F;&#x2F;读取value “ abc”<br>        提供较好的服务<br>            }<br>        }<br>}</p>
+<p>销毁时机：<br>1）在默认情况下，Cookie对象存放在浏览器的缓存中吗，只要浏览器关闭Cookie对象就会销毁<br>2）手动设置情况下，可以要求浏览器将接收到的Cookie存放在客户端计算机的硬盘上，同时需要制定硬盘上的存活时间.存活时间范围内，关闭浏览器，关闭客户端计算机，关闭服务器，都不会导致Cookie被销毁<br>。在存活时间到达，Cookie自动的在硬盘上被删除</p>
+<p>cookie.setMaxAge(60);&#x2F;&#x2F;cookie存活60秒<br>1</p>
+<h3 id="3-HttpSession接口："><a href="#3-HttpSession接口：" class="headerlink" title="3.HttpSession接口："></a>3.HttpSession接口：</h3><p>介绍：<br>1）HttpSession接口来自于Servlet规范下的一个接口，存在于Servlet-api.jar,其实现类由Http服务器提供。<br>2）如果两个Servlet来自于同一个网站，并且为同一个浏览器&#x2F;用户提供服务，此时借助于HttpSession对象进行数据共享<br>3）开发人员习惯于将HttpSession接口修饰对象称为【会话作用域对象】</p>
+<p>HttpSession 与 Cookie 区别：【面试题】<br>1）存储位置: 一个在天上，一个在地下<br>Cookie：存放在客户端计算机（浏览器内存&#x2F;硬盘） HttpSession：存放在服务端计算机内存</p>
+<p>2）数据类型： Cookie对象存储共享数据类型只能是String<br>HttpSession对象可以存储任意类型的共享数据Object</p>
+<p>3)数据数量: 一个Cookie对象只能存储一个共享数据<br>HttpSession使用map集合存储共享数据，所以可以 存储任意数量共享数据</p>
+<p>4）参照物: Cookie相当于客户在服务端【会员卡】 HttpSession相当于客户在服务端【私人保险柜】</p>
+<p>命令实现: 同一个网站（myWeb）下OneServlet将数据传递给TwoServlet<br>OneServlet{<br>            public void doGet(HttpServletRequest request,HttpServletResponse response){	<br>                        &#x2F;&#x2F;1.调用请求对象向Tomcat索要当前用户在服务端的私人储物柜<br>                         HttpSession   session &#x3D; request.getSession();<br>                           &#x2F;&#x2F;2.将数据添加到用户私人储物柜<br>                        session.setAttribute(“key1”,共享数据)<br>                 }<br>         }<br>1</p>
+<p>​		      浏览器访问&#x2F;myWeb中TwoServlet<br>1<br> TwoServlet{<br>   public void doGet(HttpServletRequest request,HttpServletResponse response){<br>​				       &#x2F;&#x2F;1.调用请求对象向Tomcat索要当前用户在服务端的私人储物柜<br>​				        HttpSession   session &#x3D; request.getSession();<br>​                        &#x2F;&#x2F;2.从会话作用域对象得到OneServlet提供的共享数据<br>​				        Object 共享数据 &#x3D; session.getAttribute(“key1”);<br>​				}<br>​	 }</p>
+<p>Http服务器如何将用户与HttpSession关联起来 使用cookie</p>
+<p>getSession() 与 getSession(false)<br>1）getSession(): 如果当前用户在服务端已经拥有了自己的私人储物柜. 要求tomcat将这个私人储物柜进行返回 如果当前用户在服务端尚未拥有自己的私人储物柜 要求tocmat为当前用户创建一个全新的私人储物柜</p>
+<p>2)getSession(false):如果当前用户在服务端已经拥有了自己的私人储物柜. 要求tomcat将这个私人储物柜进行返回 如果当前用户在服务端尚未拥有自己的私人储物柜 此时Tomcat将返回null</p>
+<p>HttpSession销毁时机:<br>1.用户与HttpSession关联时使用的Cookie只能存放在浏览器缓存中.<br>2.在浏览器关闭时，意味着用户与他的HttpSession关系被切断<br>3.由于Tomcat无法检测浏览器何时关闭，因此在浏览器关闭时并不会<br>导致Tomcat将浏览器关联的HttpSession进行销毁<br>4.为了解决这个问题，Tomcat为每一个HttpSession对象设置【空闲时间】<br>这个空闲时间默认30分钟，如果当前HttpSession对象空闲时间达到30分钟<br>此时Tomcat认为用户已经放弃了自己的HttpSession，此时Tomcat就会销毁<br>掉这个HttpSession</p>
+<p>HttpSession空闲时间手动设置<br>  在当前网站&#x2F;web&#x2F;WEB-INF&#x2F;web.xml<br>            <session-config><br>                   <session-timeout>5</session-timeout> <!--当前网站中每一个session最大空闲时间5分钟--><br>            </session-config><br>1<br>2<br>3<br>4</p>
+<h3 id="4-HttpServletRequest接口实现数据共享："><a href="#4-HttpServletRequest接口实现数据共享：" class="headerlink" title="4.HttpServletRequest接口实现数据共享："></a>4.HttpServletRequest接口实现数据共享：</h3><p>介绍：<br>1） 在同一个网站中，如果两个Servlet之间通过【请求转发】方式进行调用，<br>彼此之间共享同一个请求协议包。而一个请求协议包只对应一个请求对象 因此servlet之间共享同一个请求对象，此时可以利用这个请求对象在两个<br>Servlet之间实现数据共享 2） 在请求对象实现Servlet之间数据共享功能时，开发人员将请求对象称为【请求作用域对象】</p>
+<p>命令实现： OneServlet通过请求转发申请调用TwoServlet时，需要给TwoServlet提供共享数据<br>  OneServlet{<br>                   public void doGet(HttpServletRequest req,HttpServletResponse response){<br>                          &#x2F;&#x2F;1.将数据添加到【请求作用域对象】中attribute属性<br>                          req.setAttribute(“key1”,数据); &#x2F;&#x2F;数据类型可以任意类型Object<br>                               &#x2F;&#x2F;2.向Tomcat申请调用TwoServlet<br>                             req.getRequestDispatcher(“&#x2F;two”).forward(req,response)<br>                   }<br>             }<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>TwoServlet{<br>                    public void doGet(HttpServletRequest req,HttpServletResponse response){<br>                                                &#x2F;&#x2F;从当前请求对象得到OneServlet写入到共享数据<br>                        Object 数据 &#x3D; req.getAttribute(“key1”);<br>                    }<br>         }<br>1<br>2<br>3<br>4<br>5<br>6</p>
+<h2 id="十二、监听器接口"><a href="#十二、监听器接口" class="headerlink" title="十二、监听器接口"></a>十二、监听器接口</h2><p>介绍：<br>1）一组来自于Servlet规范下接口，共有8个接口。在Tomcat存在servlet-api.jar包<br>2）监听器接口需要由开发人员亲自实现，Http服务器提供jar包并没有对应的实现类<br>3）监听器接口用于监控【作用域对象生命周期变化时刻】以及【作用域对象共享数据变化时刻】</p>
+<p>作用域对象：<br>1）在Servlet规范中，认为在服务端内存中可以在某些条件下为两个Servlet之间提供数据共享方案的对象，被称为【作用域对象】</p>
+<p>2）Servlet规范下作用域对象:<br>ServletContext： 全局作用域对象<br>HttpSession : 会话作用域对象<br>HttpServletRequest:请求作用域对象</p>
+<p>监听器接口实现类开发规范：三步<br>1）根据监听的实际情况，选择对应监听器接口进行实现</p>
+<p>2）重写监听器接口声明【监听事件处理方法】</p>
+<p>3）在web.xml文件将监听器接口实现类注册到Http服务器</p>
+<p>ServletContextListener接口：<br>1）作用：通过这个接口合法的检测全局作用域对象被初始化时刻以及被销毁时刻</p>
+<p>2）监听事件处理方法：</p>
+<p>public void contextInitlized（） ：在全局作用域对象被Http服务器初始化被调用</p>
+<p>public void contextDestory(): 在全局作用域对象被Http服务器销毁时候触发调用</p>
+<p>ServletContextAttributeListener接口<br>1)作用：通过这个接口合法的检测全局作用域对象共享数据变化时刻<br>2）监听事件处理方法：</p>
+<p> public void contextAdd():在全局作用域对象添加共享数据<br>1<br> public void contextReplaced():在全局作用域对象更新共享数据<br>1<br>public void contextRemove():在全局作用域对象删除共享数据<br>1<br>全局作用域对象共享数据变化时刻<br> ServletContext application &#x3D; request.getServletContext();<br> application.setAttribute(“key1”,100); &#x2F;&#x2F;新增共享数据<br> application.setAttribute(“key1”,200); &#x2F;&#x2F;更新共享数据<br> application.removeAttribute(“key1”);  &#x2F;&#x2F;删除共享数据<br>1<br>2<br>3<br>4</p>
+<h2 id="十三、Filter接口-过滤器接口"><a href="#十三、Filter接口-过滤器接口" class="headerlink" title="十三、Filter接口(过滤器接口)"></a>十三、Filter接口(过滤器接口)</h2><p>介绍：<br>1）来自于Servlet规范下接口，在Tomcat中存在于servlet-api.jar包<br>2）Filter接口实现类由开发人员负责提供，Http服务器不负责提供<br>3)Filter接口在Http服务器调用资源文件之前，对Http服务器进行拦截</p>
+<p>具体作用：<br>1）拦截Http服务器，帮助Http服务器检测当前请求合法性<br>2）拦截Http服务器，对当前请求进行增强操作</p>
+<p>Filter接口实现类开发步骤：三步<br>1）创建一个Java类实现Filter接口<br>2）重写Filter接口中doFilter方法<br>3）web.xml将过滤器接口实现类注册到Http服务器</p>
+<p>Filter拦截地址格式<br>1）命令格式:</p>
+  <filter-mapping>
+        <filter-name>oneFilter</filter-name>
+        <url-pattern>拦截地址</url-pattern>
+    </filter-mapping>
+1
+2
+3
+4
+2）命令作用：
+拦截地址通知Tomcat在调用何种资源文件之前需要调用OneFilter过滤进行拦截
+
+<p>3）要求Tomcat在调用某一个具体文件之前，来调用OneFilter拦截</p>
+<pre><code class="hljs">&lt;url-pattern&gt;/img/mm.jpg&lt;/url-pattern&gt;
+</code></pre>
+<p>1<br>4）要求Tomcat在调用某一个文件夹下所有的资源文件之前，来调用OneFilter拦截</p>
+<pre><code class="hljs">&lt;url-pattern&gt;/img/*&lt;/url-pattern&gt;
+</code></pre>
+<p>1<br>5）要求Tomcat在调用任意文件夹下某种类型文件之前，来调用OneFilter拦截</p>
+<p>1<br>6)要求Tomcat在调用网站中任意文件时，来调用OneFilter拦截</p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/java/" class="category-chain-item">java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/">#java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JavaWeb</div>
+      <div>http://example.com/2023/06/01/Java精通/Javaweb/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/13/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/My%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8Freadme-%E9%BB%91/" title="设计模式-黑马">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">设计模式-黑马</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/Java%E7%B2%BE%E9%80%9A/Java%E5%9F%BA%E7%A1%80/" title="Java基础">
+                        <span class="hidden-mobile">Java基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

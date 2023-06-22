@@ -1,0 +1,900 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Flink-官方文档笔记Flink-Bootintsmaze&#x2F;flink-boot: 懒松鼠Flink-Boot 脚手架让Flink全面拥抱Spring生态体系  Sink流处理中的sink是指将处理结果输出到外部系统的组件，例如将处理结果写入数据库、发送到消息队列、输出到文件等。sink是流处理中的最后一步，完成了数据的整个流程，让处理结果得以持久化或最终展示给用户。 Java的sin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink-官方文档笔记">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/Flink/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Flink-官方文档笔记Flink-Bootintsmaze&#x2F;flink-boot: 懒松鼠Flink-Boot 脚手架让Flink全面拥抱Spring生态体系  Sink流处理中的sink是指将处理结果输出到外部系统的组件，例如将处理结果写入数据库、发送到消息队列、输出到文件等。sink是流处理中的最后一步，完成了数据的整个流程，让处理结果得以持久化或最终展示给用户。 Java的sin">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200727095427952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzU2MzcwNQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/window-assigners.svg">
+<meta property="og:image" content="https://nightlies.apache.org/flink/flink-docs-release-1.17/fig/levels_of_abstraction.svg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/processes.svg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/tasks_chains.svg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/tasks_slots.svg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/slot_sharing.svg">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T15:33:41.700Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="flink">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200727095427952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzU2MzcwNQ==,size_16,color_FFFFFF,t_70">
+  
+  
+  
+  <title>Flink-官方文档笔记 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flink-官方文档笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          78 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Flink-官方文档笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Flink-官方文档笔记"><a href="#Flink-官方文档笔记" class="headerlink" title="Flink-官方文档笔记"></a>Flink-官方文档笔记</h1><h2 id="Flink-Boot"><a href="#Flink-Boot" class="headerlink" title="Flink-Boot"></a>Flink-Boot</h2><p><a target="_blank" rel="noopener" href="https://github.com/intsmaze/flink-boot">intsmaze&#x2F;flink-boot: 懒松鼠Flink-Boot 脚手架让Flink全面拥抱Spring生态体系</a></p>
+<p><img src="https://img-blog.csdnimg.cn/20200727095427952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzU2MzcwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="Sink"><a href="#Sink" class="headerlink" title="Sink"></a>Sink</h2><p>流处理中的sink是指将处理结果输出到外部系统的组件，例如将处理结果写入数据库、发送到消息队列、输出到文件等。sink是流处理中的最后一步，完成了数据的整个流程，让处理结果得以持久化或最终展示给用户。</p>
+<p>Java的sink主要通过Stream API提供，常用的sink有：输出到集合、输出到文件、写入数据库等。以下是一个输出到集合的示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs JAVA">List&lt;Integer&gt; list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;Integer&gt;();<br>Stream.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)<br>      .filter(i -&gt; i % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>)<br>      .forEach(list::add);<br>System.out.println(list);<br></code></pre></td></tr></table></figure>
+
+<p>这段代码将1~5中的偶数输出，并将结果存储到一个ArrayList中作为sink。</p>
+<p>而在Flink中，sink是用于将数据写入外部系统的组件，如将数据写入Kafka、Hadoop、Cassandra等。Flink中的sink在数据流处理过程中扮演着关键的角色，决定了流处理结果的输出方式。以下是一个输出到Kafka的示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-type">StreamExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> StreamExecutionEnvironment.getExecutionEnvironment();<br><br>    <span class="hljs-type">Properties</span> <span class="hljs-variable">properties</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Properties</span>();<br>    properties.setProperty(<span class="hljs-string">&quot;bootstrap.servers&quot;</span>, <span class="hljs-string">&quot;localhost:9092&quot;</span>);<br>    properties.setProperty(<span class="hljs-string">&quot;topic&quot;</span>, <span class="hljs-string">&quot;test&quot;</span>);<br><br>    DataStream&lt;String&gt; stream = env.socketTextStream(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">9999</span>);<br><br>    stream.addSink(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FlinkKafkaProducer011</span>&lt;&gt;(<span class="hljs-string">&quot;localhost:9092&quot;</span>, <span class="hljs-string">&quot;test&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleStringSchema</span>()));<br><br>    env.execute();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，数据源来自Socket，数据被处理后通过FlinkKafkaProducer011写入到Kafka中，Kafka作为sink持久化了流处理的结果。</p>
+<p>总的来说，sink是流处理中的核心组件之一。Java和Flink都提供了丰富的sink组件用于不同的使用场景，开发者应根据实际需求选择最佳的sink组件。</p>
+<p>重点：事件、时间、快照、状态</p>
+<h2 id="Event"><a href="#Event" class="headerlink" title="Event"></a>Event</h2><p>Flink 明确支持以下三种时间语义:</p>
+<ul>
+<li><em>事件时间(event time)：</em> 事件产生的时间，记录的是设备生产(或者存储)事件的时间</li>
+<li><em>摄取时间(ingestion time)：</em> Flink 读取事件时记录的时间</li>
+<li><em>处理时间(processing time)：</em> Flink pipeline 中具体算子处理事件的时间</li>
+</ul>
+<h3 id="waterMarks"><a href="#waterMarks" class="headerlink" title="waterMarks"></a>waterMarks</h3><p> <em>watermarks 的作用</em> — 它们定义何时停止等待较早的事件。</p>
+<h2 id="Window"><a href="#Window" class="headerlink" title="Window"></a>Window</h2><p>用 Flink 计算窗口分析取决于两个主要的抽象操作：<em>Window Assigners</em>，将事件分配给窗口（根据需要创建新的窗口对象），以及 <em>Window Functions</em>，处理窗口内的数据。</p>
+<p>Flink 的窗口 API 还具有 <em>Triggers</em> 和 <em>Evictors</em> 的概念，<em>Triggers</em> 确定何时调用窗口函数，而 <em>Evictors</em> 则可以删除在窗口中收集的元素。</p>
+<h3 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a>窗口</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/window-assigners.svg" srcset="/img/loading.gif" lazyload alt="Window assigners"></p>
+<ul>
+<li>滚动时间窗口<ul>
+<li><em>每分钟页面浏览量</em></li>
+<li><code>TumblingEventTimeWindows.of(Time.minutes(1))</code></li>
+</ul>
+</li>
+<li>滑动时间窗口<ul>
+<li><em>每10秒钟计算前1分钟的页面浏览量</em></li>
+<li><code>SlidingEventTimeWindows.of(Time.minutes(1), Time.seconds(10))</code></li>
+</ul>
+</li>
+<li>会话窗口<ul>
+<li><em>每个会话的网页浏览量，其中会话之间的间隔至少为30分钟</em></li>
+<li><code>EventTimeSessionWindows.withGap(Time.minutes(30))</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="State"><a href="#State" class="headerlink" title="State"></a>State</h2><p>Flink 管理的状态存储在 <em>state backend</em> 中。Flink 有两种 state backend 的实现 – 一种基于 RocksDB 内嵌 key&#x2F;value 存储将其工作状态保存在磁盘上的，另一种基于堆的 state backend，将其工作状态保存在 Java 的堆内存中。这种基于堆的 state backend 有两种类型：FsStateBackend，将其状态快照持久化到分布式文件系统；MemoryStateBackend，它使用 JobManager 的堆保存状态快照。</p>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">Working State</th>
+<th align="left">状态备份</th>
+<th align="left">快照</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">RocksDBStateBackend</td>
+<td align="left">本地磁盘（tmp dir）</td>
+<td align="left">分布式文件系统</td>
+<td align="left">全量 &#x2F; 增量</td>
+</tr>
+<tr>
+<td align="left">支持大于内存大小的状态经验法则：比基于堆的后端慢10倍</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">FsStateBackend</td>
+<td align="left">JVM Heap</td>
+<td align="left">分布式文件系统</td>
+<td align="left">全量</td>
+</tr>
+<tr>
+<td align="left">快速，需要大的堆内存受限制于 GC</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">MemoryStateBackend</td>
+<td align="left">JVM Heap</td>
+<td align="left">JobManager JVM Heap</td>
+<td align="left">全量</td>
+</tr>
+<tr>
+<td align="left">适用于小状态（本地）的测试和实验</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>当使用基于堆的 state backend 保存状态时，访问和更新涉及在堆上读写对象。但是对于保存在 <code>RocksDBStateBackend</code> 中的对象，访问和更新涉及序列化和反序列化，所以会有更大的开销。但 RocksDB 的状态量仅受本地磁盘大小的限制。还要注意，只有 <code>RocksDBStateBackend</code> 能够进行增量快照，这对于具有大量变化缓慢状态的应用程序来说是大有裨益的。</p>
+<p>所有这些 state backends 都能够异步执行快照，这意味着它们可以在不妨碍正在进行的流处理的情况下执行快照。</p>
+<h2 id="Checkpoint-Storage"><a href="#Checkpoint-Storage" class="headerlink" title="Checkpoint Storage #"></a>Checkpoint Storage <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/learn-flink/fault_tolerance/#checkpoint-storage">#</a></h2><p>Flink 定期对每个算子的所有状态进行持久化快照，并将这些快照复制到更持久的地方，例如分布式文件系统。 如果发生故障，Flink 可以恢复应用程序的完整状态并恢复处理，就好像没有出现任何问题一样。</p>
+<p>这些快照的存储位置是通过作业_checkpoint storage_定义的。 有两种可用检查点存储实现：一种持久保存其状态快照 到一个分布式文件系统，另一种是使用 JobManager 的堆。</p>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">状态备份</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">FileSystemCheckpointStorage</td>
+<td align="left">分布式文件系统</td>
+</tr>
+<tr>
+<td align="left">支持非常大的状态大小高度可靠推荐用于生产部署</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">JobManagerCheckpointStorage</td>
+<td align="left">JobManager JVM Heap</td>
+</tr>
+<tr>
+<td align="left">适合小状态（本地）的测试和实验</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="确保精确一次（exactly-once）"><a href="#确保精确一次（exactly-once）" class="headerlink" title="确保精确一次（exactly once） #"></a>确保精确一次（exactly once） <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/learn-flink/fault_tolerance/#%E7%A1%AE%E4%BF%9D%E7%B2%BE%E7%A1%AE%E4%B8%80%E6%AC%A1exactly-once">#</a></h3><p>当流处理应用程序发生错误的时候，结果可能会产生丢失或者重复。Flink 根据你为应用程序和集群的配置，可以产生以下结果：</p>
+<ul>
+<li>Flink 不会从快照中进行恢复（<em>at most once</em>）</li>
+<li>没有任何丢失，但是你可能会得到重复冗余的结果（<em>at least once</em>）</li>
+<li>没有丢失或冗余重复（<em>exactly once</em>）</li>
+</ul>
+<p>Flink 通过回退和重新发送 source 数据流从故障中恢复，当理想情况被描述为<strong>精确一次</strong>时，这并<em>不</em>意味着每个事件都将被精确一次处理。相反，这意味着 <em>每一个事件都会影响 Flink 管理的状态精确一次</em>。</p>
+<p>Barrier 只有在需要提供精确一次的语义保证时需要进行对齐（Barrier alignment）。如果不需要这种语义，可以通过配置 <code>CheckpointingMode.AT_LEAST_ONCE</code> 关闭 Barrier 对齐来提高性能。</p>
+<h3 id="端到端精确一次"><a href="#端到端精确一次" class="headerlink" title="端到端精确一次 #"></a>端到端精确一次 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/learn-flink/fault_tolerance/#%E7%AB%AF%E5%88%B0%E7%AB%AF%E7%B2%BE%E7%A1%AE%E4%B8%80%E6%AC%A1">#</a></h3><p>为了实现端到端的精确一次，以便 sources 中的每个事件都仅精确一次对 sinks 生效，必须满足以下条件：</p>
+<ol>
+<li>你的 sources 必须是可重放的，并且</li>
+<li>你的 sinks 必须是事务性的（或幂等的）</li>
+</ol>
+<h2 id="Flink-中的-API"><a href="#Flink-中的-API" class="headerlink" title="Flink 中的 API #"></a>Flink 中的 API <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/overview/#flink-%E4%B8%AD%E7%9A%84-api">#</a></h2><p>Flink 为流式&#x2F;批式处理应用程序的开发提供了不同级别的抽象。</p>
+<p><img src="https://nightlies.apache.org/flink/flink-docs-release-1.17/fig/levels_of_abstraction.svg" srcset="/img/loading.gif" lazyload alt="Programming levels of abstraction"></p>
+<ul>
+<li><p>Flink API 最底层的抽象为<strong>有状态实时流处理</strong>。其抽象实现是 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/datastream/operators/process_function/">Process Function</a>，并且 <strong>Process Function</strong> 被 Flink 框架集成到了 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/datastream/overview/">DataStream API</a> 中来为我们使用。它允许用户在应用程序中自由地处理来自单流或多流的事件（数据），并提供具有全局一致性和容错保障的<em>状态</em>。此外，用户可以在此层抽象中注册事件时间（event time）和处理时间（processing time）回调方法，从而允许程序可以实现复杂计算。</p>
+</li>
+<li><p>Flink API 第二层抽象是 <strong>Core APIs</strong>。实际上，许多应用程序不需要使用到上述最底层抽象的 API，而是可以使用 <strong>Core APIs</strong> 进行编程：其中包含 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/datastream/overview/">DataStream API</a>（应用于有界&#x2F;无界数据流场景）和 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/dataset/overview/">DataSet API</a>（应用于有界数据集场景）两部分。Core APIs 提供的流式 API（Fluent API）为数据处理提供了通用的模块组件，例如各种形式的用户自定义转换（transformations）、联接（joins）、聚合（aggregations）、窗口（windows）和状态（state）操作等。此层 API 中处理的数据类型在每种编程语言中都有其对应的类。</p>
+<p><em>Process Function</em> 这类底层抽象和 <em>DataStream API</em> 的相互集成使得用户可以选择使用更底层的抽象 API 来实现自己的需求。<em>DataSet API</em> 还额外提供了一些原语，比如循环&#x2F;迭代（loop&#x2F;iteration）操作。</p>
+</li>
+<li><p>Flink API 第三层抽象是 <strong>Table API</strong>。<strong>Table API</strong> 是以表（Table）为中心的声明式编程（DSL）API，例如在流式数据场景下，它可以表示一张正在动态改变的表。<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/table/overview/">Table API</a> 遵循（扩展）关系模型：即表拥有 schema（类似于关系型数据库中的 schema），并且 Table API 也提供了类似于关系模型中的操作，比如 select、project、join、group-by 和 aggregate 等。Table API 程序是以声明的方式定义<em>应执行的逻辑操作</em>，而不是确切地指定程序<em>应该执行的代码</em>。尽管 Table API 使用起来很简洁并且可以由各种类型的用户自定义函数扩展功能，但还是比 Core API 的表达能力差。此外，Table API 程序在执行之前还会使用优化器中的优化规则对用户编写的表达式进行优化。</p>
+<p>表和 <em>DataStream</em>&#x2F;<em>DataSet</em> 可以进行无缝切换，Flink 允许用户在编写应用程序时将 <em>Table API</em> 与 <em>DataStream</em>&#x2F;<em>DataSet</em> API 混合使用。</p>
+</li>
+<li><p>Flink API 最顶层抽象是 <strong>SQL</strong>。这层抽象在语义和程序表达式上都类似于 <em>Table API</em>，但是其程序实现都是 SQL 查询表达式。<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/table/overview/#sql">SQL</a> 抽象与 Table API 抽象之间的关联是非常紧密的，并且 SQL 查询语句可以在 <em>Table API</em> 中定义的表上执行。</p>
+</li>
+</ul>
+<h1 id="Flink架构"><a href="#Flink架构" class="headerlink" title="Flink架构"></a>Flink架构</h1><h2 id="集群剖析"><a href="#集群剖析" class="headerlink" title="集群剖析"></a>集群剖析</h2><p>Flink 运行时由两种类型的进程组成：一个 <em>JobManager</em> 和一个或者多个 <em>TaskManager</em>。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/processes.svg" srcset="/img/loading.gif" lazyload alt="The processes involved in executing a Flink dataflow"></p>
+<h3 id="JobManager"><a href="#JobManager" class="headerlink" title="JobManager #"></a>JobManager <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#jobmanager">#</a></h3><p><em>JobManager</em> 具有许多与协调 Flink 应用程序的分布式执行有关的职责：它决定何时调度下一个 task（或一组 task）、对完成的 task 或执行失败做出反应、协调 checkpoint、并且协调从失败中恢复等等。这个进程由三个不同的组件组成：</p>
+<ul>
+<li><p><strong>ResourceManager</strong></p>
+<p><em>ResourceManager</em> 负责 Flink 集群中的资源提供、回收、分配 - 它管理 <strong>task slots</strong>，这是 Flink 集群中资源调度的单位（请参考<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#taskmanagers">TaskManagers</a>）。Flink 为不同的环境和资源提供者（例如 YARN、Kubernetes 和 standalone 部署）实现了对应的 ResourceManager。在 standalone 设置中，ResourceManager 只能分配可用 TaskManager 的 slots，而不能自行启动新的 TaskManager。</p>
+</li>
+<li><p><strong>Dispatcher</strong></p>
+<p><em>Dispatcher</em> 提供了一个 REST 接口，用来提交 Flink 应用程序执行，并为每个提交的作业启动一个新的 JobMaster。它还运行 Flink WebUI 用来提供作业执行信息。</p>
+</li>
+<li><p><strong>JobMaster</strong></p>
+<p><em>JobMaster</em> 负责管理单个<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#logical-graph">JobGraph</a>的执行。Flink 集群中可以同时运行多个作业，每个作业都有自己的 JobMaster。</p>
+</li>
+</ul>
+<p>始终至少有一个 JobManager。高可用（HA）设置中可能有多个 JobManager，其中一个始终是 <em>leader</em>，其他的则是 <em>standby</em>（请参考 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/deployment/ha/overview/">高可用（HA）</a>）。</p>
+<h3 id="TaskManagers"><a href="#TaskManagers" class="headerlink" title="TaskManagers #"></a>TaskManagers <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#taskmanagers">#</a></h3><p><em>TaskManager</em>（也称为 <em>worker</em>）执行作业流的 task，并且缓存和交换数据流。</p>
+<p>必须始终至少有一个 TaskManager。在 TaskManager 中资源调度的最小单位是 task <em>slot</em>。TaskManager 中 task slot 的数量表示并发处理 task 的数量。请注意一个 task slot 中可以执行多个算子（请参考<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#tasks-and-operator-chains">Tasks 和算子链</a>）。</p>
+<h2 id="Tasks-和算子链"><a href="#Tasks-和算子链" class="headerlink" title="Tasks 和算子链 #"></a>Tasks 和算子链 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#tasks-%E5%92%8C%E7%AE%97%E5%AD%90%E9%93%BE">#</a></h2><p>对于分布式执行，Flink 将算子的 subtasks <em>链接</em>成 <em>tasks</em>。每个 task 由一个线程执行。将算子链接成 task 是个有用的优化：它减少线程间切换、缓冲的开销，并且减少延迟的同时增加整体吞吐量。链行为是可以配置的；请参考<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/datastream/operators/overview/#task-chaining-and-resource-groups">链文档</a>以获取详细信息。</p>
+<p>下图中样例数据流用 5 个 subtask 执行，因此有 5 个并行线程。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/tasks_chains.svg" srcset="/img/loading.gif" lazyload alt="Operator chaining into Tasks"></p>
+<p><a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#top">Back to top</a></p>
+<h2 id="Task-Slots-和资源"><a href="#Task-Slots-和资源" class="headerlink" title="Task Slots 和资源 #"></a>Task Slots 和资源 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#task-slots-%E5%92%8C%E8%B5%84%E6%BA%90">#</a></h2><p>每个 worker（TaskManager）都是一个 <em>JVM 进程</em>，可以在单独的线程中执行一个或多个 subtask。为了控制一个 TaskManager 中接受多少个 task，就有了所谓的 <strong>task slots</strong>（至少一个）。</p>
+<p>每个 <em>task slot</em> 代表 TaskManager 中资源的固定子集。例如，具有 3 个 slot 的 TaskManager，会将其托管内存 1&#x2F;3 用于每个 slot。分配资源意味着 subtask 不会与其他作业的 subtask 竞争托管内存，而是具有一定数量的保留托管内存。注意此处没有 CPU 隔离；当前 slot 仅分离 task 的托管内存。</p>
+<p>通过调整 task slot 的数量，用户可以定义 subtask 如何互相隔离。每个 TaskManager 有一个 slot，这意味着每个 task 组都在单独的 JVM 中运行（例如，可以在单独的容器中启动）。具有多个 slot 意味着更多 subtask 共享同一 JVM。同一 JVM 中的 task 共享 TCP 连接（通过多路复用）和心跳信息。它们还可以共享数据集和数据结构，从而减少了每个 task 的开销。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/tasks_slots.svg" srcset="/img/loading.gif" lazyload alt="A TaskManager with Task Slots and Tasks"></p>
+<p>默认情况下，Flink 允许 subtask 共享 slot，即便它们是不同的 task 的 subtask，只要是来自于同一作业即可。结果就是一个 slot 可以持有整个作业管道。允许 <em>slot 共享</em>有两个主要优点：</p>
+<ul>
+<li>Flink 集群所需的 task slot 和作业中使用的最大并行度恰好一样。无需计算程序总共包含多少个 task（具有不同并行度）。</li>
+<li>容易获得更好的资源利用。如果没有 slot 共享，非密集 subtask（<em>source&#x2F;map()<em>）将阻塞和密集型 subtask（</em>window</em>） 一样多的资源。通过 slot 共享，我们示例中的基本并行度从 2 增加到 6，可以充分利用分配的资源，同时确保繁重的 subtask 在 TaskManager 之间公平分配。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/slot_sharing.svg" srcset="/img/loading.gif" lazyload alt="TaskManagers with shared Task Slots"></p>
+<h2 id="Flink-应用程序执行"><a href="#Flink-应用程序执行" class="headerlink" title="Flink 应用程序执行 #"></a>Flink 应用程序执行 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C">#</a></h2><p><em>Flink 应用程序</em> 是从其 <code>main()</code> 方法产生的一个或多个 Flink 作业的任何用户程序。这些作业的执行可以在本地 JVM（<code>LocalEnvironment</code>）中进行，或具有多台机器的集群的远程设置（<code>RemoteEnvironment</code>）中进行。对于每个程序，<code>ExecutionEnvironment</code> 提供了一些方法来控制作业执行（例如设置并行度）并与外界交互（请参考 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/datastream/overview/#anatomy-of-a-flink-program">Flink 程序剖析</a> ）。</p>
+<p>Flink 应用程序的作业可以被提交到长期运行的 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#flink-session-cluster">Flink Session 集群</a>、专用的 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#flink-job-cluster">Flink Job 集群</a> 或 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#flink-application-cluster">Flink Application 集群</a>。这些选项之间的差异主要与集群的生命周期和资源隔离保证有关。</p>
+<h3 id="Flink-Session-集群"><a href="#Flink-Session-集群" class="headerlink" title="Flink Session 集群 #"></a>Flink Session 集群 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-session-%E9%9B%86%E7%BE%A4">#</a></h3><ul>
+<li><strong>集群生命周期</strong>：在 Flink Session 集群中，客户端连接到一个预先存在的、长期运行的集群，该集群可以接受多个作业提交。即使所有作业完成后，集群（和 JobManager）仍将继续运行直到手动停止 session 为止。因此，Flink Session 集群的寿命不受任何 Flink 作业寿命的约束。</li>
+<li><strong>资源隔离</strong>：TaskManager slot 由 ResourceManager 在提交作业时分配，并在作业完成时释放。由于所有作业都共享同一集群，因此在集群资源方面存在一些竞争 — 例如提交工作阶段的网络带宽。此共享设置的局限性在于，如果 TaskManager 崩溃，则在此 TaskManager 上运行 task 的所有作业都将失败；类似的，如果 JobManager 上发生一些致命错误，它将影响集群中正在运行的所有作业。</li>
+<li><strong>其他注意事项</strong>：拥有一个预先存在的集群可以节省大量时间申请资源和启动 TaskManager。有种场景很重要，作业执行时间短并且启动时间长会对端到端的用户体验产生负面的影响 — 就像对简短查询的交互式分析一样，希望作业可以使用现有资源快速执行计算。</li>
+</ul>
+<blockquote>
+<p>以前，Flink Session 集群也被称为 <em>session 模式</em>下的 Flink 集群。</p>
+</blockquote>
+<h3 id="Flink-Job-集群"><a href="#Flink-Job-集群" class="headerlink" title="Flink Job 集群 #"></a>Flink Job 集群 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-job-%E9%9B%86%E7%BE%A4">#</a></h3><ul>
+<li><strong>集群生命周期</strong>：在 Flink Job 集群中，可用的集群管理器（例如 YARN）用于为每个提交的作业启动一个集群，并且该集群仅可用于该作业。在这里，客户端首先从集群管理器请求资源启动 JobManager，然后将作业提交给在这个进程中运行的 Dispatcher。然后根据作业的资源请求惰性的分配 TaskManager。一旦作业完成，Flink Job 集群将被拆除。</li>
+<li><strong>资源隔离</strong>：JobManager 中的致命错误仅影响在 Flink Job 集群中运行的一个作业。</li>
+<li><strong>其他注意事项</strong>：由于 ResourceManager 必须应用并等待外部资源管理组件来启动 TaskManager 进程和分配资源，因此 Flink Job 集群更适合长期运行、具有高稳定性要求且对较长的启动时间不敏感的大型作业。</li>
+</ul>
+<blockquote>
+<p>以前，Flink Job 集群也被称为 <em>job (or per-job) 模式</em>下的 Flink 集群。</p>
+</blockquote>
+<blockquote>
+<p>Kubernetes 不支持 Flink Job 集群。 请参考 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/deployment/resource-providers/standalone/kubernetes/#per-job-cluster-mode">Standalone Kubernetes</a> 和 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/deployment/resource-providers/native_kubernetes/#per-job-cluster-mode">Native Kubernetes</a>。</p>
+</blockquote>
+<h3 id="Flink-Application-集群"><a href="#Flink-Application-集群" class="headerlink" title="Flink Application 集群 #"></a>Flink Application 集群 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-application-%E9%9B%86%E7%BE%A4">#</a></h3><ul>
+<li><strong>集群生命周期</strong>：Flink Application 集群是专用的 Flink 集群，仅从 Flink 应用程序执行作业，并且 <code>main()</code>方法在集群上而不是客户端上运行。提交作业是一个单步骤过程：无需先启动 Flink 集群，然后将作业提交到现有的 session 集群；相反，将应用程序逻辑和依赖打包成一个可执行的作业 JAR 中，并且集群入口（<code>ApplicationClusterEntryPoint</code>）负责调用 <code>main()</code>方法来提取 JobGraph。例如，这允许你像在 Kubernetes 上部署任何其他应用程序一样部署 Flink 应用程序。因此，Flink Application 集群的寿命与 Flink 应用程序的寿命有关。</li>
+<li><strong>资源隔离</strong>：在 Flink Application 集群中，ResourceManager 和 Dispatcher 作用于单个的 Flink 应用程序，相比于 Flink Session 集群，它提供了更好的隔离。</li>
+</ul>
+<blockquote>
+<p>Flink Job 集群可以看做是 Flink Application 集群”客户端运行“的替代方案。</p>
+</blockquote>
+<h2 id="Flink-的数据传输"><a href="#Flink-的数据传输" class="headerlink" title="Flink 的数据传输"></a>Flink 的数据传输</h2><h3 id="TaskManager（slot槽）之间的数据接收和数据发送"><a href="#TaskManager（slot槽）之间的数据接收和数据发送" class="headerlink" title="TaskManager（slot槽）之间的数据接收和数据发送"></a>TaskManager（slot槽）之间的数据接收和数据发送</h3><p>发送端：将数据发送到接收端</p>
+<p>接收端：接受数据</p>
+<p>接收端和发送端端并行度应该相同</p>
+<h3 id="基于信用值的流量控制"><a href="#基于信用值的流量控制" class="headerlink" title="基于信用值的流量控制"></a>基于信用值的流量控制</h3><p>作用：提高吞吐量和利用率，减少等待时间（低延迟 、高吞吐）</p>
+<p>接收端 – 发送信用值</p>
+<p>发送端 – 发送积压量</p>
+<p>发送端在<strong>信用值</strong>范围内，尽可能多的发送</p>
+<p>接收端在<strong>积压量</strong>中选择策略修改信用值的优先级</p>
+<h3 id="任务链接"><a href="#任务链接" class="headerlink" title="任务链接"></a>任务链接</h3><p>将满足要求的算计（同一个机器-本地通信，相同并行度），即可压缩上下游调用关系（融合为一个任务）</p>
+<h2 id="Job、Job-Instance、task"><a href="#Job、Job-Instance、task" class="headerlink" title="Job、Job Instance、task"></a>Job、Job Instance、task</h2><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ada">在Flink中，主要有如下三个概念：Job、JobInstance和<span class="hljs-keyword">Task</span>，它们所代表的含义分别如下：<br><br>* Job：表示应用程序的一次执行，是一个与Flink集群交互的最高级别的概念，代表了一个拓扑图，并包括了所有需要运行的<span class="hljs-keyword">Task</span>以及它们之间的数据流。Job拥有一个唯一标识，可以通过该标识来查询和管理这个Job以及它的执行状态。<br><br>* JobInstance：一个Job实例表示一个具体的Job执行实例，它包含了Job的配置、<span class="hljs-keyword">Task</span>的初始化状态等信息。当Job提交到Flink集群后，会创建一个JobInstance并为其分配资源，该JobInstance会运行相应的<span class="hljs-keyword">Task</span>并在完成后报告其状态。<br><br>* <span class="hljs-keyword">Task</span>：表示一个作业中的任务，它是Flink中的最小执行单元。每个<span class="hljs-keyword">Task</span>都处理一个数据分区（Partition）并通过网络传输与其它任务交换数据（Flink中的Shuffle）。一个Job由多个<span class="hljs-keyword">Task</span>组成。一个JobInstance中的任务可以根据需要动态的进行上下扩展。<br><br>简而言之，Job是一次作业的最高级别的概念，代表了数据流拓扑，而JobInstance则是具体的Job执行实例，它的配置和状态信息都存储在Flink的JobManager中，可以用于管理和监控Job的执行状态。<span class="hljs-keyword">Task</span>是在作业执行时是真正进行计算的最小执行单元，每个<span class="hljs-keyword">Task</span>都是同构的，负责处理数据的一部分并互相协作完成作业的结果。<br><br>需要注意的是，JobInstance是在Job被提交后到集群处理之前创建的，当Job执行完成后，JobInstance会被销毁。而<span class="hljs-keyword">Task</span>则是在JobInstance的生命周期内，根据不同的需要进行动态创建和销毁。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="支持数据类型"><a href="#支持数据类型" class="headerlink" title="支持数据类型"></a>支持数据类型</h1><p>普通数据类型</p>
+<p>Java 和 Scale 元组</p>
+<p>POJO ： 包含set、get方法  （Avro 会转为 POJO） </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">Avro ：Avro是Hadoop的一个数据序列化系统，由Hadoop的创始人Doug Cutting（也是Lucene，Nutch等项目的创始人）开发，设计用于支持大批量数据交换的应用。<br><br>https:<span class="hljs-regexp">//</span>www.cnblogs.com<span class="hljs-regexp">/wqbin/</span>p/<span class="hljs-number">11228188</span>.html<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%A4%A7%E6%95%B0%E6%8D%AE/" class="category-chain-item">大数据</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">#大数据</a>
+      
+        <a href="/tags/flink/">#flink</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flink-官方文档笔记</div>
+      <div>http://example.com/2023/06/01/分布式系统-大数据/Flink/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/" title="分布式系统计算框架">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式系统计算框架</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/mit6.824-%E5%AF%BC%E8%88%AA/" title="MIT-6.824记录">
+                        <span class="hidden-mobile">MIT-6.824记录</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1008 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="gitGit常用操作总结 - 知乎 (zhihu.com) 架构图在 Git 中，工作流程通常分为三个区域：工作区、暂存区和本地仓库。  工作区：工作区是你在本地电脑上实际操作文件的区域，包含了你的项目文件和目录。  暂存区：暂存区是一个临时存储区域，用于存储 Git 要提交到本地仓库的文件列表。当你用 git add 命令将修改过的文件添加到暂存区时，Git 会记录下这些修改，并将其保存在暂存区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%B7%A5%E5%85%B7/git/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="gitGit常用操作总结 - 知乎 (zhihu.com) 架构图在 Git 中，工作流程通常分为三个区域：工作区、暂存区和本地仓库。  工作区：工作区是你在本地电脑上实际操作文件的区域，包含了你的项目文件和目录。  暂存区：暂存区是一个临时存储区域，用于存储 Git 要提交到本地仓库的文件列表。当你用 git add 命令将修改过的文件添加到暂存区时，Git 会记录下这些修改，并将其保存在暂存区">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:01:40.981Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>git - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="git"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          20k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          167 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">git</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="git"><a href="#git" class="headerlink" title="git"></a>git</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/404642045">Git常用操作总结 - 知乎 (zhihu.com)</a></p>
+<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>在 Git 中，工作流程通常分为三个区域：工作区、暂存区和本地仓库。</p>
+<ol>
+<li><p>工作区：工作区是你在本地电脑上实际操作文件的区域，包含了你的项目文件和目录。</p>
+</li>
+<li><p>暂存区：暂存区是一个临时存储区域，用于存储 Git 要提交到本地仓库的文件列表。当你用 <code>git add</code> 命令将修改过的文件添加到暂存区时，Git 会记录下这些修改，并将其保存在暂存区中。</p>
+</li>
+<li><p>本地仓库：本地仓库是 Git 存储所有提交过的文件的位置，包含了项目历史的所有版本。当你使用 <code>git commit</code> 命令将修改提交到本地仓库时，Git 会将当前暂存区中的文件保存为一个新的版本，并且将其记录在本地仓库中。</p>
+</li>
+</ol>
+<p>在这个三个区域中，Git 对于每一次修改都会跟踪它们的状态，并将其记录在提交历史中。当你执行 <code>git add</code> 命令时，Git 会将这些修改添加到暂存区，等待下一次 <code>git commit</code> 命令将其提交到本地仓库中。通过这种方式，Git 能够有效地跟踪每个版本的变化，让你轻松管理你的项目代码。</p>
+<h3 id="作用描述"><a href="#作用描述" class="headerlink" title="作用描述"></a>作用描述</h3><p>Git 中的三个区域（工作区、暂存区和本地仓库）分别承担了不同的作用，具体如下：</p>
+<ol>
+<li><p>工作区：工作区是项目实际的工作目录，其中包含了项目的源代码、配置文件等，你可以在工作区中进行文件的修改和添加。</p>
+</li>
+<li><p>暂存区：暂存区也称为 Git 的 “Index”，是一个缓存区，它保存了即将提交到本地仓库的内容。你可以使用 <code>git add</code> 命令将工作区的修改添加到暂存区，等待提交到本地仓库。</p>
+</li>
+<li><p>本地仓库：本地仓库存储了 Git 所有的版本历史，包括每个版本的代码、提交信息等。你可以使用 <code>git commit</code> 命令将暂存区的修改提交到本地仓库。</p>
+</li>
+</ol>
+<p>在实际使用中，工作区、暂存区和本地仓库通常结合起来进行管理，Git 提供了一系列命令用于操作这些区域：</p>
+<ol>
+<li><p><code>git add</code>：将修改后的文件添加到暂存区。</p>
+</li>
+<li><p><code>git commit</code>：将暂存区的文件提交到本地仓库。</p>
+</li>
+<li><p><code>git push</code>：将本地仓库中的代码推送到远程仓库。</p>
+</li>
+<li><p><code>git fetch</code>：从远程仓库下载最新的代码，但是不会自动合并代码。</p>
+</li>
+<li><p><code>git merge</code>：将某个分支合并到当前分支，自动合并代码。</p>
+</li>
+<li><p><code>git pull</code>：从远程仓库下载最新的代码，并且立即将其合并到本地分支。</p>
+</li>
+</ol>
+<p>在实际场景中，你可以在工作区中修改文件，添加&#x2F;删除文件，使用 <code>git add</code> 命令将修改暂存到暂存区，使用 <code>git commit</code> 命令将暂存区的修改提交到本地仓库。当你想要将本地修改推送到远程仓库时，可以使用 <code>git push</code> 命令将本地仓库的代码推送到远程仓库，也可以使用 <code>git fetch</code> 和 <code>git merge</code> 命令将最新代码合并到当前分支后再进行推送。当你想要更新本地分支时，可以使用 <code>git fetch</code> 和 <code>git merge</code> 命令来获取最新代码并合并到当前分支。</p>
+<h3 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h3><p>下面是 Git 中常用的一些命令和它们的作用：</p>
+<ol>
+<li><p><code>git init</code>：初始化一个新的 Git 仓库。</p>
+</li>
+<li><p><code>git clone</code>：从远程仓库克隆代码到本地仓库。</p>
+</li>
+<li><p><code>git add</code>：将工作区中的修改添加到暂存区。</p>
+</li>
+<li><p><code>git commit</code>：将暂存区中的修改提交到本地仓库。</p>
+</li>
+<li><p><code>git status</code>：查看工作区、暂存区和本地仓库的当前状态。</p>
+</li>
+<li><p><code>git diff</code>：查看文件的修改差异。</p>
+</li>
+<li><p><code>git log</code>：查看本地仓库的提交历史。</p>
+</li>
+<li><p><code>git push</code>：将本地仓库中的代码推送到远程仓库。</p>
+</li>
+<li><p><code>git fetch</code>：从远程仓库下载最新的代码，但是不会自动合并代码。</p>
+</li>
+<li><p><code>git merge</code>：将某个分支合并到当前分支，自动合并代码。</p>
+</li>
+<li><p><code>git pull</code>：从远程仓库下载最新的代码，并且立即将其合并到本地分支。</p>
+</li>
+<li><p><code>git branch</code>：查看、创建、删除和切换分支。</p>
+</li>
+<li><p><code>git checkout</code>：切换分支或还原项目文件。</p>
+</li>
+<li><p><code>git stash</code>：将当前修改暂时保存，并回到项目的另一个状态。</p>
+</li>
+<li><p><code>git tag</code>：给提交打标签。</p>
+</li>
+<li><p><code>git remote</code>：管理远程仓库。</p>
+</li>
+<li><p><code>git config</code>：管理 Git 配置。</p>
+</li>
+<li><p><code>git revert</code>：还原某个提交的修改。</p>
+</li>
+<li><p><code>git reset</code>：回退版本并删除提交。</p>
+</li>
+<li><p><code>git rm</code>：删除工作区中的文件。</p>
+</li>
+</ol>
+<p>这些命令是 Git 中的基本命令，涵盖了 Git 中常见的操作，建议你先掌握这些命令，在之后的实践中学习其他更高级的命令。</p>
+<h2 id="config-文件"><a href="#config-文件" class="headerlink" title="config 文件"></a>config 文件</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[core]</span><br>	<span class="hljs-attr">repositoryformatversion</span> = <span class="hljs-number">0</span><br>	<span class="hljs-attr">filemode</span> = <span class="hljs-literal">false</span><br>	<span class="hljs-attr">bare</span> = <span class="hljs-literal">false</span><br>	<span class="hljs-attr">logallrefupdates</span> = <span class="hljs-literal">true</span><br>	<span class="hljs-attr">symlinks</span> = <span class="hljs-literal">false</span><br>	<span class="hljs-attr">ignorecase</span> = <span class="hljs-literal">true</span><br><span class="hljs-section">[remote &quot;origin&quot;]</span><br>	<span class="hljs-attr">url</span> = https://github.com/spring-projects/spring-boot.git<br>	<span class="hljs-attr">fetch</span> = +refs/heads/*:refs/remotes/origin/*<br><span class="hljs-section">[branch &quot;master&quot;]</span><br>	<span class="hljs-attr">remote</span> = origin<br>	<span class="hljs-attr">merge</span> = refs/heads/master<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="文件解读"><a href="#文件解读" class="headerlink" title="文件解读"></a>文件解读</h3><p>以上示例代码展示了一个 Git 仓库的配置文件，其中方括号内的是配置项名，等号后面是该配置项的值。以下是各个配置项的含义解释：</p>
+<ol>
+<li><p>repositoryformatversion：Git 仓库的格式版本。</p>
+</li>
+<li><p>filemode：控制 Git 是否记录文件的权限和可执行状态。如果设置为 true，Git 将记录文件的权限和可执行状态；如果设置为 false，Git 将忽略文件的权限和可执行状态。</p>
+</li>
+<li><p>bare：是否是裸仓库。如果设置为 true，表示这是一个裸仓库，Git 不会在仓库目录中保存工作树，而只保存 Git 数据库。如果设置为 false，表示这是一个非裸仓库，Git 会保存工作树和 Git 数据库。</p>
+</li>
+<li><p>logallrefupdates：是否记录所有引用的更新日志。如果设置为 true，Git 将记录所有引用的更新日志，包括标签、分支等；如果设置为 false，Git 将只记录 HEAD 引用的更新日志。</p>
+</li>
+<li><p>symlinks：是否检查符号链接。如果设置为 true，Git 将检查符号链接；如果设置为 false，Git 将忽略符号链接。</p>
+</li>
+<li><p>ignorecase：是否忽略文件名大小写。如果设置为 true，Git 将忽略文件名大小写；如果设置为 false，Git 将区分文件名大小写。</p>
+</li>
+<li><p>remote “origin”：定义了一个远程仓库，名称为 origin。</p>
+</li>
+<li><p>url：远程仓库的 URL 地址，表示该仓库的数据存储在哪个服务器上，通过哪个协议访问。</p>
+</li>
+<li><p>fetch：拉取远程仓库的分支和标签。代码中的 fetch 值 <code>+refs/heads/*:refs/remotes/origin/*</code> 表示拉取远程仓库中的所有分支，<code>*</code> 表示标记任何分支名称或通配符。</p>
+</li>
+<li><p>branch “master”：定义了一个本地分支，名称为 master。</p>
+</li>
+<li><p>remote：指定本地分支对应的远程分支，例如这里的 origin，意味着将本地的 master 分支与远程仓库 origin 上的 master 分支关联起来。</p>
+</li>
+<li><p>merge：指定从远程分支合并代码到本地分支的方式。代码中的 merge 值 <code>refs/heads/master</code> 表示将远程仓库的 master 分支合并到本地的 master 分支。</p>
+</li>
+</ol>
+<p>这是一个 Git 仓库的基本配置示例，其中远程仓库的 URL、分支关联和合并规则是 Git 中常见的概念。了解这些配置项及其含义，可以帮助我们更好地理解和使用 Git。</p>
+<h2 id="解决本地、远程差异过大"><a href="#解决本地、远程差异过大" class="headerlink" title="解决本地、远程差异过大"></a>解决本地、远程差异过大</h2><p>当本地代码与远程代码差异较大时，可能会出现版本冲突或无法合并的情况。这通常需要进行一些手动操作来解决。下面是一些可能有助于解决版本冲突的方法：</p>
+<ol>
+<li>把远程仓库的最新代码拉取到本地</li>
+</ol>
+<p>首先，需要确保本地仓库与远程仓库的代码历史保持一致，如果本地仓库落后于远程仓库的代码，可能会导致版本冲突。可以使用以下命令将最新的远程代码拉取到本地：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">git fetch origin</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>切换分支</li>
+</ol>
+<p>如果本地仓库和远程仓库有不同的分支，需要切换到相应的分支，以确保操作的分支历史一致。例如，切换到本地 <code>master</code> 分支：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git checkout <span class="hljs-literal">master</span><br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>使用合适的合并策略</li>
+</ol>
+<p>运行 <code>git merge</code> 命令时，可以使用不同的合并策略来处理版本冲突。例如，可以使用 <code>git merge --strategy=recursive</code> 命令来使用递归合并策略，该策略尝试自动解决大多数版本冲突情况。如果自动解决失败，可以使用手动解决或其他适合的策略。</p>
+<ol start="4">
+<li>手动解决冲突</li>
+</ol>
+<p>如果自动合并失败，或者需要进行手动解决冲突，则需要打开代码编辑器并编辑包含冲突的文件。冲突标记 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> 和 <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> 会在代码文件中显示冲突部分的起始和结束位置。手动编辑代码以解决冲突，删除标记并保存冲突解决方案。完成冲突修改后，使用以下命令将更改提交到本地仓库中：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">git <span class="hljs-keyword">add</span> &lt;突文件名&gt;<br>git <span class="hljs-keyword">commit</span> -m &quot;解决版本冲突&quot;<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>强制推送到远程仓库</li>
+</ol>
+<p>在解决版本冲突后，需要将本地更改推送到远程仓库。如果本地更改与远程历史版本存在冲突，可以使用以下命令强制将本地更改推送到远程仓库：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">git <span class="hljs-built_in">push</span> -f <span class="hljs-built_in">origin</span> branch-name<br></code></pre></td></tr></table></figure>
+
+<p>该命令将会覆盖远程仓库上的历史版本，并且将本地更改作为新的版本推送到远程仓库上。这将永久删除远程仓库上的历史版本，应该谨慎使用。</p>
+<h2 id="强制合并"><a href="#强制合并" class="headerlink" title="强制合并"></a>强制合并</h2><p>如果在使用 <code>git pull</code> 命令或 <code>git merge</code> 命令将本地更改合并到远端代码时出现合并冲突或问题，可以使用以下命令强制合并远程仓库：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git fetch --all<br>git reset --hard origin/<span class="hljs-keyword">master</span><br><span class="hljs-title">git</span> pull origin <span class="hljs-keyword">master</span> <span class="hljs-title">--allow-unrelated-histories</span><br>git push --force origin <span class="hljs-literal">master</span><br></code></pre></td></tr></table></figure>
+
+<p>上述命令执行的操作如下：</p>
+<ol>
+<li><code>git fetch --all</code>：拉取远程所有分支的最新代码。</li>
+<li><code>git reset --hard origin/master</code>：将本仓库的 <code>master</code> 分支重置为远程仓库的最新代码。</li>
+<li><code> pull origin master --allow-unrelated-histories</code>：强制将最新远程仓库的代码和本地仓库的代码合并。<code>--allow-unrelated-histories</code> 参数可以允许合并两个独立开发的仓库。</li>
+<li><code>git push --force origin master</code>：将强制合并后的本地代码推送到远程仓库。</li>
+</ol>
+<p>需要注意的是，强制合并会覆盖原有的提交历史，并且会永久性地删除所有现有的、与最新远程代码不同的提交历史。因此，需谨慎使用此操作，确保对代码进行备份，并且在执行此操作之前先进行评估和测试，以确保不会引入任何不必要的问题或错误。</p>
+<h2 id="覆盖"><a href="#覆盖" class="headerlink" title="覆盖"></a>覆盖</h2><p>如果远程仓库中的代码需要完全覆盖本地代码，可以使用以下方法：</p>
+<ol>
+<li>备份本地代码</li>
+</ol>
+<p>在进行任何更改之前，最好先备份本地代码，以便在需要时可以还原。</p>
+<ol start="2">
+<li>强制拉取最新代码</li>
+</ol>
+<p>使用以下命令强制拉取远程仓库中的最新代码：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">git <span class="hljs-keyword">fetch</span> <span class="hljs-comment">--all</span><br>git <span class="hljs-keyword">reset</span> <span class="hljs-comment">--hard origin/master</span><br></code></pre></td></tr></table></figure>
+
+<p>这将从远程仓库中拉取最新的代码，并将本地仓库的 <code>master</code> 分支设置为与远程仓库完全相同。所有本地未提交的更改都将被覆盖。</p>
+<ol start="3">
+<li>强制推送到远程仓库</li>
+</ol>
+<p>使用以下命令将本地代码强制推送到远程仓库：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">git <span class="hljs-built_in">push</span> --force <span class="hljs-built_in">origin</span> master<br></code></pre></td></tr></table></figure>
+
+<p>该命令将强制将本地更改覆盖远程仓库中的所有代码。需要注意的是，这将永久删除远程仓库上的历史版本，应该谨慎使用。</p>
+<p>需要注意的是，这种操作会对本地未提交的更改造成极大影响，将其覆盖并删除。只有在非常确定进行操作时，才应该使用该方法。如果需要保存原有的本地更改，可以在覆盖之前将其备份并在覆盖后恢复。</p>
+<h1 id="业务"><a href="#业务" class="headerlink" title="业务"></a>业务</h1><h2 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h2><p>当您在工作区进行修改时，在执行 Git 中的操作（如合并或拉取）时可能会出现冲突。以下是 Git 中解决本地工作区冲突的详细步骤：</p>
+<ol>
+<li>查看冲突</li>
+</ol>
+<p>请使用 <code>git status</code> 命令查看是否存在冲突文件。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">git status</span><br></code></pre></td></tr></table></figure>
+
+<p>通常，会出现以下提示语：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">$ git status<br>On branch <span class="hljs-keyword">master</span><br><span class="hljs-title">You</span> have unmerged paths.<br>  (fix conflicts <span class="hljs-keyword">and</span> run <span class="hljs-string">&quot;git commit&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>手动解决冲突</li>
+</ol>
+<p>找到导致冲突的文件。使用文本编辑器打开文件，并修复所有括号和标记。将文件修改合并为单个文件，保存您的更改。</p>
+<p>通常，解决冲突后文件会包含以下几个元素：</p>
+<ul>
+<li>确定您要保留的代码</li>
+<li>删除不必要的代码</li>
+<li>处理如何合并代码并解决冲突</li>
+<li>收集您的代码并使其可以正常工作</li>
+</ul>
+<ol start="3">
+<li>手动合并文件时调用编辑器</li>
+</ol>
+<p>如果您正处理的文件是一个长文件，或者是一个包含许多冲突的文件，您可能需要进行更高级的冲突解决策略，比如使用编辑器。请在 Git 中配置一个编辑器，并在解决冲突时调用它。您可以使用以下命令进行全局设置：</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">$ git config --<span class="hljs-keyword">global</span> core.<span class="hljs-keyword">editor</span> <span class="hljs-string">&quot;vanilla -w&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>这会将 vanilla 编辑器作为您默认的 Git 编辑器，解决冲突时会自动启动编辑器。</p>
+<ol start="4">
+<li>标记文件为已解决（已暂存）</li>
+</ol>
+<p>解决代码冲突后，您需要将文件标记为已解决以通知 Git 代码冲突已经被解决。</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">git <span class="hljs-built_in">add</span> &lt;<span class="hljs-built_in">file</span>&gt;<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>提交代码</li>
+</ol>
+<p>完成所有修改并标记所有文件后，您需要提交代码。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">git commit</span><br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是，解决代码冲突是一个经验问题，并且不同的应用场景可能需要不同的决策。要进一步了解如何解决 Git 中的冲突问题，可以参考 Git 官方文档，并尝试使用示例文件进行练习。</p>
+<h2 id="进入编译器"><a href="#进入编译器" class="headerlink" title="进入编译器"></a>进入编译器</h2><p>如果您在手动解决 Git 冲突时需要启动编辑器，则可以使用以下命令：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">git mergetool</span><br></code></pre></td></tr></table></figure>
+
+<p>这个命令会打开您已配置为默认编辑器的工具，帮助您更轻松地理解和解决冲突的位置。在编辑器中，您可以将修改和合并的部分并排放置在一个文件中，以便进行比较和修改。</p>
+<p>需要注意的是，使用 <code>git mergetool</code> 命令之前，请先确保您的系统上已经安装了一个 Git 可识别的合适编辑器。如果您希望使用特定的编辑器作为默认编辑器，可以将其通过 <code>git config</code> 命令设置为默认编辑器。</p>
+<p>如果您尚未为 Git 设置编辑器，您可以使用以下命令将默认编辑器设置为 vim：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">git <span class="hljs-built_in">config</span> <span class="hljs-comment">--global core.editor vim</span><br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是，vim 是一种高级的编辑器，需要一定的学习曲线和一些命令行知识。如果您不熟悉使用 vim，可以考虑使用其他文本编辑器来代替。不过，在使用 vim 之前，您可以阅读这篇关于 vim 基础的教程，以了解如何进行文件冲突解决。</p>
+<p>当您运行 <code>git mergetool</code> 命令且 Git 系统无法识别默认的 Git 工具时，您会看到上面的消息。如果您已经设置了 <code>git difftool</code>，可以使用 <code>git mergetool --tool-diff</code> 命令来尝试调用 Git 明确的 Meld 或您自己的视觉 diff 工具来启动合并工具。</p>
+<p>如果您还没有安装 Git 可识别的合适工具，可以使用以下步骤为您的操作系统选择可用于解决 Git 冲突的合适工具：</p>
+<ol>
+<li><p>对于 Windows 系统，您可以使用 Visula Studio Code、Beyond Compare、WinMerge、TortoiseMerge 或 比较推等编辑器。</p>
+</li>
+<li><p>对于 Linux &#x2F; macOS 系统，您可以使用 Emacs、Meld、Vim 或 KDiff3、p4merge等编辑器。</p>
+</li>
+</ol>
+<p>然后，您可以将您选择的工具添加到您的 Git 配置中。假设您选择的是 Beyond Compare，则可以使用以下命令：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> merge<span class="hljs-selector-class">.tool</span> bc3 <br>git config <span class="hljs-attr">--global</span> mergetool<span class="hljs-selector-class">.bc3</span><span class="hljs-selector-class">.path</span> <span class="hljs-string">&quot;c:/program files/beyond compare 4/bcomp.exe&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>以上命令将 Beyond Compare 设置为默认的 Git 工具。</p>
+<p>需要注意的是，解决代码冲突是一个经验问题，并且不同的应用场景可能需要不同的决策。要进一步了解如何解决 Git 中的冲突问题，可以参考 Git 官方文档，并尝试使用示例文件进行练习。</p>
+<h2 id="git-clone-指定文件地址-x2F-分支"><a href="#git-clone-指定文件地址-x2F-分支" class="headerlink" title="git clone 指定文件地址 &#x2F; 分支"></a>git clone 指定文件地址 &#x2F; 分支</h2><p>在执行git clone命令时，可以通过使用参数来指定要克隆的文件或目录地址。具体步骤如下：</p>
+<ol>
+<li><p>打开要克隆的仓库的网页地址，如<a target="_blank" rel="noopener" href="https://github.com/user/repo%EF%BC%8C%E5%A4%8D%E5%88%B6%E8%AF%A5%E7%BD%91%E9%A1%B5%E5%9C%B0%E5%9D%80%E3%80%82">https://github.com/user/repo，复制该网页地址。</a></p>
+</li>
+<li><p>打开终端，进入要克隆到的目录下。</p>
+</li>
+<li><p>执行以下命令，将仓库的指定文件或目录克隆到当前目录下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">git clone <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span> --depth 1 --branch=<span class="hljs-tag">&lt;<span class="hljs-name">branch</span>&gt;</span> --single-branch <span class="hljs-tag">&lt;<span class="hljs-name">path</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>其中，<url>是仓库的网页地址，<branch>是仓库的分支名称，<path>是要克隆的文件或目录地址。</p>
+<p>例如，如果要克隆仓库user&#x2F;repo的master分支下的docs目录，可以使用以下命令：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://github.com/user/repo.git --depth <span class="hljs-number">1</span> --<span class="hljs-attr">branch=</span><span class="hljs-keyword">master</span> <span class="hljs-title">--single-branch</span> docs<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>执行完命令后，会在当前目录下生成一个名为<path>的目录，其中包含了要克隆的文件或目录。</p>
+</li>
+</ol>
+<p>注意事项：</p>
+<ol>
+<li><p>如果要克隆的文件或目录在仓库的根目录下，可以将<path>减去，直接使用仓库名称作为克隆后的目录名称。</p>
+</li>
+<li><p>如果克隆的文件或目录在Git仓库中发生变化，需要重新克隆才能获取更新的内容。</p>
+</li>
+</ol>
+<h2 id="PR提交流程-x2F-MR规范"><a href="#PR提交流程-x2F-MR规范" class="headerlink" title="PR提交流程 &#x2F; MR规范"></a>PR提交流程 &#x2F; MR规范</h2><h3 id="MR"><a href="#MR" class="headerlink" title="MR"></a>MR</h3><p>“MR”规范是Git代码仓库中的一种代码审查（Code Review）方式，全称为“Merge Request”规范。它是GitLab中一种常用的代码协作方式，可以为开发者提交的代码提供审核、评论和修改等功能，以帮助团队更好地协作和管理代码。由于GitLab非常流行，因此”MR”规范也得到了广泛的应用。</p>
+<p>“MR” 的基本流程如下：</p>
+<ol>
+<li><p>开发者在自己的分支（Branch）上完成代码编写之后，将代码推送到Git代码仓库中。</p>
+</li>
+<li><p>此时开发者可以发起一个“Merge Request”，用于请求其他成员对其改动进行审核、修改和讨论。</p>
+</li>
+<li><p>其他成员可以在“Merge Request”页面对代码进行审查、添加评论，并提供修改建议。</p>
+</li>
+<li><p>开发者可以对代码进行修改，并在第3步中与其他成员进行讨论，以最终确定代码是否可以合并到主代码库中。</p>
+</li>
+</ol>
+<p>“MR”规范有助于团队更好地协作和管理代码，促进代码质量的提高，同时也减轻了团队负责人和管理人员的工作负担。</p>
+<h3 id="PR"><a href="#PR" class="headerlink" title="PR"></a>PR</h3><p>PR（Pull Request）是Git和GitHub中常用的协作方式，而MR（Merge Request）则是GitLab中的一种协作方式。二者的基本流程类似，都用于请求其他开发者或团队成员对自己所做的更改进行查看、审核和合并。但二者的具体实现和用法略有不同，主要区别如下：</p>
+<ol>
+<li><p>用法不同：PR 是Git&#x2F;GitHub的一种代码协作方式，而MR 是GitLab的一种代码协作方式。</p>
+</li>
+<li><p>实现方式略有不同：PR 是将自己的版本库 clone 下来，在本地进行修改后用命令推送到GitHub上的公共版本库，并在GitHub上发起合并请求。MR 是通过GitLab自带的Web界面，将开发者的新代码分支（branch）提交到GitLab上的公共版本库，并在GitLab的Web界面上发起合并请求。</p>
+</li>
+<li><p>用法范围不同：GitHub 包括了码云等国内众多的代码托管服务。而 GitLab 是一个服务端搭建和企业自用的 Git 代码库平台，在国内用户上面并不多。</p>
+</li>
+</ol>
+<p>虽然二者实现方式略有差异，但是其本质上都是代码协作方式，都帮助协作开发者更好地协作和管理代码。开发者可以根据具体情况在Git&#x2F;GitHub或GitLab中选择合适的方式，以达到更好的协作效果。</p>
+<h2 id="分支命名规范"><a href="#分支命名规范" class="headerlink" title="分支命名规范"></a>分支命名规范</h2><ol>
+<li><p><code>master</code> 分支：代表主分支，包含最新版本的代码。一般情况下，<code>master</code> 分支应该保持稳定，不应该直接进行修改，而是通过其他分支（例如 <code>dev-*</code>）或打标签（Tag）的方式来实现。</p>
+</li>
+<li><p><code>dev-*</code> 分支：代表开发分支，是开发者进行开发工作的主要分支。例如，开发者可以在 <code>dev-login</code> 分支上进行登录功能开发，或在 <code>dev-payment</code> 分支上进行支付功能开发。</p>
+</li>
+<li><p><code>hotfix-*</code> 分支：代表紧急修复分支，通常用于紧急修复生产环境中的问题。例如，如果出现了一个支付系统崩溃的问题，开发者可以创建 <code>hotfix-payments-crash</code> 分支来进行修复。</p>
+</li>
+<li><p><code>feature/*</code> 分支：代表新特性分支，通常用于添加新功能或实现某些新的业务需求。例如，如果需要添加一个新的商品推荐功能，开发者可以在 <code>feature/product-recommendation</code> 分支上进行开发。</p>
+</li>
+<li><p><code>release/*</code> 分支：代表发行&#x2F;发布分支，通常用于准备发布新版本的代码。例如，开发者可以在 <code>release/v1.2.3</code> 分支上进行版本号为 <code>v1.2.3</code> 的代码准备和测试。</p>
+</li>
+</ol>
+<p>注意，以上仅是对一些常见的命名规范的示例，具体的分支命名规范还需要根据项目和团队的实际情况进行定制。在使用 GitHub 进行项目开发时，你可以选择自己的命名规范，并利用 GitHub 提供的分支管理、Pull Request、代码审核及合并等功能，有效地帮助团队进行协作和代码管理。</p>
+<p><strong>“-“ 与 ‘&#x2F;’</strong></p>
+<p>在 Git 中，分支名是使用正斜线（即 <code>/</code>）分割的，而在一些实现中，例如 GitHub 或 GitLab，使用短横线（即 <code>-</code>）作为分隔符也是常见的。这两种分隔符虽然不同，但其实质是一样的，都是用于区分分支名的不同部分。</p>
+<p>在实际应用中，使用 <code>/</code> 或 <code>-</code> 作为分隔符没有本质区别，但根据团队的实际情况，可以选择一个更适合自己习惯和管理风格的分隔符。例如，部分团队习惯使用 <code>/</code>，因为它类似于 Unix 路径分隔符，更符合 Unix 系统下目录结构的习惯；而另一些团队则更喜欢 <code>-</code>，因为它看起来更加简洁易懂。</p>
+<p>需要注意的是，如果你在使用 GitLab 或 GitHub 等服务时，尽管你可以使用 <code>-</code> 来定义分支名称，但是在在命令行上进行相关的 Git 操作时，需要使用 <code>/</code>，否则会出现错误。另外，在进行一些持续集成和部署工具集成时，也需要使用 <code>/</code>，包括 Jenkins、Travis CI 和 GitLab CI 等工具。</p>
+<p>综上所述，使用 <code>/</code> 和 <code>-</code> 的区别并不大，取决于具体的团队和个人习惯，以及引用的工具和系统的要求。</p>
+<h2 id="commit-提交规范"><a href="#commit-提交规范" class="headerlink" title="commit 提交规范"></a>commit 提交规范</h2><ul>
+<li>代码提交规范使用当前业界应用的比较广泛的 <a href="https://link.juejin.cn/?target=https://github.com/angular/angular.js/blob/master/DEVELOPERS.md%23-git-commit-guidelines">Angular Git Commit Guidelines</a> ，但是会有少许的变化</li>
+<li>具体格式</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-attr">[oceanus-tapd]</span><span class="hljs-selector-attr">[scope]</span><span class="hljs-selector-attr">[type]</span> subject<br><br><span class="hljs-selector-tag">body</span><br><br><span class="hljs-selector-tag">footer</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>格式说明（<em>注意</em>：<strong>tapd、type和subject为必选项</strong>）：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">TapdId为TAPD的需求/bug单<br>scope: 可选项，表示本次 <span class="hljs-keyword">commit</span> 波及的范围，如果项目中不存在多个模块，score可以省略，如：galileo，如果项目中存在多个模块，需要加上范围，如：oceanus-common、flink<br><span class="hljs-keyword">type</span>: <span class="hljs-keyword">type</span>为 <span class="hljs-keyword">commit</span> 的类，诸如 feat、fix、docs、style 等<br>subject: 简明扼要的阐述下本次 <span class="hljs-keyword">commit</span> 的主旨，在原文中特意强调了几点 <span class="hljs-number">1.</span> 使用祈使句 <span class="hljs-number">2.</span> 首字母不要大写 <span class="hljs-number">3.</span> 结尾无需添加标点<br>body: 使用祈使句，在主体内容中我们需要把本次 <span class="hljs-keyword">commit</span> 详细的描述一下，比如此次变更的动机<br>footer: 描述下与之关联的 issue 或 重大改<br></code></pre></td></tr></table></figure>
+
+
+
+<p>Type的类别说明：</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs subunit">feat: 添加新特性<br>fix: 修复bug<br>docs: 仅仅修改了文档<br>style: 仅仅修改了空格、格式缩进、都好等等，不改变代码逻辑<br>refactor: 代码重构，没有加新功能或者修复bug<br>perf: 增加代码进行性能测试<br><span class="hljs-keyword">test: </span>增加测试用例<br>chore: 改变构建流程、或者增加依赖库、工具等<br></code></pre></td></tr></table></figure>
+
+
+
+<p>例子</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-number">1</span>. galileo常规特性开发<br><span class="hljs-selector-attr">[95082695]</span><span class="hljs-selector-attr">[feat]</span> 日志上传到COS<br><span class="hljs-number">2</span>. galileo bug修复<br><span class="hljs-selector-attr">[95082695]</span><span class="hljs-selector-attr">[fix]</span> 修复DescribeProperClsLogset 接口 logset为空时返回值不合法问题<br><span class="hljs-number">3</span>. oceanus-common代码重构<br><span class="hljs-selector-attr">[95082695]</span><span class="hljs-selector-attr">[cluster-model]</span><span class="hljs-selector-attr">[refactor]</span> 事件模块 jobAlert 等接口重构<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>注意：<ul>
+<li>[oceanus-tapd][scope][type] 使用小写</li>
+<li>每个特性尽量使用单个commit就好</li>
+</ul>
+</li>
+</ul>
+<h2 id="用户名、邮箱配置"><a href="#用户名、邮箱配置" class="headerlink" title="用户名、邮箱配置"></a>用户名、邮箱配置</h2><p>在使用 Git 时，为了方便管理代码和协作开发，需要在 Git 中配置个人信息，包括 username 和 email。下面是在 Git 中配置个人信息的步骤：</p>
+<ol>
+<li><p>打开 Git 命令行工具（如 Git Bash），输入以下命令并运行：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.name</span> <span class="hljs-string">&quot;Your Username&quot;</span><br>git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.email</span> <span class="hljs-string">&quot;your_email@example.com&quot;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>“Your Username” 和 “<a href="mailto:&#x79;&#111;&#x75;&#114;&#x5f;&#x65;&#109;&#97;&#105;&#108;&#64;&#101;&#x78;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#x6f;&#109;">&#x79;&#111;&#x75;&#114;&#x5f;&#x65;&#109;&#97;&#105;&#108;&#64;&#101;&#x78;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#x6f;&#109;</a>“ 分别替换为你的用户名和邮箱地址即可。</p>
+</li>
+<li><p>如果想要检查配置是否成功，可以输入以下命令：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">git <span class="hljs-built_in">config</span> <span class="hljs-comment">--list</span><br></code></pre></td></tr></table></figure>
+
+<p>运行后，将会显示当前 Git 配置的详细信息，包括 “user.name” 和 “user.email” 配置项。</p>
+</li>
+</ol>
+<p>注意：在 Git 中，–global 标志的作用是将配置应用于当前用户的所有项目中，如果只想在当前项目中使用，可以去掉 –global 标志。</p>
+<p>4、查看</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">git config <span class="hljs-keyword">user</span>.name<br>git config <span class="hljs-keyword">user</span>.email<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h1><p>中文文档 ： 翻译 –  <a target="_blank" rel="noopener" href="https://docs.apachecn.org/git/#/docs/2">git-config (apachecn.org)</a></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">git help -a<br>See <span class="hljs-string">&#x27;git help &lt;command&gt;&#x27;</span> <span class="hljs-keyword">to</span> <span class="hljs-keyword">read</span> about a specific subcommand<br><br>Main Porcelain Commands<br>   <span class="hljs-keyword">add</span>                  <span class="hljs-keyword">Add</span> file contents <span class="hljs-keyword">to</span> the <span class="hljs-keyword">index</span><br>   am                   Apply a series <span class="hljs-keyword">of</span> patches <span class="hljs-keyword">from</span> a mailbox<br>   archive              <span class="hljs-keyword">Create</span> an archive <span class="hljs-keyword">of</span> files <span class="hljs-keyword">from</span> a named tree<br>   bisect               Use binary <span class="hljs-keyword">search</span> <span class="hljs-keyword">to</span> find the <span class="hljs-keyword">commit</span> that introduced a bug<br>   branch               List, <span class="hljs-keyword">create</span>, <span class="hljs-keyword">or</span> <span class="hljs-keyword">delete</span> branches<br>   bundle               <span class="hljs-keyword">Move</span> objects <span class="hljs-keyword">and</span> refs <span class="hljs-keyword">by</span> archive<br>   checkout             Switch branches <span class="hljs-keyword">or</span> restore working tree files<br>   cherry-pick          Apply the changes introduced <span class="hljs-keyword">by</span> <span class="hljs-keyword">some</span> existing commits<br>   citool               Graphical alternative <span class="hljs-keyword">to</span> git-<span class="hljs-keyword">commit</span><br>   clean                Remove untracked files <span class="hljs-keyword">from</span> the working tree<br>   clone                Clone a repository <span class="hljs-keyword">into</span> a <span class="hljs-built_in">new</span> directory<br>   <span class="hljs-keyword">commit</span>               <span class="hljs-type">Record</span> changes <span class="hljs-keyword">to</span> the repository<br>   describe             Give an <span class="hljs-keyword">object</span> a human readable <span class="hljs-type">name</span> based <span class="hljs-keyword">on</span> an available <span class="hljs-keyword">ref</span><br>   diff                 <span class="hljs-keyword">Show</span> changes <span class="hljs-keyword">between</span> commits, <span class="hljs-keyword">commit</span> <span class="hljs-keyword">and</span> working tree, etc<br>   <span class="hljs-keyword">fetch</span>                Download objects <span class="hljs-keyword">and</span> refs <span class="hljs-keyword">from</span> another repository<br>   <span class="hljs-keyword">format</span>-patch         <span class="hljs-keyword">Prepare</span> patches <span class="hljs-keyword">for</span> e-mail submission<br>   gc                   Cleanup unnecessary files <span class="hljs-keyword">and</span> optimize the <span class="hljs-keyword">local</span> repository<br>   gitk                 The Git repository browser<br>   grep                 Print lines matching a pattern<br>   gui                  A portable graphical interface <span class="hljs-keyword">to</span> Git<br>   init                 <span class="hljs-keyword">Create</span> an empty Git repository <span class="hljs-keyword">or</span> reinitialize an existing one<br>   <span class="hljs-keyword">log</span>                  <span class="hljs-keyword">Show</span> <span class="hljs-keyword">commit</span> logs<br>   maintenance          Run tasks <span class="hljs-keyword">to</span> optimize Git repository data<br>   merge                <span class="hljs-keyword">Join</span> two <span class="hljs-keyword">or</span> more development histories together<br>   mv                   <span class="hljs-keyword">Move</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">rename</span> a file, a directory, <span class="hljs-keyword">or</span> a symlink<br>   notes                <span class="hljs-keyword">Add</span> <span class="hljs-keyword">or</span> inspect <span class="hljs-keyword">object</span> notes<br>   pull                 <span class="hljs-keyword">Fetch</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">and</span> integrate <span class="hljs-keyword">with</span> another repository <span class="hljs-keyword">or</span> a <span class="hljs-keyword">local</span> branch<br>   push                 <span class="hljs-keyword">Update</span> remote refs along <span class="hljs-keyword">with</span> associated objects<br>   <span class="hljs-keyword">range</span>-diff           Compare two <span class="hljs-keyword">commit</span> ranges (e.g. two versions <span class="hljs-keyword">of</span> a branch)<br>   rebase               Reapply commits <span class="hljs-keyword">on</span> top <span class="hljs-keyword">of</span> another base tip<br>   <span class="hljs-keyword">reset</span>                <span class="hljs-keyword">Reset</span> <span class="hljs-keyword">current</span> HEAD <span class="hljs-keyword">to</span> the specified state<br>   restore              Restore working tree files<br>   revert               Revert <span class="hljs-keyword">some</span> existing commits<br>   rm                   Remove files <span class="hljs-keyword">from</span> the working tree <span class="hljs-keyword">and</span> <span class="hljs-keyword">from</span> the <span class="hljs-keyword">index</span><br>   shortlog             Summarize <span class="hljs-string">&#x27;git log&#x27;</span> output<br>   <span class="hljs-keyword">show</span>                 <span class="hljs-keyword">Show</span> various <span class="hljs-keyword">types</span> <span class="hljs-keyword">of</span> objects<br>   sparse-checkout      Reduce your working tree <span class="hljs-keyword">to</span> a subset <span class="hljs-keyword">of</span> tracked files<br>   stash                Stash the changes <span class="hljs-keyword">in</span> a dirty working directory away<br>   status               <span class="hljs-keyword">Show</span> the working tree status<br>   submodule            Initialize, <span class="hljs-keyword">update</span> <span class="hljs-keyword">or</span> inspect submodules<br>   switch               Switch branches<br>   tag                  <span class="hljs-keyword">Create</span>, list, <span class="hljs-keyword">delete</span> <span class="hljs-keyword">or</span> verify a tag <span class="hljs-keyword">object</span> signed <span class="hljs-keyword">with</span> GPG<br>   worktree             Manage multiple working trees<br><br>Ancillary Commands / Manipulators<br>   config               <span class="hljs-keyword">Get</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">set</span> repository <span class="hljs-keyword">or</span> <span class="hljs-keyword">global</span> <span class="hljs-keyword">options</span><br>   fast-export          Git data exporter<br>   fast-<span class="hljs-keyword">import</span>          Backend <span class="hljs-keyword">for</span> fast Git data importers<br>   <span class="hljs-keyword">filter</span>-branch        Rewrite branches<br>   mergetool            Run merge <span class="hljs-keyword">conflict</span> resolution tools <span class="hljs-keyword">to</span> resolve merge conflicts<br>   pack-refs            Pack heads <span class="hljs-keyword">and</span> tags <span class="hljs-keyword">for</span> efficient repository <span class="hljs-keyword">access</span><br>   prune                Prune <span class="hljs-keyword">all</span> unreachable objects <span class="hljs-keyword">from</span> the <span class="hljs-keyword">object</span> <span class="hljs-keyword">database</span><br>   reflog               Manage reflog information<br>   remote               Manage <span class="hljs-keyword">set</span> <span class="hljs-keyword">of</span> tracked repositories<br>   repack               Pack unpacked objects <span class="hljs-keyword">in</span> a repository<br>   replace              <span class="hljs-keyword">Create</span>, list, <span class="hljs-keyword">delete</span> refs <span class="hljs-keyword">to</span> replace objects<br><br>Ancillary Commands / Interrogators<br>   annotate             Annotate file lines <span class="hljs-keyword">with</span> <span class="hljs-keyword">commit</span> information<br>   blame                <span class="hljs-keyword">Show</span> what revision <span class="hljs-keyword">and</span> author last modified <span class="hljs-keyword">each</span> <span class="hljs-type">line</span> <span class="hljs-keyword">of</span> a file<br>   bugreport            Collect information <span class="hljs-keyword">for</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">to</span> file a bug report<br>   count-objects        Count unpacked number <span class="hljs-keyword">of</span> objects <span class="hljs-keyword">and</span> their disk consumption<br>   difftool             <span class="hljs-keyword">Show</span> changes <span class="hljs-keyword">using</span> common diff tools<br>   fsck                 Verifies the connectivity <span class="hljs-keyword">and</span> validity <span class="hljs-keyword">of</span> the objects <span class="hljs-keyword">in</span> the <span class="hljs-keyword">database</span><br>   gitweb               Git web interface (web frontend <span class="hljs-keyword">to</span> Git repositories)<br>   help                 Display help information about Git<br>   instaweb             Instantly browse your working repository <span class="hljs-keyword">in</span> gitweb<br>   merge-tree           <span class="hljs-keyword">Show</span> three-way merge <span class="hljs-keyword">without</span> touching <span class="hljs-keyword">index</span><br>   rerere               Reuse recorded resolution <span class="hljs-keyword">of</span> conflicted merges<br>   <span class="hljs-keyword">show</span>-branch          <span class="hljs-keyword">Show</span> branches <span class="hljs-keyword">and</span> their commits<br>   verify-<span class="hljs-keyword">commit</span>        <span class="hljs-keyword">Check</span> the GPG signature <span class="hljs-keyword">of</span> commits<br>   verify-tag           <span class="hljs-keyword">Check</span> the GPG signature <span class="hljs-keyword">of</span> tags<br>   whatchanged          <span class="hljs-keyword">Show</span> logs <span class="hljs-keyword">with</span> difference <span class="hljs-keyword">each</span> <span class="hljs-keyword">commit</span> introduces<br><br>Interacting <span class="hljs-keyword">with</span> Others<br>   archimport           <span class="hljs-keyword">Import</span> a GNU Arch repository <span class="hljs-keyword">into</span> Git<br>   cvsexportcommit      Export a single <span class="hljs-keyword">commit</span> <span class="hljs-keyword">to</span> a CVS checkout<br>   cvsimport            Salvage your data <span class="hljs-keyword">out</span> <span class="hljs-keyword">of</span> another SCM people love <span class="hljs-keyword">to</span> hate<br>   cvsserver            A CVS <span class="hljs-keyword">server</span> emulator <span class="hljs-keyword">for</span> Git<br>   imap-send            Send a collection <span class="hljs-keyword">of</span> patches <span class="hljs-keyword">from stdin</span> <span class="hljs-keyword">to</span> an IMAP folder<br>   p4                   <span class="hljs-keyword">Import</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">and</span> submit <span class="hljs-keyword">to</span> Perforce repositories<br>   quiltimport          Applies a quilt patchset onto the <span class="hljs-keyword">current</span> branch<br>   request-pull         Generates a <span class="hljs-keyword">summary</span> <span class="hljs-keyword">of</span> pending changes<br>   send-email           Send a collection <span class="hljs-keyword">of</span> patches <span class="hljs-keyword">as</span> emails<br>   svn                  Bidirectional operation <span class="hljs-keyword">between</span> a Subversion repository <span class="hljs-keyword">and</span> Git<br><br>Low-<span class="hljs-keyword">level</span> Commands / Manipulators<br>   apply                Apply a patch <span class="hljs-keyword">to</span> files <span class="hljs-keyword">and</span>/<span class="hljs-keyword">or</span> <span class="hljs-keyword">to</span> the <span class="hljs-keyword">index</span><br>   checkout-<span class="hljs-keyword">index</span>       <span class="hljs-keyword">Copy</span> files <span class="hljs-keyword">from</span> the <span class="hljs-keyword">index</span> <span class="hljs-keyword">to</span> the working tree<br>   <span class="hljs-keyword">commit</span>-graph         <span class="hljs-keyword">Write</span> <span class="hljs-keyword">and</span> verify Git <span class="hljs-keyword">commit</span>-graph files<br>   <span class="hljs-keyword">commit</span>-tree          <span class="hljs-keyword">Create</span> a <span class="hljs-built_in">new</span> <span class="hljs-keyword">commit</span> <span class="hljs-keyword">object</span><br>   hash-<span class="hljs-keyword">object</span>          Compute <span class="hljs-keyword">object</span> ID <span class="hljs-keyword">and</span> optionally creates a blob <span class="hljs-keyword">from</span> a file<br>   <span class="hljs-keyword">index</span>-pack           Build pack <span class="hljs-keyword">index</span> file <span class="hljs-keyword">for</span> an existing packed archive<br>   merge-file           Run a three-way file merge<br>   merge-<span class="hljs-keyword">index</span>          Run a merge <span class="hljs-keyword">for</span> files needing merging<br>   mktag                Creates a tag <span class="hljs-keyword">object</span> <span class="hljs-keyword">with</span> extra validation<br>   mktree               Build a tree-<span class="hljs-keyword">object</span> <span class="hljs-keyword">from</span> ls-tree formatted <span class="hljs-type">text</span><br>   multi-pack-<span class="hljs-keyword">index</span>     <span class="hljs-keyword">Write</span> <span class="hljs-keyword">and</span> verify multi-pack-indexes<br>   pack-objects         <span class="hljs-keyword">Create</span> a packed archive <span class="hljs-keyword">of</span> objects<br>   prune-packed         Remove extra objects that are already <span class="hljs-keyword">in</span> pack files<br>   <span class="hljs-keyword">read</span>-tree            Reads tree information <span class="hljs-keyword">into</span> the <span class="hljs-keyword">index</span><br>   symbolic-<span class="hljs-keyword">ref</span>         <span class="hljs-keyword">Read</span>, modify <span class="hljs-keyword">and</span> <span class="hljs-keyword">delete</span> symbolic refs<br>   unpack-objects       Unpack objects <span class="hljs-keyword">from</span> a packed archive<br>   <span class="hljs-keyword">update</span>-<span class="hljs-keyword">index</span>         Register file contents <span class="hljs-keyword">in</span> the working tree <span class="hljs-keyword">to</span> the <span class="hljs-keyword">index</span><br>   <span class="hljs-keyword">update</span>-<span class="hljs-keyword">ref</span>           <span class="hljs-keyword">Update</span> the <span class="hljs-keyword">object</span> <span class="hljs-type">name</span> stored <span class="hljs-keyword">in</span> a <span class="hljs-keyword">ref</span> safely<br>   <span class="hljs-keyword">write</span>-tree           <span class="hljs-keyword">Create</span> a tree <span class="hljs-keyword">object</span> <span class="hljs-keyword">from</span> the <span class="hljs-keyword">current</span> <span class="hljs-keyword">index</span><br><br>Low-<span class="hljs-keyword">level</span> Commands / Interrogators<br>   cat-file             Provide content <span class="hljs-keyword">or</span> <span class="hljs-keyword">type</span> <span class="hljs-keyword">and</span> size information <span class="hljs-keyword">for</span> repository objects<br>   cherry               Find commits yet <span class="hljs-keyword">to</span> be applied <span class="hljs-keyword">to</span> upstream<br>   diff-files           Compares files <span class="hljs-keyword">in</span> the working tree <span class="hljs-keyword">and</span> the <span class="hljs-keyword">index</span><br>   diff-<span class="hljs-keyword">index</span>           Compare a tree <span class="hljs-keyword">to</span> the working tree <span class="hljs-keyword">or</span> <span class="hljs-keyword">index</span><br>   diff-tree            Compares the content <span class="hljs-keyword">and</span> mode <span class="hljs-keyword">of</span> blobs <span class="hljs-built_in">found</span> via two tree objects<br>   <span class="hljs-keyword">for</span>-<span class="hljs-keyword">each</span>-<span class="hljs-keyword">ref</span>         Output information <span class="hljs-keyword">on</span> <span class="hljs-keyword">each</span> <span class="hljs-keyword">ref</span><br>   <span class="hljs-keyword">for</span>-<span class="hljs-keyword">each</span>-repo        Run a Git command <span class="hljs-keyword">on</span> a list <span class="hljs-keyword">of</span> repositories<br>   <span class="hljs-keyword">get</span>-tar-<span class="hljs-keyword">commit</span>-id    Extract <span class="hljs-keyword">commit</span> ID <span class="hljs-keyword">from</span> an archive created <span class="hljs-keyword">using</span> git-archive<br>   ls-files             <span class="hljs-keyword">Show</span> information about files <span class="hljs-keyword">in</span> the <span class="hljs-keyword">index</span> <span class="hljs-keyword">and</span> the working tree<br>   ls-remote            List <span class="hljs-keyword">references</span> <span class="hljs-keyword">in</span> a remote repository<br>   ls-tree              List the contents <span class="hljs-keyword">of</span> a tree <span class="hljs-keyword">object</span><br>   merge-base           Find <span class="hljs-keyword">as</span> good common ancestors <span class="hljs-keyword">as</span> possible <span class="hljs-keyword">for</span> a merge<br>   <span class="hljs-type">name</span>-rev             Find symbolic names <span class="hljs-keyword">for</span> given revs<br>   pack-redundant       Find redundant pack files<br>   rev-list             Lists <span class="hljs-keyword">commit</span> objects <span class="hljs-keyword">in</span> <span class="hljs-keyword">reverse</span> chronological <span class="hljs-keyword">order</span><br>   rev-parse            Pick <span class="hljs-keyword">out</span> <span class="hljs-keyword">and</span> massage parameters<br>   <span class="hljs-keyword">show</span>-<span class="hljs-keyword">index</span>           <span class="hljs-keyword">Show</span> packed archive <span class="hljs-keyword">index</span><br>   <span class="hljs-keyword">show</span>-<span class="hljs-keyword">ref</span>             List <span class="hljs-keyword">references</span> <span class="hljs-keyword">in</span> a <span class="hljs-keyword">local</span> repository<br>   unpack-file          Creates a <span class="hljs-keyword">temporary</span> file <span class="hljs-keyword">with</span> a blob<span class="hljs-string">&#x27;s contents</span><br><span class="hljs-string">   var                  Show a Git logical variable</span><br><span class="hljs-string">   verify-pack          Validate packed Git archive files</span><br><span class="hljs-string"></span><br><span class="hljs-string">Low-level Commands / Syncing Repositories</span><br><span class="hljs-string">   daemon               A really simple server for Git repositories</span><br><span class="hljs-string">   fetch-pack           Receive missing objects from another repository</span><br><span class="hljs-string">   http-backend         Server side implementation of Git over HTTP</span><br><span class="hljs-string">   send-pack            Push objects over Git protocol to another repository</span><br><span class="hljs-string">   update-server-info   Update auxiliary info file to help dumb servers</span><br><span class="hljs-string"></span><br><span class="hljs-string">Low-level Commands / Internal Helpers</span><br><span class="hljs-string">   check-attr           Display gitattributes information</span><br><span class="hljs-string">   check-ignore         Debug gitignore / exclude files</span><br><span class="hljs-string">   check-mailmap        Show canonical names and email addresses of contacts</span><br><span class="hljs-string">   check-ref-format     Ensures that a reference name is well formed</span><br><span class="hljs-string">   column               Display data in columns</span><br><span class="hljs-string">   credential           Retrieve and store user credentials</span><br><span class="hljs-string">   credential-cache     Helper to temporarily store passwords in memory</span><br><span class="hljs-string">   credential-store     Helper to store credentials on disk</span><br><span class="hljs-string">   fmt-merge-msg        Produce a merge commit message</span><br><span class="hljs-string">   hook                 Run git hooks</span><br><span class="hljs-string">   interpret-trailers   Add or parse structured information in commit messages</span><br><span class="hljs-string">   mailinfo             Extracts patch and authorship from a single e-mail message</span><br><span class="hljs-string">   mailsplit            Simple UNIX mbox splitter program</span><br><span class="hljs-string">   merge-one-file       The standard helper program to use with git-merge-index</span><br><span class="hljs-string">   patch-id             Compute unique ID for a patch</span><br><span class="hljs-string">   sh-i18n              Git&#x27;</span>s i18n setup code <span class="hljs-keyword">for</span> shell scripts<br>   sh-setup             Common Git shell script setup code<br>   stripspace           Remove unnecessary whitespace<br><br><span class="hljs-keyword">External</span> commands<br>   askpass<br>   askyesno<br>   credential-helper-selector<br>   credential-manager-core<br>   flow<br>   lfs<br>   <span class="hljs-keyword">update</span>-git-<span class="hljs-keyword">for</span>-windows<br>=======<br>&gt;&gt;&gt;&gt;&gt;&gt;&gt; master<br><br><br>## Git 本地分支无法更新问题<br><br>先提交，在pull，保持版本一直<br><br><br><br><br><br>## git stash<br><br>[Git(六)：git stash 命令 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/<span class="hljs-number">117553180</span>)<br><br>存储当前尚未提交的代码，<br><br>git stash pop，取出存储的代码<br><br><br><br><br><br>## git rebase<br><br>两个分支合并<br><br>[(<span class="hljs-number">8</span>条消息) git rebase详解（图解+最简单示例，一次就懂）_风中一匹狼v的博客-CSDN博客](https://blog.csdn.net/weixin_42310154/article/details/<span class="hljs-number">119004977</span>)<br><br><br><br><br><br># 业务描述<br><br><br><br>## git 删除远程分支信息<br><br>要删除远程分支，可以使用 `git push` 命令加上 `<span class="hljs-comment">--delete` 参数。语法如下：</span><br><br></code></pre></td></tr></table></figure>
+<p>git push <remote-repository> –delete <branch></p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>其中：<br><br>- `&lt;remote-repository&gt;` 是远程仓库的名称，如 `origin`。<br>- `&lt;branch&gt;` 是要删除的远程分支的名称，如 `dev-<span class="hljs-number">9.4</span>`。<br><br>例如，要删除名为 `dev-<span class="hljs-number">9.4</span>` 的远程分支，可以执行以下命令：<br><br></code></pre></td></tr></table></figure>
+<p>git push origin –delete dev-9.4</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs"><br>在执行命令后，Git 将会从远程仓库中删除指定的分支。需要注意的是，执行该命令后，该分支上原有的提交记录也将被删除。<br><br>如果你想在本地同时删除该远程分支的本地跟踪分支，可以在删除远程分支后执行以下命令：<br><br></code></pre></td></tr></table></figure>
+<p>git branch -d -r origin&#x2F;dev-9.4</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>其中，`-d` 表示删除本地跟踪分支，`-r` 表示删除远程跟踪分支。执行该命令后，本地的 `origin/dev-<span class="hljs-number">9.4</span>` 跟踪分支也将被删除。<br><br>如果该远程分支存在于其他开发者的本地仓库中，他们需要执行 `git pull` 命令，从远程仓库拉取最新的分支列表。当他们尝试从远程仓库中拉取该分支时，Git 会自动将其从他们的本地仓库中删除。<br><br><br><br><br><br>## 提交 push request流程<br><br><span class="hljs-number">1</span>、在主仓库中拉去分支<br><br><span class="hljs-number">2</span>、在本地工作区修改代码<br><br><span class="hljs-number">3</span>、git fetch 拉去远程最新分支情况<br><br><span class="hljs-number">4</span>、git add .    git commit    git push origin master:dev --  一套流程：添加本地仓库代码，修改远程仓库代码<br><br><span class="hljs-number">5</span>、<span class="hljs-keyword">new</span> merge request ： 发起合并请求<br><br><span class="hljs-number">6</span>、合并通过，merge到master中<br><br><br><br>## git commit guide<br><br>代码提交规范使用当前业界应用的比较广泛的 Angular Git Commit Guidelines ，但是会有少许的变化<br>具体格式<br><br></code></pre></td></tr></table></figure>
+<p>[oceanus-tapd][scope][type] subject<br>body</p>
+<p>footer<br>格式说明（注意：tapd、type和subject为必选项）：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs ada"><br><br><br><span class="hljs-keyword">Type</span>的类别说明：<br><br></code></pre></td></tr></table></figure>
+<p>feat: 添加新特性<br>fix: 修复bug<br>docs: 仅仅修改了文档<br>style: 仅仅修改了空格、格式缩进、都好等等，不改变代码逻辑<br>refactor: 代码重构，没有加新功能或者修复bug<br>perf: 增加代码进行性能测试<br>test: 增加测试用例<br>chore: 改变构建流程、或者增加依赖库、工具等</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br>例子<br><br><span class="hljs-bullet">1.</span> galileo常规特性开发<br>[<span class="hljs-string">95082695</span>][<span class="hljs-symbol">feat</span>] 日志上传到COS<br><span class="hljs-bullet">2.</span> galileo bug修复<br>[<span class="hljs-string">95082695</span>][<span class="hljs-symbol">fix</span>] 修复DescribeProperClsLogset 接口 logset为空时返回值不合法问题<br><span class="hljs-bullet">3.</span> oceanus-common代码重构<br>[<span class="hljs-string">95082695</span>][<span class="hljs-symbol">cluster-model</span>][<span class="hljs-string">refactor</span>] 事件模块 jobAlert 等接口重构<br>注意：<br><br>[<span class="hljs-string">oceanus-tapd</span>][<span class="hljs-symbol">scope</span>][<span class="hljs-string">type</span>] 使用小写<br>每个特性尽量使用单个commit就好<br><br><br><br><span class="hljs-section">## 更新本地代码</span><br><br>git -c credential.helper= -c core.quotepath=false -c log.showSignature=false fetch origin --recurse-submodules=no --progress --prune<br><br>这个命令是用来从Git远程仓库(<span class="hljs-code">`origin`</span>)中获取最新的代码，并更新本地的代码库。该命令由以下组成部分：<br><br><span class="hljs-bullet">1.</span> <span class="hljs-code">`-c credential.helper=`</span>: 禁用Git凭证助手，以便在没有任何凭证助手的情况下执行此命令。<br><br><span class="hljs-bullet">2.</span> <span class="hljs-code">`-c core.quotepath=false`</span>: 禁用路径名中的引号。<br><br><span class="hljs-bullet">3.</span> <span class="hljs-code">`-c log.showSignature=false`</span>: 不显示提交者的GPG签名。<br><br><span class="hljs-bullet">4.</span> <span class="hljs-code">`fetch origin`</span>: 从远程仓库(origin)中获取最新的代码。<br><br><span class="hljs-bullet">5.</span> <span class="hljs-code">`--recurse-submodules=no`</span>: 不递归获取子模块的更新。<br><br><span class="hljs-bullet">6.</span> <span class="hljs-code">`--progress`</span>: 显示进度信息，以便您可以在下载期间查看操作进展。<br><br><span class="hljs-bullet">7.</span> <span class="hljs-code">`--prune`</span>: 删除本地不存在的远程分支信息。<br><br>总之，这个命令是一个Git命令，用于从Git远程仓库获取最新的代码，以及更新本地库。<br><br><br><br><br><br><span class="hljs-section">## Angular Git Commit Guidelines -- 提交规范</span><br><br>[<span class="hljs-string">Commit message 和 Change log 编写指南 - 阮一峰的网络日志 (ruanyifeng.com)</span>](<span class="hljs-link">https://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html</span>)<br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-chain-item">工具</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>git</div>
+      <div>http://example.com/2023/06/01/工具/git/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%B7%A5%E5%85%B7/Linux-docker%E5%9C%BA%E6%99%AF/" title="Linux-docker使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux-docker使用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%B7%A5%E5%85%B7/gradle/" title="Gradle">
+                        <span class="hidden-mobile">Gradle</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,865 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="权限验证业务业务设计方案用户模块与鉴权模块数据库设计与查询： 在微服务模块中使用 RBAC 模型与 Oauth2 协议进行鉴权时，通常可以将鉴权模块与用户模块共用一个数据库，鉴权模块通过查询用户表、角色表和权限表来获取用户的权限信息，并进行鉴权操作。手动同步：使用一个任务调度程序定时从用户模块数据库中同步用户和权限相关的数据到鉴权模块数据库中。这种方案的优点是可以避免数据冗余和重复，同时能够分离不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="权限验证业务">
+<meta property="og:url" content="http://example.com/2023/06/01/%E4%B8%9A%E5%8A%A1/%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="权限验证业务业务设计方案用户模块与鉴权模块数据库设计与查询： 在微服务模块中使用 RBAC 模型与 Oauth2 协议进行鉴权时，通常可以将鉴权模块与用户模块共用一个数据库，鉴权模块通过查询用户表、角色表和权限表来获取用户的权限信息，并进行鉴权操作。手动同步：使用一个任务调度程序定时从用户模块数据库中同步用户和权限相关的数据到鉴权模块数据库中。这种方案的优点是可以避免数据冗余和重复，同时能够分离不">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-019f839e3d42197e539d4d2527803489_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-84d1095bc579bcbcf3f5f0aa19b9ba49_1440w.webp">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-22T12:08:11.384Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="业务">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-019f839e3d42197e539d4d2527803489_1440w.webp">
+  
+  
+  
+  <title>权限验证业务 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="权限验证业务"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          15k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          125 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">权限验证业务</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="权限验证业务"><a href="#权限验证业务" class="headerlink" title="权限验证业务"></a>权限验证业务</h1><h1 id="业务设计"><a href="#业务设计" class="headerlink" title="业务设计"></a>业务设计</h1><h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>用户模块与鉴权模块数据库设计与查询：</p>
+<p>在微服务模块中使用 RBAC 模型与 Oauth2 协议进行鉴权时，通常可以将鉴权模块与用户模块共用一个数据库，鉴权模块通过查询用户表、角色表和权限表来获取用户的权限信息，并进行鉴权操作。<br>手动同步：使用一个任务调度程序定时从用户模块数据库中同步用户和权限相关的数据到鉴权模块数据库中。这种方案的优点是可以避免数据冗余和重复，同时能够分离不同模块间的数据访问，缺点是需要开发额外的同步程序并确保数据同步的正确和一致性。</p>
+<p>ETL 工具：使用 ETL（Extract、Transform、Load）工具从用户模块数据库中抽取、转换和加载用户和权限相关的数据到鉴权模块数据库中，此方案也可以自动化的完成数据库的数据同步。</p>
+<p>数据库的微服务化：将用户和权限等关键信息，统一放到一个中心化的微服务系统中，再由其他微服务模块访问这个系统。这种方案可以集中化管理和保护用户信息，同时避免数据冗余和重复，但需要设计高可用且高性能的中心微服务系统，确保其他模块从中获取数据的效率。</p>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><ol>
+<li><p>手动同步：使用一个任务调度程序定时从用户模块数据库中同步用户和权限相关的数据到鉴权模块数据库中。这种方案的优点是可以避免数据冗余和重复，同时能够分离不同模块间的数据访问，缺点是需要开发额外的同步程序并确保数据同步的正确和一致性。</p>
+</li>
+<li><p>ETL 工具：使用 ETL（Extract、Transform、Load）工具从用户模块数据库中抽取、转换和加载用户和权限相关的数据到鉴权模块数据库中，此方案也可以自动化的完成数据库的数据同步。</p>
+</li>
+<li><p>数据库的微服务化：将用户和权限等关键信息，统一放到一个中心化的微服务系统中，再由其他微服务模块访问这个系统。这种方案可以集中化管理和保护用户信息，同时避免数据冗余和重复，但需要设计高可用且高性能的中心微服务系统，确保其他模块从中获取数据的效率。</p>
+</li>
+</ol>
+<p>JWT等权限方案博客 ： <a target="_blank" rel="noopener" href="https://andaily.com/blog/?p=956">各类JWT库(java)的使用与评价 | MONKEYK.博客 (andaily.com)</a></p>
+<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><h2 id="零信任模型"><a href="#零信任模型" class="headerlink" title="零信任模型"></a>零信任模型</h2><p><a target="_blank" rel="noopener" href="https://www.secrss.com/articles/19021">Gartner报告《零信任架构及解决方案》全文翻译 - 安全内参 | 决策者的网络安全知识库 (secrss.com)</a></p>
+<h2 id="传统模型"><a href="#传统模型" class="headerlink" title="传统模型"></a>传统模型</h2><h1 id="安全模型"><a href="#安全模型" class="headerlink" title="安全模型"></a>安全模型</h1><p>传统的安全模型通过“一次验证+静态授权”的方式评估实体风险，而零信任基于“持续验证+动态授权”的模式构筑企业的安全基石。</p>
+<p>安全模型：<br>安全模型（Security Model）是指在计算机系统、网络和应用程序中，基于某种形式的逻辑或数学体系描述所需或预期的安全行为和操作的方法。常用的安全模型有自主安全，强制访问控制和审计安全模型。</p>
+<ul>
+<li><p>自主安全模型：<br>自主安全模型（Discretionary Security Model）是指根据系统或资源拥有者自己的判断，对资源或内容进行保护和限制访问。系统中的用户拥有对文件、目录、设备等资源的访问权限，可以对自己拥有的内容或资源进行控制，但也要遵守系统的规则和限制。</p>
+</li>
+<li><p>强制访问控制模型：<br>强制访问控制模型（Mandatory Access Control Model）是一种严格的访问控制模型，将访问控制权完全掌握在系统中心管理者手中，用户不具有授权的能力，系统根据所有用户和资源的安全级别、标签和分类来决定是否允许访问。它是一种更高级别和强制性的安全模型，用于保护高度机密且绝不能通过人为操作降低安全系统的机密性信息，如政府机密或军事机密等。</p>
+</li>
+<li><p>审计安全模型：<br>审计安全模型（Audit Security Model）是指记录和跟踪所有系统、资源或用户的访问和操作，以便追溯目的和发现潜在的安全威胁。审计安全模型通常与其他安全模型一起使用，在一些高度机密、高度保密的环境中使用，确保在未经授权的情况下没有访问敏感数据的用户或应用程序。</p>
+</li>
+</ul>
+<p>以上是一些常见的权限模型和安全模型，而实际上还有很多其他的模型，如固定（Bell-LaPadula的保密性模型）、非固定自主（Biba完整性模型）、多级保护（MLS，Multi-Level Security）、约束决策（CDM，ConstrainedDecisions Making）等等。</p>
+<p>这些模型可以根据不同的需求和场景，选择适合的安全和访问控制模型。例如，如果需要对许多用户访问许多资源进行细致和灵活的控制，可以考虑使用基于角色的访问控制（RBAC）模型；如果要控制对高度机密数据的访问，可以使用强制访问控制模型（MAC）；如果需要对审计和追溯进行控制，则可以使用审计安全模型。</p>
+<h1 id="权限访问控制模型"><a href="#权限访问控制模型" class="headerlink" title="权限访问控制模型"></a>权限访问控制模型</h1><p>简书： <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ce0944b4a903">权限系统设计模型分析（DAC，MAC，RBAC，ABAC） - 简书 (jianshu.com)</a></p>
+<p>copy : <a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904056876433416#heading-0">权限管理–浅析权限管理模型(DAC, MAC, RBAC, ABAC) - 掘金 (juejin.cn)</a></p>
+<h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>权限访问控制模型（Access Control Model）是指对于计算机系统中访问控制（Access Control）的模型化描述。常见的权限访问控制模型有访问控制列表（ACL）、基于角色的访问控制（RBAC）、基于属性的访问控制（ABAC）和体—对象—权限（SOT）访问控制模型。</p>
+<ul>
+<li><p>1、访问控制列表（ACL）：<br>ACL 是一种基于对象的权限控制模型，通过对资源或文件夹等对象设定访问控制列表来限制用户的访问权限。ACL 的优点是灵活、简单易懂，适合对权限控制的要求较低的系统。缺点是管理困难，不适用于大型复杂的系统。</p>
+</li>
+<li><p>2、基于角色的访问控制（RBAC）：<br>RBAC 模型是一种基于角色的访问控制模型，将权限授予角色，再将角色授予用户，以简化权限管理和保证安全性。RBAC 模型将用户划分为不同的角色，根据角色确定许可和限制，适用于需要对不同角色和组织进行权限控制的系统，尤其适用于大型组织和复杂的应用程序。</p>
+</li>
+<li><p>3、基于属性的访问控制（ABAC）：<br>ABAC 模型是一种基于属性和条件的权限控制模型，考虑到环境和上下文，动态地基于访问主体和请求环境对访问进行决策，能够灵活应对复杂的授权策略。</p>
+</li>
+<li><p>4、主体—对象—权限（SOT）：<br>SOT 模型是一种基于主体、客体和权限三个要素的权限控制模型，主体是指用户、组织、应用程序等操作者，客体是指需要进行访问控制的资源、数据、服务等。SOT 模型可以区分不同的主体和多个客体之间</p>
+</li>
+<li><p>5、因果访问控制模型（CaBAC）：<br>因果访问控制模型是一种基于因果关系的访问控制模式，它可以根据因果关系控制对象访问，以限制和允许对象对资源的访问。CaBAC 模型中的因果关系可以定义为敌对关系或者有依赖的关系。适用于需要控制对象对资源访问的场景，例如控制进程访问系统资源等。</p>
+</li>
+<li><p>6、基于协议的访问控制模型（PBAC）：<br>基于协议的访问控制模型是一种基于协议的访问控制模型，将授权信息与管理任务耦合在一起，加强了访问控制协议的定义和管理。PBAC 模型中强调了协议行为的规范和隐私保护。适用于需要保护协议行为和保护访问控制信息的场景。</p>
+</li>
+<li><p>7、强制访问控制（MAC）模型：<br>MAC 模型是一种强制性的访问控制模型，需要系统管理者对所有用户和对象的标签及分类等信息进行管理，以决定对象和用户的访问权限。适用于需要保护高度机密信息的场景。</p>
+</li>
+<li><p>8、固定自主访问控制（Bell-LaPadula的保密性模型）：<br>该模型提出了一个保密性模型，即固定自主访问控制模型。固定自主访问控制是一种基于访问主体的安全性模型，要求所有资源和用户被分为不同的保护级别，以减轻机密和信息安全的风险。</p>
+</li>
+<li><p>9、非固定自主访问控制（Biba的完整性模型）：<br>该模型提出了一个完整性模型，即非固定自主访问控制模型。非固定自主访问控制是一种基于主体访问对象的完整性模型，其主要目的是保护数据的完整性。</p>
+</li>
+<li><p>10、约束决策访问控制（CDM）模型：<br>CDM 模型是一种基于需要约束和管理访问策略的访问控制模型。它是一种基于决策的访问控制模型，主要通过一些策略约束来规范和控制访问行为的决策。</p>
+</li>
+</ul>
+<p>除了上述几种权限访问控制模型，还有非固定自主访问控制模型（Biba）、约束决策访问控制模型（CDM）等等，这些模型也可以根据具体场景选择使用。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>下面给出这些权限访问控制模型的应用场景和建表方式：</p>
+<ol>
+<li><p>访问控制列表（ACL）模型：<br>应用场景：适用于对许多用户访问许多资源进行细致和灵活的控制。<br>建表方式：ACL 表格中含有两个字段：资源字段和访问控制列表字段。资源字段用于标识资源的名称和位置，访问控制列表字段用于包含访问控制列表。访问控制列表中包括一组定义，用于确定哪些用户和用户组具有哪些访问权限。</p>
+</li>
+<li><p>基于角色的访问控制（RBAC）模型：<br>应用场景：适用于需要对不同角色和组织进行权限控制的系统，尤其适用于大型组织和复杂的应用程序。<br>建表方式：基于角色的表格建议包括三个表格：角色表格、权限表格和用户角色关系表格。角色表格存储角色，权限表格存储权限，用户角色关系表格存储每个用户与其角色之间的关系。</p>
+</li>
+<li><p>基于属性的访问控制（ABAC）模型：<br>应用场景：适用于动态的环境和上下文，基于属性和条件的权限控制。<br>建表方式：ABAC 表格应包括至少三个表格：策略表格、主体属性表格和资源属性表格。策略表格包含访问控制策略，主体属性表格和资源属性表格包含与主体和资源相关的属性信息。</p>
+</li>
+<li><p>主体—对象—权限（SOT）模型：<br>应用场景：适用于需要区分不同主体和多个客体之间的访问控制的场景。<br>建表方式：SOT 表格应包括主体表格、客体表格和权限表格。主体表格和客体表格分别存储主体和客体的属性信息，如用户 ID、组织 ID、资源 ID 等，权限表格则记录主体对于特定客体具有哪些权限。</p>
+</li>
+<li><p>强制访问控制（MAC）模型：<br>应用场景：适用于需要保护高度机密信息的场景。<br>建表方式：MAC型要求管理者对所有对象进行标记和分类，建议将安全标签存储在对象的元数据和安全策的查询中使用。例如，可以建立对象表、政策表和标签表。对象表包含受保护的对象及其元数据，政策表包含与安全策略相关的信息，标签表用于存储与对象和主体相关的安全标签。</p>
+</li>
+<li><p>固定自主访问控制（Bell-LaPadula 的保密性模型）：<br>应用场景：适用于需要保护机密性的规则内的资产建表方式：此模型建议使用主体表格、资源表格和保护等级表格。要限制访问，需要将主体与资源匹配并确保它们满足特定的访问控制策略。可以使用保护级别表格来存储定义政策所需的安全性政策级别信息。</p>
+</li>
+<li><p>非固定自主访问控制（Biba 的完整性模型）：<br>应用场景：适用于需要防止数据被非法篡改的场景，例如保护银行系统的数据库。<br>建表方式：此模型建议使用主体表格、资源表格和整性表格。完整性表格用于存储资源完整性的级别信息，从而保证资源不被非法篡改。</p>
+</li>
+<li><p>约束决策访问控制（CDM）模型：<br>应用场景：适用于需要约束和管理访问策略的场景，如就业文件控制、标签记录和医疗保密。<br>建表方式：CDM 模型建议使用策略表格，访问主体表格和相应的客体表格。策略表格用于存储和定义访问控制策略及其相关约束，访问主体表格存储的是访问请求主体的信息，客体表格存储需要被访问或访问请求的对象。</p>
+</li>
+<li><p>因果访问控制（CaBAC）模型：<br>应用场景：适用于需要根据因果关系控制对象访问的场景。<br>建表方式：CaBAC 模型建议使用因果表格、主体表格和动作表格。因果关系表格记录对象之间的因果关系，主体表格记录主体相关的属性，动作表格记录动作和相应的权限。</p>
+</li>
+<li><p>基于协议的访问控制（PBAC）模型：<br>应用场景：适用于需要保护协议行为和保护访问控制信息的场景。<br>建表方式：PBAC 模型建议使用安全标识符表格、安全策略表格和规则表格。安全标识符表格用于存储与主体和客体相关的安全标识符，安全策略表格储访问控制策略，规则表格用于存储实际的访问控制规则。</p>
+</li>
+</ol>
+<p>总的来说，建表方式应根据具体模型的特点和具体场景而定，建议按照最佳实践和标准建表，以提高数据的安全性和可维护性。</p>
+<h2 id="SQL-建表"><a href="#SQL-建表" class="headerlink" title="SQL 建表"></a>SQL 建表</h2><h3 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h3><p>由于不同的数据库管理系统（DBMS）所支持的 SQL 语法有所不同，因此在这里只能简单列举 SQL 语句的大致格式，具体实现还需要根据实际情况而定。下面是一些示例 SQL 命令：</p>
+<ol>
+<li>访问控制列表（ACL）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> resource (<br>    resource_id <span class="hljs-type">INT</span>,<br>    resource_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> access_control_list (<br>    acl_id <span class="hljs-type">INT</span>,<br>    resource_id <span class="hljs-type">INT</span>,<br>    user_id <span class="hljs-type">INT</span>,<br>    group_id <span class="hljs-type">INT</span>,<br>    permission <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>)<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>基于角色的访问控制（RBAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> role (<br>    role_id <span class="hljs-type">INT</span>,<br>    role_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> permission (<br>    permission_id <span class="hljs-type">INT</span>,<br>    permission_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    permission_value <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">20</span>)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> role_permission (<br>    role_id <span class="hljs-type">INT</span>,<br>    permission_id <span class="hljs-type">INT</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> user_role (<br>    user_id <span class="hljs-type">INT</span>,<br>    role_id <span class="hljs-type">INT</span><br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>基于属性的访问控制（ABAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INT</span>,<br>    policy_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    condition1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    condition2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject_attribute (<br>    user_id <span class="hljs-type">INT</span>,<br>    user_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> resource_attribute (<br>    resource_id <span class="hljs-type">INT</span>,<br>    resource_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...)<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>主体—对象—权限（SOT）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INT</span>,<br>    subject_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INT</span>,<br>    object_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    object_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    owner_id <span class="hljs-type">INT</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> permission (<br>    permission_id <span class="hljs-type">INT</span>,<br>    permission_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object_permission (<br>    object_id <span class="hljs-type">INT</span>,<br>    permission_id <span class="hljs-type">INT</span>,<br>    subject_id <span class="hljs-type">INT</span><br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>强制访问控制（MAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INT</span>,<br>    object_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    label1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>),<br>    label2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>),<br>    ...)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INT</span>,<br>    subject_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    label1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>),<br>    label2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>),<br>    ...)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INT</span>,<br>    policy_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    policy_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>),<br>    subject_label <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>),<br>    object_label <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">10</span>),<br>    ...)<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>固定自主访问控制（Bell-LaPadula 的保密性模型）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INT</span>,<br>    subject_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    clearance_level <span class="hljs-type">INT</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INT</span>,<br>    object_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    object_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    sensitivity_level <span class="hljs-type">INT</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INT</span>,<br>    policy_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    policy_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    rule_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    subject_clearance <span class="hljs-type">INT</span>,<br>    object_sensitivity <span class="hljs-type">INT</span><br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>非固定自主访问控制（Biba 的完整性模型）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INT</span>,<br>    subject_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    integrity_level <span class="hljs-type">INT</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INT</span>,<br>    object_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    object_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    integrity_level <span class="hljs-type">INT</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INT</span>,<br>    policy_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    policy_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    rule_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    subject_integrity <span class="hljs-type">INT</span>,<br>    object_integrity <span class="hljs-type">INT</span><br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>约束决策访问控制（CDM）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INT</span>,<br>    policy_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    policy_type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    rule_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    subject_attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    subject_attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...,<br>    object_attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    object_attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...,<br>    action_attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    action_attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INT</span>,<br>    subject_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    subject_attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    subject_attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INT</span>,<br>    object_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    object_attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    object_attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> action (<br>    action_id <span class="hljs-type">INT</span>,<br>    action_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    action_attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    action_attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>   );<br></code></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>因果访问控制（CaBAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> causality (<br>    causality_id <span class="hljs-type">INT</span>,<br>    causality_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    object1_id <span class="hljs-type">INT</span>,<br>    object2_id <span class="hljs-type">INT</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INT</span>,<br>    subject_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> action (<br>    action_id <span class="hljs-type">INT</span>,<br><br>    action_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    attribute2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>基于协议的访问控制（PBAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> security_identifier (<br>    id <span class="hljs-type">INT</span>,<br>    type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    <span class="hljs-keyword">value</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> security_policy (<br>    id <span class="hljs-type">INT</span>,<br>    name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    type <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    action <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    security_identifier1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    security_identifier2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> rule (<br>    id <span class="hljs-type">INT</span>,<br>    name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    permission <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    security_identifier1 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    security_identifier2 <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">30</span>),<br>    ...<br>);<br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是，这些 SQL 命令并不是具体的建表语句，只是为了方便理解，给出了建表语句的大致格式。实际实现时，应根据具体情况和所使用的数据库管理系统进行相应的修改和调整。例如，SQLite、MySQL、PostgreSQL 和 Oracle 的 SQL 语法有很大差异，同样的建表语句在不同数据库中也有不同的实现方式。</p>
+<h3 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h3><p>下面再给出一些具体的 SQL 建表语句示例，供参考：</p>
+<ol>
+<li>访问控制列表（ACL）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> resource (<br>    resource_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    resource_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> access_control_list (<br>    acl_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    resource_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> resource (resource_id),<br>    user_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    group_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    permission TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>基于角色的访问控制（RBAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> role (<br>    role_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    role_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> permission (<br>    permission_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    permission_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    permission_value TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> role_permission (<br>    role_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> role (role_id),<br>    permission_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> permission (permission_id),<br>    <span class="hljs-keyword">PRIMARY</span> KEY (role_id, permission_id)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> user_role (<br>    user_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    role_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> role (role_id),<br>    <span class="hljs-keyword">PRIMARY</span> KEY (user_id, role_id)<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>基于属性的访问控制（ABAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    policy_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    condition1 TEXT,<br>    condition2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject_attribute (<br>    user_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    user_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    attribute1 TEXT,<br>    attribute2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> resource_attribute (<br>    resource_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    resource_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    attribute1 TEXT,<br>    attribute2 TEXT,<br>    ...<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>主体—对象—权限（SOT）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    subject_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    object_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    owner_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> subject (subject_id)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> permission (<br>    permission_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    permission_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object_permission (<br>    object_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> object (object_id),<br>    permission_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> permission (permission_id),<br>    subject_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> subject (subject_id),<br>    <span class="hljs-keyword">PRIMARY</span> KEY (object_id, permission_id, subject_id)<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>强制访问控制（MAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    object_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    label1 TEXT,<br>    label2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    subject_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    label1 TEXT,<br>    label2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    policy_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    policy_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    subject_label TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object_label TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    ...<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>固定自主访问控制（Bell-LaPadula 的保密性模型）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    subject_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    clearance_level <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    object_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    sensitivity_level <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    policy_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    policy_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    rule_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    subject_clearance <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object_sensitivity <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>非固定自主访问控制（Biba 的完整性模型）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    subject_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>, <br>    integrity_level <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    object_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    integrity_level <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    policy_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    policy_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    rule_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    subject_integrity <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object_integrity <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>约束决策访问控制（CDM）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> policy (<br>    policy_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    policy_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    policy_type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    rule_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    subject_attribute1 TEXT,<br>    subject2 TEXT,<br>    ...,<br>    object_attribute1 TEXT,<br>    object_attribute2 TEXT,<br>    ...,<br>    action_attribute1 TEXT,<br>    action_attribute2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    subject_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    subject_attribute1 TEXT,<br>    subject_attribute2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> object (<br>    object_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    object_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object_attribute1 TEXT,<br>    object_attribute2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> action (<br>    action_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    action_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    action_attribute1 TEXT,<br>    action_attribute2 TEXT,<br>    ... <br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>因果访问控制（CaBAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> causality (<br>    causality_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    causality_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    object1_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> object (object_id),<br>    object2_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">REFERENCES</span> object (object_id)<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> subject (<br>    subject_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    subject_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    attribute1 TEXT,<br>    attribute2 TEXT,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> action (<br>    action_id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    action_name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    attribute1 TEXT,<br>    attribute2 TEXT,<br>    ...<br>);<br></code></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>基于协议的访问控制（PBAC）表格建表示例：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> security_identifier (<br>    id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    <span class="hljs-keyword">value</span> TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> security_policy (<br>    id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    type TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    action TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    security_identifier1 TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    security_identifier2 TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    ...<br>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> rule (<br>    id <span class="hljs-type">INTEGER</span> <span class="hljs-keyword">PRIMARY</span> KEY,<br>    name TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    permission TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    security_identifier1 TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    security_identifier2 TEXT <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    ...<br>);<br></code></pre></td></tr></table></figure>
+
+<p>注意，这些示例 SQL 命令只是为了方便理解建表语句的基本格式和一些建议的表格结构，具体的建表语句实现还需根据实际情况和使用的DBMS进行相应的修改和调整。虽然这些示例 SQL 命令针对的是 SQLite 数据库，但是与 SQLite 的 SQL 语法类似的 DBMS（如 MySQL、PostgreSQL、Oracle 等）也可以进行相应的调整和适配。</p>
+<p>需要注意的是，在编写 SQL 命令时，应该遵循以下一些最佳实践：</p>
+<ol>
+<li>为主键列定义 UNIQUE 和 NOT NULL 约束。</li>
+<li>为外键列定义 约束，并确保其指向正确的主键列。</li>
+<li>数据类型必须选定得当，并不应该将 TEXT 数据类型用于需要存储数值型数据的列中，或将 INTEGER 数据类型用于需要存储文本数据的列中。</li>
+<li>命名规范应该清晰明了、不陈旧和不短小，可以遵循一些常用的规则，如下划线命名、帕斯卡命名等。</li>
+<li>表格的结构应该简单明了，不应该包含过多的冗余字段或关联表，避免出现不必要的复杂性。</li>
+<li>在应用层面上，除非有明确的需要，否则应该避免使用复杂的 SQL 嵌套查询和自连接查询，应该优先考虑使用 JOIN 操作和视图。</li>
+<li>在设计数据库表格时，可以考虑使用第三方工具来生成建表语句，如 MySQL Workbench、Navicat 等，这些工具可以方便快捷地生成合适的建表语句。</li>
+</ol>
+<p>总之，SQL 建表语句在设计安全访问控制系统时扮演了至关重要的角色，需要严谨地编写，保证表格结构清晰、简洁、易于维护和使用。</p>
+<h2 id="ABAC模型"><a href="#ABAC模型" class="headerlink" title="ABAC模型"></a>ABAC模型</h2><p>适用场景 – 零信任网络 （<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/110350413">初识“零信任安全网络架构” - 知乎 (zhihu.com)</a>）</p>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>ABAC既然是针对属性（attributes）的，那我们先来看看它一般是针对哪些属性进行授权控制的。属性可以是任意的对象，一般会涉及的属性主要是以下四类：</p>
+<p><strong>1.访问主体属性：访问者自带的属性，比如年龄，性别，部门，角色等；</strong></p>
+<p><strong>2.动作属性：比如读取，删除，查看等；</strong></p>
+<p><strong>3.对象属性：被访问对象的属性，比如一条记录的修改时间，创建者等；</strong></p>
+<p><strong>4.环境属性：比如时间信息，地理位置信息，访问平台信息等。</strong></p>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>基于属性，ABAC可以设置很多灵活的策略来进行访问的控制，比如：</p>
+<p><strong>1.当一个文档的所属部门跟用户的部门相同时，用户可以访问这个文档；</strong></p>
+<p><strong>2.当用户是一个文档的额拥有者并且文档的状态是草稿，用户可以编辑这个文档；</strong></p>
+<p><strong>3.早上九点前禁止A部门的人访问B系统；</strong></p>
+<p><strong>4.在除了上海以外的地方禁止以管理员身份访问A系统。</strong></p>
+<p>看起来是不是挺强大的。</p>
+<p>因为模型是基于策略，而策略又是基于各种灵活的属性动态控制的，所以ABAC模型里通常有配置文件（XML、YAML等）或DSL配合规则解析引擎使用。规则引擎负责控制逻辑的处理，配置文件负责策略的定义和描述。</p>
+<p>XACML（eXtensible Access Control Markup Language）就是基于ABAC访问模型的一个实现（可能也是最复杂的一种实现）。</p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>在XACML的架构中，有5种控制节点：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-019f839e3d42197e539d4d2527803489_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>典型的访问请求是这样流转的：</p>
+<p>\1. 用户访问资源，发送原始请求，请求会被PEP拦截；</p>
+<p>\2. PEP把请求转换成一个XACML的访问申请请求；</p>
+<p>\3. PEP把访问申请请求转发给PDP；</p>
+<p>\4. PDP根据策略配置对认证请求进行评估。策略保存在PRP，并由PAP维护。如果需要采集属性信息，还会从PIP收集属性；</p>
+<p>\5. PDP收到访问申请请求的结果（允许，禁止）并发送给PEP；</p>
+<p>\6. PEP根据收到的信息，允许或者禁止用户访问资源。</p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p><img src="https://pic2.zhimg.com/80/v2-84d1095bc579bcbcf3f5f0aa19b9ba49_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="RBAC模型"><a href="#RBAC模型" class="headerlink" title="RBAC模型"></a>RBAC模型</h2><p>- </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%B8%9A%E5%8A%A1/" class="category-chain-item">业务</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B8%9A%E5%8A%A1/">#业务</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>权限验证业务</div>
+      <div>http://example.com/2023/06/01/业务/权限验证/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%9A%E5%8A%A1/" title="异常处理业务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">异常处理业务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B8%9A%E5%8A%A1/%E7%94%B5%E5%95%86%E4%B8%9A%E5%8A%A1/" title="电商业务">
+                        <span class="hidden-mobile">电商业务</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
