@@ -1,0 +1,763 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式共识算法概述概述分布式共识算法分为，选主、数据（日志）同步、接收客户端请求、leader职责、follower职责、observer职责、一致性保证（顺序一致性、因果一致性、） ZAB - CPZAB（ZooKeeper Atomic Broadcast）协议是ZooKeeper的核心组件，用于实现ZooKeeper中的原子广播。它确保了分布式环境下的一致性和原子性操作。 ZAB协议的流程：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式共识算法概述">
+<meta property="og:url" content="http://example.com/2023/07/08/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="分布式共识算法概述概述分布式共识算法分为，选主、数据（日志）同步、接收客户端请求、leader职责、follower职责、observer职责、一致性保证（顺序一致性、因果一致性、） ZAB - CPZAB（ZooKeeper Atomic Broadcast）协议是ZooKeeper的核心组件，用于实现ZooKeeper中的原子广播。它确保了分布式环境下的一致性和原子性操作。 ZAB协议的流程：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-08T01:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:37.810Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="概述">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>分布式共识算法概述 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式共识算法概述"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-08 09:00" pubdate>
+          2023年7月8日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式共识算法概述</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="分布式共识算法概述"><a href="#分布式共识算法概述" class="headerlink" title="分布式共识算法概述"></a>分布式共识算法概述</h1><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>分布式共识算法分为，选主、数据（日志）同步、接收客户端请求、leader职责、follower职责、observer职责、一致性保证（顺序一致性、因果一致性、）</p>
+<h1 id="ZAB-CP"><a href="#ZAB-CP" class="headerlink" title="ZAB - CP"></a>ZAB - CP</h1><p>ZAB（ZooKeeper Atomic Broadcast）协议是ZooKeeper的核心组件，用于实现ZooKeeper中的原子广播。它确保了分布式环境下的一致性和原子性操作。</p>
+<p>ZAB协议的流程：</p>
+<ol>
+<li>领导者选举：ZooKeeper集群中的所有节点参与领导者选举过程。选举的依据是节点的编号，编号最小的节点成为领导者。</li>
+<li>通信：领导者与集群中的其他节点保持通信。它接收来自客户端的请求，并将请求转发给所有的follower节点进行处理。</li>
+<li>提议（Proposal）和广播（Broadcast）：当领导者接收到来自客户端的请求后，将其转换为一个提案。提案包含了操作的详细信息，并按递增顺序进行编号。然后，领导者将提案发送给所有的follower节点，这一过程称为广播。</li>
+<li>响应（Response）和提交（Commit）：follower节点接收到提案后，会对其进行校验，并将响应发送给领导者。当领导者收到大多数（majority）的follower节点的响应后，就可以将提案标记为已提交，并发送给所有节点进行执行。这一过程称为提交。</li>
+<li>回滚（Rollback）：如果领导者发生故障或者与大多数的follower节点失去联系，则会触发领导者选举过程，并将未处理的提案进行回滚。</li>
+</ol>
+<p>ZAB协议的原理：<br>ZAB协议通过领导者选举、提议和广播、响应和提交的流程来实现一致性和原子性。它使用了基于编号的提案来确保操作的顺序性，并使用多数原则保证了大多数节点的一致性。</p>
+<p>ZAB协议如何保证原子性：<br>ZAB协议通过领导者与follower节点的通信，确保了提案的正确性和一致性。只有当领导者接收到大多数follower节点的响应后，才会将提案标记为已提交并执行。这样可以保证操作的原子性，即要么所有节点都执行操作，要么都不执行。同时，<strong>对于已经提交的提案，即使领导者发生故障或者网络发生中断，系统也能够恢复并从故障之前的状态继续运行。</strong></p>
+<p>ZAB协议如何保证分布式一致性：<br>ZAB协议通过多数原则保证了大多数节点的一致性。只有当大多数节点（超过半数）都响应并提交了提案后，协议才认为操作是一致的。这样可以确保在网络分区或节点故障的情况下，集群仍然能够达到一致性。</p>
+<p>ZAB协议的优缺点分析：<br>优点：</p>
+<ol>
+<li>ZAB协议提供了高可用性和容错性，即使领导者节点发生故障，系统也能够继续工作并保持一致性。</li>
+<li>通过多数原则，ZAB协议确保了分布式环境下的一致性和原子性操作。</li>
+<li>ZAB协议具有较低的延迟和较高的吞吐量，能够快速处理客户端的请求。</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>ZAB协议在选举领导者时可能会出现网络延迟或其他问题，导致选举时间较长，影响系统的性能。</li>
+<li>ZAB协议对节点的数量有一定的限制，当节点过多时，广播和响应的开销会增加，影响系统的性能。</li>
+<li>ZAB协议的实现复杂度较高，需要考虑节点故障、网络分区等各种异常情况。</li>
+</ol>
+<p>综上所述，ZAB协议通过领导者选举、提议和广播、响应和提交的流程来实现分布式一致性和原子性。它具备高可用性和容错性，并通过多数原则确保了数据的一致性。但是，它也存在选举延迟、节点数量限制和实现复杂等缺点。</p>
+<h1 id="Raft-CP"><a href="#Raft-CP" class="headerlink" title="Raft - CP"></a>Raft - CP</h1><p>Raft协议是一种用于实现分布式一致性的算法。它将分布式系统的一致性问题划分为领导者选举、日志复制和安全性三个子问题，并通过这些子问题的协作来实现一致性。</p>
+<p>Raft协议的流程：</p>
+<ol>
+<li>领导者选举：集群中的节点通过互相发送请求投票来选举一个领导者。节点会根据候选人的连续编号、候选人的日志更新情况等来进行投票。如果有某个节点在选举中获得了大多数的选票，则该节点成为领导者。</li>
+<li>客户端请求：领导者接收到来自客户端的请求后，将其作为一条新的日志条目附加到自己的日志中。</li>
+<li>日志复制：领导者将新的日志条目通过网络发送给所有的follower节点。当follower节点接收到这些日志条目后，会将其添加到自己的日志中。</li>
+<li>提交：当领导者发现一条日志条目被大多数节点复制后，它会将该日志条目标记为已提交，并将其应用到状态机中执行。然后，领导者会通知follower节点把该日志条目也标记为已提交并执行。</li>
+<li>安全性：为了确保安全性，Raft协议要求在选举过程中选举出的领导者必须包含所有已经提交的日志。如果一个follower节点的日志比领导者新，那么它必须跟随领导者的日志进行同步。</li>
+</ol>
+<p>Raft协议的原理：<br>Raft协议使用了领导者选举、规范化的复制和安全性机制来实现分布式一致性。它通过选举一个领导者来确保日志的一致性，并使用规范化的复制过程来保证日志的可靠复制。同时，安全性机制保证了领导者提交的日志是正确的。</p>
+<p>如何保证原子性：<br>Raft协议通过领导者的角色来保证原子性。只有领导者才有权利将客户端请求作为一条新的日志条目附加到其日志中，并将其复制给其他节点。在领导者将该日志标记为已提交并执行之后，才认为操作具有原子性。</p>
+<p>如何保证分布式一致性：<br>Raft协议使用多数原则来保证分布式环境下的一致性。只有当领导者和大多数节点达成一致，且已将提交的日志应用到状态机中执行，才认为操作是一致的。这样可以确保在网络分区或节点故障的情况下，集群仍然能够达到一致性。</p>
+<p>Raft协议的优缺点分析：<br>优点：</p>
+<ol>
+<li>Raft协议相较于Paxos算法更易于理解和实现，降低了开发和维护的复杂性。</li>
+<li>Raft协议的领导者选举过程简单，不需要进行复杂的角色切换。</li>
+<li>Raft协议具备较高的可用性和容错性，能够在领导者故障时快速进行新的选举。</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>Raft协议对节点的数量有一定的限制，当节点过多时，复制和同步的开销会增加，影响系统的性能。</li>
+<li>Raft协议在网络分区的情况下可能会导致系统的可用性下降，因为只有大多数节点能够形成一致性。</li>
+<li>Raft协议在系统刚启动或者领导者失去连接的情况下，需要进行新一轮的选举过程，可能会导致延迟。</li>
+</ol>
+<p>综上所述，Raft协议通过领导者选举、日志复制和安全性等机制来实现分布式一致性。它具备易于理解、可用性高和容错性好等优点，但是在节点数量较多和网络分区的情况下，性能可能会受到影响。</p>
+<h1 id="Distro-AP"><a href="#Distro-AP" class="headerlink" title="Distro - AP"></a>Distro - AP</h1><p>nacos的distro协议是一种用于实现分布式配置的协议，用于将配置信息在nacos集群中进行同步和分发。下面是nacos的distro协议的流程、原理以及如何保证原子性和分布式一致性的介绍，以及一些优缺点的分析：</p>
+<p>流程：</p>
+<ol>
+<li>集群初始化：通过选举算法选择一个节点作为distroLeader。distroLeader节点负责进行配置文件的缓存和同步工作。</li>
+<li>同步过程：当集群中的一台节点对配置进行改变时，distroLeader节点会将改变后的配置文件上传到分布式存储中，并通过配置发布节点将变更消息发送给其他节点。</li>
+<li>分发过程：接收到配置文件变更消息的节点会从分布式存储中下载最新的配置文件，并将其应用到本地的nacos配置中。</li>
+</ol>
+<p>原理：</p>
+<ol>
+<li>集群初始化：通过选举算法选出一个节点作为distroLeader，distroLeader负责配置的同步和分发。其他节点作为distroFollower，接收和应用配置的变更。</li>
+<li>同步过程：distroLeader节点负责将变更的配置文件上传至分布式存储中，然后通过配置发布节点将变更消息广播给其他节点。</li>
+<li>分发过程：接收到变更消息的节点通过分布式存储获取最新的配置文件，然后将其应用到本地的nacos配置中。</li>
+</ol>
+<p>如何保证原子性：<br>在nacos的distro协议中，原子性是通过使用分布式存储来保证的。当distroLeader将配置文件上传到分布式存储中时，它使用事务机制确保上传的文件是完整和一致的。此外，在分发过程中，节点从分布式存储中下载配置文件，保证了文件的一致性和原子性。</p>
+<p>如何保证分布式一致性：<br>nacos的distro协议使用选举算法选出一个节点作为distroLeader，所有变更都由distroLeader发起，然后通过广播的方式将变更消息发送给其他节点。这样做可以保证集群中所有节点获取相同的配置信息，从而实现分布式一致性。</p>
+<p>优点：</p>
+<ol>
+<li>nacos的distro协议实现了高效的配置分发和同步，可以快速将配置信息同步到集群中所有的节点。</li>
+<li>通过选举机制，自动选举一个节点作为distroLeader，从而实现了高可用性和容错性。</li>
+<li>使用分布式存储来保证配置文件的一致性和原子性，可以有效地处理节点故障和网络异常情况。</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>分布式存储的性能和可扩展性可能会成为瓶颈，特别是在节点数量增加和配置文件较大的情况下。</li>
+<li>distro协议依赖于选举算法来选择distroLeader，如果选举算法存在问题，可能会导致配置分发和同步的延迟或错误。</li>
+</ol>
+<p>综上所述，nacos的distro协议通过选举机制、分布式存储和广播等方式来实现配置的分发和同步。它具有高效、可靠的特点，可以保证分布式一致性和原子性。然而，它也存在性能和选举算法的潜在问题。</p>
+<h1 id="Gossip-AP"><a href="#Gossip-AP" class="headerlink" title="Gossip - AP"></a>Gossip - AP</h1><p>Gossip协议是一种用于信息传播和分布式数据同步的协议。它基于点对点的通信方式，通过节点之间的随机交互来传播信息和实现分布式一致性。下面是Gossip协议的流程、原理，以及如何保证原子性和分布式一致性的介绍，以及一些优缺点的分析：</p>
+<p>流程：</p>
+<ol>
+<li>初始化：每个节点都有一个Gossip状态，包含节点自身的信息和节点所知的其他节点信息。</li>
+<li>Gossip交互：每个节点按照一定的策略选择其他节点进行交互。节点之间通过点对点通信，随机选择相互交换自身的信息。</li>
+<li>信息传播：节点在交互过程中，会将自己所知的信息传播给其他节点。接收到信息的节点会更新自身的Gossip状态。</li>
+<li>信息演播：节点根据一定的策略，选择部分或全部的Gossip状态信息向其他节点进行广播，从而达到信息的全局传播和分发。</li>
+</ol>
+<p>原理：</p>
+<ol>
+<li>随机交互：Gossip协议中的节点通过随机选择其他节点进行交互。这种随机交互方式使得节点能够在整个系统中传播和接收信息。</li>
+<li>信息传播：每个节点在Gossip过程中将自己所知的信息传播给其他节点，从而实现信息的分发和同步。</li>
+<li>信息演播：节点根据一定的策略选择部分或全部的信息向其他节点广播，通过这种方式将信息快速传播到整个系统。</li>
+</ol>
+<p>如何保证原子性：<br>Gossip协议本身并没有提供原子性的保证。它主要用于信息传播和分布式数据同步。要实现原子性，可以在Gossip协议之上结合使用其他保证原子性的技术，如分布式事务或分布式锁。</p>
+<p>如何保证分布式一致性：<br>Gossip协议通过交换和传播节点之间的信息，从而达到分布式一致性。节点在交互过程中，会接收到其他节点传播的信息，并更新自身的状态。随着Gossip交互的不断进行，系统中的所有节点逐渐达到一致的状态。</p>
+<p>优点：</p>
+<ol>
+<li>Gossip协议具有分布式特性，每个节点通过点对点通信来传播信息，无需集中的控制节点，具有高度的扩展性和容错性。</li>
+<li>Gossip协议是自适应的，可以根据网络环境的变化和节点的增加或减少来动态调整交互策略，适用于大规模分布式系统。</li>
+<li>Gossip协议具有良好的传播性能，能够快速将信息传播到系统中的所有节点。</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>Gossip协议的可靠性依赖于交互节点的随机性，如果节点之间的交互过于频繁或不够频繁，可能会导致信息传播的不完整或延迟。</li>
+<li>Gossip协议在网络分区的情况下可能会导致节点之间的信息不一致。</li>
+<li>Gossip协议需要消耗一定的网络带宽和计算资源，特别是在节点数量较多时，性能可能会受到影响。</li>
+</ol>
+<p>综上所述，Gossip协议通过节点之间的随机交互来实现信息的传播和分布式数据同步。它具有分布式特性、自适应性和良好的传播性能等优点，但也存在可靠性和性能方面的考虑。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E6%A6%82%E8%BF%B0/" class="category-chain-item">概述</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+        <a href="/tags/%E6%A6%82%E8%BF%B0/">#概述</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式共识算法概述</div>
+      <div>http://example.com/2023/07/08/分布式系统-大数据/分布式共识算法概述/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/08/%E4%B8%9A%E5%8A%A1/Redis%E4%B8%9A%E5%8A%A1/" title="redis业务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">redis业务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/07/%E5%AD%A6%E4%B9%A0+%E7%96%91%E6%83%91/ChatGPT%E9%97%AE%E7%AD%94/" title="ChatGPT问答">
+                        <span class="hidden-mobile">ChatGPT问答</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

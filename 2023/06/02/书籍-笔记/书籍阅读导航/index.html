@@ -1,0 +1,847 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="书籍阅读导航书籍作者 GitHub地址： fenixsoft (IcyFenix) (github.com)  有趣书籍记录《建造可进化的系统构架》:(简评)建造可进化的系统构架 - 知乎 (zhihu.com) 《Kubernetes In Action》：(简评)Kubernetes In Action(大势所趋) - 知乎 (zhihu.com) 《Streaming System》 ：评:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="书籍阅读导航">
+<meta property="og:url" content="http://example.com/2023/06/02/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E4%B9%A6%E7%B1%8D%E9%98%85%E8%AF%BB%E5%AF%BC%E8%88%AA/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="书籍阅读导航书籍作者 GitHub地址： fenixsoft (IcyFenix) (github.com)  有趣书籍记录《建造可进化的系统构架》:(简评)建造可进化的系统构架 - 知乎 (zhihu.com) 《Kubernetes In Action》：(简评)Kubernetes In Action(大势所趋) - 知乎 (zhihu.com) 《Streaming System》 ：评:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230516100851038.png">
+<meta property="article:published_time" content="2023-06-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:36.793Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="书籍">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230516100851038.png">
+  
+  
+  
+  <title>书籍阅读导航 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="书籍阅读导航"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-02 00:00" pubdate>
+          2023年6月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          69 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">书籍阅读导航</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="书籍阅读导航"><a href="#书籍阅读导航" class="headerlink" title="书籍阅读导航"></a>书籍阅读导航</h1><p>书籍作者 GitHub地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fenixsoft">fenixsoft (IcyFenix) (github.com)</a></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230516100851038.png" srcset="/img/loading.gif" lazyload alt="image-20230516100851038"></p>
+<h2 id="有趣书籍记录"><a href="#有趣书籍记录" class="headerlink" title="有趣书籍记录"></a>有趣书籍记录</h2><p>《建造可进化的系统构架》:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/40880082">(简评)建造可进化的系统构架 - 知乎 (zhihu.com)</a></p>
+<p>《Kubernetes In Action》：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/41606961">(简评)Kubernetes In Action(大势所趋) - 知乎 (zhihu.com)</a></p>
+<p>《Streaming System》 ：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43301661">评:Streaming System(简直炸裂,强势安利) - 知乎 (zhihu.com)</a></p>
+<p>《kafka》</p>
+<p>《Stream Process with Apache Flink》</p>
+<h1 id="调优指南"><a href="#调优指南" class="headerlink" title="调优指南"></a>调优指南</h1><p>以下是一些关于Java JVM调优的推荐阅读书籍：</p>
+<ol>
+<li><p>《深入理解Java虚拟机》- 这本书由周志明撰写，是学习Java虚拟机和调优的经典教材。涵盖了JVM的内存模型、垃圾回收算法、类加载机制以及性能调优等方面的知识。</p>
+</li>
+<li><p>《Java性能优化权威指南》- 这本书由Charlie Hunt和Binu John合著，介绍了Java应用程序性能优化的各个方面。包括JVM选项、垃圾收集器、线程和锁、I&#x2F;O、数据库、网络通信等。</p>
+</li>
+<li><p>《Java Performance》- 这本书由Scott Oaks撰写，提供了丰富的Java性能优化指导。内容包括JVM调优、垃圾收集器、多线程、内存管理、I&#x2F;O等方面的实用技巧和案例分析。</p>
+</li>
+<li><p>《Java Performance Tuning》- 这本书由Jack Shirazi撰写，是一本综合性的Java性能优化指南。介绍了各种性能调优技术，包括JVM调优、内存管理、垃圾回收、并发和多线程编程等。</p>
+</li>
+<li><p>《High-Performance Java Persistence》- 这本书由Vlad Mihalcea撰写，专注于Java持久化相关性能优化。内容包括数据库访问、Hibernate框架、查询性能和数据缓存等方面的最佳实践和优化技巧。</p>
+</li>
+</ol>
+<p>这些书籍都是Java JVM调优领域内的经典著作，可以帮助您了解和掌握Java虚拟机的内部工作原理、性能调优技术和最佳实践。通过深入学习这些书籍，您将能够更好地优化Java应用程序的性能和资源利用情况。</p>
+<h1 id="技术-语言"><a href="#技术-语言" class="headerlink" title="技术 - 语言"></a>技术 - 语言</h1><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><p>go语言圣经</p>
+<p>go 并发编程</p>
+<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><p>JVM深入理解虚拟机</p>
+<h1 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h1><p>以下是每个主题的几本推荐书籍：</p>
+<h3 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h3><ol>
+<li><p>《ZooKeeper: 分布式过程协同技术详解》（Rachel和Flavio）</p>
+<p>这本书详细介绍了 ZooKeeper 的设计原理、工作机制、应用场景以及使用方法，适合想要深入理解 ZooKeeper 的读者。</p>
+</li>
+<li><p>《Apache ZooKeeper 官方指南（中译本）》</p>
+<p>这本书是 ZooKeeper 的官方指南的中文翻译版，包含了 ZooKeeper 的基本概念、基本使用方法和高级应用场景等方面内容，对于初学者和有一定经验的读者都有价值。</p>
+</li>
+<li><p>《从Paxos到Zookeeper  分布式一致性原理与实践》</p>
+</li>
+</ol>
+<h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><ol>
+<li><p>《高性能 MySQL（第3版）》（Baron Schwartz 等）</p>
+<p>这本经典书籍详细介绍了 MySQL 的性能优化原理、技巧和工具，适合想要深入了解 MySQL 数据库性能优化的读者。</p>
+</li>
+<li><p>《MySQL技术内幕：InnoDB存储引擎》（周志明）</p>
+<p>这本书详细介绍了 MySQL 的 InnoDB 存储引擎的设计原理、内部机制和性能优化技巧，适合想要深入查阅 MySQL 存储引擎相关知识的读者。</p>
+</li>
+</ol>
+<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><ol>
+<li><p>《深入理解Kafka：核心设计与实践原理》（豆瓣电子科技）</p>
+<p>这本书详细介绍了 Kafka 的设计原理、工作机制、核心架构和实践案例，适合想要了解 Kafka 的读者。</p>
+</li>
+<li><p>《Kafka权威指南》（Gwen Shapira等）</p>
+<p>这本权威指南全面地介绍了 Kafka 的核心概念、架构和使用方法，以及在实践中的应用技巧和最佳实践，适合想要精通 Kafka 的读者。</p>
+</li>
+</ol>
+<h3 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h3><ol>
+<li><p>《深入理解Java虚拟机：JVM高级特性与最佳实践（第3版）》（周志明）</p>
+<p>这本书详细介绍了 Java 虚拟机的原理、内部机制、性能优化和高级特性等方面内容，适合深入学习 Java 虚拟机的读者。</p>
+</li>
+<li><p>《Java 并发编程实战》（Brian Goetz 等）</p>
+<p>这本书深入讲解了 Java 并发编程的基本概念、实践技巧和并发编程模型，适合想要深入了解 Java 并发编程的读者。</p>
+</li>
+</ol>
+<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><ol>
+<li><p>《Redis 设计与实现》（黄健宏）</p>
+<p>这本书详细介绍了 Redis 的设计原理、数据结构、应用场景、性能调优，以及 Redis 集群、高可用等方面内容，适合深入学习 Redis 的读者。</p>
+</li>
+<li><p>《Redis 实战》（Josiah L. Carlson）</p>
+<p>这本书详细介绍了 Redis 实战中的常用场景和应用方法，包括计数器、限速器、消息队列、缓存等方面，适合初学者和实践者快速上手 Redis 使用。</p>
+</li>
+</ol>
+<p>以上是每个主题下的几本推荐书籍，每本书都有其各自的特点和优劣势，需要根据自己的需求和兴趣选择适合自己的书籍进行学习。</p>
+<h1 id="零信任网络模型相关书籍"><a href="#零信任网络模型相关书籍" class="headerlink" title="零信任网络模型相关书籍"></a>零信任网络模型相关书籍</h1><p>学习零信任网络模型，你可以考虑以下书籍和学习方式：</p>
+<p>书籍推荐：</p>
+<ol>
+<li><p>零信任网络：在不可信网络中构建安全系统</p>
+<p>“Zero Trust Networks: Building Secure Systems in Untrusted Networks” - 作者：Evan Gilman、Doug Barth<br>这本书是关于零信任网络模型的权威指南，详细介绍了零信任概念、原则和部署策略，并提供了实际案例和最佳实践。<strong>（有了）</strong></p>
+</li>
+<li><p>实施和发展云安全与隐私<br>“Implementing and Developing Cloud Security and Privacy” - 作者：Zeeshan Naseh、Syed A. Ahson<br>这本书介绍了零信任网络模型与云安全的关系，以及如何在云环境中实施和开发安全的零信任策略。</p>
+</li>
+</ol>
+<p>除了之前提到的书籍，以下是更多关于零信任网络模型的书籍推荐：</p>
+<ol>
+<li><p>零信任安全:数字时代的新安全模式<br>“Zero Trust Security: A New Security Model for the Digital Age” - 作者：Lior Frenkel、Gil Barzilai<br>本书提供了零信任安全模型的详细介绍，包括背景、原则、设计和实施策略，并涵盖了与身份验证、访问控制、网络安全和应用程序安全相关的主题。</p>
+</li>
+<li><p>“The Practice of Network Security: Deploying the Zero Trust Model” - 作者：Mark Kadrich<br>这本书探讨了零信任网络模型的实践方法，包括如何设计、部署和管理零信任网络，以及为组织提供更高的安全性和可见性。</p>
+</li>
+<li><p>“The Zero Trust Strategy: Earning trust through enhanced security” - 作者：Bob Lentz<br>这本书讲解了零信任策略的重要性和实施方法，以及如何在企业中建立和推广零信任文化，以确保数据和网络的安全。</p>
+</li>
+<li><p>“Network Security Through Data Analysis: From Data to Action” - 作者：Michael Collins<br>虽然这本书不是专门讨论零信任网络模型，但它提供了一些基于数据分析的网络安全实践，可以与零信任模型结合使用来提高网络的安全性。</p>
+</li>
+</ol>
+<p>请注意，这些书籍提供了更深入和全面的理解零信任网络模型的资源，你可以根据自己的兴趣和需求选择适合你的读物。同时，了解网络安全领域的最新趋势、技术和标准也是持续学习的关键。</p>
+<p>当涉及到零信任网络模型的中文书籍推荐，以下是几本可供参考的书籍：</p>
+<ol>
+<li><p>《零信任网络：信任屏障不仅仅是网关》 - 作者：方锐海<br>这本书详细解释了零信任网络模型的理念、原则和实施策略，以及如何通过构建安全边界和访问控制策略来提高网络安全。</p>
+</li>
+<li><p>《零信任网络建设指南》 - 作者：刘明明、王国华<br>这本书介绍了零信任网络的建设过程，包括设计原则、访问控制机制和安全策略等方面的实践经验和案例分析。</p>
+</li>
+<li><p>《零信任安全网络实践指南》 - 作者：罗萌<br>本书提供了一个综合的指南，介绍了实施零信任安全网络的步骤，包括使用多重认证、访问控制、网络分段和审计等措施来保护网络。</p>
+</li>
+</ol>
+<p>请注意，中文书籍的数量相对较少，因此可能在市场上找到的选择相对较少。尽管如此，仍然建议在阅读之前查看书籍的评论和评级，以确保所选书籍符合你的需求和期望。此外，在线资源、博客和论坛也是了解中文零信任网络模型话题的有用资源。</p>
+<h1 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h1><h2 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h2><p>《微服务架构设计模式》：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/725368?spm=a2c6h.12873639.article-detail.5.5dea53c6Zf6btf">带你读《微服务架构设计模式》之二：服务的拆分策略-阿里云开发者社区 (aliyun.com)</a></p>
+<p>《凤凰架构》：<a target="_blank" rel="noopener" href="https://icyfenix.cn/immutable-infrastructure/">https://icyfenix.cn/immutable-infrastructure/</a></p>
+<p>凤凰架构 : <a target="_blank" rel="noopener" href="https://jingyecn.top:18080/">凤凰架构：构筑可靠的大型分布式系统 | 凤凰架构 (jingyecn.top)</a></p>
+<p>《微服务架构设计模式》 Microservices Patterns  </p>
+<p>微服务实战</p>
+<p>《数据密集型应用设计 – DDIA》   : <a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch7">第七章：事务 (vonng.com)</a></p>
+<p>微服务设计：构建分布式系统</p>
+<p>重构——改善既有代码的设计 : <a target="_blank" rel="noopener" href="https://github.com/MwumLi/book-refactoring2">MwumLi&#x2F;book-refactoring2: 《重构 改善既有代码的设计第二版》中文版 (github.com)</a></p>
+<h2 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h2><p>《DDIA – 数据密集型应用设计》 ：<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/preface">序言 (vonng.com)</a></p>
+<h2 id="flink"><a href="#flink" class="headerlink" title="flink"></a>flink</h2><p>阅读顺序推荐：</p>
+<p>《Streaming System》 </p>
+<p>《Stream Processing with Apache Flink》</p>
+<p>以下是关于Flink方面的一些书籍推荐：</p>
+<ol>
+<li><p>《Stream Processing with Apache Flink》(使用Apache Flink进行流处理)，作者Fabian Hüske、Vasia Kalavri、Jamie Grier、Ellen Friedman。这本书提供了Flink的详细介绍和示例代码，从流处理基础知识到高级主题都有涉及。读者可以学习到如何使用Flink处理实时数据，包括数据流处理、状态管理、窗口和时间特性等。</p>
+</li>
+<li><p>《Mastering Apache Flink》(精通Apache Flink)，作者Apache Flink PMC成员Jiangjie Qin、Chesnay Schepler和Fabian Hüske。本书深入介绍了Flink框架的所有方面，包括流和批处理、数据流和数据集编程、高级运算符和状态管理等。这本书通过示例代码和最佳实践，帮助读者深入了解Flink的整个生态系统。</p>
+</li>
+<li><p>《Flink in Action》(Flink实战)，作者Ufuk Celebi、Dawid Wysakowicz和Jamie Grier。这本书提供了许多实际应用场景，帮助读者学习如何使用Flink处理大数据。本书深入介绍了Flink的核心概念、API和最佳实践，包括数据流处理、事件时间处理、数据窗口和容错机制等。</p>
+</li>
+<li><p>《Learning Apache Flink》(学习Apache Flink)，作者Tanmay Deshpande。这本书涵盖了Flink的各个方面，包括Flink的历史和架构、核心概念、应用程序开发、流和批处理等。本书还提供了大量的示例代码和练习，有助于读者进行实践。</p>
+</li>
+</ol>
+<h2 id="分布式共识算法"><a href="#分布式共识算法" class="headerlink" title="分布式共识算法"></a>分布式共识算法</h2><p>以下是关于 Raft 一些推荐的阅读书籍：</p>
+<ol>
+<li><p>“Understanding Raft” 一文，是 Raft 论文的一个非正式解释和扩展。文章详细论述了 Raft 的核心思想和实现细节，适合初学者入门阅读。</p>
+</li>
+<li><p>《分布式系统：概念与设计》（原书第 5 版），作者为 George Coulouris、Jean Dollimore 和 Tim Kindberg，该书是分布式系统领域的经典教材，其中一章专门介绍了 Raft 算法。适合有一定分布式系统背景知识的人阅读。</p>
+</li>
+<li><p>《Raft 一致性算法：原理、实现与应用》一书，由康威士（Cornell）大学出版社出版，该书对 Raft 算法进行了全面的介绍，包括算法原理、实现细节和实际应用。适合想深入了解 Raft 算法的人阅读。</p>
+</li>
+<li><p>《跨越分布式系统的实践》（原书第 2 版），作者为 Brendan Burns, Bridget Kromhout 和 Joe Beda，该书是针对 Kubernetes 设计和构建的实用指南，其中涉及到分布式系统中的很多优秀实践和 Raft 一致性算法的应用。适合想要更加深入地了解 Raft 算法在生产环境中实际应用的人阅读。</p>
+</li>
+</ol>
+<p>需要注意的是，通过阅读书籍和文章来学习 Raft 算法是一种非常好的方式，但最好的方式还是亲自实践和使用，掌握 Raft 算法的应用和实现。</p>
+<p>以下是涉及分布式一致性算法的一些推荐的书籍：</p>
+<ol>
+<li><p>《分布式系统：概念与设计》（原书第 5 版），作者为 George Coulouris、Jean Dollimore 和 Tim Kindberg，该书是分布式系统领域的经典教材，其中包括了多种一致性算法的介绍，如 Paxos、ZAB 等，适合有一定分布式系统背景知识的人阅读。</p>
+</li>
+<li><p>《分布式系统算法》一书，作者为 Gabriel Kliot，该书介绍了分布式系统的关键算法，如协调、共识和共享资源分配等，包括几种流行的一致性算法的详细说明，适合想深入学习分布式系统算法的人阅读。</p>
+</li>
+<li><p>《Raft 一致性算法：原理、实现与应用》一书，由康威士（Cornell）大学出版社出版，该书对 Raft 算法进行了全面的介绍，包括算法原理、实现细节和实际应用。该书适合想深入了解 Raft 算法的人阅读。</p>
+</li>
+<li><p>《分布式系统的可扩展性原理与实践》一书，作者为 Martin Kleppmann，该书解释了为何分布式系统常常面临可扩展性和性能挑战，介绍了如何设计和实现可扩展的分布式系统，并深入讨论了现代的一致性算法、数据库和数据管理技术。适合想从架构层面了解分布式系统的可扩展性和一致性的人阅读。</p>
+</li>
+</ol>
+<p>需要注意的是，以上书籍只是分布式一致性算法领域的一部分，还有很多其他的经典书籍和文章，如果想要进一步深入了解分布式一致性算法，还需要多方面查阅相关资料。</p>
+<h1 id="云原生"><a href="#云原生" class="headerlink" title="云原生"></a>云原生</h1><p>云原生是一种软件架构和开发方法论，旨在使应用程序能够充分利用云计算环境的弹性、可伸缩性和可靠性。云原生应用程序通常在容器化的环境中运行，利用容器编排和自动化管理工具来简化部署、扩展和管理操作。</p>
+<p>主要的云原生组件包括：</p>
+<ol>
+<li><p>容器化技术：容器化技术（如Docker）使应用程序和其依赖项能够打包为独立的可移植容器，在不同的环境中快速部署和运行。</p>
+</li>
+<li><p>容器编排平台：容器编排平台（如Kubernetes）用于自动化部署、管理和扩展容器化应用程序。它提供了弹性、高可用性和自动化的功能，使应用程序能够在多个节点上运行，并根据需求调整副本数。</p>
+</li>
+<li><p>微服务架构：云原生应用程序通常采用微服务架构，将应用程序拆分为多个小型、自治的服务单元。每个微服务都独立运行，并通过API进行通信，从而提高应用程序的可扩展性和灵活性。</p>
+</li>
+<li><p>声明式基础设施：声明式基础设施工具（如Terraform）用于定义和管理基础设施资源，如虚拟机、网络和存储。通过编写基础设施的声明式配置文件，可以轻松创建、修改和终止云环境的资源。</p>
+</li>
+<li><p>持续交付和自动化测试：云原生强调持续交付和自动化测试的实践，通过自动化构建、测试和部署流程，以提高开发人员的生产力和软件质量。</p>
+</li>
+<li><p>监控和日志管理：云原生应用程序需要具有有效的监控和日志管理机制，用于实时监测应用程序的性能、可用性和安全性，并提供透明的日志可视化和分析。</p>
+</li>
+</ol>
+<p>这些组件共同构成了云原生架构的核心，并为应用程序开发人员和运维团队提供了一种更灵活、可靠和高效的方式来构建、部署和管理云环境中的应用程序。</p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>《Docker — 从入门到实践》：<a target="_blank" rel="noopener" href="https://docker-practice.github.io/zh-cn/">前言 · Docker – 从入门到实践 (docker-practice.github.io)</a></p>
+<h2 id="Kubernetes"><a href="#Kubernetes" class="headerlink" title="Kubernetes"></a>Kubernetes</h2><p>以下是一些Kubernetes方面的书籍推荐：</p>
+<ol>
+<li>《Kubernetes in Action》(Kubernetes实战)，由Marko Lukša编写。它是一本详细介绍Kubernetes的书籍，从基础概念到高级主题都有涉及。这本书提供了大量演示，可以帮助你学习如何使用Kubernetes来管理分布式应用程序。</li>
+<li>《Kubernetes: Up and Running》(Kubernetes:运维指南)，由Brendan Burns、Kelsey Hightower和Joe Beda编写。这本书提供了一份深入的指南，帮助你创建、部署和管理Kubernetes集群。它囊括了Kubernetes的核心概念和实践，同时也包含了最佳实践、案例和管理工具。</li>
+<li>《Mastering Kubernetes》(精通Kubernetes)，作者Gigi Sayfan。这本书包含了有关Kubernetes的高级特性，例如：安全、监控、存储、网络等内容。书中深入剖析了Kubernetes的各个方面，展示如何部署和管理生产级别的应用程序。</li>
+<li>《Kubernetes Cookbook》(Kubernetes菜谱)，Nirmata团队编写。这本书是一本针对Kubernetes使用操作的实用手册，提供了各种各样的解决方案和最佳实践。从Pods管理、Kubernetes和Docker集成到监视和调试等内容均有详细介绍。</li>
+</ol>
+<p>以上是一些Kubernetes方面的书籍推荐，希望能对您学习Kubernetes有所帮助。</p>
+<ol start="5">
+<li><p>《Kubernetes: The Complete Guide to Master Kubernetes》(Kubernetes:全面掌握Kubernetes指南)，作者James Lee。本书深入讲解了如何使用Kubernetes构建高可用、高可扩展和弹性的应用程序。包括Kubernetes的架构、部署、管理、监控等方面。书中包含了大量的实用示例和代码，适合初学者和有经验的用户。</p>
+</li>
+<li><p>《Kubernetes: A Comprehensive Guide to Building, Deploying, and Managing Large-Scale Applications》(Kubernetes：构建、部署和管理大规模应用程序的综合指南)，作者Sébastien Goasguen。这本书介绍了Kubernetes的起源、设计、部署、配置、监控和管理等方面。书中包含了大量的示例和代码，可以帮助读者深入理解Kubernetes的运作原理。</p>
+</li>
+<li><p>《Kubernetes Operators: Automating the Container Orchestration Platform》(Kubernetes操作手册：自动化容器编排平台)，由Jason Dobies、Josh Wood及Vince Power编写。本书介绍了一种新的Kubernetes扩展机制Operator，它允许用户自定义资源、基于CRD构建自己的API，以及在集群中部署和升级应用程序。书中包含了丰富的范例和案例。</p>
+</li>
+</ol>
+<p>这些书籍都对不同层次的读者有所考虑，有些是适合初学者快速入门，有些则更适合有一定Kubernetes基础，希望深入了解Kubernetes的用户深入阅读。</p>
+<p>服务网格 Mesh</p>
+<p>以下是几本关于服务网格的经典书籍推荐：</p>
+<ol>
+<li><p>《Istio in Action》：这本书是关于Istio Service Mesh的实践指南，它讲解了如何使用Istio构建服务网格，以及如何使用各种Istio的核心组件实现流量管理、安全性、监控和可观察性等方面的任务。</p>
+</li>
+<li><p>《Service Mesh Patterns》：这本书是O’Reilly Media出版的关于服务网格设计模式的指南。它提供最佳实践，采用不同的平台（包括Istio、Linkerd、Consul等）和编程语言构建服务网格时的服务网格 pattern，从而实现标准化，高弹性，安全性，可视化和容易扩展的微服务架构。</p>
+</li>
+<li><p>《Kubernetes Service Mesh》：这本书介绍了如何使用Kubernetes和Service Mesh技术构建一套完整的、高度可扩展和安全的微服务应用程序。它教会了读者如何使用Kubernetes平台中的Service Mesh工具来管理流量、安全性和可观察性，并实现生产级别的自动化和可靠性。</p>
+</li>
+<li><p>《Istio：Up and Running》：这本O’Reilly Media出版的书是关于Istio的短小精悍的介绍，向读者展示了如何在Kubernetes上快速构建和使用Istio。它简要地介绍了每个Istio组件的功能和操作原理，并提供了关键示例，以帮助读者理解如何使用Istio中的不同特性。</p>
+</li>
+</ol>
+<p>《Service Mesh微服务架构设计》<br>《云原生服务网格Istio：原理、实践、架构与源码解析》</p>
+<h1 id="论文？"><a href="#论文？" class="headerlink" title="论文？"></a>论文？</h1><p>欠着</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%B9%A6%E7%B1%8D/" class="category-chain-item">书籍</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B9%A6%E7%B1%8D/">#书籍</a>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>书籍阅读导航</div>
+      <div>http://example.com/2023/06/02/书籍-笔记/书籍阅读导航/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/13/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/My%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8Freadme-%E9%BB%91/" title="设计模式-黑马">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">设计模式-黑马</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/Java%E7%B2%BE%E9%80%9A/Javaweb/" title="JavaWeb">
+                        <span class="hidden-mobile">JavaWeb</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

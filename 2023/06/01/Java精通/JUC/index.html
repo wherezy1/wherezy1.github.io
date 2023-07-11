@@ -46,7 +46,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230328150530763.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230328150613875.png">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-06-22T15:33:40.702Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:36.788Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="JUC">
@@ -244,7 +244,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          23k 字
+          24k 字
         
       </span>
     
@@ -255,7 +255,7 @@
         
         
         
-          195 分钟
+          202 分钟
         
       </span>
     
@@ -374,6 +374,18 @@
 
 
 
+<h1 id="锁原理实现"><a href="#锁原理实现" class="headerlink" title="锁原理实现"></a>锁原理实现</h1><h2 id="LockSupport"><a href="#LockSupport" class="headerlink" title="LockSupport"></a>LockSupport</h2><p><code>LockSupport</code>是Java并发工具包（java.util.concurrent）中的一个类，它提供了线程阻塞和唤醒的能力。下面是<code>LockSupport</code>的主要方法介绍：</p>
+<ol>
+<li><code>park()</code>: 当前线程阻塞，直到被其他线程唤醒或被中断。</li>
+<li><code>parkNanos(long nanos)</code>: 当前线程阻塞，最多阻塞指定的纳秒数，直到被其他线程唤醒、被中断或超时。</li>
+<li><code>parkUntil(long deadline)</code>: 当前线程阻塞，直到被其他线程唤醒、被中断或达到指定的时间戳。</li>
+<li><code>unpark(Thread thread)</code>: 唤醒指定线程，如果该线程之前被阻塞的话。</li>
+</ol>
+<p><code>LockSupport</code>的实现原理是基于操作系统提供的底层线程阻塞和唤醒机制。在调用<code>park()</code>方法时，当前线程会被阻塞，直到被其他线程调用<code>unpark()</code>方法唤醒。<code>unpark()</code>方法可以在<code>park()</code>方法调用之前或之后调用，因此可以先唤醒线程再阻塞线程。<code>park()</code>方法也可以被中断，即其他线程调用当前线程的<code>interrupt()</code>方法来中断阻塞状态。</p>
+<p><code>LockSupport</code>的优点是它比传统的<code>wait()</code>和<code>notify()</code>方法更加灵活和可靠。它不依赖于对象的监视器（monitor），因此可以在任何时候使用，而不需要获取对象的锁。此外，<code>LockSupport</code>的阻塞和唤醒操作是一对一的，不会出现信号丢失的情况。</p>
+<p>采用<code>LockSupport</code>来实现锁的原因是它提供了更底层的线程阻塞和唤醒机制，可以更灵活地控制线程的阻塞和唤醒。相比传统的锁机制，<code>LockSupport</code>的使用更加简单，不需要在同步块中调用<code>wait()</code>和<code>notify()</code>方法，减少了出错的可能性。此外，<code>LockSupport</code>还可以避免线程因为等待锁而进入阻塞状态时，被其他线程调用<code>interrupt()</code>方法中断而抛出<code>InterruptedException</code>异常的情况。因此，<code>LockSupport</code>是实现锁的一种更可靠和高效的方式。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+
 
 
 <h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><ol>
@@ -388,7 +400,7 @@
 <p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230411222154076.png" srcset="/img/loading.gif" lazyload alt="image-20230411222154076"></p>
 <h2 id="Volatile"><a href="#Volatile" class="headerlink" title="Volatile"></a>Volatile</h2><p>内存屏障</p>
 <p>不能保证原子性</p>
-<h1 id="Concurrent-Collection"><a href="#Concurrent-Collection" class="headerlink" title="Concurrent Collection"></a>Concurrent Collection</h1><p>LongAdder为什么比AtomicLong块<br>LongAdder的基本思路就是分散热点，将value的值分散到一个Cell数组中，不同的线程会命中不同的Cell，各个现在只对自己槽中的那个值进行Cas操作，这样热点就被分散了，冲突的概率小很多，想要获得真正的long值，只要将各个槽中的变量值累加返回就行。</p>
+<h1 id="Concurrent-Collection-并发集合"><a href="#Concurrent-Collection-并发集合" class="headerlink" title="Concurrent Collection(并发集合)"></a>Concurrent Collection(并发集合)</h1><p>LongAdder为什么比AtomicLong块<br>LongAdder的基本思路就是分散热点，将value的值分散到一个Cell数组中，不同的线程会命中不同的Cell，各个现在只对自己槽中的那个值进行Cas操作，这样热点就被分散了，冲突的概率小很多，想要获得真正的long值，只要将各个槽中的变量值累加返回就行。</p>
 <p>sum()方法会将Cell数组中的value和base累加作为返回值。</p>
 <p>核心思想就是将AtomicLong的一个value的更新压力分散到多个vulue中去</p>
 <h1 id="线程-Thread"><a href="#线程-Thread" class="headerlink" title="线程 - Thread"></a>线程 - Thread</h1><h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">enum</span> <span class="hljs-title class_">State</span> &#123;<br>    <span class="hljs-comment">// 未start的thread</span><br>    NEW,<br>	<span class="hljs-comment">// 可运行，但是未运行 Java线程中将就绪（ready）和运行中（running）两种状态笼统的称为“运行”</span><br>    <span class="hljs-comment">// 在jvm中运行，但是在等待资源 或 调度</span><br>    RUNNABLE,<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">   		没有锁</span><br><span class="hljs-comment">     * 想要获取monitor的锁，阻塞在monitor中 -- Object的monitor锁</span><br><span class="hljs-comment">     synchronized锁 就是通过锁对象的 Object底层monitor对象实现</span><br><span class="hljs-comment">     * &#123;<span class="hljs-doctag">@link</span> Object#wait() Object.wait&#125;.</span><br><span class="hljs-comment">     */</span><br>    BLOCKED,<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Thread state for a waiting thread.</span><br><span class="hljs-comment">     * A thread is in the waiting state due to calling one of the</span><br><span class="hljs-comment">     * following methods:</span><br><span class="hljs-comment">     * &lt;ul&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> Object#wait() Object.wait&#125; with no timeout&lt;/li&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> #join() Thread.join&#125; with no timeout&lt;/li&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> LockSupport#park() LockSupport.park&#125;&lt;/li&gt;</span><br><span class="hljs-comment">     * &lt;/ul&gt;</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * &lt;p&gt;A thread in the waiting state is waiting for another thread to</span><br><span class="hljs-comment">     * perform a particular action.</span><br><span class="hljs-comment">     等待唤醒，wait，join，park ---释放锁</span><br><span class="hljs-comment">     */</span><br>    WAITING,<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 有时间限制的等待，未释放锁</span><br><span class="hljs-comment">     * &lt;ul&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> #sleep Thread.sleep&#125;&lt;/li&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> Object#wait(long) Object.wait&#125; with timeout&lt;/li&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> #join(long) Thread.join&#125; with timeout&lt;/li&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> LockSupport#parkNanos LockSupport.parkNanos&#125;&lt;/li&gt;</span><br><span class="hljs-comment">     *   &lt;li&gt;&#123;<span class="hljs-doctag">@link</span> LockSupport#parkUntil LockSupport.parkUntil&#125;&lt;/li&gt;</span><br><span class="hljs-comment">     * &lt;/ul&gt;</span><br><span class="hljs-comment">     */</span><br>    TIMED_WAITING,<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 线程执行完毕，暂停线程</span><br><span class="hljs-comment">     */</span><br>    TERMINATED;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -610,9 +622,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E5%AD%A6%E4%B9%A0/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="微服务架构设计模式">
+                      <a href="/2023/06/01/ECS/k8s/k8s-%E5%B0%9A%E7%A1%85%E8%B0%B7/" title="K8S-尚硅谷">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">微服务架构设计模式</span>
+                        <span class="hidden-mobile">K8S-尚硅谷</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -620,8 +632,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E5%AD%A6%E4%B9%A0/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" title="凤凰架构">
-                        <span class="hidden-mobile">凤凰架构</span>
+                      <a href="/2023/06/01/ECS/k8s/k8s-%E9%BB%91%E9%A9%AC/" title="K8S-黑马">
+                        <span class="hidden-mobile">K8S-黑马</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

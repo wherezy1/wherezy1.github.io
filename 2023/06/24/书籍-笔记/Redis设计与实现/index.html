@@ -1,0 +1,927 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis设计与实现第一部分 数据结构与对象第2章 简单动态字符串每个sds.h&#x2F;sdshdr结构表示一个SDS值: 123456789struct sdshdr &amp;#123;   &#x2F;&#x2F;记录buf 数组中已使用字节的数量  &#x2F;&#x2F; 等于SDS所保存字符串的长度  int len;  &#x2F;&#x2F; 记录buf数组中未使用字节的数量  int free;	&#x2F;&#x2F;字节数组，用于保存字符串   char b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis设计与实现">
+<meta property="og:url" content="http://example.com/2023/06/24/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Redis设计与实现第一部分 数据结构与对象第2章 简单动态字符串每个sds.h&#x2F;sdshdr结构表示一个SDS值: 123456789struct sdshdr &amp;#123;   &#x2F;&#x2F;记录buf 数组中已使用字节的数量  &#x2F;&#x2F; 等于SDS所保存字符串的长度  int len;  &#x2F;&#x2F; 记录buf数组中未使用字节的数量  int free;	&#x2F;&#x2F;字节数组，用于保存字符串   char b">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624170855544.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625095653415.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624171921108.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624175515424.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624175327665.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625094418441.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625101544963.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625100505434.png">
+<meta property="article:published_time" content="2023-06-24T09:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:36.792Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="书籍">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="组件">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624170855544.png">
+  
+  
+  
+  <title>Redis设计与实现 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Redis设计与实现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-24 17:00" pubdate>
+          2023年6月24日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          93 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis设计与实现</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Redis设计与实现"><a href="#Redis设计与实现" class="headerlink" title="Redis设计与实现"></a>Redis设计与实现</h1><h1 id="第一部分-数据结构与对象"><a href="#第一部分-数据结构与对象" class="headerlink" title="第一部分 数据结构与对象"></a>第一部分 数据结构与对象</h1><h2 id="第2章-简单动态字符串"><a href="#第2章-简单动态字符串" class="headerlink" title="第2章 简单动态字符串"></a>第2章 简单动态字符串</h2><p>每个sds.h&#x2F;sdshdr结构表示一个SDS值:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sdshdr</span> &#123;</span><br>   <span class="hljs-comment">//记录buf 数组中已使用字节的数量</span><br>  <span class="hljs-comment">// 等于SDS所保存字符串的长度</span><br>  <span class="hljs-type">int</span> len;<br>  <span class="hljs-comment">// 记录buf数组中未使用字节的数量</span><br>  <span class="hljs-type">int</span> <span class="hljs-built_in">free</span>;<br>	<span class="hljs-comment">//字节数组，用于保存字符串</span><br>   <span class="hljs-type">char</span> buf[];<br>   &#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="SDS与C字符串的区别"><a href="#SDS与C字符串的区别" class="headerlink" title="SDS与C字符串的区别"></a>SDS与C字符串的区别</h3><p>C语言使用长度为N+1的字符数组来表示长度为N的字符串，并且字符数组的最后一个元素总是空字符’\0’。</p>
+<h2 id="第3章-链表"><a href="#第3章-链表" class="headerlink" title="第3章 链表"></a>第3章 链表</h2><h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>每个链表节点使用一个adlist.h&#x2F;listNode结构来表示:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> &#123;</span><br>  <span class="hljs-comment">//前置节点</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> * <span class="hljs-title">prev</span>;</span><br><span class="hljs-comment">//后置节点</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">listNode</span> * <span class="hljs-title">next</span>;</span><br><span class="hljs-comment">//节点的值</span><br>  <span class="hljs-type">void</span> * value;<br>&#125;listNode;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c">   <span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">list</span> &#123;</span><br>       <span class="hljs-comment">//</span><br>表头节点<br>       listNode * head;<br><span class="hljs-comment">//</span><br>表尾节点<br>       listNode * tail;<br><span class="hljs-comment">//</span><br>链表所包含的节点数量<br>       <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> len;<br><span class="hljs-comment">//</span><br>节点值复制函数<br>       <span class="hljs-type">void</span> *(*dup)(<span class="hljs-type">void</span> *ptr);<br><span class="hljs-comment">//</span><br>节点值释放函数<br>       <span class="hljs-type">void</span> (*<span class="hljs-built_in">free</span>)(<span class="hljs-type">void</span> *ptr);<br><span class="hljs-comment">//</span><br>节点值对比函数<br>       <span class="hljs-type">int</span> (*match)(<span class="hljs-type">void</span> *ptr,<span class="hljs-type">void</span> *key);<br>   &#125; <span class="hljs-built_in">list</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="第4章-字典"><a href="#第4章-字典" class="headerlink" title="第4章 字典"></a>第4章 字典</h2><h3 id="哈希表dictht"><a href="#哈希表dictht" class="headerlink" title="哈希表dictht"></a>哈希表dictht</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c">   <span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dictht</span> &#123;</span><br>       <span class="hljs-comment">//</span><br>哈希表数组<br>       dictEntry **table;<br><span class="hljs-comment">//</span><br>哈希表大小<br>       <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> size;<br><span class="hljs-comment">//哈希表大小掩码，用于计算索引值</span><br><span class="hljs-comment">// 总是等于size-1</span><br>       <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> sizemask;<br><span class="hljs-comment">//</span><br>该哈希表已有节点的数量<br>       <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> used;<br>   &#125; dictht;<br></code></pre></td></tr></table></figure>
+
+<h3 id="字典dict"><a href="#字典dict" class="headerlink" title="字典dict"></a>字典dict</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><br>   <span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dict</span> &#123;</span><br>       <span class="hljs-comment">//</span><br>类型特定函数<br>       dictType *type;<br><span class="hljs-comment">//</span><br>私有数据<br>       <span class="hljs-type">void</span> *privdata;<br><span class="hljs-comment">//</span><br>哈希表<br>       dictht ht[<span class="hljs-number">2</span>];<br><span class="hljs-comment">// rehash</span><br>索引<br><span class="hljs-comment">// 当rehash</span><br>不在进行时，值为<span class="hljs-number">-1</span><br>in trehashidx; <span class="hljs-comment">/* rehashing not in progress if rehashidx == -1 */</span><br>&#125; dict;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="rehash"><a href="#rehash" class="headerlink" title="rehash"></a>rehash</h3><p>扩展和收缩哈希表的工作可以通过执行rehash(重新散列)操作来 完成，Redis对字典的哈希表执行rehash的步骤如下:</p>
+<p>1)为字典的ht[1]哈希表分配空间，这个哈希表的空间大小取决于 要执行的操作，以及ht[0]当前包含的键值对数量(也即是ht[0].used属性 的值):</p>
+<ul>
+<li>·如果执行的是扩展操作，那么ht[1]的大小为第一个大于等于 ht[0].used*2的2 n (2的n次方幂);</li>
+<li>·如果执行的是收缩操作，那么ht[1]的大小为第一个大于等于 ht[0].used的2 n 。</li>
+</ul>
+<p>2)将保存在ht[0]中的所有键值对rehash到ht[1]上面:rehash指的是 重新计算键的哈希值和索引值，然后将键值对放置到ht[1]哈希表的指定 位置上。</p>
+<p>3)当ht[0]包含的所有键值对都迁移到了ht[1]之后(ht[0]变为空 表)，释放ht[0]，将ht[1]设置为ht[0]，并在ht[1]新创建一个空白哈希 表，为下一次rehash做准备。</p>
+<h3 id="渐进式rehash-重点"><a href="#渐进式rehash-重点" class="headerlink" title="渐进式rehash - 重点"></a>渐进式rehash - 重点</h3><p>以下是哈希表渐进式rehash的详细步骤:</p>
+<p>1)为ht[1]分配空间，让字典同时持有ht[0]和ht[1]两个哈希表。</p>
+<p>2)在字典中维持一个索引计数器变量rehashidx，并将它的值设置 为0，表示rehash工作正式开始。</p>
+<p>3)在rehash进行期间，每次对字典执行添加、删除、查找或者更新 操作时，程序除了执行指定的操作以外，还会顺带将ht[0]哈希表在 rehashidx索引上的所有键值对rehash到ht[1]，当rehash工作完成之后，程 序将rehashidx属性的值增一。</p>
+<p>4)随着字典操作的不断执行，最终在某个时间点上，ht[0]的所有 键值对都会被rehash至ht[1]，这时程序将rehashidx属性的值设为-1，表 示rehash操作已完成。</p>
+<p><strong>特别</strong></p>
+<p>渐进式rehash进行期间，<strong>字典的删除(delete)、查找 (find)、更新(update)等操作会在两个哈希表上进行</strong>。例如，要在 字典里面查找一个键的话，程序会先在ht[0]里面进行查找，如果没找到 的话，就会继续到ht[1]里面进行查找，诸如此类。</p>
+<p>另外，在渐进式rehash执行期间，<strong>新添加到字典的键值对一律会被 保存到ht[1]里面</strong>，而ht[0]则不再进行任何添加操作，这一措施保证了 ht[0]包含的键值对数量会只减不增，并随着rehash操作的执行而最终变 成空表。</p>
+<h2 id="第5章-跳跃表"><a href="#第5章-跳跃表" class="headerlink" title="第5章 跳跃表"></a>第5章 跳跃表</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624170855544.png" srcset="/img/loading.gif" lazyload alt="image-20230624170855544"></p>
+<h3 id="zskipList"><a href="#zskipList" class="headerlink" title="zskipList"></a>zskipList</h3><p>最左边的是zskiplist结构， 该结构包含以下属性:</p>
+<p>·header:指向跳跃表的表头节点。 ·tail:指向跳跃表的表尾节点。 ·level:记录目前跳跃表内，层数最大的那个节点的层数(表头节</p>
+<p>点的层数不计算在内)。</p>
+<p>·length:记录跳跃表的长度，也即是，跳跃表目前包含节点的数 量(表头节点不计算在内)。</p>
+<h3 id="zSkipNode"><a href="#zSkipNode" class="headerlink" title="zSkipNode"></a>zSkipNode</h3><p>四个zskiplistNode结构，该结构包含以下 属性:</p>
+<p>·层(level):节点中用L1、L2、L3等字样标记节点的各个层，L1 代表第一层，L2代表第二层，以此类推。每个层都带有两个属性:前进 指针和跨度。前进指针用于访问位于表尾方向的其他节点，而跨度则记 录了前进指针所指向节点和当前节点的距离。在上面的图片中，连线上 带有数字的箭头就代表前进指针，而那个数字就是跨度。当程序从表头 向表尾进行遍历时，访问会沿着层的前进指针进行。</p>
+<p>·后退(backward)指针:节点中用BW字样标记节点的后退指 针，它指向位于当前节点的前一个节点。后退指针在程序从表尾向表头 遍历时使用。</p>
+<p>·分值(score):各个节点中的1.0、2.0和3.0是节点所保存的分 值。在跳跃表中，节点按各自所保存的分值从小到大排列。</p>
+<p>·成员对象(obj):各个节点中的o1、o2和o3是节点所保存的成员 对象。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>·Redis的跳跃表实现由zskiplist和zskiplistNode两个结构组成，其中 zskiplist用于保存跳跃表信息(比如表头节点、表尾节点、长度)，而 zskiplistNode则用于表示跳跃表节点。</li>
+<li>·每个跳跃表节点的层高都是1至32之间的随机数。</li>
+<li>·在同一个跳跃表中，多个节点可以包含相同的分值，但每个节点的成员对象必须是唯一的。</li>
+<li>·跳跃表中的节点按照分值大小进行排序，当分值相同时，节点按照成员对象的大小进行排序。</li>
+</ul>
+<h2 id="第6章-整数集合"><a href="#第6章-整数集合" class="headerlink" title="第6章 整数集合"></a>第6章 整数集合</h2><p>每个intset.h&#x2F;intset结构表示一个整数集合:</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">typedef</span> struct <span class="hljs-built_in">int</span><span class="hljs-keyword">set</span> &#123;<br>    <span class="hljs-comment">//编码方式</span><br>    <span class="hljs-built_in">uint32</span>_t encoding;<br>    <span class="hljs-comment">//集合包含的元素数量</span><br>    <span class="hljs-built_in">uint32</span>_t length;<br>    <span class="hljs-comment">//保存元素的数组</span><br>    <span class="hljs-built_in">int8</span>_t contents[];<br>&#125; <span class="hljs-built_in">int</span><span class="hljs-keyword">set</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h3><p>每当我们要将一个新元素添加到整数集合里面，并且新元素的类型 比整数集合现有所有元素的类型都要长时，整数集合需要先进行升级 (upgrade)，然后才能将新元素添加到整数集合里面。</p>
+<p>升级整数集合并添加新元素共分为三步进行:</p>
+<ul>
+<li>1)根据新元素的类型，扩展整数集合底层数组的空间大小，并为 新元素分配空间。</li>
+<li>2)将底层数组现有的所有元素都转换成与新元素相同的类型，并 将类型转换后的元素放置到正确的位上，而且在放置元素的过程中，需 要继续维持底层数组的有序性质不变。</li>
+<li>3)将新元素添加到底层数组里面。</li>
+</ul>
+<h3 id="降级-不支持"><a href="#降级-不支持" class="headerlink" title="降级 - 不支持"></a>降级 - 不支持</h3><p>整数集合不支持降级操作，一旦对数组进行了升级，编码就会一直保持升级后的状态。</p>
+<h2 id="第7章-压缩列表"><a href="#第7章-压缩列表" class="headerlink" title="第7章 压缩列表"></a>第7章 压缩列表</h2><h3 id="—结构"><a href="#—结构" class="headerlink" title="—结构"></a>—结构</h3><p>压缩列表是Redis为了节约内存而开发的，是由一系列特殊编码的 连续内存块组成的顺序型(sequential)数据结构。一个压缩列表可以包 含任意多个节点(entry)，每个节点可以保存一个字节数组或者一个整 数值。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625095653415.png" srcset="/img/loading.gif" lazyload alt="image-20230625095653415"></p>
+<h3 id="—总结"><a href="#—总结" class="headerlink" title="—总结"></a>—总结</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs">·压缩列表是一种为节约内存而开发的顺序型数据结构。<br>  ·压缩列表被用作列表键和哈希键的底层实现之一。<br>  ·压缩列表可以包含多个节点，每个节点可以保存一个字节数组或<br>者整数值。<br>  ·添加新节点到压缩列表，或者从压缩列表中删除节点，可能会引<br>发连锁更新操作，但这种操作出现的几率并不高。<br></code></pre></td></tr></table></figure>
+
+<h2 id="第8章-对象"><a href="#第8章-对象" class="headerlink" title="第8章 对象"></a>第8章 对象</h2><p>Redis中的每个对象都由一个redisObject结构表示，该结构中和保存 数据有关的三个属性分别是type属性、encoding属性和ptr属性:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisObject</span> &#123;</span><br>	<span class="hljs-comment">//类型</span><br>	<span class="hljs-type">unsigned</span> type:<span class="hljs-number">4</span>;<br>	<span class="hljs-comment">// 编码</span><br>	<span class="hljs-type">unsigned</span> encoding:<span class="hljs-number">4</span>;<br>	<span class="hljs-comment">//指向底层实现数据结构的指针</span><br>	<span class="hljs-type">void</span> *ptr;<br><span class="hljs-comment">// ... &#125; robj;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624171921108.png" srcset="/img/loading.gif" lazyload alt="image-20230624171921108"></p>
+<p>字符串对象的编码可以是int、raw或者embstr。</p>
+<p>列表对象的编码可以是ziplist或者linkedlist。</p>
+<p>哈希对象的编码可以是ziplist或者hashtable。</p>
+<p>有序集合的编码可以是ziplist或者skiplist。</p>
+<h1 id="第二部分-单机数据库的实现"><a href="#第二部分-单机数据库的实现" class="headerlink" title="第二部分 单机数据库的实现"></a>第二部分 单机数据库的实现</h1><h2 id="第9章-数据库"><a href="#第9章-数据库" class="headerlink" title="第9章 数据库"></a>第9章 数据库</h2><h3 id="过期键删除策略"><a href="#过期键删除策略" class="headerlink" title="过期键删除策略"></a>过期键删除策略</h3><p>这个问题有三种可能的答案，它们分别代表了三种不同的删除策略:</p>
+<ul>
+<li>·定时删除:在设置键的过期时间的同时，创建一个定时器 (timer)，让定时器在键的过期时间来临时，立即执行对键的删除操 作。</li>
+<li>·惰性删除:放任键过期不管，但是每次从键空间中获取键时，都检查取得的键是否过期，如果过期的话，就删除该键;如果没有过期就返回该键。</li>
+<li>·定期删除:每隔一段时间，程序就对数据库进行一次检查，删除里面的过期键。至于要删除多少过期键，以及要检查多少个数据库，则由算法决定。</li>
+</ul>
+<h3 id="AOF、RDB和复制功能对过期键的处理"><a href="#AOF、RDB和复制功能对过期键的处理" class="headerlink" title="AOF、RDB和复制功能对过期键的处理"></a>AOF、RDB和复制功能对过期键的处理</h3><p>生成RDB：已过期的键不会被保存到新创建的RDB 文件中。</p>
+<p>载入RDB：</p>
+<ul>
+<li>·如果服务器以<strong>主服务器</strong>模式运行，那么在载入RDB文件时，程序 会对文件中保存的键进行检查，未过期的键会被载入到数据库中，而过 期键则会被忽略，所以过期键对载入RDB文件的主服务器不会造成影 响。</li>
+<li>·如果服务器以<strong>从服务器</strong>模式运行，那么在载入RDB文件时，文件 中保存的所有键，不论是否过期，都会被载入到数据库中。不过，因为 主从服务器在进行数据同步的时候，从服务器的数据库就会被清空，所 以一般来讲，过期键对载入RDB文件的从服务器也不会造成影响。</li>
+</ul>
+<p>写入AOF：</p>
+<ul>
+<li>当服务器以AOF持久化模式运行时，如果数据库中的某个键已经过 期，但它还<strong>没有被惰性删除或者定期删除</strong>，那么AOF文件不会因为这个 过期键而产生任何影响。</li>
+<li>当过期键<strong>被惰性删除或者定期删除</strong>之后，程序会向AOF文件追加 (append)一条DEL命令，来显式地记录该键已被删除。</li>
+</ul>
+<p>AOF重写：程序会对数据库中的键进行检查，已过期的键不会被保存到重写后的AOF文件中。</p>
+<p>复制：当服务器运行在复制模式下时，从服务器的过期键删除动作由主服务器控制:</p>
+<ul>
+<li>·主服务器在删除一个过期键之后，会显式地向所有从服务器发送 一个DEL命令，告知从服务器删除这个过期键。	  </li>
+<li>·从服务器在执行客户端发送的读命令时，即使碰到过期键也不会将过期键删除，而是继续像处理未过期的键一样来处理过期键。</li>
+<li>·从服务器只有在接到主服务器发来的DEL命令之后，才会删除过 期键。</li>
+</ul>
+<h2 id="第10章-RDB持久化"><a href="#第10章-RDB持久化" class="headerlink" title="第10章 RDB持久化"></a>第10章 RDB持久化</h2><h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><ul>
+<li>SAVE命令会阻塞Redis服务器进程，直到RDB文件创建完毕为止，在服务器进程阻塞期间，服务器不能处理任何命令请求:</li>
+<li>BGSAVE命令会派 生出一个子进程，然后由子进程负责创建RDB文件，服务器进程(父进 程)继续处理命令请求:</li>
+</ul>
+<h3 id="载入"><a href="#载入" class="headerlink" title="载入"></a>载入</h3><p>服务器在载入RDB文件期间，会一直处于阻塞状态，直到载入工作 完成为止。</p>
+<h3 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h3><ul>
+<li>·RDB文件是一个经过压缩的二进制文件，由多个部分组成。</li>
+<li>·对于不同类型的键值对，RDB文件会使用不同的方式来保存它 们。</li>
+</ul>
+<h2 id="第11章-AOF持久化"><a href="#第11章-AOF持久化" class="headerlink" title="第11章 AOF持久化"></a>第11章 AOF持久化</h2><h3 id="写入"><a href="#写入" class="headerlink" title="写入"></a>写入</h3><p>Redis的服务器进程就是一个事件循环(loop)，这个循环中的文件 事件负责接收客户端的命令请求，以及向客户端发送命令回复，而时间 事件则负责执行像serverCron函数这样需要定时运行的函数。</p>
+<h3 id="载入-1"><a href="#载入-1" class="headerlink" title="载入"></a>载入</h3><p>Redis读取AOF文件并还原数据库状态的详细步骤如下:</p>
+<ul>
+<li>1)创建一个不带网络连接的伪客户端(fake client):因为Redis的 命令只能在客户端上下文中执行，而载入AOF文件时所使用的命令直接 来源于AOF文件而不是网络连接，所以服务器使用了一个没有网络连接 的伪客户端来执行AOF文件保存的写命令，伪客户端执行命令的效果和 带网络连接的客户端执行命令的效果完全一样。</li>
+<li>2)从AOF文件中分析并读取出一条写命令。</li>
+<li>3)使用伪客户端执行被读出的写命令。</li>
+<li>4)一直执行步骤2和步骤3，直到AOF文件中的所有写命令都被处 理完毕为止。</li>
+</ul>
+<p>当完成以上步骤之后，AOF文件所保存的数据库状态就会被完整地 还原出来，整个过程如图11-2所示。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624175515424.png" srcset="/img/loading.gif" lazyload alt="image-20230624175515424"></p>
+<h3 id="后台重写"><a href="#后台重写" class="headerlink" title="后台重写"></a>后台重写</h3><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gcode">两个目的:<br>·子进程进行AOF重写期间，服务器进程<span class="hljs-comment">(父进程)</span>可以继续处理 命令请求。<br>·子进程带有服务器进程的数据副本，使用子进程而不是线程，可以在避免使用锁的情况下，保证数据的安全性。<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230624175327665.png" srcset="/img/loading.gif" lazyload alt="image-20230624175327665"></p>
+<p>子进程执行AOF<strong>重写期间</strong>，服务器进程需要执行以 下三个工作:</p>
+<ul>
+<li><p>1)执行客户端发来的命令。</p>
+</li>
+<li><p>2)将执行后的写命令追加到AOF缓冲区。</p>
+</li>
+<li><p>3)将执行后的写命令追加到AOF重写缓冲区。</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">这样一来可以保证:</span><br>·AOF缓冲区的内容会定期被写入和同步到AOF文件，对现有AOF 文件的处理工作会如常进行。<br>·从创建子进程开始，服务器执行的所有写命令都会被记录到AOF 重写缓冲区里面。<br></code></pre></td></tr></table></figure>
+
+<p>当子进程<strong>完成AOF重写工作</strong>之后，它会向父进程发送一个信号，父 进程在接到该信号之后，会调用一个信号处理函数，并执行以下工作:</p>
+<ul>
+<li><p>1)将AOF重写缓冲区中的所有内容写入到新AOF文件中，这时新 AOF文件所保存的数据库状态将和服务器当前的数据库状态一致。</p>
+</li>
+<li><p>2)对新的AOF文件进行改名，原子地(atomic)覆盖现有的AOF 文件，完成新旧两个AOF文件的替换。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs">  这个信号处理函数执行完毕之后，父进程就可以继续像往常一样接<br>受命令请求了。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="第12章-事件"><a href="#第12章-事件" class="headerlink" title="第12章 事件"></a>第12章 事件</h2><p>Redis服务器是一个事件驱动程序，服务器需要处理以下两类事件:</p>
+<ul>
+<li><p>·文件事件(file event):Redis服务器通过套接字与客户端(或者 其他Redis服务器)进行连接，而文件事件就是服务器对套接字操作的抽 象。服务器与客户端(或者其他服务器)的通信会产生相应的文件事 件，而服务器则通过监听并处理这些事件来完成一系列网络通信操作。</p>
+</li>
+<li><p>·时间事件(time event):Redis服务器中的一些操作(比如 serverCron函数)需要在给定的时间点执行，而时间事件就是服务器对 这类定时操作的抽象。</p>
+</li>
+</ul>
+<h2 id="第13章-客户端"><a href="#第13章-客户端" class="headerlink" title="第13章 客户端"></a>第13章 客户端</h2><h3 id="—基本概念"><a href="#—基本概念" class="headerlink" title="—基本概念"></a>—基本概念</h3><p>Redis服务器是典型的一对多服务器程序:一个服务器可以与多个 客户端建立网络连接，每个客户端可以向服务器发送命令请求，而服务 器则接收并处理客户端发送的命令请求，并向客户端返回命令回复。</p>
+<p>通过使用由I&#x2F;O多路复用技术实现的文件事件处理器，Redis服务器 使用单线程单进程的方式来处理命令请求，并与多个客户端进行网络通 信。</p>
+<p>对于每个与服务器进行连接的客户端，服务器都为这些客户端建立 了相应的redis.h&#x2F;redisClient结构(客户端状态)，这个结构保存了客户 端当前的状态信息，以及执行相关功能时需要用到的数据结构，其中包 括:</p>
+<ul>
+<li>·客户端的套接字描述符。</li>
+<li>·客户端的名字。</li>
+<li>·客户端的标志值(flag)。 ·指向客户端正在使用的数据库的指针，以及该数据库的号码。 ·客户端当前要执行的命令、命令的参数、命令参数的个数，以及指向命令实现函数的指针。</li>
+<li>·客户端的输入缓冲区和输出缓冲区。</li>
+<li>·客户端的复制状态信息，以及进行复制所需的数据结构。</li>
+<li>·客户端执行BRPOP、BLPOP等列表阻塞命令时使用的数据结 构。</li>
+<li>·客户端的事务状态，以及执行WATCH命令时用到的数据结构。</li>
+<li>·客户端执行发布与订阅功能时用到的数据结构。</li>
+<li>·客户端的身份验证标志。</li>
+<li>·客户端的创建时间，客户端和服务器最后一次通信的时间，以及 客户端的输出缓冲区大小超出软性限制(soft limit)的时间。</li>
+</ul>
+<p>Redis服务器状态结构的clients属性是一个链表，这个链表保存了所 有与服务器连接的客户端的状态结构，对客户端执行批量操作，或者查 找某个指定的客户端，都可以通过遍历<strong>clients链表</strong>来完成:</p>
+<h3 id="—客户端属性"><a href="#—客户端属性" class="headerlink" title="—客户端属性"></a>—客户端属性</h3><h3 id="—客户端创建和关闭"><a href="#—客户端创建和关闭" class="headerlink" title="—客户端创建和关闭"></a>—客户端创建和关闭</h3><h4 id="Lua脚本的伪客户端"><a href="#Lua脚本的伪客户端" class="headerlink" title="Lua脚本的伪客户端"></a>Lua脚本的伪客户端</h4><p><strong>服务器会在初始化时创建负责执行Lua脚本中包含的Redis命令的伪 客户端</strong>，并将这个伪客户端关联在服务器状态结构的lua_client属性中:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisServer</span> &#123;</span><br>    <span class="hljs-comment">// ...</span><br>    redisClient *lua_client;<br>    <span class="hljs-comment">// ... </span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>lua_client伪客户端在服务器运行的整个生命期中会一直存在，只有 服务器被关闭时，这个客户端才会被关闭。</p>
+<h4 id="AOF文件的伪客户端"><a href="#AOF文件的伪客户端" class="headerlink" title="AOF文件的伪客户端"></a>AOF文件的伪客户端</h4><p><strong>服务器在载入AOF文件时</strong>，会创建用于执行AOF文件包含的Redis 命令的伪客户端，并在载入完成之后，关闭这个伪客户端。</p>
+<h3 id="—总结-1"><a href="#—总结-1" class="headerlink" title="—总结"></a>—总结</h3><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs abnf">·服务器状态结构使用clients链表连接起多个客户端状态，新添加的客户端状态会被放到链表的末尾。<br>·客户端状态的flags属性使用不同标志来表示客户端的角色，以及 客户端当前所处的状态。<br>·输入缓冲区记录了客户端发送的命令请求，这个缓冲区的大小不 能超过<span class="hljs-number">1</span>GB。<br>·命令的参数和参数个数会被记录在客户端状态的argv和argc属性 里面，而cmd属性则记录了客户端要执行命令的实现函数。<br>·客户端有固定大小缓冲区和可变大小缓冲区两种缓冲区可用，其 中固定大小缓冲区的最大大小为<span class="hljs-number">16</span>KB，而可变大小缓冲区的最大大小 不能超过服务器设置的硬性限制值。<br>·输出缓冲区限制值有两种，如果输出缓冲区的大小超过了服务器设置的硬性限制，那么客户端会被立即关闭<span class="hljs-comment">;除此之外，如果客户端在一定时间内，一直超过服务器设置的软性限制，那么客户端也会被关闭。</span><br>·当一个客户端通过网络连接连上服务器时，服务器会为这个客户 端创建相应的客户端状态。网络连接关闭、发送了不合协议格式的命令 请求、成为CLIENT KILL命令的目标、空转时间超时、输出缓冲区的大 小超出限制，以上这些原因都会造成客户端被关闭。<br>·处理Lua脚本的伪客户端在服务器初始化时创建，这个客户端会 一直存在，直到服务器关闭。<br>·载入AOF文件时使用的伪客户端在载入工作开始时动态创建，载 入工作完毕之后关闭。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="第14章-服务器"><a href="#第14章-服务器" class="headerlink" title="第14章 服务器"></a>第14章 服务器</h2><p>Redis服务器负责与多个客户端建立网络连接，处理客户端发送的 命令请求，在数据库中保存客户端执行命令所产生的数据，并通过资源 管理来维持服务器自身的运转。</p>
+<h3 id="—命令请求过程"><a href="#—命令请求过程" class="headerlink" title="—命令请求过程"></a>—命令请求过程</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css"><br>·一个命令请求从发送到完成主要包括以下步骤:<span class="hljs-number">1</span>)客户端将命 令请求发送给服务器;<span class="hljs-number">2</span>)服务器读取命令请求，并分析出命令参数; <span class="hljs-number">3</span>)命令执行器根据参数查找命令的实现函数，然后执行实现函数并得 出命令回复;<span class="hljs-number">4</span>)服务器将命令回复返回给客户端。<br></code></pre></td></tr></table></figure>
+
+
+
+<p>关键词：redisClient、redisCommand、argv、argc、buf、</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625094418441.png" srcset="/img/loading.gif" lazyload alt="image-20230625094418441"></p>
+<h3 id="—serverCron函数执行"><a href="#—serverCron函数执行" class="headerlink" title="—serverCron函数执行"></a>—serverCron函数执行</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">·serverCron函数默认每隔100毫秒执行一次，它的工作主要包括更 新服务器状态信息，处理服务器接收的SIGTERM信号，管理客户端资 源和数据库状态，检查并执行持久化操作等等。<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="—初始化服务器"><a href="#—初始化服务器" class="headerlink" title="—初始化服务器"></a>—初始化服务器</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">·服务器从启动到能够处理客户端的命令请求需要执行以下步骤: <span class="hljs-number">1</span>)初始化服务器状态;<span class="hljs-number">2</span>)载入服务器配置;<span class="hljs-number">3</span>)初始化服务器数据结 构;<span class="hljs-number">4</span>)还原数据库状态;<span class="hljs-number">5</span>)执行事件循环<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="第三部分-多机数据库的实现"><a href="#第三部分-多机数据库的实现" class="headerlink" title="第三部分 多机数据库的实现"></a>第三部分 多机数据库的实现</h1><h2 id="第15章-复制"><a href="#第15章-复制" class="headerlink" title="第15章 复制"></a>第15章 复制</h2><p>在Redis中，用户可以通过执行SLAVEOF命令或者设置slaveof选 项，让一个服务器去复制(replicate)另一个服务器，我们称呼被复制 的服务器为主服务器(master)，而对主服务器进行复制的服务器则被 称为从服务器(slave)，如图15-1所示。</p>
+<h3 id="—旧版实现"><a href="#—旧版实现" class="headerlink" title="—旧版实现"></a>—旧版实现</h3><p>Redis的复制功能分为同步(sync)和命令传播(commandpropagate)两个操作: </p>
+<ul>
+<li><p>·同步操作用于将从服务器的数据库状态更新至主服务器当前所处的数据库状态。</p>
+</li>
+<li><p>·命令传播操作则用于在主服务器的数据库状态被修改，导致主从服务器的数据库状态出现不一致时，让主从服务器的数据库重新回到一致状态。</p>
+</li>
+</ul>
+<h3 id="旧版缺陷分析"><a href="#旧版缺陷分析" class="headerlink" title="旧版缺陷分析"></a>旧版缺陷分析</h3><p>在Redis中，从服务器对主服务器的复制可以分为以下两种情况:</p>
+<ul>
+<li>·<strong>初次复制</strong>:从服务器以前没有复制过任何主服务器，或者从服务<br>  器当前要复制的主服务器和上一次复制的主服务器不同。</li>
+<li>·<strong>断线后重复制</strong>:处于命令传播阶段的主从服务器因为网络原因而<br>  中断了复制，但从服务器通过自动重连接重新连上了主服务器，并继续<br>  复制主服务器。</li>
+</ul>
+<p>对于初次复制来说，旧版复制功能能够很好地完成任务，但对于断线后重复制来说，旧版复制功能虽然也能让主从服务器重新回到一致状<br>态，但效率却非常低。</p>
+<h3 id="—新版实现"><a href="#—新版实现" class="headerlink" title="—新版实现"></a>—新版实现</h3><p>PSYNC命令具有完整重同步(full resynchronization)和部分重同步 (partial resynchronization)两种模式:</p>
+<ul>
+<li><p>·其中完整重同步用于处理初次复制情况:完整重同步的执行步骤 和SYNC命令的执行步骤基本一样，它们都是通过让主服务器创建并发 送RDB文件，以及向从服务器发送保存在缓冲区里面的写命令来进行同 步。</p>
+</li>
+<li><p>·而部分重同步则用于处理断线后重复制情况:当从服务器在断线后重新连接主服务器时，如果条件允许，主服务器可以将主从服务器连接断开期间执行的写命令发送给从服务器，从服务器只要接收并执行这些写命令，就可以将数据库更新至主服务器当前所处的状态。</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625101544963.png" srcset="/img/loading.gif" lazyload alt="image-20230625101544963"></p>
+<h2 id="第16章-Sentinel"><a href="#第16章-Sentinel" class="headerlink" title="第16章 Sentinel"></a>第16章 Sentinel</h2><p>Sentinel(哨岗、哨兵)是Redis的高可用性(high availability)解决 方案:由一个或多个Sentinel实例(instance)组成的Sentinel系统 (system)可以监视任意多个主服务器，以及这些主服务器属下的所有 从服务器，并在被监视的主服务器进入下线状态时，自动将下线主服务 器属下的某个从服务器升级为新的主服务器，然后由新的主服务器代替 已下线的主服务器继续处理命令请求。</p>
+<h3 id="故障转移"><a href="#故障转移" class="headerlink" title="故障转移"></a>故障转移</h3><p>在选举产生出领头Sentinel之后，领头Sentinel将对已下线的主服务</p>
+<p>器执行故障转移操作，该操作包含以下三个步骤:</p>
+<p>1)在已下线主服务器属下的所有从服务器里面，挑选出一个从服 务器，并将其转换为主服务器。</p>
+<p>2)让已下线主服务器属下的所有从服务器改为复制新的主服务 器。</p>
+<p>3)将已下线主服务器设置为新的主服务器的从服务器，当这个旧 的主服务器重新上线时，它就会成为新的主服务器的从服务器。</p>
+<h2 id="第17章-集群"><a href="#第17章-集群" class="headerlink" title="第17章 集群"></a>第17章 集群</h2><p>Redis集群是Redis提供的分布式数据库方案，集群通过分片(sharding)来进行数据共享，并提供复制和故障转移功能。</p>
+<p>  本节将对集群的节点、槽指派、命令执行、重新分片、转向、故障转移、消息等各个方面进行介绍。</p>
+<h3 id="—节点"><a href="#—节点" class="headerlink" title="—节点"></a>—节点</h3><p>一个Redis集群通常由多个节点(node)组成，在刚开始的时候， 每个节点都是相互独立的，它们都处于一个只包含自己的集群当中，要 组建一个真正可工作的集群，我们必须将各个独立的节点连接起来，构 成一个包含多个节点的集群。</p>
+<p>连接各个节点的工作可以使用CLUSTER MEET命令来完成，该命 令的格式如下:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">CLUSTER MEET <span class="hljs-tag">&lt;<span class="hljs-name">ip</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">port</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>向一个节点node发送CLUSTER MEET命令，可以让node节点与ip和 port所指定的节点进行握手(handshake)，当握手成功时，node节点就 会将ip和port所指定的节点添加到node节点当前所在的集群中。</p>
+<h3 id="—槽指派"><a href="#—槽指派" class="headerlink" title="—槽指派"></a>—槽指派</h3><p>Redis集群通过分片的方式来保存数据库中的键值对:集群的整个 数据库被分为16384个槽(slot)，数据库中的每个键都属于这16384个 槽的其中一个，集群中的每个节点可以处理0个或最多16384个槽。</p>
+<p>当数据库中的16384个槽都有节点在处理时，集群处于上线状态 (ok);相反地，如果数据库中有任何一个槽没有得到处理，那么集群 处于下线状态(fail)。</p>
+<p>通过向节点发送CLUSTER ADDSLOTS命令，我们可以将一个或多个槽指派(assign)给节点负责: </p>
+<p>CLUSTER ADDSLOTS <slot> [slot …]</p>
+<h3 id="—在集群中执行命令"><a href="#—在集群中执行命令" class="headerlink" title="—在集群中执行命令"></a>—在集群中执行命令</h3><p>在对数据库中的16384个槽都进行了指派之后，集群就会进入上线状态，这时客户端就可以向集群中的节点发送数据命令了。</p>
+<p>当客户端向节点发送与数据库键有关的命令时，接收命令的节点会<br>计算出命令要处理的数据库键属于哪个槽，并检查这个槽是否指派给了<br>自己:</p>
+<ul>
+<li><p>·如果键所在的槽正好就指派给了当前节点，那么节点直接执行这<br>  个命令。</p>
+</li>
+<li><p>·如果键所在的槽并没有指派给当前节点，那么节点会向客户端返 回一个MOVED错误，指引客户端转向(redirect)至正确的节点，并再 次发送之前想要执行的命令。</p>
+</li>
+</ul>
+<h3 id="—分片"><a href="#—分片" class="headerlink" title="—分片"></a>—分片</h3><p>Redis集群的重新分片操作可以将任意数量已经指派给某个节点 (源节点)的槽改为指派给另一个节点(目标节点)，并且相关槽所属 的键值对也会从源节点被移动到目标节点。</p>
+<p>重新分片操作可以在线(online)进行，在重新分片的过程中，集 群不需要下线，并且源节点和目标节点都可以继续处理命令请求。</p>
+<p>重新分片的实现原理</p>
+<p>Redis集群的重新分片操作是由Redis的集群管理软件redis-trib负责 执行的，Redis提供了进行重新分片所需的所有命令，而redis-trib则通过 向源节点和目标节点发送命令来进行重新分片操作。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230625100505434.png" srcset="/img/loading.gif" lazyload alt="image-20230625100505434"></p>
+<h3 id="—复制与故障转移"><a href="#—复制与故障转移" class="headerlink" title="—复制与故障转移"></a>—复制与故障转移</h3><p>Redis集群中的节点分为主节点(master)和从节点(slave)，其中 主节点用于处理槽，而从节点则用于复制某个主节点，并在被复制的主 节点下线时，代替下线主节点继续处理命令请求。</p>
+<h1 id="第四部分-独立功能的实现-源码"><a href="#第四部分-独立功能的实现-源码" class="headerlink" title="第四部分 独立功能的实现-源码"></a>第四部分 独立功能的实现-源码</h1><h2 id="第18章-发布与订阅"><a href="#第18章-发布与订阅" class="headerlink" title="第18章 发布与订阅"></a>第18章 发布与订阅</h2><p>Redis的发布与订阅功能由PUBLISH、SUBSCRIBE、PSUBSCRIBE等命令组成。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">·服务器状态在pubsub_channels字典保存了所有频道的订阅关系: SUBSCRIBE命令负责将客户端和被订阅的频道关联到这个字典里面，而 UNSUBSCRIBE命令则负责解除客户端和被退订频道之间的关联。</span><br><span class="hljs-section">·服务器状态在pubsub_patterns链表保存了所有模式的订阅关系: PSUBSCRIBE命令负责将客户端和被订阅的模式记录到这个链表中，而 PUNSUBSCRIBE命令则负责移除客户端和被退订模式在链表中的记 录。</span><br>·PUBLISH命令通过访问pubsub_channels字典来向频道的所有订阅 者发送消息，通过访问pubsub_patterns链表来向所有匹配频道的模式的 订阅者发送消息。<br>·PUBSUB命令的三个子命令都是通过读取pubsub_channels字典和 pubsub_patterns链表中的信息来实现的。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="第19章-事务"><a href="#第19章-事务" class="headerlink" title="第19章 事务"></a>第19章 事务</h2><p>Redis通过MULTI、EXEC、WATCH等命令来实现事</p>
+<h2 id="第20章-Lua脚本"><a href="#第20章-Lua脚本" class="headerlink" title="第20章 Lua脚本"></a>第20章 Lua脚本</h2><p>Redis从2.6版本开始引入对Lua脚本的支持，通过在服务器中嵌入 Lua环境，Redis客户端可以使用Lua脚本，直接在服务器端原子地执行 多个Redis命令。</p>
+<h2 id="第21章-排序"><a href="#第21章-排序" class="headerlink" title="第21章 排序"></a>第21章 排序</h2><h2 id="第22章-二进制位数组"><a href="#第22章-二进制位数组" class="headerlink" title="第22章 二进制位数组"></a>第22章 二进制位数组</h2><h2 id="第23章-慢查询日志"><a href="#第23章-慢查询日志" class="headerlink" title="第23章 慢查询日志"></a>第23章 慢查询日志</h2><h2 id="第24章-监视器"><a href="#第24章-监视器" class="headerlink" title="第24章 监视器"></a>第24章 监视器</h2>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BB%84%E4%BB%B6/" class="category-chain-item">组件</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BB%84%E4%BB%B6/%E4%B9%A6%E7%B1%8D/" class="category-chain-item">书籍</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B9%A6%E7%B1%8D/">#书籍</a>
+      
+        <a href="/tags/redis/">#redis</a>
+      
+        <a href="/tags/%E7%BB%84%E4%BB%B6/">#组件</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis设计与实现</div>
+      <div>http://example.com/2023/06/24/书籍-笔记/Redis设计与实现/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/25/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Kafka%EF%BC%9A%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" title="深入理解Kafka：核心设计和实现原理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">深入理解Kafka：核心设计和实现原理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/24/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3OSGi/" title="深入理解OSGi">
+                        <span class="hidden-mobile">深入理解OSGi</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

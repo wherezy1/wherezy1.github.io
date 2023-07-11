@@ -16,12 +16,12 @@
   <meta name="author" content="where">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Spring Boot启动流程 SpringApplication 初始化 – 通过springFactoryLoader加载ApplicationLisener 和 ApplicationInitailize SpringApplication run方法，进行上下文初始化，主要是对context的准备工作 ​	包括：配置文件ymal，properties的加载，Environment环境变量的">
+    <meta name="description" content="Spring Boot启动流程SpringApplication 初始化 – 通过springFactoryLoader加载ApplicationLisener 和 ApplicationInitailize SpringApplication run方法，进行上下文初始化，主要是对context的准备工作 ​	包括：配置文件ymal，properties的加载，Environment环境变量的获">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Boot">
 <meta property="og:url" content="http://example.com/2023/06/01/Spring%E5%AE%B6%E6%97%8F/Spring%20Boot/index.html">
 <meta property="og:site_name" content="where&#39;s blog">
-<meta property="og:description" content="Spring Boot启动流程 SpringApplication 初始化 – 通过springFactoryLoader加载ApplicationLisener 和 ApplicationInitailize SpringApplication run方法，进行上下文初始化，主要是对context的准备工作 ​	包括：配置文件ymal，properties的加载，Environment环境变量的">
+<meta property="og:description" content="Spring Boot启动流程SpringApplication 初始化 – 通过springFactoryLoader加载ApplicationLisener 和 ApplicationInitailize SpringApplication run方法，进行上下文初始化，主要是对context的准备工作 ​	包括：配置文件ymal，properties的加载，Environment环境变量的获">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230403140959807.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230403141946420.png">
@@ -123,7 +123,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230407235054392.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/aaaa.png">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-06-22T15:33:40.706Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:36.790Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary_large_image">
@@ -374,8 +374,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h1><p>启动流程</p>
-<p>SpringApplication 初始化 – 通过springFactoryLoader加载ApplicationLisener 和 ApplicationInitailize</p>
+                <h1 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h1><h1 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h1><p>SpringApplication 初始化 – 通过springFactoryLoader加载ApplicationLisener 和 ApplicationInitailize</p>
 <p>SpringApplication run方法，进行上下文初始化，主要是对context的准备工作</p>
 <p>​	包括：配置文件ymal，properties的加载，Environment环境变量的获取和设置，</p>
 <p>​			初始化Context，并实例化AnnotationBeanDefinitionReader等用于读取Resource,注册为BeanDefinitoin的读取器，将Component注解的类注册为BeanDefinition（主要为Configuraiton），会在InvokeBeanFactoryPostProcessor()方法中进行各种 配置类的解析，注入（@Import注解，@Bean，Component，ComponentScan，Import，ImportResource）</p>
@@ -416,7 +415,10 @@
 
 
 
-<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230403141946420.png" srcset="/img/loading.gif" lazyload alt="image-20230403141946420"></p>
+<img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230403141946420.png" srcset="/img/loading.gif" lazyload alt="image-20230403141946420"  />
+
+
+
 <h4 id="LifecycleProcessor"><a href="#LifecycleProcessor" class="headerlink" title="LifecycleProcessor"></a>LifecycleProcessor</h4><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230403142450132.png" srcset="/img/loading.gif" lazyload alt="image-20230403142450132"></p>
 <h4 id="AbstractEnvironment"><a href="#AbstractEnvironment" class="headerlink" title="AbstractEnvironment"></a>AbstractEnvironment</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractEnvironment</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ConfigurableEnvironment</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">IGNORE_GETENV_PROPERTY_NAME</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;spring.getenv.ignore&quot;</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">ACTIVE_PROFILES_PROPERTY_NAME</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;spring.profiles.active&quot;</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">DEFAULT_PROFILES_PROPERTY_NAME</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;spring.profiles.default&quot;</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">RESERVED_DEFAULT_PROFILE_NAME</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;default&quot;</span>;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Log</span> <span class="hljs-variable">logger</span> <span class="hljs-operator">=</span> LogFactory.getLog(<span class="hljs-built_in">this</span>.getClass());<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Set&lt;String&gt; activeProfiles = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedHashSet</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Set&lt;String&gt; defaultProfiles = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedHashSet</span>(<span class="hljs-built_in">this</span>.getReservedDefaultProfiles());<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">MutablePropertySources</span> <span class="hljs-variable">propertySources</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MutablePropertySources</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ConfigurablePropertyResolver propertyResolver;<br>&#125;<br></code></pre></td></tr></table></figure>
 

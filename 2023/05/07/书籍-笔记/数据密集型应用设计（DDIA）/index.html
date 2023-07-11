@@ -1,0 +1,717 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="数据密集型应用设计（DDIA）DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com) 第三章：存储与检索 (vonng.com) 第一部分：数据系统基础第一章 可靠性、可伸缩性和可维护性第二章 数据模型与查询语言数据模型在计算机科学和数据库中，常见的数据模型包括以下几种：  层次模型（Hierarchical Model）：层次模型是一种树状的数据结构，其中数据组织成为一个以父节点和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据密集型应用设计（DDIA）">
+<meta property="og:url" content="http://example.com/2023/05/07/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1%EF%BC%88DDIA%EF%BC%89/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="数据密集型应用设计（DDIA）DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com) 第三章：存储与检索 (vonng.com) 第一部分：数据系统基础第一章 可靠性、可伸缩性和可维护性第二章 数据模型与查询语言数据模型在计算机科学和数据库中，常见的数据模型包括以下几种：  层次模型（Hierarchical Model）：层次模型是一种树状的数据结构，其中数据组织成为一个以父节点和">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig6-4.png">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig6-5.png">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig6-6.png">
+<meta property="article:published_time" content="2023-05-07T02:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:37.803Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="书籍">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://ddia.vonng.com/img/fig6-4.png">
+  
+  
+  
+  <title>数据密集型应用设计（DDIA） - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据密集型应用设计（DDIA）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-05-07 10:00" pubdate>
+          2023年5月7日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数据密集型应用设计（DDIA）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="数据密集型应用设计（DDIA）"><a href="#数据密集型应用设计（DDIA）" class="headerlink" title="数据密集型应用设计（DDIA）"></a>数据密集型应用设计（DDIA）</h1><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/beta/article/1676119">DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<p><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3">第三章：存储与检索 (vonng.com)</a></p>
+<h1 id="第一部分：数据系统基础"><a href="#第一部分：数据系统基础" class="headerlink" title="第一部分：数据系统基础"></a>第一部分：数据系统基础</h1><h2 id="第一章-可靠性、可伸缩性和可维护性"><a href="#第一章-可靠性、可伸缩性和可维护性" class="headerlink" title="第一章 可靠性、可伸缩性和可维护性"></a>第一章 可靠性、可伸缩性和可维护性</h2><h2 id="第二章-数据模型与查询语言"><a href="#第二章-数据模型与查询语言" class="headerlink" title="第二章 数据模型与查询语言"></a>第二章 数据模型与查询语言</h2><h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p>在计算机科学和数据库中，常见的数据模型包括以下几种：</p>
+<ol>
+<li><p>层次模型（Hierarchical Model）：<br>层次模型是一种树状的数据结构，其中数据组织成为一个以父节点和子节点之间具有父子关系的层级结构。这种模型适合表示具有明确父子关系的数据。层次模型的代表是IBM的IMS（Information Management System）。</p>
+</li>
+<li><p>网状模型（Network Model）：<br>网状模型是一种网络连接的数据结构，其中数据可以具有多对多的关系。它通过指针连接数据记录，并且一个数据记录可以连接到多个其他记录。网状模型主要用于处理复杂的关系和连接，常见的网状数据库系统是IDMS（Integrated Database Management System）。</p>
+</li>
+<li><p>关系模型（Relational Model）：<br>关系模型是一种基于关系代数的数据模型，它使用表格（关系）来组织和管理数据。关系模型将数据划分为各种属性，每个属性在关系中表示为列，每个实体在关系中表示为行。关系模型最成熟且广泛使用，常用的关系型数据库包括MySQL，Oracle，SQL Server等。</p>
+</li>
+<li><p>对象模型（Object Model）：<br>对象模型是一种基于面向对象思想的数据模型，它将数据和操作封装到对象中，用于描述现实世界中的实体和其之间的关系。对象模型适合表示复杂的结构和关系，常用的对象数据库有MongoDB。</p>
+</li>
+<li><p>文档模型（Document Model）：<br>文档模型是一种无模式（Schema-less）的数据模型，数据以自包含的文档形式存储，如JSON或XML。文档模型适合存储半结构化数据和灵活、动态的数据模式。常用的文档数据库有MongoDB和CouchDB。</p>
+</li>
+<li><p>键值模型（Key-Value Model）：<br>键值模型是一种简单的数据模型，它将数据存储为键值对，每个键都是唯一的。这种模型适用于快速查询和存储大量简单数据的场景，常见的键值数据库有Redis和Memcached。</p>
+</li>
+</ol>
+<p>这些是常见的数据模型，并且每种模型有其特定的使用场景和优势。根据实际需求和数据结构，可以选择适合的数据模型来组织和管理数据。</p>
+<h2 id="存储与检索"><a href="#存储与检索" class="headerlink" title="存储与检索"></a>存储与检索</h2><p>存储数据结构结构 ：散列索引、B树、SSTable、LSM树</p>
+<h1 id="第二部分：分布式数据"><a href="#第二部分：分布式数据" class="headerlink" title="第二部分：分布式数据"></a>第二部分：分布式数据</h1><h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><h2 id="分区（片）"><a href="#分区（片）" class="headerlink" title="分区（片）"></a>分区（片）</h2><blockquote>
+<p>**分区 (partition)**，在 MongoDB，Elasticsearch 和 Solr Cloud 中被称为 **分片 (shard)**，在 HBase 中称之为 **区域 (Region)**，Bigtable 中则是 **表块（tablet）**，Cassandra 和 Riak 中是 **虚节点（vnode)**，Couchbase 中叫做 **虚桶 (vBucket)*<em>。但是 *<em>分区 (partitioning)</em></em> 是最约定俗成的叫法。</p>
+</blockquote>
+<h3 id="键值数据模型-–-的分区"><a href="#键值数据模型-–-的分区" class="headerlink" title="键值数据模型  – 的分区"></a>键值数据模型  – 的分区</h3><p>键范围分区</p>
+<blockquote>
+</blockquote>
+<h3 id="次级索引-–-的分区"><a href="#次级索引-–-的分区" class="headerlink" title="次级索引 – 的分区"></a>次级索引 – 的分区</h3><p>次级索引的问题是它们不能整齐地映射到分区。有两种用次级索引对数据库进行分区的方法：<strong>基于文档的分区（document-based）</strong> 和 <strong>基于关键词（term-based）的分区</strong></p>
+<blockquote>
+<p>使用场景：次级索引是关系型数据库的基础，并且在文档数据库中也很普遍。许多键值存储（如 HBase 和 Volde-mort）为了减少实现的复杂度而放弃了次级索引，但是一些（如 Riak）已经开始添加它们，因为它们对于数据模型实在是太有用了。并且次级索引也是 Solr 和 Elasticsearch 等搜索服务器的基石。</p>
+</blockquote>
+<p>基于文档的分区</p>
+<p>确保你的索引与底层数据保持一致。 竞争条件和间歇性写入失败（其中一些更改已保存，但其他更改未保存）很容易<strong>导致数据不同步</strong> - 请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch7?id=%E5%A4%9A%E5%AF%B9%E8%B1%A1%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9C%80%E6%B1%82">多对象事务的需求</a>”。</p>
+<p><img src="http://ddia.vonng.com/img/fig6-4.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在这种索引方法中，每个分区是完全独立的：每个分区维护自己的次级索引，仅覆盖该分区中的文档。它不关心存储在其他分区的数据。无论何时你需要写入数据库（添加，删除或更新文档），只需处理包含你正在编写的文档 ID 的分区即可。出于这个原因，<strong>文档分区索引</strong> 也被称为 <strong>本地索引</strong>（而不是将在下一节中描述的 <strong>全局索引</strong>）。</p>
+<p>如果要搜索红色汽车，则需要将查询发送到所有分区，并合并所有返回的结果。</p>
+<p>这种查询分区数据库的方法有时被称为 <strong>分散 &#x2F; 聚集（scatter&#x2F;gather）</strong>，并且可能会使次级索引上的读取查询相当昂贵。即使并行查询分区，分散 &#x2F; 聚集也容易导致<strong>尾部延迟</strong>放大。</p>
+<p>基于关键词的分区</p>
+<p>我们可以构建一个覆盖所有分区数据的 <strong>全局索引</strong>，而不是给每个分区创建自己的次级索引（本地索引）。但是，我们不能只把这个索引存储在一个节点上，因为它可能会成为瓶颈，违背了分区的目的。全局索引也必须进行分区，但可以采用与主键不同的分区方式。（简历全局索引，并进行分区存储）</p>
+<p><img src="http://ddia.vonng.com/img/fig6-5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>优点：读取更有效率：不需要 <strong>分散 &#x2F; 收集</strong> 所有分区</p>
+<p>缺点：全局索引的缺点在于写入速度较慢且较为复杂，写入单个文档现在可能会影响索引的多个分区</p>
+<h3 id="分区再平衡-–-Rebalance"><a href="#分区再平衡-–-Rebalance" class="headerlink" title="分区再平衡 – Rebalance"></a>分区再平衡 – Rebalance</h3><h4 id="反面教材：hash-mod-N"><a href="#反面教材：hash-mod-N" class="headerlink" title="反面教材：hash mod N"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch6?id=%E5%8F%8D%E9%9D%A2%E6%95%99%E6%9D%90%EF%BC%9Ahash-mod-n">反面教材：hash mod N</a></h4><p>节点大量迁移 ： 模 N（mod N）方法的问题是，如果节点数量 N 发生变化，大多数键将需要从一个节点移动到另一个节点。</p>
+<h4 id="固定数量的分区"><a href="#固定数量的分区" class="headerlink" title="固定数量的分区"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch6?id=%E5%9B%BA%E5%AE%9A%E6%95%B0%E9%87%8F%E7%9A%84%E5%88%86%E5%8C%BA">固定数量的分区</a></h4><p>定义：固定分区数量，例如10个节点（Node），划分100个分区</p>
+<p>节点增加：将闲置分区分给新节点</p>
+<p>节点减少：将删除节点分区 重新分配到 现有节点</p>
+<p>只有分区在节点之间的移动。分区的数量不会改变，键所指定的分区也不会改变。唯一改变的是分区所在的节点。</p>
+<p>问题：在网络上传输大量的数据需要一些时间 — 所以在传输过程中，原有分区仍然会接受读写操作。</p>
+<p>使用场景分析：</p>
+<blockquote>
+<p>在这种配置中，分区的数量通常在数据库第一次建立时确定，之后不会改变。</p>
+<p>如果数据集的总大小难以预估（例如，可能它开始很小，但随着时间的推移会变得更大），选择正确的分区数是困难的。由于每个分区包含了总数据量固定比率的数据，因此每个分区的大小与集群中的数据总量成比例增长。如果分区非常大，再平衡和从节点故障恢复变得昂贵。但是，如果分区太小，则会产生太多的开销。当分区大小 “恰到好处” 的时候才能获得很好的性能，如果分区数量固定，但数据量变动很大，则难以达到最佳性能。</p>
+</blockquote>
+<p><img src="http://ddia.vonng.com/img/fig6-6.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="动态分区"><a href="#动态分区" class="headerlink" title="动态分区"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch6?id=%E5%8A%A8%E6%80%81%E5%88%86%E5%8C%BA">动态分区</a></h4><p>对于使用键范围分区的数据库（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch6?id=%E6%A0%B9%E6%8D%AE%E9%94%AE%E7%9A%84%E8%8C%83%E5%9B%B4%E5%88%86%E5%8C%BA">根据键的范围分区</a>”），具有固定边界的固定数量的分区将非常不便：如果出现边界错误，则可能会导致一个分区中的所有数据或者其他分区中的所有数据为空。手动重新配置分区边界将非常繁琐。</p>
+<p>按键的范围进行分区的数据库（如 HBase 和 RethinkDB）会动态创建分区。当分区增长到超过配置的大小时（在 HBase 上，默认值是 10GB），会被分成两个分区，每个分区约占一半的数据【26】。与之相反，如果大量数据被删除并且分区缩小到某个阈值以下，则可以将其与相邻分区合并。此过程与 B 树顶层发生的过程类似（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=b%E6%A0%91">B 树</a>”）。</p>
+<h4 id="按节点比例分区"><a href="#按节点比例分区" class="headerlink" title="按节点比例分区"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch6?id=%E6%8C%89%E8%8A%82%E7%82%B9%E6%AF%94%E4%BE%8B%E5%88%86%E5%8C%BA">按节点比例分区</a></h4><p>通过动态分区，分区的数量与数据集的大小成正比，因为拆分和合并过程将每个分区的大小保持在固定的最小值和最大值之间。另一方面，对于固定数量的分区，每个分区的大小与数据集的大小成正比。在这两种情况下，分区的数量都与节点的数量无关。</p>
+<p>Cassandra 和 Ketama 使用的第三种方法是使分区数与节点数成正比 —— 换句话说，每个节点具有固定数量的分区【23,27,28】。在这种情况下，每个分区的大小与数据集大小成比例地增长，而节点数量保持不变，但是当增加节点数时，分区将再次变小。由于较大的数据量通常需要较大数量的节点进行存储，因此这种方法也使每个分区的大小较为稳定。</p>
+<p>当一个新节点加入集群时，它随机选择固定数量的现有分区进行拆分，然后占有这些拆分分区中每个分区的一半，同时将每个分区的另一半留在原地。随机化可能会产生不公平的分割，但是平均在更大数量的分区上时（在 Cassandra 中，默认情况下，每个节点有 256 个分区），新节点最终从现有节点获得公平的负载份额。 Cassandra 3.0 引入了另一种再平衡的算法来避免不公平的分割【29】。</p>
+<p>随机选择分区边界要求使用基于散列的分区（可以从散列函数产生的数字范围中挑选边界）。实际上，这种方法最符合一致性哈希的原始定义【7】（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch6?id=%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C">一致性哈希</a>”）。最新的哈希函数可以在较低元数据开销的情况下达到类似的效果【8】。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/snefsnef/article/details/124533544?spm=1001.2014.3001.5502">(6条消息) 浅析分布式系统之体系结构 - 事务与隔离级别（多对象、多操作）上篇_snefsnef的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/snefsnef/article/details/125228632?spm=1001.2014.3001.5502">(6条消息) 浅析分布式系统之体系结构 - 事务与隔离级别（多对象、多操作）下篇_snefsnef的博客-CSDN博客</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E4%B9%A6%E7%B1%8D/" class="category-chain-item">书籍</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+        <a href="/tags/%E4%B9%A6%E7%B1%8D/">#书籍</a>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据密集型应用设计（DDIA）</div>
+      <div>http://example.com/2023/05/07/书籍-笔记/数据密集型应用设计（DDIA）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年5月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%A6%82%E8%BF%B0/" title="消息队列概述">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">消息队列概述</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

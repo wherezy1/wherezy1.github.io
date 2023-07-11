@@ -1,0 +1,877 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis概述应用场景(13条消息) Redis 16 个常见使用场景_redis使用场景_Young丶的博客-CSDN博客 11、点赞、签到、打卡用 like:t1001 来维护 t1001 这条微博的所有点赞用户 点赞了这条微博：sadd like:t1001 u3001取消点赞：srem like:t1001 u3001是否点赞：sismember like:t1001 u3001点赞的所有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis概述">
+<meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Redis%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Redis概述应用场景(13条消息) Redis 16 个常见使用场景_redis使用场景_Young丶的博客-CSDN博客 11、点赞、签到、打卡用 like:t1001 来维护 t1001 这条微博的所有点赞用户 点赞了这条微博：sadd like:t1001 u3001取消点赞：srem like:t1001 u3001是否点赞：sismember like:t1001 u3001点赞的所有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8f8f2356fb2c4955213c5b114113a811_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-fc8e2a11644c48b023e4fa974d9bba04_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230411075253724.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-960fa322dbb3d976331a73999dc59375_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-6a84f8a661df7996fbcd4ca65c1a40b6_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8fd5104994d92443af483d747d631390_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-102238a40860c08faf37c492f61f6d94_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-2ae62e4f384bfe7104a4450f72c2f18c_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-cb433a8eadf9ca3ab0ffc24f3bda081b_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-c860405f0c426655102ad1294caebbc2_1440w.webp">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020031110064661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200311103429660.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/watermark%252Ctype_ZmFuZ3poZW5naGVpdGk%252Cshadow_10%252Ctext_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy%252Csize_16%252Ccolor_FFFFFF%252Ct_70">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230417142003732.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230417141831965.png">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:37.812Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta property="article:tag" content="概述">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8f8f2356fb2c4955213c5b114113a811_1440w.webp">
+  
+  
+  
+  <title>Redis概述 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Redis概述"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          15k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          124 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Redis概述</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Redis概述"><a href="#Redis概述" class="headerlink" title="Redis概述"></a>Redis概述</h1><h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/agonie201218/article/details/123640871">(13条消息) Redis 16 个常见使用场景_redis使用场景_Young丶的博客-CSDN博客</a></p>
+<h2 id="11、点赞、签到、打卡"><a href="#11、点赞、签到、打卡" class="headerlink" title="11、点赞、签到、打卡"></a>11、点赞、签到、打卡</h2><p>用 like:t1001 来维护 t1001 这条微博的所有点赞用户</p>
+<p>点赞了这条微博：sadd like:t1001 u3001<br>取消点赞：srem like:t1001 u3001<br>是否点赞：sismember like:t1001 u3001<br>点赞的所有用户：smembers like:t1001<br>点赞数：scard like:t1001</p>
+<h2 id="16-显示最新的项目列表"><a href="#16-显示最新的项目列表" class="headerlink" title="16 .显示最新的项目列表"></a>16 .显示最新的项目列表</h2><p>比如说，我们的一个Web应用想要列出用户贴出的最新20条评论。在最新的评论边上我们有一个“显示全部”的链接，点击后就可以获得更多的评论。</p>
+<p>每次新评论发表时，我们会将它的ID添加到一个Redis列表。可以限定列表的长度为5000</p>
+<p>LPUSH latest.comments</p>
+<p>在Redis中我们的最新ID使用了常驻缓存，这是一直更新的。但是我们做了限制不能超过5000个ID，因此我们的获取ID函数会一直询问Redis。只有在超出了这个范围的时候，才需要去访问数据库</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_70730532/article/details/125870478">(4条消息) 如何保障 MySQL 和 Redis 的数据一致性？_redis和mysql数据一致性_Java烟雨的博客-CSDN博客</a></p>
+<h2 id="17-HyperLogLog"><a href="#17-HyperLogLog" class="headerlink" title="17.HyperLogLog"></a>17.HyperLogLog</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs cmd">pfadd 添加<br>影响基数估值则返回<span class="hljs-number">1</span>否则返回<span class="hljs-number">0</span>.若key不存在则创建<br>时间复杂度O(<span class="hljs-number">1</span>)<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">1</span><br><span class="hljs-number">2</span><br>pfcount 获得基数值<br>得到基数值，白话就叫做去重值（<span class="hljs-number">1</span>，<span class="hljs-number">1</span>，<span class="hljs-number">2</span>，<span class="hljs-number">2</span>，<span class="hljs-number">3</span>）的插入pfcount得到的是<span class="hljs-number">3</span><br>可一次统计多个key<br>时间复杂度为O(N)，N为key的个数<br>返回值是一个带有 <span class="hljs-number">0</span>.<span class="hljs-number">81</span>% 标准错误（standard error）的近似值.<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m1<br>(integer) <span class="hljs-number">4</span><br><span class="hljs-number">1</span><br><span class="hljs-number">2</span><br><span class="hljs-number">3</span><br><span class="hljs-number">4</span><br>pfmerge 合并多个key<br>取多个key的并集<br>命令只会返回 OK.<br>时间复杂度为O（N）<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m1<br>(integer) <span class="hljs-number">4</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m2 <span class="hljs-number">3</span> <span class="hljs-number">3</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">4</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">5</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">6</span> <span class="hljs-number">6</span> <span class="hljs-number">1</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m2<br>(integer) <span class="hljs-number">5</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfmerge mergeDes m1 m2<br>OK<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount mergeDes<br>(integer) <span class="hljs-number">6</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>应用场景<br>说明：</p>
+<p>基数不大，数据量不大就用不上，会有点大材小用浪费空间<br>有局限性，就是只能统计基数数量，而没办法去知道具体的内容是什么<br>和bitmap相比，属于两种特定统计情况，简单来说，HyperLogLog 去重比 bitmap 方便很多<br>一般可以bitmap和hyperloglog配合使用，bitmap标识哪些用户活跃，hyperloglog计数<br>一般使用：</p>
+<p>统计注册 IP 数<br>统计每日访问 IP 数<br>统计页面实时 UV 数<br>统计在线用户数<br>统计用户每天搜索不同词条的个数</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/148562122">最详细的Redis五种数据结构详解（理论+实战），建议收藏。 - 知乎 (zhihu.com)</a></p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8f8f2356fb2c4955213c5b114113a811_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><ol>
+<li><code>String</code>：字符串类型</li>
+<li><code>List</code>：列表类型</li>
+<li><code>Set</code>：无序集合类型</li>
+<li><code>ZSet</code>：有序集合类型</li>
+<li><code>Hash</code>：哈希表类型</li>
+<li>HyperLogLog : bitMap类型，计数统计</li>
+<li>BitMap ：位图类型，判断存在与否，将10亿个int （4G）压缩为 （4G &#x2F; 32b）128MB</li>
+<li>布隆过滤器：判断有无  — <strong>有则一定有</strong>；<strong>没有的可能有</strong>  – 解决缓存穿透问题 （提前将数据库数据映射到布隆过滤器种）</li>
+</ol>
+<h3 id="Redis核心对象"><a href="#Redis核心对象" class="headerlink" title="Redis核心对象"></a>Redis核心对象</h3><p>在Redis中有一个<strong>「核心的对象」</strong>叫做<code>redisObject</code> ，是用来表示所有的key和value的，用redisObject结构体来表示<code>String、Hash、List、Set、ZSet</code>五种数据类型。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-fc8e2a11644c48b023e4fa974d9bba04_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230411075253724.png" srcset="/img/loading.gif" lazyload alt="image-20230411075253724"></p>
+<p><strong>String类型</strong>的数据结构存储方式有三种<code>int、raw、embstr</code>。</p>
+<p><strong>Hash对象</strong>的实现方式有两种分别是<code>ziplist、hashtable</code></p>
+<p><strong>Set的底层</strong>实现是<strong>「ht和intset」</strong></p>
+<p><strong>List列表</strong>在3.2之前的版本是使用<code>ziplist</code>和<code>linkedlist</code>进行实现的。在3.2之后的版本就是引入了<code>quicklist</code>。</p>
+<p><strong>ZSet是有序集合</strong>，从上面的图中可以看到ZSet的底层实现是<code>ziplist</code>和<code>skiplist</code>实现的，</p>
+<h3 id="Raw-和-intset"><a href="#Raw-和-intset" class="headerlink" title="Raw 和 intset"></a>Raw 和 intset</h3><p>Raw进制安全，可以存放图片信息</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-960fa322dbb3d976331a73999dc59375_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="ZipList"><a href="#ZipList" class="headerlink" title="ZipList"></a>ZipList</h3><p><strong>缩列表</strong>中每一个节点表示的含义如下所示：</p>
+<ol>
+<li><code>zlbytes</code>：4个字节的大小，记录压缩列表占用内存的字节数。</li>
+<li><code>zltail</code>：4个字节大小，记录表尾节点距离起始地址的偏移量，用于快速定位到尾节点的地址。</li>
+<li><code>zllen</code>：2个字节的大小，记录压缩列表中的节点数。</li>
+<li><code>entry</code>：表示列表中的每一个节点。</li>
+<li><code>zlend</code>：表示压缩列表的特殊结束符号<code>&#39;0xFF&#39;</code>。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-6a84f8a661df7996fbcd4ca65c1a40b6_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>entry节点</strong>又有三部分组成，包括<code>previous_entry_ength、encoding、content</code>。</p>
+<ol>
+<li><code>previous_entry_ength</code>表示前一个节点entry的长度，可用于计算前一个节点的其实地址，因为他们的地址是连续的。</li>
+<li>encoding：这里保存的是content的内容类型和长度。</li>
+<li>content：content保存的是每一个节点的内容。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8fd5104994d92443af483d747d631390_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="LinkedList-和-QuickList"><a href="#LinkedList-和-QuickList" class="headerlink" title="LinkedList 和 QuickList"></a>LinkedList 和 QuickList</h3><p>Redis中链表的特性：</p>
+<ol>
+<li>每一个节点都有指向前一个节点和后一个节点的指针。</li>
+<li>头节点和尾节点的prev和next指针指向为null，所以链表是无环的。</li>
+<li>链表有自己长度的信息，获取长度的时间复杂度为O(1)。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-102238a40860c08faf37c492f61f6d94_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="HashTable-字典"><a href="#HashTable-字典" class="headerlink" title="HashTable - 字典"></a>HashTable - 字典</h3><p>rehash - 渐近式hash</p>
+<p>类似于标记复制算法，两倍空间H[0] - source, H[1] - taget</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css">在渐进式rehash的过程「更新、删除、查询会在ht<span class="hljs-selector-attr">[0]</span>和ht<span class="hljs-selector-attr">[1]</span>中都进行」，比如更新一个值先更新ht<span class="hljs-selector-attr">[0]</span>，然后再更新ht<span class="hljs-selector-attr">[1]</span>。<br>而新增操作直接就新增到ht<span class="hljs-selector-attr">[1]</span>表中，ht<span class="hljs-selector-attr">[0]</span>不会新增任何的数据，这样保证「ht<span class="hljs-selector-attr">[0]</span>只减不增，直到最后的某一个时刻变成空表」，这样rehash操作完成。<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="SkipList"><a href="#SkipList" class="headerlink" title="SkipList"></a>SkipList</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68516038">数据结构与算法——跳表 - 知乎 (zhihu.com)</a></p>
+<p>在跳跃表的结构中有head和tail表示指向头节点和尾节点的指针，能后快速的实现定位。level表示层数，len表示跳跃表的长度，BW表示后退指针，在从尾向前遍历的时候使用。</p>
+<p>BW下面还有两个值分别表示分值（score）和成员对象（各个节点保存的成员对象）。</p>
+<p>跳跃表的实现中，除了<strong>最底层的一层保存的是原始链表的完整数据</strong>，上层的节点数会越来越少，并且跨度会越来越大。</p>
+<p>跳跃表的上面层就相当于索引层，都是为了找到最后的数据而服务的，<strong>数据量越大，条表所体现的查询的效率就越高</strong>，和平衡树的查询效率相差无几</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-2ae62e4f384bfe7104a4450f72c2f18c_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> skiplist;<br><br><span class="hljs-keyword">import</span> java.util.Random;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 跳表的一种实现方法。</span><br><span class="hljs-comment"> * 跳表中存储的是正整数，并且存储的是不重复的。</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SkipList</span> &#123;<br><br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">MAX_LEVEL</span> <span class="hljs-operator">=</span> <span class="hljs-number">16</span>;<br><br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">float</span> <span class="hljs-variable">SKIPLIST_P</span> <span class="hljs-operator">=</span> <span class="hljs-number">0.5f</span>;<br><br>  <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">levelCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br><br>  <span class="hljs-keyword">private</span> <span class="hljs-type">Node</span> <span class="hljs-variable">head</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>();  <span class="hljs-comment">// 带头链表</span><br><br>  <span class="hljs-keyword">private</span> <span class="hljs-type">Random</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();<br><br>  <span class="hljs-keyword">public</span> Node <span class="hljs-title function_">find</span><span class="hljs-params">(<span class="hljs-type">int</span> value)</span> &#123;<br>    <span class="hljs-type">Node</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> head;<br>      <span class="hljs-comment">// 从head节点的最上层开始寻找</span><br>      <span class="hljs-comment">// 找到最后一个小于当前value的 索引数组</span><br>      <span class="hljs-comment">// 然后下层递减，直到为 0</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> levelCount - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>        <span class="hljs-comment">// p = 向前的下一个 Node</span><br>      <span class="hljs-keyword">while</span> (p.forwards[i] != <span class="hljs-literal">null</span> &amp;&amp; p.forwards[i].data &lt; value) &#123;<br>        p = p.forwards[i];<br>      &#125;<br>    &#125;<br>	<span class="hljs-comment">// 判断是否找到</span><br>    <span class="hljs-keyword">if</span> (p.forwards[<span class="hljs-number">0</span>] != <span class="hljs-literal">null</span> &amp;&amp; p.forwards[<span class="hljs-number">0</span>].data == value) &#123;<br>      <span class="hljs-keyword">return</span> p.forwards[<span class="hljs-number">0</span>];<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>  &#125;<br>	<span class="hljs-comment">// 插入 -- 新建一个</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> value)</span> &#123;<br>      <span class="hljs-comment">// 将当前啊节点随机插入level级索引</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">level</span> <span class="hljs-operator">=</span> randomLevel();<br>    <span class="hljs-type">Node</span> <span class="hljs-variable">newNode</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>();<br>    newNode.data = value;<br>    newNode.maxLevel = level;<br>    Node update[] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>[level];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; level; ++i) &#123;<br>      update[i] = head;s<br>    &#125;<br>	<span class="hljs-comment">// 记录当前值的每层索引，保存在update</span><br>    <span class="hljs-comment">// record every level largest value which smaller than insert value in update[]</span><br>    <span class="hljs-type">Node</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> head;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> level - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>      <span class="hljs-keyword">while</span> (p.forwards[i] != <span class="hljs-literal">null</span> &amp;&amp; p.forwards[i].data &lt; value) &#123;<br>        p = p.forwards[i];<br>      &#125;<br>      update[i] = p;<span class="hljs-comment">// use update save node in search path</span><br>    &#125;<br>	<span class="hljs-comment">// 将需要更新的节点 的索引换为 newNode</span><br>    <span class="hljs-comment">// in search path node next node become new node forwords(next)</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; level; ++i) &#123;<br>      newNode.forwards[i] = update[i].forwards[i];<br>      update[i].forwards[i] = newNode;<br>    &#125;<br><br>    <span class="hljs-comment">// update node hight</span><br>    <span class="hljs-keyword">if</span> (levelCount &lt; level) levelCount = level;<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">delete</span><span class="hljs-params">(<span class="hljs-type">int</span> value)</span> &#123;<br>    Node[] update = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>[levelCount];<br>    <span class="hljs-type">Node</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> head;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> levelCount - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>      <span class="hljs-keyword">while</span> (p.forwards[i] != <span class="hljs-literal">null</span> &amp;&amp; p.forwards[i].data &lt; value) &#123;<br>        p = p.forwards[i];<br>      &#125;<br>      update[i] = p;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (p.forwards[<span class="hljs-number">0</span>] != <span class="hljs-literal">null</span> &amp;&amp; p.forwards[<span class="hljs-number">0</span>].data == value) &#123;<br>      <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> levelCount - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>        <span class="hljs-keyword">if</span> (update[i].forwards[i] != <span class="hljs-literal">null</span> &amp;&amp; update[i].forwards[i].data == value) &#123;<br>          update[i].forwards[i] = update[i].forwards[i].forwards[i];<br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;<br><br> <span class="hljs-comment">// 理论来讲，一级索引中元素个数应该占原始数据的 50%，二级索引中元素个数占 25%，三级索引12.5% ，一直到最顶层。</span><br>  <span class="hljs-comment">// 因为这里每一层的晋升概率是 50%。对于每一个新插入的节点，都需要调用 randomLevel 生成一个合理的层数。</span><br>  <span class="hljs-comment">// 该 randomLevel 方法会随机生成 1~MAX_LEVEL 之间的数，且 ：</span><br>  <span class="hljs-comment">//        50%的概率返回 1</span><br>  <span class="hljs-comment">//        25%的概率返回 2</span><br>  <span class="hljs-comment">//      12.5%的概率返回 3 ...</span><br>  <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-title function_">randomLevel</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">level</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br><br>    <span class="hljs-keyword">while</span> (Math.random() &lt; SKIPLIST_P &amp;&amp; level &lt; MAX_LEVEL)<br>      level += <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">return</span> level;<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printAll</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">Node</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> head;<br>    <span class="hljs-keyword">while</span> (p.forwards[<span class="hljs-number">0</span>] != <span class="hljs-literal">null</span>) &#123;<br>      System.out.print(p.forwards[<span class="hljs-number">0</span>] + <span class="hljs-string">&quot; &quot;</span>);<br>      p = p.forwards[<span class="hljs-number">0</span>];<br>    &#125;<br>    System.out.println();<br>  &#125;<br>	<span class="hljs-comment">// data存值，数组存Node指针</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">data</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>      <span class="hljs-comment">// 向前 ：指向下一个更大的索引</span><br>    <span class="hljs-keyword">private</span> Node forwards[] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>[MAX_LEVEL];<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">maxLevel</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">toString</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">builder</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();<br>      builder.append(<span class="hljs-string">&quot;&#123; data: &quot;</span>);<br>      builder.append(data);<br>      builder.append(<span class="hljs-string">&quot;; levels: &quot;</span>);<br>      builder.append(maxLevel);<br>      builder.append(<span class="hljs-string">&quot; &#125;&quot;</span>);<br><br>      <span class="hljs-keyword">return</span> builder.toString();<br>    &#125;<br>  &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Redis集群模式"><a href="#Redis集群模式" class="headerlink" title="Redis集群模式"></a>Redis集群模式</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0232236688c1">Redis Cluster 原理分析 - 简书 (jianshu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/100885432">Redis两种持久化机制RDB和AOF详解（面试常问，工作常用） - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340082703">面试必问的 Redis：RDB、AOF、混合持久化 - 知乎 (zhihu.com)</a></p>
+<h2 id="集群同步策略"><a href="#集群同步策略" class="headerlink" title="集群同步策略"></a>集群同步策略</h2><p>RDB、AOF、RDB+AOF</p>
+<h3 id="RDB-（Redis-Database）"><a href="#RDB-（Redis-Database）" class="headerlink" title="RDB  - （Redis Database）"></a>RDB  - （Redis Database）</h3><p>触发方式：</p>
+<p><strong>save</strong> : 该命令会阻塞当前Redis服务器，执行save命令期间，Redis不能处理其他命令，直到RDB过程完成为止。</p>
+<p><strong>bgsave</strong> : 执行该命令时，Redis会在后台异步进行快照操作，快照同时还可以响应客户端请求。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-cb433a8eadf9ca3ab0ffc24f3bda081b_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>自动触发</strong> : 自动触发是由我们的配置文件来完成的。在redis.conf配置文件中，里面有如下配置，我们可以去设置：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment">#表示900 秒内如果至少有 1 个 key 的值变化，则保存</span><br><span class="hljs-attribute">save</span> <span class="hljs-number">900</span> <span class="hljs-number">1</span><br><span class="hljs-comment">#表示300 秒内如果至少有 10 个 key 的值变化，则保存</span><br><span class="hljs-attribute">save</span> <span class="hljs-number">300</span> <span class="hljs-number">10</span><br><span class="hljs-comment">#表示60 秒内如果至少有 10000 个 key 的值变化，则保存</span><br><span class="hljs-attribute">save</span> <span class="hljs-number">60</span> <span class="hljs-number">10000</span><br><br><span class="hljs-comment">## 不需要持久化，那么你可以注释掉所有的 save 行来停用保存功能。</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<p><strong>RDB 的优势和劣势</strong></p>
+<p>①、优势</p>
+<p>（1）RDB文件紧凑，全量备份，非常适合用于进行备份和灾难恢复。</p>
+<p>（2）生成RDB文件的时候，redis主进程会fork()一个子进程来处理所有保存工作，主进程不需要进行任何磁盘IO操作。</p>
+<p>（3）RDB 在恢复<strong>大数据集</strong>时的速度比 AOF 的恢复速度要快。</p>
+<p>②、劣势</p>
+<p>　RDB快照是一次全量备份，存储的是内存数据的二进制序列化形式，存储上非常紧凑。当进行快照持久化时，会开启一个子进程专门负责快照持久化，子进程会拥有父进程的内存数据，父进程修改内存子进程不会反应出来，所以在快照持久化期间修改的数据不会被保存，可能丢失数据。</p>
+<h3 id="AOF-–-（Append-Only-File）"><a href="#AOF-–-（Append-Only-File）" class="headerlink" title="AOF  – （Append Only File）"></a>AOF  – （Append Only File）</h3><p><strong>三种触发机制</strong></p>
+<p>（1）每修改同步always：同步持久化 每次发生数据变更会被立即记录到磁盘 性能较差但数据完整性比较好</p>
+<p>（2）每秒同步everysec：异步操作，每秒记录 如果一秒内宕机，有数据丢失</p>
+<p>（3）不同no：从不同步</p>
+<p><strong>优点</strong></p>
+<p>（1）AOF可以更好的保护数据不丢失，一般AOF会每隔1秒，通过一个后台线程执行一次fsync操作，最多丢失1秒钟的数据。<br>（2）AOF日志文件没有任何磁盘寻址的开销，写入性能非常高，文件不容易破损。</p>
+<p>（3）AOF日志文件即使过大的时候，出现后台重写操作，也不会影响客户端的读写。</p>
+<p>（4）AOF日志文件的命令通过非常可读的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复。比如某人不小心用flushall命令清空了所有数据，只要这个时候后台rewrite还没有发生，那么就可以立即拷贝AOF文件，将最后一条flushall命令给删了，然后再将该AOF文件放回去，就可以通过恢复机制，自动恢复所有数据</p>
+<p><strong>缺点</strong></p>
+<p>（1）对于同一份数据来说，AOF日志文件通常比RDB数据快照文件更大</p>
+<p>（2）AOF开启后，支持的写QPS会比RDB支持的写QPS低，因为AOF一般会配置成每秒fsync一次日志文件，当然，每秒一次fsync，性能也还是很高的</p>
+<p>（3）以前AOF发生过bug，就是通过AOF记录的日志，进行数据恢复的时候，没有恢复一模一样的数据出来。</p>
+<h3 id="混合持久化"><a href="#混合持久化" class="headerlink" title="混合持久化"></a>混合持久化</h3><p>​	混合持久化只发生于 AOF 重写过程。使用了混合持久化，重写后的新 AOF 文件前半段是 RDB 格式的全量数据，后半段是 AOF 格式的增量数据。</p>
+<p>​	混合持久化本质是通过 <strong>AOF 后台重写（bgrewriteaof 命令）</strong>完成的，不同的是当开启混合持久化时，fork 出的子进程先将当前全量数据以 RDB 方式写入新的 AOF 文件，然后再将 AOF 重写缓冲区（aof_rewrite_buf_blocks）的增量命令以 AOF 方式写入到文件，写入完成后通知主进程将新的含有 RDB 格式和 AOF 格式的 AOF 文件替换旧的的 AOF 文件。</p>
+<h3 id="AOF-重写"><a href="#AOF-重写" class="headerlink" title="AOF 重写"></a>AOF 重写</h3><p>描述：Redis 生成新的 AOF 文件来代替旧 AOF 文件，这个新的 AOF 文件包含重建当前数据集所需的最少命令。具体过程是遍历所有数据库的所有键，从数据库读取键现在的值，然后用一条命令去记录键值对，代替之前记录这个键值对的多条命令。</p>
+<p>命令：有两个 Redis 命令可以用于触发 AOF 重写，一个是 BGREWRITEAOF 、另一个是 REWRITEAOF 命令；</p>
+<p><strong>流程很复杂</strong></p>
+<h4 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h4><p>AOF重写期间数据不一致问题 —- 通过 AOF重写缓冲区解决；</p>
+<p>AOF缓冲区过大问题 —- Redis 会创建一组用于<strong>父子进程间通信的管道</strong>，同时会新增一个<strong>文件事件</strong>，该文件事件会将写入 AOF 重写缓冲区的内容通过该管道发送到子进程。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-c860405f0c426655102ad1294caebbc2_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="同步步骤"><a href="#同步步骤" class="headerlink" title="同步步骤"></a>同步步骤</h2><h3 id="1、全量同步"><a href="#1、全量同步" class="headerlink" title="1、全量同步"></a>1、全量同步</h3><p>当一个redis服务器初次向主服务器发送salveof命令时，redis从服务器会进行一次全量同步，同步的步骤如下图所示：</p>
+<p><img src="https://img-blog.csdnimg.cn/2020031110064661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<ul>
+<li>slave服务器向master发送psync命令（此时发送的是psync ? -1），告诉master我需要同步数据了。</li>
+<li>master接收到psync命令后会进行BGSAVE命令生成RDB文件快照。</li>
+<li>生成完后，会将RDB文件发送给slave。</li>
+<li>slave接收到文件会载入RDB快照，并且将数据库状态变更为master在执行BGSAVE时的状态一致。</li>
+<li>master会发送保存在缓冲区里的所有写命令，告诉slave可以进行同步了</li>
+<li>slave执行这些写命令。</li>
+</ul>
+<h3 id="2-命令传播"><a href="#2-命令传播" class="headerlink" title="2.命令传播"></a>2.命令传播</h3><p>slave已经同步过master了，那么如果后续master进行了写操作，比如说一个简单的set name redis，那么master执行过当前命令后，会将当前命令发送给slave执行一遍，达成数据一致性。</p>
+<h3 id="3-重新复制"><a href="#3-重新复制" class="headerlink" title="3.重新复制"></a>3.重新复制</h3><p>当slave断开重连之后会进行重新同步，重新同步分完全同步和部分同步</p>
+<p>首先来看看部分同步大致的走向</p>
+<p><img src="https://img-blog.csdnimg.cn/20200311103429660.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<ul>
+<li>当slave断开重连后，会发送psync 命令给master。</li>
+<li>master收到psync后会返回+continue回复，表示slave可以执行部分同步了。</li>
+<li>master发送断线后的写命令给slave</li>
+<li>slave执行写命令。</li>
+</ul>
+<h3 id="部分同步判断"><a href="#部分同步判断" class="headerlink" title="部分同步判断"></a>部分同步判断</h3><p>实际上当slave发送psync命令给master之后，master还需要根据以下三点判断是否进行部分同步。</p>
+<p>先来介绍一下是哪三个方面：</p>
+<h4 id="1、服务器运行ID"><a href="#1、服务器运行ID" class="headerlink" title="1、服务器运行ID"></a><strong>1、服务器运行ID</strong></h4><p>每个redis服务器开启后会生成运行ID。</p>
+<p>当进行初次同步时，master会将自己的ID告诉slave，slave会记录下来，当slave断线重连后，发现ID是这个master的就会尝试进行部分重同步。当ID与现在连接的master不一样时会进行完整重同步。</p>
+<h4 id="2、复制偏移量"><a href="#2、复制偏移量" class="headerlink" title="2、复制偏移量"></a><strong>2、复制偏移量</strong></h4><p>复制偏移量包括master复制偏移量和slave复制偏移量，当初次同步过后两个数据库的复制偏移量相同，之后master执行一次写命令，那么master的偏移量+1，master将写命令给slave，slave执行一次，slave偏移量+1，这样版本就能一致。</p>
+<h4 id="3、复制积压缓冲区"><a href="#3、复制积压缓冲区" class="headerlink" title="3、复制积压缓冲区"></a><strong>3、复制积压缓冲区</strong></h4><p>复制积压缓冲区是由master维护的固定长度的先进先出的队列。</p>
+<p>当slave发送psync，会将自己的偏移量也发送给master，当slave的偏移量之后的数据在缓冲区还存在，就会返回+continue通知slave进行部分重同步。</p>
+<p>当slave的偏移量之后的数据不在缓冲区了，就会进行完整重同步。</p>
+<h4 id="4、总结："><a href="#4、总结：" class="headerlink" title="4、总结："></a><strong>4、总结：</strong></h4><ul>
+<li>当slave断开重连后，会发送psync 命令给master。</li>
+<li>master首先会对服务器运行进行判断，如果与自己相同就进行判断偏移量</li>
+<li>master会判断自己的偏移量与slave的偏移量是否一致。</li>
+<li>如果不一致，master会去缓冲区中判断slave的偏移量之后的数据是否存在。</li>
+<li>如果存在就会返回+continue回复，表示slave可以执行部分同步了。</li>
+<li>master发送断线后的写命令给slave</li>
+<li>slave执行写命令。<br>5.主从同步最终流程</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/watermark%252Ctype_ZmFuZ3poZW5naGVpdGk%252Cshadow_10%252Ctext_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy%252Csize_16%252Ccolor_FFFFFF%252Ct_70" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<h2 id="一、主从复制模式"><a href="#一、主从复制模式" class="headerlink" title="一、主从复制模式"></a>一、主从复制模式</h2><p>作用</p>
+<p><strong>master写，slave读</strong></p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">读写分离：<span class="hljs-literal">master</span>写，<span class="hljs-literal">slave</span>读，提高服务器的读写负载能力<br>负载均衡：基于主从结构，配合读写分离，由<span class="hljs-literal">slave</span>分担<span class="hljs-literal">master</span>负载，并根据需求的变化，改变<span class="hljs-literal">slave</span>的数据，通过多个结点分担数据读取负载，大大提高Redis服务器并发量与数据吞吐量<br>故障恢复：当<span class="hljs-literal">master</span>出现问题时，由<span class="hljs-literal">slave</span>提供服务，实现快速的故障恢复<br>数据冗余：实现数据热备份，是持久化之外的一种数据冗余方式<br>高可用基石：基于主从复制，构建哨兵模式与集群，实现Redis的高可用方案<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="二、哨兵模式"><a href="#二、哨兵模式" class="headerlink" title="二、哨兵模式"></a>二、哨兵模式</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">哨兵（sentinel）是一个分布式系统，用于对主从结构中的每台服务器进行监控，当出现故障时通过投票机制选择新的<span class="hljs-literal">master</span>并将所有<span class="hljs-literal">slave</span>连接到新的<span class="hljs-literal">master</span><br></code></pre></td></tr></table></figure>
+
+<p>为什么有哨兵<br>主机宕机，如何能够高可用的恢复正常，不用人为进行干预</p>
+<p>作用</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><span class="hljs-number">1</span>.监控 :<br>	不断地检查<span class="hljs-literal">master</span>和<span class="hljs-literal">slave</span>是否正常运行<br>	<span class="hljs-literal">master</span>存活检测，<span class="hljs-literal">master</span>与<span class="hljs-literal">slave</span>运行清空检测<br><span class="hljs-number">2</span>.通知（提醒） : <br>	当被监控地服务器出现问题时，向其他（哨兵、客户端）发送通知<br><span class="hljs-number">3</span>.自动故障转移 : <br>	断开<span class="hljs-literal">master</span>与<span class="hljs-literal">slave</span>连接，选取一个<span class="hljs-literal">slave</span>作为<span class="hljs-literal">master</span>，将其他<span class="hljs-literal">slave</span>连接到新地<span class="hljs-literal">master</span>，并告知客户端新地服务器地址<br></code></pre></td></tr></table></figure>
+
+<p>缺点</p>
+<p>不能动态扩充，哨兵模式还是只有一个master</p>
+<h2 id="三、Redis-Cluster"><a href="#三、Redis-Cluster" class="headerlink" title="三、Redis-Cluster"></a>三、Redis-Cluster</h2><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">使用哨兵，redis 每个实例也是全量存储，每个 redis 存储的内容都是完整的数据，浪费内存且有木桶效应。为了最大化利用内存，可以采用 <span class="hljs-keyword">cluster</span> 群集，就是分布式存储。<br></code></pre></td></tr></table></figure>
+
+<h3 id="职责"><a href="#职责" class="headerlink" title="职责"></a>职责</h3><p>Master – 读写， Slave - 备份	</p>
+<p>在 cluster 架构下，默认的，一般 <strong>redis-master 用于接收读写</strong>，而 <strong>redis-slave 则用于备份</strong>，当有请求是在向 slave 发起时，会直接重定向到对应 key 所在的 master 来处理。但如果不介意读取的是 redis-cluster 中有可能过期的数据并且对写请求不感兴趣时，则亦可通过 readonly 命令，将 slave 设置成可读，然后通过 slave 获取相关的 key，达到读写分离。</p>
+<h3 id="Slot槽"><a href="#Slot槽" class="headerlink" title="Slot槽"></a>Slot槽</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs processing">redis-cluster 架构中，被设计成共有 <span class="hljs-number">16384</span> 个 hash slot。每个 master 分得一部分 slot.<br><br>Redis 集群没有并使用传统的一致性哈希来分配数据，而是采用另外一种叫做哈希槽 (hash slot)的方式来分配的。redis cluster 默认分配了 <span class="hljs-number">16384</span> 个slot，当我们<span class="hljs-built_in">set</span>一个<span class="hljs-built_in">key</span> 时，会用CRC16算法来取模得到所属的slot，然后将这个<span class="hljs-built_in">key</span> 分到哈希槽区间的节点上，具体算法就是：<span class="hljs-title function_">CRC16</span>(<span class="hljs-built_in">key</span>) % <span class="hljs-number">16384</span>。<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h1><h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/363323742">Zookeeper实现分布式锁 - 知乎 (zhihu.com)</a></p>
+<h2 id="RedLock"><a href="#RedLock" class="headerlink" title="RedLock"></a>RedLock</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/CPLASF_/article/details/121714461">(4条消息) Redis分布式锁之：RedLock_小小少年_的博客-CSDN博客</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedissonMultiLock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">RLock</span> &#123;<br>    <span class="hljs-keyword">final</span> List&lt;RLock&gt; locks = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>();<br>    <br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lockInterruptibly</span><span class="hljs-params">(<span class="hljs-type">long</span> leaseTime, TimeUnit unit)</span> <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>        <span class="hljs-comment">// 初始化 waitTime  -- </span><br>        <span class="hljs-comment">// 四种情况：baseWaitTime, 2000ms, [leaseTime / 2, leaseTime], [baseTime, leaseTime];</span><br>        <span class="hljs-comment">// 等待时间 和 释放时间</span><br>        <span class="hljs-type">long</span> <span class="hljs-variable">baseWaitTime</span> <span class="hljs-operator">=</span> (<span class="hljs-type">long</span>)(<span class="hljs-built_in">this</span>.locks.size() * <span class="hljs-number">1500</span>);<br>        <span class="hljs-type">long</span> <span class="hljs-variable">waitTime</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1L</span>;<br>        <span class="hljs-keyword">if</span> (leaseTime == -<span class="hljs-number">1L</span>) &#123;<br>            waitTime = baseWaitTime;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            leaseTime = unit.toMillis(leaseTime);<br>            <span class="hljs-keyword">if</span> (leaseTime &lt;= <span class="hljs-number">2000L</span>) &#123;<br>                waitTime = <span class="hljs-number">2000L</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (leaseTime &lt;= baseWaitTime) &#123;<br>                waitTime = ThreadLocalRandom.current().nextLong(leaseTime / <span class="hljs-number">2L</span>, leaseTime);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                waitTime = ThreadLocalRandom.current().nextLong(baseWaitTime, leaseTime);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">while</span>(!<span class="hljs-built_in">this</span>.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS)) &#123;<br>        &#125;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230417142003732.png" srcset="/img/loading.gif" lazyload alt="image-20230417142003732"></p>
+<h2 id="Redisson"><a href="#Redisson" class="headerlink" title="Redisson"></a>Redisson</h2><img src= "https://static.bookstack.cn/projects/redisson-doc-cn/images/redisson.png" width = "80%" height = "10%">
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// RedissonBaseLock</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedissonBaseLock</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RedissonExpirable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">RLock</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Logger</span> <span class="hljs-variable">log</span> <span class="hljs-operator">=</span> LoggerFactory.getLogger(RedissonBaseLock.class);<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> ConcurrentMap&lt;String, RedissonBaseLock.ExpirationEntry&gt; EXPIRATION_RENEWAL_MAP = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ConcurrentHashMap</span>();<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">long</span> internalLockLeaseTime;<br>    <span class="hljs-keyword">final</span> String id;<br>    <span class="hljs-keyword">final</span> String entryName;<br>    <span class="hljs-keyword">final</span> CommandAsyncExecutor commandExecutor;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> RedisCommand&lt;Integer&gt; HGET = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisCommand</span>(<span class="hljs-string">&quot;HGET&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">MapValueDecoder</span>(), <span class="hljs-keyword">new</span> <span class="hljs-title class_">IntegerReplayConvertor</span>(<span class="hljs-number">0</span>));<br>&#125;<br><br><span class="hljs-comment">// RedissonLock</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedissonLock</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RedissonBaseLock</span> &#123;<br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">long</span> internalLockLeaseTime;<br>    <span class="hljs-comment">// 发布订阅</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">final</span> LockPubSub pubSub;<br>    <span class="hljs-comment">// </span><br>    <span class="hljs-keyword">final</span> CommandAsyncExecutor commandExecutor;   <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230417141831965.png" srcset="/img/loading.gif" lazyload alt="image-20230417141831965"></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/CPLASF_/article/details/121690952">https://blog.csdn.net/CPLASF_/article/details/121690952</a></p>
+<h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-comment">// 这里是尝试加锁的代码</span><br><span class="hljs-keyword">private</span> &lt;T&gt; RFuture&lt;Long&gt; <span class="hljs-title function_">tryAcquireAsync</span><span class="hljs-params">(<span class="hljs-type">long</span> leaseTime, TimeUnit unit, <span class="hljs-type">long</span> threadId)</span> &#123;<br>    <span class="hljs-comment">// 1.如果指定了超时时间，就进入下面这个分支执行加锁的逻辑</span><br>    <span class="hljs-keyword">if</span> (leaseTime != -<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-keyword">return</span> tryLockInnerAsync(leaseTime, unit, threadId, RedisCommands.EVAL_LONG);<br>    &#125;<br>    <span class="hljs-comment">// 2.如果没有指定超时时间，会进入到这里，默认加锁30S</span><br>    RFuture&lt;Long&gt; ttlRemainingFuture = tryLockInnerAsync(commandExecutor.getConnectionManager().getCfg().getLockWatchdogTimeout(), TimeUnit.MILLISECONDS, threadId, RedisCommands.EVAL_LONG);<br>    ttlRemainingFuture.onComplete((ttlRemaining, e) -&gt; &#123;<br>        <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// lock acquired</span><br>        <span class="hljs-comment">// 3.在加锁成功之后，会开启一个线程，在第10S的时候，进行锁续期</span><br>        <span class="hljs-keyword">if</span> (ttlRemaining == <span class="hljs-literal">null</span>) &#123;<br>            scheduleExpirationRenewal(threadId);<br>        &#125;<br>    &#125;);<br>    <span class="hljs-keyword">return</span> ttlRemainingFuture;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="加锁"><a href="#加锁" class="headerlink" title="加锁"></a>加锁</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 这里就是真正加锁的lua脚本了</span><br>&lt;T&gt; RFuture&lt;T&gt; <span class="hljs-title function_">tryLockInnerAsync</span><span class="hljs-params">(<span class="hljs-type">long</span> leaseTime, TimeUnit unit, <span class="hljs-type">long</span> threadId, RedisStrictCommand&lt;T&gt; command)</span> &#123;<br>    internalLockLeaseTime = unit.toMillis(leaseTime);<br><br>    <span class="hljs-keyword">return</span> evalWriteAsync(getName(), LongCodec.INSTANCE, command,<br>            <span class="hljs-string">&quot;if (redis.call(&#x27;exists&#x27;, KEYS[1]) == 0) then &quot;</span> +<br>                  <span class="hljs-string">&quot;redis.call(&#x27;hincrby&#x27;, KEYS[1], ARGV[2], 1); &quot;</span> +<br>                  <span class="hljs-string">&quot;redis.call(&#x27;pexpire&#x27;, KEYS[1], ARGV[1]); &quot;</span> +<br>                  <span class="hljs-string">&quot;return nil; &quot;</span> +<br>            <span class="hljs-string">&quot;end; &quot;</span> +<br>            <span class="hljs-string">&quot;if (redis.call(&#x27;hexists&#x27;, KEYS[1], ARGV[2]) == 1) then &quot;</span> +<br>                  <span class="hljs-string">&quot;redis.call(&#x27;hincrby&#x27;, KEYS[1], ARGV[2], 1); &quot;</span> +<br>                  <span class="hljs-string">&quot;redis.call(&#x27;pexpire&#x27;, KEYS[1], ARGV[1]); &quot;</span> +<br>                  <span class="hljs-string">&quot;return nil; &quot;</span> +<br>             <span class="hljs-string">&quot;end; &quot;</span> +<br>             <span class="hljs-string">&quot;return redis.call(&#x27;pttl&#x27;, KEYS[1]);&quot;</span>,<br>            Collections.singletonList(getName()), internalLockLeaseTime, getLockName(threadId));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这段lua脚本大致的思想是这样的：</p>
+<p>先判断key是否存在，如果key不存在，就加锁，并且设置过期时间<br>如果key已经存在，并且当前加锁的key是重入了，那就将key对应的加锁次数加1<br>如果key已存在，并且当前加锁的key和线程和已加锁的不一样，无法重入，那就返回当前key的过期时间</p>
+<h3 id="锁续期"><a href="#锁续期" class="headerlink" title="锁续期"></a>锁续期</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">renewExpiration</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">ExpirationEntry</span> <span class="hljs-variable">ee</span> <span class="hljs-operator">=</span> EXPIRATION_RENEWAL_MAP.get(getEntryName());<br>    <span class="hljs-keyword">if</span> (ee == <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <br>    <span class="hljs-comment">// 锁续期的核心代码，就是下面这个run方法</span><br>    <span class="hljs-type">Timeout</span> <span class="hljs-variable">task</span> <span class="hljs-operator">=</span> commandExecutor.getConnectionManager().newTimeout(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TimerTask</span>() &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">(Timeout timeout)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>            <span class="hljs-type">ExpirationEntry</span> <span class="hljs-variable">ent</span> <span class="hljs-operator">=</span> EXPIRATION_RENEWAL_MAP.get(getEntryName());<br>            <span class="hljs-keyword">if</span> (ent == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-type">Long</span> <span class="hljs-variable">threadId</span> <span class="hljs-operator">=</span> ent.getFirstThreadId();<br>            <span class="hljs-keyword">if</span> (threadId == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-comment">// 上面应该都是一些判断，最终会调用下面这个代码，这里的lua脚本就是续期的</span><br>            RFuture&lt;Boolean&gt; future = renewExpirationAsync(threadId);<br>            future.onComplete((res, e) -&gt; &#123;<br>                <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>                    log.error(<span class="hljs-string">&quot;Can&#x27;t update lock &quot;</span> + getName() + <span class="hljs-string">&quot; expiration&quot;</span>, e);<br>                    <span class="hljs-keyword">return</span>;<br>                &#125;<br>                <br>                <span class="hljs-comment">// 如果续期成功，会循环调用 </span><br>                <span class="hljs-keyword">if</span> (res) &#123;<br>                    <span class="hljs-comment">// reschedule itself</span><br>                    renewExpiration();<br>                &#125;<br>            &#125;);<br>        &#125;<br>        <span class="hljs-comment">// internalLockLeaseTime 这个参数是加锁的时间，默认是30S，这里的意思是，会延迟 30 / 3的时间去执行run方法</span><br>    &#125;, internalLockLeaseTime / <span class="hljs-number">3</span>, TimeUnit.MILLISECONDS);<br>    <br>    ee.setTimeout(task);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/%E6%A6%82%E8%BF%B0/" class="category-chain-item">概述</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+        <a href="/tags/%E6%A6%82%E8%BF%B0/">#概述</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Redis概述</div>
+      <div>http://example.com/2023/06/01/分布式组件+常见组件/Redis概述/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" title="凤凰架构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">凤凰架构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%A6%82%E8%BF%B0/" title="消息队列概述">
+                        <span class="hidden-mobile">消息队列概述</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

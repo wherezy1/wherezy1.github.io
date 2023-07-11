@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://flink.apachecn.org/docs/img/interval-join.svg">
 <meta property="og:image" content="http://flink.apachecn.org/docs/img/times_clocks.svg">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-06-22T12:01:41.115Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:37.809Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="分布式系统">
 <meta property="article:tag" content="大数据">
@@ -230,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          38k 字
+          40k 字
         
       </span>
     
@@ -241,7 +241,7 @@
         
         
         
-          318 分钟
+          332 分钟
         
       </span>
     
@@ -427,7 +427,7 @@
 <p>要实现自己的累加器，只需编写Accumulator接口的实现即可。如果您认为自定义累加器应与Flink一起提供，请随意创建拉取请求。</p>
 <p>您可以选择实现 <a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/Accumulator.java">Accumulator</a> 或<a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/SimpleAccumulator.java">SimpleAccumulator</a>。</p>
 <p><code>Accumulator&lt;V,R&gt;</code>最灵活：它定义<code>V</code>要添加的值的类型<code>R</code>，以及最终结果的结果类型。例如，对于直方图，<code>V</code>是数字并且<code>R</code>是直方图。<code>SimpleAccumulator</code>适用于两种类型相同的情况，例如计数器。</p>
-<h1 id="DataStreamAPI"><a href="#DataStreamAPI" class="headerlink" title="- DataStreamAPI"></a>- DataStreamAPI</h1><h1 id="–-框架"><a href="#–-框架" class="headerlink" title="– 框架"></a>– 框架</h1><h2 id="数据源-输入"><a href="#数据源-输入" class="headerlink" title="数据源 - 输入"></a>数据源 - 输入</h2><p>调用：StreamExecutionEnvironment.addSource(sourceFunction)</p>
+<h1 id="DataStreamAPI"><a href="#DataStreamAPI" class="headerlink" title="DataStreamAPI"></a>DataStreamAPI</h1><h1 id="–框架"><a href="#–框架" class="headerlink" title="–框架"></a>–框架</h1><h2 id="数据源-输入"><a href="#数据源-输入" class="headerlink" title="数据源 - 输入"></a>数据源 - 输入</h2><p>调用：StreamExecutionEnvironment.addSource(sourceFunction)</p>
 <p>自定义：addSource() 接口</p>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">源是您的程序从中读取输入的位置。您可以使用将附加源附加到程序<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">StreamExecutionEnvironment</span>.</span></span>add<span class="hljs-constructor">Source(<span class="hljs-params">sourceFunction</span>)</span>。Flink附带了许多预先实现的源函数，但您可以通过实现SourceFunction 非并行源，或通过实现ParallelSourceFunction接口或扩展 RichParallelSourceFunction并行源来编写自己的自定义源。<br></code></pre></td></tr></table></figure>
 
@@ -489,7 +489,7 @@
 
 
 
-<h1 id="–-关键词下包含的概念"><a href="#–-关键词下包含的概念" class="headerlink" title="– 关键词下包含的概念"></a>– 关键词下包含的概念</h1><h1 id="算子"><a href="#算子" class="headerlink" title="算子"></a>算子</h1><h2 id="视窗-window-窗口"><a href="#视窗-window-窗口" class="headerlink" title="视窗- window - 窗口"></a>视窗- window - 窗口</h2><h3 id="被Keys化与非被Keys化Windows"><a href="#被Keys化与非被Keys化Windows" class="headerlink" title="被Keys化与非被Keys化Windows"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E8%A2%ABkeys%E5%8C%96%E4%B8%8E%E9%9D%9E%E8%A2%ABkeys%E5%8C%96windows">被Keys化与非被Keys化Windows</a></h3><p>要指定的第一件事是您的流是否应该键入。必须在定义窗口之前完成此 算子操作。使用the <code>keyBy(...)</code>将您的无限流分成逻辑被Key化的数据流。如果<code>keyBy(...)</code>未调用，则表示您的流不是被Keys化的。</p>
+<h1 id="–关键词下包含的概念"><a href="#–关键词下包含的概念" class="headerlink" title="–关键词下包含的概念"></a>–关键词下包含的概念</h1><h1 id="—-算子"><a href="#—-算子" class="headerlink" title="— 算子"></a>— 算子</h1><h2 id="视窗-window-窗口"><a href="#视窗-window-窗口" class="headerlink" title="视窗- window - 窗口"></a>视窗- window - 窗口</h2><h3 id="被Keys化与非被Keys化Windows"><a href="#被Keys化与非被Keys化Windows" class="headerlink" title="被Keys化与非被Keys化Windows"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E8%A2%ABkeys%E5%8C%96%E4%B8%8E%E9%9D%9E%E8%A2%ABkeys%E5%8C%96windows">被Keys化与非被Keys化Windows</a></h3><p>要指定的第一件事是您的流是否应该键入。必须在定义窗口之前完成此 算子操作。使用the <code>keyBy(...)</code>将您的无限流分成逻辑被Key化的数据流。如果<code>keyBy(...)</code>未调用，则表示您的流不是被Keys化的。</p>
 <p>对于被Key化的数据流，可以将传入事件的任何属性用作键（<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/api_concepts.html#specifying-keys">此处有</a>更多详细信息）。拥有被Key化的数据流将允许您的窗口计算由多个任务并行执行，因为每个逻辑被Key化的数据流可以独立于其余任务进行处理。引用相同Keys的所有数据元将被发送到同一个并行任务。</p>
 <p>在非被Key化的数据流的情况下，您的原始流将不会被拆分为多个逻辑流，并且所有窗口逻辑将由单个任务执行，_即_并行度为1。</p>
 <p>区别：窗口    可并行 与 不可并行</p>
@@ -666,7 +666,7 @@
 <li>使用其查找&#x2F;查询方法调用阻塞的数据库客户端，直到收到结果为止</li>
 <li>阻止&#x2F;等待<code>asyncInvoke(...)</code>方法内异步客户端返回的future-type对象</li>
 </ul>
-<h1 id="活动时间-time"><a href="#活动时间-time" class="headerlink" title="活动时间 -  time"></a>活动时间 -  time</h1><h2 id="事件时间-x2F-处理时间-x2F-摄取时间"><a href="#事件时间-x2F-处理时间-x2F-摄取时间" class="headerlink" title="事件时间&#x2F;处理时间&#x2F;摄取时间"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=%E4%BA%8B%E4%BB%B6%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86%E6%97%B6%E9%97%B4%E6%91%84%E5%8F%96%E6%97%B6%E9%97%B4">事件时间&#x2F;处理时间&#x2F;摄取时间</a></h2><p>Flink 在流处理节目中支持不同的_时间_概念。</p>
+<h1 id="—-活动时间-time"><a href="#—-活动时间-time" class="headerlink" title="— 活动时间 -  time"></a>— 活动时间 -  time</h1><h2 id="事件时间-x2F-处理时间-x2F-摄取时间"><a href="#事件时间-x2F-处理时间-x2F-摄取时间" class="headerlink" title="事件时间&#x2F;处理时间&#x2F;摄取时间"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=%E4%BA%8B%E4%BB%B6%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86%E6%97%B6%E9%97%B4%E6%91%84%E5%8F%96%E6%97%B6%E9%97%B4">事件时间&#x2F;处理时间&#x2F;摄取时间</a></h2><p>Flink 在流处理节目中支持不同的_时间_概念。</p>
 <p>处理时间（process time）：处理算子时，使用本地 机器的 系统时钟</p>
 <ul>
 <li><p><strong>处理时间：</strong>处理时间是指执行相应 算子操作的机器的系统时间。</p>
@@ -711,7 +711,7 @@
 
 
 
-<h1 id="状态和容错-–-status-x2F-fault-tolerant"><a href="#状态和容错-–-status-x2F-fault-tolerant" class="headerlink" title="状态和容错 – status &#x2F; fault- tolerant"></a>状态和容错 – status &#x2F; fault- tolerant</h1><h2 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h2><h2 id="启用和配置检查点"><a href="#启用和配置检查点" class="headerlink" title="启用和配置检查点"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/22?id=%E5%90%AF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E7%82%B9">启用和配置检查点</a></h2><p>默认情况下，禁用检查点。为了使检查点，调用<code>enableCheckpointing(n)</code>上<code>StreamExecutionEnvironment</code>，其中 <em>N</em> 是以毫秒为单位的检查点间隔。</p>
+<h1 id="—-状态和容错-–-status-x2F-fault-tolerant"><a href="#—-状态和容错-–-status-x2F-fault-tolerant" class="headerlink" title="— 状态和容错 – status &#x2F; fault- tolerant"></a>— 状态和容错 – status &#x2F; fault- tolerant</h1><h2 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h2><h2 id="启用和配置检查点"><a href="#启用和配置检查点" class="headerlink" title="启用和配置检查点"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/22?id=%E5%90%AF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E7%82%B9">启用和配置检查点</a></h2><p>默认情况下，禁用检查点。为了使检查点，调用<code>enableCheckpointing(n)</code>上<code>StreamExecutionEnvironment</code>，其中 <em>N</em> 是以毫秒为单位的检查点间隔。</p>
 <p>检查点的其他参数包括：</p>
 <ul>
 <li><p>_完全一次与至少一次_：您可以选择将模式传递给<code>enableCheckpointing(n)</code>方法，以在两个保证级别之间进行选择。对于大多数应用来说，恰好一次是优选的。至少一次可能与某些超低延迟（始终为几毫秒）的应用程序相关。</p>
@@ -736,7 +736,7 @@
 
 
 
-<h1 id="管理状态的自定义序列化"><a href="#管理状态的自定义序列化" class="headerlink" title="管理状态的自定义序列化"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E7%AE%A1%E7%90%86%E7%8A%B6%E6%80%81%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96">管理状态的自定义序列化</a></h1><p>如果您的应用程序使用Flink的托管状态，则可能需要为特殊用例实现自定义序列化逻辑。</p>
+<h1 id="—-管理状态的自定义序列化"><a href="#—-管理状态的自定义序列化" class="headerlink" title="— 管理状态的自定义序列化"></a>— <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E7%AE%A1%E7%90%86%E7%8A%B6%E6%80%81%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96">管理状态的自定义序列化</a></h1><p>如果您的应用程序使用Flink的托管状态，则可能需要为特殊用例实现自定义序列化逻辑。</p>
 <p>此页面的目标是需要对其状态使用自定义序列化的用户，包括如何提供自定义序列化程序以及如何处理序列化程序的升级以实现兼容性。如果您只是使用Flink自己的序列化程序，则此页面无关紧要，可以跳过。</p>
 <h3 id="使用自定义序列化器"><a href="#使用自定义序列化器" class="headerlink" title="使用自定义序列化器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8">使用自定义序列化器</a></h3><p>如上例所示，当注册托管算子或被Keys化状态时，<code>StateDescriptor</code>需要指定状态名称以及有关状态类型的信息。Flink的<a target="_blank" rel="noopener" href="https://flink.sojb.cn/types_serialization.html">类型序列化框架</a>使用类型信息为 状态创建适当的序列化程序。</p>
 <p>也可以完全绕过这个并让Flink使用您自己的自定义序列化程序来序列化托管状态，只需直接<code>StateDescriptor</code>使用您自己的<code>TypeSerializer</code>实现实例化：</p>
@@ -752,7 +752,7 @@
 
 
 
-<h1 id="旁路输出"><a href="#旁路输出" class="headerlink" title="旁路输出"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/42?id=%E6%97%81%E8%B7%AF%E8%BE%93%E5%87%BA">旁路输出</a></h1><p>除了<code>DataStream</code> 算子操作产生的主流之外，您还可以生成任意数量的附加旁路输出结果流。结果流中的数据类型不必与主流中的数据类型匹配，并且不同旁路输出的类型也可以不同。当您希望拆分通常必须复制流的数据流，然后从每个流中过滤掉您不希望拥有的数据时，此 算子操作非常有用。</p>
+<h1 id="—旁路输出"><a href="#—旁路输出" class="headerlink" title="—旁路输出"></a>—<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/42?id=%E6%97%81%E8%B7%AF%E8%BE%93%E5%87%BA">旁路输出</a></h1><p>除了<code>DataStream</code> 算子操作产生的主流之外，您还可以生成任意数量的附加旁路输出结果流。结果流中的数据类型不必与主流中的数据类型匹配，并且不同旁路输出的类型也可以不同。当您希望拆分通常必须复制流的数据流，然后从每个流中过滤掉您不希望拥有的数据时，此 算子操作非常有用。</p>
 <p>使用旁路输出时，首先需要定义一个<code>OutputTag</code>用于标识旁路输出流的方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// this needs to be an anonymous inner class, so that we can analyze the type</span><br>OutputTag&lt;String&gt; outputTag = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputTag</span>&lt;String&gt;(<span class="hljs-string">&quot;side-output&quot;</span>) &#123;&#125;;<br></code></pre></td></tr></table></figure>
 
@@ -780,15 +780,56 @@
 
 
 
-<h1 id="Stream-Connect"><a href="#Stream-Connect" class="headerlink" title="Stream Connect"></a>Stream Connect</h1><h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="-1"><a href="#-1" class="headerlink" title=""></a></h1><h1 id="DataSet-API"><a href="#DataSet-API" class="headerlink" title="- DataSet API"></a>- DataSet API</h1><p><strong>大致参照 DataStream API</strong> </p>
+<h1 id="—-Stream-Connect"><a href="#—-Stream-Connect" class="headerlink" title="— Stream Connect"></a>— Stream Connect</h1><h2 id="内置连接器"><a href="#内置连接器" class="headerlink" title="内置连接器"></a>内置连接器</h2><p>内置Connector 是 Flink 内置的连接器，用于将 Flink 与外部系统进行集成。 Flink 提供多种内置 Connector，如Kafka、Kinesis、Cassandra、Elasticsearch、JDBC 等。</p>
+<p>这些内置 Connector 都是一些通用的应用程序接口（API）的实现，Flink 用户可以将这些标准的内置 Connector 用于将 Flink 与其他的数据源或数据汇进行无缝集成。利用这些内置 Connector，Flink 用户可以方便地通过API将数据源和数据汇插入到现有的 Flink 应用程序中，而不必编写自己的代码从外部系统中读取或写入数据。</p>
+<p>在 Flink 应用程序中，用户可以使用内置 Connector 根据需要特定于源和汇的属性进行配置。这些 Connector 会自动与 Flink 应用程序中的 State 和 Checkpointing 机制集成，以确保应用程序的一致性和准确性。由于内置 Connector 被广泛使用并得到了社区的强烈支持，因此大多数情况下，Flink 用户可以使用这些内置 Connector 解决数据集成的大多数常见问题，并轻松地将 Flink 与外部系统进行无缝集成和扩展。</p>
+<h3 id="SQL获取内置连接器信息"><a href="#SQL获取内置连接器信息" class="headerlink" title="SQL获取内置连接器信息"></a>SQL获取内置连接器信息</h3><p>如果您想从 SQL 中获取 Flink 内置连接器的信息，可以使用 Flink SQL CLI 工具或通过 Flink WebUI 进行查询。以下是使用 Flink SQL CLI 工具的示例：</p>
+<ol>
+<li><p>启动 Flink SQL CLI 工具。您可以通过以下命令启动 Flink SQL CLI 工具：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">.<span class="hljs-regexp">/bin/</span>sql-client.sh embedded -l <span class="hljs-regexp">/path/</span>to/log<br></code></pre></td></tr></table></figure>
+
+<p>注意：将上述命令中的<code>/path/to/log</code>替换为您希望日志文件所在的路径。</p>
+</li>
+<li><p>一旦连接成功，在 Flink SQL CLI 工具中，您可以使用以下命令获取当前可用的内置 Connector 列表：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">SHOW CATALOGS<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>这将显示所有可用的 Flink 连接器和目录信息。如果使用内置连接器，则应看到以下目录之一：</p>
+<ul>
+<li><code>default_catalog</code>：用于默认目录；</li>
+<li><code>kafka</code>：用于 Apache Kafka 连接器；</li>
+<li><code>elasticsearch</code>：用于 Elasticsearch 连接器；</li>
+<li><code>jdbc</code>：用于 JDBC 连接器；</li>
+<li><code>cassandra</code>：用于 Cassandra 连接器；</li>
+<li><code>kinesis</code>：用于 Amazon Kinesis 连接器；</li>
+</ul>
+</li>
+<li><p>如果要获取特定内置 Connector 的信息，请使用以下命令：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SHOW</span> <span class="hljs-keyword">TABLES</span> <span class="hljs-keyword">IN</span> &lt;catalogname&gt;;<br></code></pre></td></tr></table></figure>
+
+<p>注意：将上述命令中的<code>&lt;catalogname&gt;</code>替换为您要查询的目录的名称。</p>
+<p>例如，在 Kafka Connector 中，您可以使用以下命令查看所有可用的主题列表：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SHOW</span> <span class="hljs-keyword">TABLES</span> <span class="hljs-keyword">IN</span> kafka;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>这些步骤可以让您通过 Flink SQL CLI 工具获取当前可用的 Flink 内置 Connector 的信息，并查询特定内置 Connector 的详细信息。同时，您也可以通过 Flink WebUI 进行查询，从“Catalog Management”页面查看内置连接器的信息。</p>
+<h3 id="Flink支持的内置连接器"><a href="#Flink支持的内置连接器" class="headerlink" title="Flink支持的内置连接器"></a>Flink支持的内置连接器</h3><p>，Flink 还提供了多种内置 Connector，以下是 Flink 中常用的一些内置连接器：</p>
+<ul>
+<li>Kinesis Connector：用于将 Flink 与 Amazon Kinesis 集成。</li>
+<li>Elasticsearch Connector：用于将 Flink 与 Elasticsearch 集成。</li>
+<li>Cassandra Connector：用于将 Flink 与 Cassandra 集成。</li>
+<li>JDBC Connector：用于将 Flink 与关系型数据库（如 MySQL、PostgreSQL）集成。</li>
+<li>HBase Connector：用于将 Flink 与 HBase 集成。</li>
+<li>AWS S3 Connector：用于将 Flink 与 Amazon S3 集成。</li>
+</ul>
+<p>这些内置 Connector 都是标准 API 的实现，可以方便地将 Flink 应用程序与常见的数据源或数据汇集成。有了这些内置 Connector，Flink 用户可以通过 SQL 访问外部系统中的数据，并使用 Flink 提供的强大的数据处理和流处理能力。同时，您也可以通过编写自定义连接器来将 Flink 集成到其他外部系统中，以实现更多的扩展和集成需求。</p>
+<h1 id="DataSet-API"><a href="#DataSet-API" class="headerlink" title="DataSet API"></a>DataSet API</h1><p><strong>大致参照 DataStream API</strong> </p>
 <h2 id="示例程序"><a href="#示例程序" class="headerlink" title="示例程序"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/46?id=%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F">示例程序</a></h2><p>以下程序是WordCount的完整工作示例。您可以复制并粘贴代码以在本地运行它。您只需要在项目中包含正确的Flink库（请参见<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/linking_with_flink.html">使用Flink链接</a>）并指定导入。那你就准备好了！</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WordCountExample</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">ExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> ExecutionEnvironment.getExecutionEnvironment();<br><br>        DataSet&lt;String&gt; text = env.fromElements(<br>            <span class="hljs-string">&quot;Who&#x27;s there?&quot;</span>,<br>            <span class="hljs-string">&quot;I think I hear them. Stand, ho! Who&#x27;s there?&quot;</span>);<br><br>        DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; wordCounts = text<br>            .flatMap(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LineSplitter</span>())<br>            .groupBy(<span class="hljs-number">0</span>)<br>            .sum(<span class="hljs-number">1</span>);<br><br>        wordCounts.print();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LineSplitter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">FlatMapFunction</span>&lt;String, Tuple2&lt;String, Integer&gt;&gt; &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">flatMap</span><span class="hljs-params">(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out)</span> &#123;<br>            <span class="hljs-keyword">for</span> (String word : line.split(<span class="hljs-string">&quot; &quot;</span>)) &#123;<br>                out.collect(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;String, Integer&gt;(word, <span class="hljs-number">1</span>));<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-<h1 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h1><p>DataSet -》 DataSet</p>
+<h1 id="–转化"><a href="#–转化" class="headerlink" title="–转化"></a>–转化</h1><p>DataSet -》 DataSet</p>
 <p>参照api文档 ：<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/47">数据集转换 (apachecn.org)</a></p>
-<h1 id="容错"><a href="#容错" class="headerlink" title="容错"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E5%AE%B9%E9%94%99">容错</a></h1><p>Flink的容错机制在出现故障时恢复程序并继续执行它们。此类故障包括机器硬件故障，网络故障，瞬态程序故障等。</p>
+<h1 id="–容错"><a href="#–容错" class="headerlink" title="–容错"></a>–<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E5%AE%B9%E9%94%99">容错</a></h1><p>Flink的容错机制在出现故障时恢复程序并继续执行它们。此类故障包括机器硬件故障，网络故障，瞬态程序故障等。</p>
 <h2 id="批处理容错（DataSet-API）"><a href="#批处理容错（DataSet-API）" class="headerlink" title="批处理容错（DataSet API）"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E6%89%B9%E5%A4%84%E7%90%86%E5%AE%B9%E9%94%99%EF%BC%88dataset-api%EF%BC%89">批处理容错（DataSet API）</a></h2><p>_DataSet API中_程序的容错能力通过重试失败的执行来实现。Flink在作业声明为失败之前重试执行的时间可通过_执行重试_参数进行配置。值_0_有效意味着禁用容错。</p>
 <p>要激活容错，请将_执行重试次数_设置为大于零的值。常见的选择是值为3。</p>
 <p>此示例显示如何配置Flink DataSet程序的执行重试。</p>
@@ -805,7 +846,7 @@
 
 
 
-<h1 id="Table-API和SQL"><a href="#Table-API和SQL" class="headerlink" title="- Table API和SQL"></a>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/56?id=table-api%E5%92%8Csql">Table API和SQL</a></h1><p>Apache Flink具有两个关系API - Table API和SQL - 用于统一流和批处理。 Table API是Scala和Java语言集成查询API，允许以非常直观的方式组合来自关系 算子的查询，例如选择，过滤和连接。Flink的SQL支持基于实现SQL标准的<a target="_blank" rel="noopener" href="https://calcite.apache.org/">Apache Calcite</a>。无论输入是批输入（DataSet）还是流输入（DataStream），任一接口中指定的查询都具有相同的语义并指定相同的结果。</p>
+<h1 id="Table-API和SQL"><a href="#Table-API和SQL" class="headerlink" title="Table API和SQL"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/56?id=table-api%E5%92%8Csql">Table API和SQL</a></h1><p>Apache Flink具有两个关系API - Table API和SQL - 用于统一流和批处理。 Table API是Scala和Java语言集成查询API，允许以非常直观的方式组合来自关系 算子的查询，例如选择，过滤和连接。Flink的SQL支持基于实现SQL标准的<a target="_blank" rel="noopener" href="https://calcite.apache.org/">Apache Calcite</a>。无论输入是批输入（DataSet）还是流输入（DataStream），任一接口中指定的查询都具有相同的语义并指定相同的结果。</p>
 <p>Table API和SQL接口彼此紧密集成，以及Flink的DataStream和DataSet API。您可以轻松地在基于API构建的所有API和库之间切换。例如，您可以使用<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/libs/cep.html">CEP库</a>从DataStream中提取模式，然后使用 Table API分析模式，或者可以在预处理上运行<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/libs/gelly">Gelly图算法</a>之前使用SQL查询扫描，过滤和聚合批处理表数据。</p>
 
                 

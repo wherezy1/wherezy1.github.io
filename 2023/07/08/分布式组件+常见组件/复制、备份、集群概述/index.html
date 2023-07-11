@@ -1,0 +1,797 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="复制、备份、集群概述Redis备份Redis备份策略是确保数据的持久性和可靠性的重要考虑因素。下面是关于Redis备份的详细介绍，包括流程、原理以及优缺点： 流程：  内存快照（RDB）：Redis使用内存快照方式进行备份，即将当前内存中的数据按照一定的格式写入磁盘。此过程可以手动触发，也可以根据配置自动触发，例如定时触发或在达到设置的保存点数量时触发。  AOF（Append-Only File">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复制、备份、集群概述">
+<meta property="og:url" content="http://example.com/2023/07/08/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E5%A4%8D%E5%88%B6%E3%80%81%E5%A4%87%E4%BB%BD%E3%80%81%E9%9B%86%E7%BE%A4%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="复制、备份、集群概述Redis备份Redis备份策略是确保数据的持久性和可靠性的重要考虑因素。下面是关于Redis备份的详细介绍，包括流程、原理以及优缺点： 流程：  内存快照（RDB）：Redis使用内存快照方式进行备份，即将当前内存中的数据按照一定的格式写入磁盘。此过程可以手动触发，也可以根据配置自动触发，例如定时触发或在达到设置的保存点数量时触发。  AOF（Append-Only File">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-08T08:48:01.000Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:37.812Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta property="article:tag" content="概述">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>复制、备份、集群概述 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="复制、备份、集群概述"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-08 16:48" pubdate>
+          2023年7月8日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">复制、备份、集群概述</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="复制、备份、集群概述"><a href="#复制、备份、集群概述" class="headerlink" title="复制、备份、集群概述"></a>复制、备份、集群概述</h1><h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h2><p>Redis备份策略是确保数据的持久性和可靠性的重要考虑因素。下面是关于Redis备份的详细介绍，包括流程、原理以及优缺点：</p>
+<p>流程：</p>
+<ol>
+<li><p>内存快照（RDB）：Redis使用内存快照方式进行备份，即将当前内存中的数据按照一定的格式写入磁盘。此过程可以手动触发，也可以根据配置自动触发，例如定时触发或在达到设置的保存点数量时触发。</p>
+</li>
+<li><p>AOF（Append-Only File）方式：Redis还提供了AOF方式进行备份，它将每个写操作追加到一个文件中。当需要恢复数据时，Redis会逐个重新执行AOF文件中的写操作，从而还原数据。</p>
+</li>
+</ol>
+<p>原理：</p>
+<ol>
+<li><p>RDB方式：Redis在特定的时间点生成快照，将整个内存的数据写入磁盘。生成快照时，Redis会将数据先写入一个临时文件，然后再替换原始的RDB文件。这样可以避免在生成新快照期间丢失数据。</p>
+</li>
+<li><p>AOF方式：每个写操作都以追加的方式写入AOF文件。AOF文件是一个日志文件，记录了执行的写操作。Redis在启动时会读取AOF文件，并重新执行其中的写操作以还原数据。</p>
+</li>
+</ol>
+<p>优点：</p>
+<ol>
+<li><p>快速恢复：通过快照和AOF，Redis可以快速将数据恢复到崩溃前的状态，确保了数据的可靠性和持久性。</p>
+</li>
+<li><p>灵活性：可以按需选择RDB或AOF备份方式，根据业务需求进行配置，平衡持久性和性能。</p>
+</li>
+<li><p>空间效率：RDB方式将整个数据集写入一个文件，相对来说占用空间较小。AOF方式以追加的方式记录写操作，而不是保存整个数据集，适用于空间敏感的场景。</p>
+</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li><p>数据丢失：</p>
+<ul>
+<li>RDB方式：RDB备份发生在特定时间点，如果在备份之后发生崩溃或故障，最新的数据将会丢失。</li>
+<li>AOF方式：AOF备份以追加的方式记录写操作，因此发生故障时，可能会丢失最后一次写操作之后的数据。</li>
+</ul>
+</li>
+<li><p>额外的存储空间消耗：</p>
+<ul>
+<li>RDB方式：由于RDB需要将整个数据集写入磁盘，因此备份文件可能会比实际内存占用更大。</li>
+<li>AOF方式：AOF日志文件按照写操作追加方式记录，因此AOF文件的大小可能会比实际数据集占用更多空间。</li>
+</ul>
+</li>
+<li><p>恢复时间较长：</p>
+<ul>
+<li>RDB方式：恢复数据时间可能较长，尤其是当备份数据较大时，重新加载整个快照需要一定时间。</li>
+<li>AOF方式：AOF方式的数据恢复速度通常比RDB快，但仍可能较慢，特别是当AOF文件较大时。</li>
+</ul>
+</li>
+<li><p>AOF文件可能增长过大：</p>
+<ul>
+<li>AOF备份通过追加方式记录每个写操作，随着时间的推移，AOF文件可能会增大到较大的规模，影响磁盘空间的利用率和备份文件的处理效率。</li>
+</ul>
+</li>
+</ol>
+<p>在选择Redis备份策略时，需要权衡数据的可靠性、性能、恢复时间、存储空间消耗等因素，根据具体的业务需求和对数据的要求进行决策。此外，还可以通过备份的组合方式（如同时使用RDB和AOF）来提高数据的可靠性和恢复能力。</p>
+<h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><p>对于Redis的集群复制流程和策略，以及集群故障转移机制（failover），下面是详细说明：</p>
+<p>集群复制流程和策略：</p>
+<ol>
+<li><p>集群模式：Redis通过集群模式实现分布式的高可用性架构，其中包括多个节点组成的集群。在集群中，每个节点都可以担任主节点（master）或者从节点（slave）的角色。</p>
+</li>
+<li><p>复制流程：在集群中，主节点负责接收写操作并复制数据给从节点。复制流程如下：<br>a. 从节点与主节点建立连接，通过发送SYNC命令请求进行复制。<br>b. 主节点生成RDB快照，将整个数据集发送给从节点。<br>c. 主节点将后续的写操作记录为AOF日志，并实时发送给从节点。<br>d. 从节点完成初始化和数据同步后，成为一个完全复制的主节点的副本。</p>
+</li>
+<li><p>复制策略：Redis使用无中心结构的复制机制，每个主节点可同时拥有多个从节点。复制策略如下：<br>a. 从节点可复制来自于不同主节点的数据，允许主从节点之间的多对多关系。<br>b. 每个主节点都负责管理与自己相关的从节点的复制流程。<br>c. 从节点可在任何时候切换成主节点，只需建立与其他从节点的复制关系。</p>
+</li>
+</ol>
+<p>集群故障转移机制（failover）：</p>
+<ol>
+<li><p>主节点故障：当主节点发生故障时，集群会自动进行故障转移，将一个从节点提升为新的主节点。</p>
+</li>
+<li><p>故障转移流程：<br>a. 当主节点无法正常响应时，从节点会触发故障检测机制，将主节点标记为下线状态。<br>b. 在下线主节点的从节点中，经过选举（通常使用Raft或sentinel等算法）选出新的主节点。<br>c. 新的主节点会向其他从节点发送消息，通知它们转变为新的从节点。<br>d. 客户端会自动更新集群配置，将请求发送到新的主节点。</p>
+</li>
+<li><p>高可用性：Redis集群的故障转移机制能够实现高可用性，减少对业务的影响，并确保数据的正常使用。</p>
+</li>
+</ol>
+<p>总结：<br>Redis的集群复制流程和策略主要通过主节点和从节点之间的复制来实现。集群中的从节点可以复制来自不同主节点的数据，实现多对多的复制关系。当主节点发生故障时，集群会自动进行故障转移，将一个从节点提升为新的主节点，保证集群的高可用性和数据的正常使用。</p>
+<h2 id="集群策略"><a href="#集群策略" class="headerlink" title="集群策略"></a>集群策略</h2><p>在Redis集群中，有几种常见的集群策略可以选择，包括：</p>
+<ol>
+<li><p>一致性哈希（Consistent Hashing）：将数据分布到不同的节点上，通过哈希算法选择存储节点。它具有高效的数据查找和负载均衡的特点，允许动态添加或删除节点。</p>
+</li>
+<li><p>分区&#x2F;分片（Sharding）：将数据分割成多个分片，每个分片存储于不同的节点。每个节点负责处理自己的分片数据，以实现水平扩展和更高的吞吐量。</p>
+</li>
+<li><p>主从复制（Master-Slave Replication）：一个主节点负责接收写操作并复制数据给多个从节点。从节点用于读取数据，实现数据冗余备份和负载均衡。</p>
+</li>
+<li><p>哨兵模式（Sentinel Mode）：引入Redis哨兵，用于监视主节点和从节点的状态。当主节点故障时，哨兵会自动进行故障转移，并选举新的主节点。</p>
+</li>
+<li><p>Redis Cluster模式：Redis Cluster是Redis官方提供的分布式解决方案。它将数据划分为多个哈希槽，分布在多个节点上，具有自动分片和故障转移的功能。</p>
+</li>
+</ol>
+<p>选择适合的集群策略取决于具体的需求和场景。对于大规模的高并发应用，可以选择一致性哈希和分区&#x2F;分片策略，以实现数据的扩展性和负载均衡。对于需要高可用性的情况，可以使用主从复制和哨兵模式来实现故障转移和冗余备份。而Redis Cluster则提供了全自动的集群管理和故障转移机制，适用于对于简化集群部署和管理的场景。</p>
+<h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><p>MySQL的复制、备份和集群策略包括以下方面：</p>
+<h2 id="复制-1"><a href="#复制-1" class="headerlink" title="复制"></a>复制</h2><p>复制（Replication）：<br>MySQL的复制是指将数据从一个MySQL数据库服务器复制到其他服务器的过程，实现数据的冗余备份、故障恢复和负载均衡。关键概念和机制如下：</p>
+<ol>
+<li><p>主从复制（Master-Slave Replication）：一个MySQL服务器作为主节点（Master），负责接收写操作并记录二进制日志（Binary Log）。其他MySQL服务器作为从节点（Slave），从主节点读取二进制日志并将其应用到本地数据库，实现数据的复制。</p>
+</li>
+<li><p>复制流程：主从复制的基本流程如下：<br>a. 主节点记录写操作到二进制日志（Binary Log）。<br>b. 从节点连接到主节点，并请求复制日志。<br>c. 主节点将复制日志发送给从节点。<br>d. 从节点将复制日志应用到本地数据库。</p>
+</li>
+<li><p>复制模式：</p>
+<ul>
+<li>异步复制：主节点将复制日志发送给从节点，并不等待从节点的确认。适用于高性能要求。</li>
+<li>半同步复制：主节点将复制日志发送给从节点，并等待至少一个从节点确认接收。提高数据可靠性。</li>
+<li>同步复制：主节点将复制日志发送给从节点，并等待所有从节点确认接收。最高数据可靠性，但性能较低。</li>
+</ul>
+</li>
+</ol>
+<h2 id="备份-1"><a href="#备份-1" class="headerlink" title="备份"></a>备份</h2><p>备份（Backup）：<br>MySQL的备份是指将数据库的数据和结构保存到其他介质（如磁盘）中，以应对数据损坏、误删除或灾难恢复等情况。常见的备份策略包括：</p>
+<ol>
+<li><p>逻辑备份：使用mysqldump命令导出数据库中的数据和结构，生成SQL脚本。适用于小型数据库和数据迁移。</p>
+</li>
+<li><p>物理备份：直接备份数据库文件，例如使用磁盘快照（Snapshot）或文件系统级别的备份程序（如XtraBackup）。适用于大型数据库和节约恢复时间。</p>
+</li>
+<li><p>定期备份：根据业务需求定期执行备份操作，例如每天、每周或每月进行全量备份或增量备份。</p>
+</li>
+</ol>
+<h2 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h2><p>集群（Cluster）：<br>MySQL的集群是指将多个MySQL服务器组成一个集群，实现数据的分布式存储、负载均衡和高可用性。常见的MySQL集群策略包括：</p>
+<ol>
+<li><p>主从复制集群：使用MySQL的主从复制机制实现集群。可以设置一个主节点和多个从节点，实现读写分离和负载均衡。主节点负责写操作，从节点负责读操作。</p>
+</li>
+<li><p>MySQL Cluster：MySQL Cluster是一个分布式数据库解决方案，基于NDB存储引擎。它将数据划分为多个数据节点（Data Node），每个数据节点存储部分数据，实现数据的分片和水平扩展。</p>
+</li>
+</ol>
+<p>选择适合的MySQL复制、备份和集群策略取决于具体需求和场景。主从复制适用于数据备份、读写分离和负载均衡；备份策略应基于数据大小、恢复时间等；集群策略则根据需求和性能要求选择主从复制、MySQL Cluster或其他分布式数据库解决方案。</p>
+<h2 id="具体"><a href="#具体" class="headerlink" title="具体"></a>具体</h2><p>对于MySQL具体的策略和工具，以下进行进一步说明：</p>
+<p>复制（Replication）策略和工具：</p>
+<ul>
+<li>MySQL原生复制：使用MySQL内置的主从复制机制，通过在my.cnf配置文件中指定server-id、log-bin等参数启用复制。从节点可以使用CHANGE MASTER TO命令指定主节点，并启动复制进程。</li>
+<li>MySQL Group Replication：基于原生复制的组复制方式，提供了自动故障检测和故障转移的能力。</li>
+<li>第三方复制工具：如Percona XtraBackup、pt-table-sync等，提供了更丰富的复制功能和管理工具。</li>
+</ul>
+<p>备份（Backup）策略和工具：</p>
+<ul>
+<li>mysqldump：逻辑备份工具，可以将数据库导出为SQL脚本。</li>
+<li>MySQL Enterprise Backup：物理备份工具，使用快照或锁表等机制实现高效的备份和恢复。</li>
+<li>第三方备份工具：如Percona XtraBackup、mydumper等，提供了更高级的备份和还原功能，支持增量备份等。</li>
+</ul>
+<p>集群（Cluster）策略和工具：</p>
+<ul>
+<li>MySQL Replication：通过设置一个主节点和多个从节点实现读写分离和负载均衡。</li>
+<li>MySQL InnoDB Cluster：一组服务器的集群解决方案，使用InnoDB集群（Group Replication）和MySQL Router来实现高可用性和负载均衡。</li>
+<li>MySQL NDB Cluster：基于NDB存储引擎的分布式数据库，支持水平扩展和高可用性。</li>
+</ul>
+<p>以上是一些常见的MySQL复制、备份和集群策略和工具，具体的选择和配置需要根据实际的需求和环境来决定。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/%E6%A6%82%E8%BF%B0/" class="category-chain-item">概述</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+        <a href="/tags/%E6%A6%82%E8%BF%B0/">#概述</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>复制、备份、集群概述</div>
+      <div>http://example.com/2023/07/08/分布式组件+常见组件/复制、备份、集群概述/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/11/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E9%AB%98%E5%B9%B6%E5%8F%91%E3%80%81%E9%AB%98%E6%80%A7%E8%83%BD%E3%80%81%E9%AB%98%E5%8F%AF%E7%94%A8/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/08/%E4%B8%9A%E5%8A%A1/Redis%E4%B8%9A%E5%8A%A1/" title="redis业务">
+                        <span class="hidden-mobile">redis业务</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

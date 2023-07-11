@@ -16,15 +16,15 @@
   <meta name="author" content="where">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Gradle">
+    <meta name="description" content="Gradle使用用途下载依赖的缓存配置  &#x2F;Users&#x2F;where&#x2F;.gradle 1、gradle init 2、配置build.gradle  (全局配置 ：下载路径、本地仓库、) 3、.gralde&#x2F;gradle.properties ： 配置本地仓库？ 4、settings.gradle 下面是对于build.gradle、.gradle&#x2F;gradl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gradle">
 <meta property="og:url" content="http://example.com/2023/06/01/%E5%B7%A5%E5%85%B7/gradle/index.html">
 <meta property="og:site_name" content="where&#39;s blog">
-<meta property="og:description" content="Gradle">
+<meta property="og:description" content="Gradle使用用途下载依赖的缓存配置  &#x2F;Users&#x2F;where&#x2F;.gradle 1、gradle init 2、配置build.gradle  (全局配置 ：下载路径、本地仓库、) 3、.gralde&#x2F;gradle.properties ： 配置本地仓库？ 4、settings.gradle 下面是对于build.gradle、.gradle&#x2F;gradl">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-06-22T12:01:41.421Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:37.818Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary_large_image">
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6 字
+          3.4k 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          1 分钟
+          29 分钟
         
       </span>
     
@@ -274,7 +274,70 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1>
+                <h1 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h1><h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h2><p>下载依赖的缓存配置 </p>
+<p>&#x2F;Users&#x2F;where&#x2F;.gradle</p>
+<p>1、gradle init</p>
+<p>2、配置build.gradle  (全局配置 ：下载路径、本地仓库、)</p>
+<p>3、.gralde&#x2F;gradle.properties ： 配置本地仓库？</p>
+<p>4、settings.gradle</p>
+<p>下面是对于<code>build.gradle</code>、<code>.gradle/gradle.properties</code>和<code>settings.gradle</code>文件的一般用途以及示例配置信息的说明：</p>
+<ol>
+<li><p><code>build.gradle</code> 文件：</p>
+<ul>
+<li>用途：<code>build.gradle</code>文件是Gradle构建脚本的主要配置文件。它包含了构建配置、任务定义、插件应用和依赖管理等内容。</li>
+<li>示例配置信息：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs groovy"><span class="hljs-comment">// 配置构建脚本的基本信息和依赖项</span><br>group <span class="hljs-string">&#x27;com.example&#x27;</span><br>version <span class="hljs-string">&#x27;1.0.0&#x27;</span><br><br><span class="hljs-comment">// 配置插件</span><br>plugins &#123;<br>    id <span class="hljs-string">&#x27;java&#x27;</span><br>    id <span class="hljs-string">&#x27;com.github.johnrengelman.shadow&#x27;</span> version <span class="hljs-string">&#x27;7.0.0&#x27;</span><br>&#125;<br><br><span class="hljs-comment">// 配置任务</span><br>tasks &#123;<br>    compileJava &#123;<br>        options.encoding = <span class="hljs-string">&#x27;UTF-8&#x27;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 配置依赖项</span><br>dependencies &#123;<br>    implementation <span class="hljs-string">&#x27;com.google.guava:guava:30.1-jre&#x27;</span><br>    testImplementation <span class="hljs-string">&#x27;junit:junit:4.13.2&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><code>.gradle/gradle.properties</code> 文件：</p>
+<ul>
+<li>用途：<code>.gradle/gradle.properties</code>文件是Gradle项目的属性文件，用于配置全局的Gradle属性，例如仓库地址和认证信息等。</li>
+<li>示例配置信息：<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-comment"># 配置仓库地址</span><br><span class="hljs-attr">repository.url</span>=<span class="hljs-string">https://maven.example.com/repo</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 配置认证信息</span><br><span class="hljs-attr">repository.username</span>=<span class="hljs-string">my_username</span><br><span class="hljs-attr">repository.password</span>=<span class="hljs-string">my_password</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 配置Gradle守护进程内存限制</span><br><span class="hljs-attr">org.gradle.jvmargs</span>=<span class="hljs-string">-Xmx2g</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><code>settings.gradle</code> 文件：</p>
+<ul>
+<li>用途：<code>settings.gradle</code>文件用于配置Gradle多项目的设置，包括根项目和子项目的配置等。</li>
+<li>示例配置信息：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs groovy">rootProject.name = <span class="hljs-string">&#x27;my-app&#x27;</span><br><br>include <span class="hljs-string">&#x27;app&#x27;</span>, <span class="hljs-string">&#x27;library&#x27;</span><br><br>project(<span class="hljs-string">&#x27;:app&#x27;</span>).projectDir = <span class="hljs-keyword">new</span> File(<span class="hljs-string">&#x27;app&#x27;</span>)<br>project(<span class="hljs-string">&#x27;:library&#x27;</span>).projectDir = <span class="hljs-keyword">new</span> File(<span class="hljs-string">&#x27;library&#x27;</span>)<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<p>请注意，这些示例配置信息仅仅是为了演示目的，你需要根据自己的实际项目需求进行相应的配置。具体的配置取决于你的项目结构、依赖关系和构建需求等。</p>
+<h2 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h2><p>这三个文件在Gradle项目中具有不同的作用和关联，下面是它们的关联和区别的说明：</p>
+<ol>
+<li><p><code>build.gradle</code> 文件：</p>
+<ul>
+<li>关联：<code>build.gradle</code>文件是Gradle构建脚本的主要配置文件，用于定义项目的构建配置、任务、依赖项等。</li>
+<li>区别：每个Gradle项目通常都有一个或多个 <code>build.gradle</code> 文件，其中一个位于项目的根目录下，用于指定根项目的配置。其他的 <code>build.gradle</code> 文件可以位于子项目的目录中，用于指定子项目的独立配置。这些 <code>build.gradle</code> 文件相互关联，构成了项目的整体构建配置。</li>
+</ul>
+</li>
+<li><p><code>.gradle/gradle.properties</code> 文件：</p>
+<ul>
+<li>关联：<code>.gradle/gradle.properties</code>文件是Gradle项目的属性文件，用于定义全局的Gradle属性，可以在构建脚本中引用这些属性。</li>
+<li>区别：<code>.gradle/gradle.properties</code>文件是一个全局文件，用于统一配置Gradle项目中全局的属性，例如仓库地址、代理设置、插件配置等。它没有针对特定的构建配置或子项目，因此可以被整个项目共享。</li>
+</ul>
+</li>
+<li><p><code>settings.gradle</code> 文件：</p>
+<ul>
+<li>关联：<code>settings.gradle</code>文件用于配置Gradle多项目的设置，包括根项目的设置和子项目的配置，并定义了项目的结构。</li>
+<li>区别：<code>settings.gradle</code>文件位于Gradle项目的根目录，并且通常只有一个。它定义了根项目的属性（例如项目名称）和子项目的属性（例如子项目目录和名称），从而形成了项目的层次结构和多项目关系。</li>
+</ul>
+</li>
+</ol>
+<p>在Gradle项目中，这三个文件共同协作来定义项目的构建配置、属性和结构。<code>build.gradle</code> 文件用于定义具体的构建任务、依赖项和插件配置。<code>.gradle/gradle.properties</code> 文件用于定义全局的Gradle属性，供构建脚本引用。<code>settings.gradle</code> 文件用于定义项目的层次结构和多项目关系。</p>
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><h2 id="build-gradle"><a href="#build-gradle" class="headerlink" title="build.gradle"></a>build.gradle</h2><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">```<br><br><br><br>## gradle.properties<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>## settings.gradle<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><br><br><br><br><br>## 使用示例<br><br>下面是基于阿里云代理的仓库下载地址、插件下载地址以及本地仓库地址的配置方式的示例：<br><br><span class="hljs-number">1</span>. `build.gradle` 文件：<br>   ```groovy<br>   <span class="hljs-keyword">buildscript</span> &#123;<br>       <span class="hljs-keyword">repositories</span> &#123;<br>           maven &#123;<br>               url <span class="hljs-string">&#x27;https://maven.aliyun.com/repository/public&#x27;</span><br>           &#125;<br>       &#125;<br>       <span class="hljs-keyword">dependencies</span> &#123;<br>           <span class="hljs-comment">// 配置阿里云的Gradle插件仓库</span><br>           <span class="hljs-keyword">classpath</span> <span class="hljs-string">&#x27;com.android.tools.build:gradle:4.2.2&#x27;</span><br>       &#125;<br>   &#125;<br>   <br>   <span class="hljs-keyword">repositories</span> &#123;<br>       <span class="hljs-comment">// 配置阿里云的Maven仓库</span><br>       maven &#123;<br>           url <span class="hljs-string">&#x27;https://maven.aliyun.com/repository/public&#x27;</span><br>       &#125;<br>       <span class="hljs-comment">// 配置本地仓库</span><br>       mavenLocal()<br>   &#125;<br>   <br>   <span class="hljs-keyword">dependencies</span> &#123;<br>       <span class="hljs-comment">// 配置阿里云的依赖项</span><br>       implementation <span class="hljs-string">&#x27;com.alibaba:fastjson:1.2.76&#x27;</span><br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p><code>.gradle/gradle.properties</code> 文件：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-comment"># 配置代理地址</span><br><span class="hljs-attr">systemProp.http.proxyHost</span>=<span class="hljs-string">your_proxy_host</span><br><span class="hljs-attr">systemProp.http.proxyPort</span>=<span class="hljs-string">your_proxy_port</span><br><span class="hljs-attr">systemProp.https.proxyHost</span>=<span class="hljs-string">your_proxy_host</span><br><span class="hljs-attr">systemProp.https.proxyPort</span>=<span class="hljs-string">your_proxy_port</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 配置插件下载地址</span><br><span class="hljs-attr">pluginPortal</span>=<span class="hljs-string">https://plugins.gradle.org/m2/</span><br><span class="hljs-comment"></span><br><span class="hljs-comment"># 配置本地仓库地址</span><br><span class="hljs-attr">maven.local.repo</span>=<span class="hljs-string">/path/to/local/repository</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><code>settings.gradle</code> 文件：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs groovy">include <span class="hljs-string">&#x27;app&#x27;</span>, <span class="hljs-string">&#x27;library&#x27;</span><br><br>pluginManagement &#123;<br>    repositories &#123;<br>        <span class="hljs-comment">// 配置插件下载地址</span><br>        gradlePluginPortal()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>上述示例中的下载地址和本地仓库地址仅供参考，实际应根据你的阿里云代理配置和本地仓库位置进行更改。同时，请确保代理地址、插件下载地址和本地仓库地址是有效的。</p>
+<p>记住，这只是一般配置示例，并不一定适用于你的具体项目需求。请根据实际情况修改这些配置，并确保它们符合你的项目需求和网络环境。</p>
+
                 
               </div>
             

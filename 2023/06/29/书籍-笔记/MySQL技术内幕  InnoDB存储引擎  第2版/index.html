@@ -1,0 +1,1063 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MySQL技术内幕  InnoDB存储引擎  第2版第一章 MySOL体系结构和存储引擎定义数据库和实例在数据库领域中有两个词很容易混淆，这就是“数据库” (database)和“实例” ( i n s t a n c e )。 作 为 常 见 的 数 据 库 术 语 ， 这 两 个 词 的 定 义 如 下 。  数据库:物理操作系统 文件或其他形式文件类型的集合。在MysQL 数据库中，数据 库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Paxos到Zookeeper 分布式一致性原理与实践">
+<meta property="og:url" content="http://example.com/2023/06/29/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/MySQL%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%20%20InnoDB%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%20%20%E7%AC%AC2%E7%89%88/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="MySQL技术内幕  InnoDB存储引擎  第2版第一章 MySOL体系结构和存储引擎定义数据库和实例在数据库领域中有两个词很容易混淆，这就是“数据库” (database)和“实例” ( i n s t a n c e )。 作 为 常 见 的 数 据 库 术 语 ， 这 两 个 词 的 定 义 如 下 。  数据库:物理操作系统 文件或其他形式文件类型的集合。在MysQL 数据库中，数据 库">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702173314518.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171838703.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171913365.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702172551389.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702170155574.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171338633.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171409408.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702154636656.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702160128036.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702160354901.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702162832102.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702162900509.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702162925149.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230703205217439.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230703205431998.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230703205745290.png">
+<meta property="article:published_time" content="2023-06-28T23:56:01.000Z">
+<meta property="article:modified_time" content="2023-07-11T11:36:36.792Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="书籍">
+<meta property="article:tag" content="组件">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702173314518.png">
+  
+  
+  
+  <title>从Paxos到Zookeeper 分布式一致性原理与实践 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="从Paxos到Zookeeper 分布式一致性原理与实践"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-29 07:56" pubdate>
+          2023年6月29日 早上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          16k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          133 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">从Paxos到Zookeeper 分布式一致性原理与实践</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="MySQL技术内幕-InnoDB存储引擎-第2版"><a href="#MySQL技术内幕-InnoDB存储引擎-第2版" class="headerlink" title="MySQL技术内幕  InnoDB存储引擎  第2版"></a>MySQL技术内幕  InnoDB存储引擎  第2版</h1><h1 id="第一章-MySOL体系结构和存储引擎"><a href="#第一章-MySOL体系结构和存储引擎" class="headerlink" title="第一章 MySOL体系结构和存储引擎"></a>第一章 MySOL体系结构和存储引擎</h1><h2 id="定义数据库和实例"><a href="#定义数据库和实例" class="headerlink" title="定义数据库和实例"></a>定义数据库和实例</h2><p>在数据库领域中有两个词很容易混淆，这就是“数据库” (database)和“实例” ( i n s t a n c e )。 作 为 常 见 的 数 据 库 术 语 ， 这 两 个 词 的 定 义 如 下 。</p>
+<ul>
+<li>数据库:物理操作系统 文件或其他形式文件类型的集合。在MysQL 数据库中，数据 库文件可以是frn 、MYD、MYI、ibd 结尾的文件。当使用NDB引擎时，数据库的 文 件 可 能 不 是 操 作 系 统 上的 文 件 ， 而 是 存 放 于 内 存 之 中 的 文件 ， 但 是 定 义 仍 然 不 变 。 </li>
+<li>实例:MySQL 数据库由后台线程以及一个共享内存区组成。共享内存可以被运行 的后合线程所共享。需要牢记的是，数据库实例才是真正用于操作数据库文件的。</li>
+</ul>
+<h2 id="MySQL体系結枸"><a href="#MySQL体系結枸" class="headerlink" title="MySQL体系結枸"></a>MySQL体系結枸</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702173314518.png" srcset="/img/loading.gif" lazyload alt="image-20230702173314518"></p>
+<p>从图1-1可以发现，MysQL 由以下几部分组成: 连 接池组件</p>
+<ul>
+<li>管理服务和工具组件</li>
+<li>SQL 接口组件</li>
+<li>查询分析器组件 </li>
+<li>优化器组件 </li>
+<li>缓冲 (Cache)组件 </li>
+<li>插 件式存储 引擎</li>
+<li>物理文件</li>
+</ul>
+<h2 id="MySQL存储引擎"><a href="#MySQL存储引擎" class="headerlink" title="MySQL存储引擎"></a>MySQL存储引擎</h2><h3 id="—InnoDB-存储引擎"><a href="#—InnoDB-存储引擎" class="headerlink" title="—InnoDB 存储引擎"></a>—InnoDB 存储引擎</h3><p>InoDB存储引擎支持事务，其设计目标主要面向在线事务处理 (OLTP)的应用。 其 特 点 是 行 锁 设 计 、 支 持 外 键 ， 并 支 持 类 似 于 O r a c l e 的 非 锁 定 读， 即 默 认 读 取 操 作 不 会 产生锁。从MySQL 数据库5. 5. 8 版本开始，InnoDB 存储引擎是默认的存储引擎。</p>
+<ul>
+<li>Inn oDB 存储引擎将 数据放在一 个逻辑的 表空间中，这个表空间就像黑盒一样由I n n o D B 存 储 引 擎 自 身 进 行 管 理 。 丛 M y s Q L 4 . 1 (包 括 4 . 1 ) 版 本 开 始 ， 它 可 以 将 每 个 InnoDB 存储引擎的表单独存放到 一个独立的ibd 文件中。此外，InnoDB 存储引擎支持 用裸设备 (rowdisk )用来建立其表空间。</li>
+<li>InnoDB 通过使用多版本并发控制(MVCC)来获得高并发性，并且实现了sQL 标准的4种隔离级别，默认为REPEATABLE 级别。</li>
+<li>同时，使用一种被称为next key l o c k i n g 的 策 略 来 避 免 幻 读 (p h a n t o m ) 现 象 的 产 生 。 </li>
+<li>除 此 之 外 ， I n n o D B 储 存 引 擎 还 提 供了插人缓冲(insert buffer)、 二次写(double write)、自适应哈希索引(adaptivehash in dex ) 、 预 读 (read ahead ) 等 高 性 能 和 高 可 用 的 功 能 。</li>
+<li>对 于 表 中 数 据 的 存 储 ， I n n o D B 存 储 引 擎 采 用 了 聚 集 (c l u s t e r e d ) 的 方 式 ， 因 此 每 张 表的存储都是按主键的顺序进行存放。如果没有显式地在表定义时指定主键，IonoDB存 储 引 擎 会 为 每 一 行 生 成 一 个 6 字 节 的 R O W I D ， 并 以 此 作 为 主键 。</li>
+</ul>
+<h3 id="—MyISAM-存储引擎"><a href="#—MyISAM-存储引擎" class="headerlink" title="—MyISAM 存储引擎"></a>—MyISAM 存储引擎</h3><ul>
+<li>MyISAM 存储引警不支持事务、表锁设计，支持全文索引，主要面向 一些OLAP数 据 库 应 用 。</li>
+<li>MyISAM存储引擎的另 一个与众不同的地方是它 的 缓 冲 池 只 缓 存 (c a c h e ) 素 引 文 件 ， 而 不 绥 冲 数 据 文 件 ， 这 点 和 大 多 数 的 数 据 库 都 非 常 不同。</li>
+<li>MyISAM 存储引擎表由MYD 和MYI 组成，MYD 用来存放数据文件，MYI 用来存 放索引文件。<br>可以通过使用myisampac k 工具来进一步压缩数据文件，因为myisampack 工具使用赫夫曼 (Huffman )编码静态算法来压缩数据，因此使用myisampack 工具压缩 后的表是只读的，当然用户也可以通过myisar pack 来解压数据文件</li>
+</ul>
+<h3 id="—NDB-存储引擎"><a href="#—NDB-存储引擎" class="headerlink" title="—NDB 存储引擎"></a>—NDB 存储引擎</h3><ul>
+<li>NDB存修到救是一个然群存储引戰，災似于Orael e 的RAC集群，不过号orgel e f A shareeverything架构不同的是，其结构是share nothing的集群架构，因此能提供更高 的 可 用 性 。 </li>
+<li>N D B 的 特 点 是 数 据 全 部 放 在 内 存 中 (从 M y s Q L 5 . 1 版 本 开 妢 ， 可 以 将 非 索 引数据放在磁盘上)，因此主键查找 (primary key 1ookups)的速度极快，并且通过添加 NDB数据存储节点(Data Node)可以线性地提高数据库性能，是高可用、高性能的集群系统。</li>
+<li>NDB存储引擎的连接操作 (JOIN)是在MySQL 数据库层完成的，而不是在存储引擎层完成的。这意味着，复杂的 连按操作需要巨大的网络开销，因此查询速度很慢。如果解决 了这个问题，NDB 存储 警的市场应该是非常巨大的。</li>
+</ul>
+<h3 id="—Memory-存储引擎"><a href="#—Memory-存储引擎" class="headerlink" title="—Memory 存储引擎"></a>—Memory 存储引擎</h3><ul>
+<li>Me mor y 存储引警 (之前称 HEA P 存储引擎)将表中的数据存放在内存中， 如果数 据库重启或发生崩溃，表中的数据都将消失。它非常适合用于存储临时数据的临时表， 以及数据仓库中的纬度表。Memor y 存储引擎默认使用哈希索引，而不是我们熟悉的Bt 树素引。</li>
+</ul>
+<h3 id="—-Archive-存储引擎"><a href="#—-Archive-存储引擎" class="headerlink" title="—- Archive 存储引擎"></a>—- Archive 存储引擎</h3><ul>
+<li>Ar c h i v e 存 储 引 擎 只 支 持 I N S E R T 和 S EL E C T 操 作 ， 从 M y s Q L 5 . 1 开 始 支 持 素引。</li>
+<li>Archive 存储引擎非常适合存储归档数据，如日志信息。 Archive 存储引擎使用行锁来实现高并发的插人操作，但是其本身并不是事务安全的存 储引擎， 其设计 目标 主要是提供高速的插人和压缩 功能。</li>
+</ul>
+<h3 id="—Federated-存储引擎"><a href="#—Federated-存储引擎" class="headerlink" title="—Federated 存储引擎"></a>—Federated 存储引擎</h3><ul>
+<li>Federat ed 存储引擎表并不存放数据，它只是指向一台远程MysQL数据库服务器上 的表。这非常类似于SQLServer 的链接服务器和Oracle 的透明网关，不同的是，当前 Feder at ed 存储引擎只支持 MySQL 数据库表，不支持异构数据库表。</li>
+</ul>
+<h3 id="—Maria-存储引擎"><a href="#—Maria-存储引擎" class="headerlink" title="—Maria 存储引擎"></a>—Maria 存储引擎</h3><ul>
+<li>Maria 存储引擎是新开发的引擎，设计目标主要是用来取代原有的MyISAM存储引 擎，从而成为MysQL 的默认存储引擎。Maria存储引擎的开发者是MysQL的创始人之一的 M i c h a e l W i d e n i u s 。 因 此 ， 它 可 以 看 做 是 M y I S A M 的 后 续 版 本 。 </li>
+<li>M a r i a 存 储 引 擎 的 特点是**:支持缓存数据和素引文件，应用了行锁设计，提供了MVCC 功能，支持事务和 非事务安全的选项，以及更好的BLOB 宇符类型的处理性能。**</li>
+</ul>
+<h2 id="连接MySQL"><a href="#连接MySQL" class="headerlink" title="连接MySQL"></a>连接MySQL</h2><p>本节将介绍连接MySQL 数据库的常用方式。需要理解的是，连接Mys QL 操作是 一个连接进程和MysQL 数据库实例进行通信。从程序设计的角度来说，本质上是进程 通信。如果对进程通信比较 了解，可以知道常用的进程通信方式有<strong>管道、命名管道、命名字、TCP&#x2F;I P 套接字、UNIX 域套接字</strong>。Mys QL 数据库提供的连接方式从本质上看都 是上述提及的进程通信方式</p>
+<h1 id="第二章-InnoDB存储引擎"><a href="#第二章-InnoDB存储引擎" class="headerlink" title="第二章 InnoDB存储引擎"></a>第二章 InnoDB存储引擎</h1><h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171838703.png" srcset="/img/loading.gif" lazyload alt="image-20230702171838703">	</p>
+<h2 id="InnoDB体系架构"><a href="#InnoDB体系架构" class="headerlink" title="InnoDB体系架构"></a>InnoDB体系架构</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171913365.png" srcset="/img/loading.gif" lazyload alt="image-20230702171913365"></p>
+<p>后台线程的主要作用是负责刷新内存池中的数据，保证缓冲池中的内存缓存的是最 近的数据。此外将已修改的数据文件刷新到磁盘文件，同时保证在数据库发生异常的情 况 下In noDB 能恢复到正常运行状态</p>
+<h3 id="—后台线程"><a href="#—后台线程" class="headerlink" title="—后台线程"></a>—后台线程</h3><p>InnoDB存储引擎是多线程的模型，因此其后台有多个不同的后合线程，负责处理不同的任务</p>
+<ol>
+<li>Master Thread<br> Master Thread 是 一个非常核心的后台线程， 主要负责将缓冲池中的数据异步刷新 到磁盘，保证数据的一致性，包括脏页的刷新、合并插人缓冲 ( INSERT BUFFER) 、 UNDO页的回收等。</li>
+<li>IO Thread<br> 在InnoDB存储引擎中大量使用了AIO (Async IO)来处理写IO 请求，这样可以极 大提高数据库的性能。而10 Thread 的工作主要是负责这些I0 请求的回调 (call back<br> 处 理 。 InnoD B 1 . 0 版 本 之 前 共 有 4 个 IO Thread ， 分 别 是 w r i t e 、 r e a d 、 i n s e r t b u f f e r 和 lo g<br> 10 tbread。</li>
+<li>Purge Thread<br> 事务被提交后，其所使用的undolog 可能不再需要，因此需要PurgeThread 来回收 已经使用并分配的undo页。在InnoDB 1.1版本之前，purge操作仅在InnoDB存储引擎 的Master Thread中完成。而从InnoDB1.1版本开始，purge操作可以独立到单独的线<br> 程中进行，以此来<strong>减轻Master Thread的工作</strong>，从而提高CPU的使用率以及提升存储引 擎的性能。</li>
+<li>Page Cleaner Thread<br> PageCleaner Thread 是在InnoDB1.2.x版本中引人的。其作用是将之前版本中脏页 的刷新操作都放人到单独的线程中来完成。而其日的是为了<strong>減轻原Master Thread的工作 及对于用户查询线程的阻塞</strong>，进 一步提高InnoDB存储引擎的性能。</li>
+</ol>
+<h3 id="—内存"><a href="#—内存" class="headerlink" title="—内存"></a>—内存</h3><ol>
+<li><p>缓冲池<br>Inno DB 存储引擎是基 于磁盘存储的，并将 其中的记录按照页的方式进行管理。因此 可将其视为基于磁盘的数据库系统(Disk-base Database)。在数据库系统中，由于CPU 速度与磁 盘速度之间的鸿沟，基于磁盘的数据库系统通常使用缓冲池技术来提高数据库 的整体性能。</p>
+<ul>
+<li>在数据库中进行读取页的操作，首先將从磁盘读到的页存放在缓冲池中， 这个过程称为将页“FIX〞在绥冲池中。下一次再读相同的页时，首先判断该页是否在 缓冲池中。若在缓冲池中，称该页在缓冲池中被命中，直接读取该页。否则，读取磁盘 上的 页 。</li>
+<li>对于数据库中页的修改操作，则首先修改在缓冲池中的页，然后再以一定的频率刷 新到磁盘上</li>
+</ul>
+<p>缓冲池中缓存的数据页类型有:素引页、数据页、undo 页、插人缓冲 ( i n s e r t b u f f e r )、 自 适 应 哈 希 素 引 ( a d a p t i v e h a s h i n d e x ) 、 I n n o D B 存 储 的 锁 信 息 ( l o c k i i n f o )、 数 据 字 典 信 息 ( d a t a d i c t i o n a r y ) 等 。 </p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702172551389.png" srcset="/img/loading.gif" lazyload alt="image-20230702172551389"></p>
+</li>
+<li><p>LRUList、Free List 和Flush List</p>
+</li>
+<li><p>重做日志缓冲</p>
+</li>
+<li><p>额外的内存池</p>
+</li>
+</ol>
+<h2 id="Checkpoint-技术"><a href="#Checkpoint-技术" class="headerlink" title="Checkpoint 技术"></a>Checkpoint 技术</h2><p>因此Checkpoint (检查点)技术的目的是解决以下几个问题: </p>
+<ul>
+<li>缩短数据库的恢复时间;</li>
+<li>缓冲池不够用时，将脏页刷新到磁盘: </li>
+<li>重做日志不可用时，刷新胜页</li>
+</ul>
+<p> 有 两 种 C h e c k p o i n t ， 分 别 为:</p>
+<ul>
+<li>Sharp Checkpoint </li>
+<li>Fuzzy Checkpoint<br>SharpCheckpoint 发生在数据库关闭时将所有的脏页都刷新回 磁盘，这是默认的工作 方式，即参数innodb fast shutdown&#x3D;1。</li>
+</ul>
+<h1 id="第三章-文件"><a href="#第三章-文件" class="headerlink" title="第三章 文件"></a>第三章 文件</h1><p>本章將分析构成MySQL 数据库和IanoDB 存储引警表的各种类型文件。这些文件 有以下这些。</p>
+<ul>
+<li>参数文件:告诉MysQL 实例启动时在哪里可以找到数据库文件，并且指定某些 初始化参数，这些参数定义了某种内存结构的大小等设置，还会介绍各种参数的 类型。</li>
+<li>日志文件:用来记录MysQL 实例对某种条件做出;响应时写入的文件，如<strong>错误日 志文件、 二进制日志文件、慢查询日志文件、查询日志文件等。</strong></li>
+<li>socket 文件:当用UNIX域套接字方式进行连接时需要的文件。</li>
+<li>pid 文件:MysQL 实例的进程D 文件。</li>
+<li>MysQL 表结构文件:用来存放MysQL 表结构定义文件。 又存储引擎文件:因为MysQL 表存储引擎的关系，每个存储引擎都会有自己的文件来保存各种数据。这些存储引擎真正存储了记录和素引等数据。本章主要介绍 与InnoDB有关的存储引擎文件。</li>
+</ul>
+<h2 id="参数文件"><a href="#参数文件" class="headerlink" title="参数文件"></a>参数文件</h2><p>可以把数据库参数看成一个键&#x2F; 值 (key&#x2F;value)对。</p>
+<p>Mys QL 数据库中的参数可以分为两类: </p>
+<ul>
+<li>动 态 (d y n a m i c ) 参 数</li>
+<li>静态 ( st ati c )参数</li>
+</ul>
+<p>动态参数意味着可以在Mys QL 实例运行中进行更改，静态参数说明在整个实例生 命周期内都不得进行更改，就好像是只读(read only)的。可以通过SET命令对动态的 参数值进行修改，SET 的语法如 下:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SET</span><br><span class="hljs-operator">|</span> [g1obal <span class="hljs-operator">|</span> session] system_var_name<span class="hljs-operator">=</span> exp<br><span class="hljs-operator">|</span> [@<span class="hljs-variable">@global</span>. <span class="hljs-operator">|</span> eesession. <span class="hljs-operator">|</span> @@] system_var_name<span class="hljs-operator">=</span> expr<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h2><ul>
+<li>错误日志 (error log)</li>
+<li>ニ 迸 制 日 志 (bin l o g )</li>
+<li>慢 査 洵 日 志 (slow query l o g )</li>
+<li>查询日志 ( log )</li>
+</ul>
+<h3 id="—错误日志-（数据库优化）"><a href="#—错误日志-（数据库优化）" class="headerlink" title="—错误日志 （数据库优化）"></a>—错误日志 （数据库优化）</h3><p>错误日志文件对MysQL 的启动、运行、关闭过程进行了记录。MySQL DBA 在遇到问题时应该首先查看该文件以便定位问题。该文件不仅记录了所有的错误信息，也记 录一些警告信息或正确的信息。用户可以通过命令SHOWVARIABLES LIKE”10g-error 来定位该文件，</p>
+<p>SHON VARIABLES LIKE ‘10g_error’ 1G;</p>
+<h3 id="—慢查询日志-（SQL优化）"><a href="#—慢查询日志-（SQL优化）" class="headerlink" title="—慢查询日志 （SQL优化）"></a>—慢查询日志 （SQL优化）</h3><p>通过错误日志得到一些关于数据库优化的信息，而慢查询日志 ( sl ow 1og )可帮助 DBA 定位可能存在问题的 SQL 语句，从而进行 SQL 语句层面的优 化</p>
+<p>使用：</p>
+<p>在默认情况下，MysQL 数据库并不启动慢查询日志，用户需要 手工将这个参数设 ‡ ON:</p>
+<p>mysq1&gt; SHOW VARIABLES LIKE ‘long_query_time’\G;</p>
+<p>mysql&gt; SHOW VARIABLES LIKE ‘log_slow_queries’\G;</p>
+<p>1、定义时间（开启slow log）long_query_time</p>
+<p>2、查询日志。log_slow_queries</p>
+<p>3、查询未使用索引的sql日志 1og_queries_not_using_indexes</p>
+<ul>
+<li>首先，设置long_guery time 这个网值后，MysQL数据库会 记录运行时间超过该值的所有SQL语向，但运行时间正好等于long guery_time 的情况并不会被记录下。也就是说，在源代码中判断的是大于long_quer y_time，而非大于等 于。其次，从MysQL5. 1开始，long_guery_time 开始以微秒记录SQL语句运行的时间，之前仅用秒为单位记录。而这样可以更精确地记录$QL的运行时间，供DBA 分析。对 DBA来说，一条SQL 语句运行0.5秒和0.05 秒是非常不同的，前者可能己经进行了表 扫，后面可能是进行 了索引。</li>
+<li>另一 个和 慢 查询 日志 有 关的 参 数 是 1og_queries_not_using_indexes ， 如 果运 行 的 S QL 语句没有使用索引，则MySQL 数据库同样会将这条SQL 语句记录到慢查询日志文件。<br>首先确认打开了1og_queries_not using_indexes:<br>mysg1&gt; SHOWVARIABLES LIKE “1og_gueries_not_using_indexes’1G;</li>
+</ul>
+<h3 id="—查询日志"><a href="#—查询日志" class="headerlink" title="—查询日志"></a>—查询日志</h3><p>查询日志记录了所有对MysQL 数据库请求的信息，<strong>无论这些请求是否得到了正雄 的执行</strong>。默认文件名为: 主机名. 1og。</p>
+<p>[root@nineyou0-43 datal# tail nineyou0-43.1og</p>
+<h3 id="—二进制日志"><a href="#—二进制日志" class="headerlink" title="—二进制日志"></a>—二进制日志</h3><p>二 进 制 日 志 (b i n a r y l o g ) 记 录 了 对 M y s Q L 数 据 库 执 行 更 改 的 所 有 操 作 ， 但 是 不 包 括SELECT 和SHOW这类操作，因为这类操作对数据本身并没有修改。</p>
+<p>二进制日志主要有以 下几种作用。</p>
+<ul>
+<li>恢 复 ( r e c o v e r y ) :<br>某 些 数 据 的 恢 复 需 要 二进 制 日 志 ， 例 如 ， 在 一 个 数 据 库 全 备 文 件恢复后，用户可以通过二进制日志进行point-in-time 的恢复。</li>
+<li>复制 (replication ):<br>其原理与恢复类似，通过复制和执行二进制日志使一台远程 的 M y s Q L 数 据 库 (一 般 称 为 s l a v e 或 s t a n d b y ) 与 一 台 M y s Q L 数 据 库 (一 般 称 为master 或primary)进行实时同步。</li>
+<li>审计(audit) :<br>用户可以通过二进制日志中的信息来进行审计，判断是否有对数 据库进行注入的攻击。</li>
+</ul>
+<p>开启：通过配置参数1og-bin [-name了可以启动一进制日志。如果不指定narmd. 则黩认豆 进制日志文件名为主机名，后级名为二进制日志的序列号，所在路径为数据库所在目录<br>( d a t a d i r )， 如 :</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702170155574.png" srcset="/img/loading.gif" lazyload alt="image-20230702170155574"></p>
+<p>当使用事务的表存储引擎 (如InnoDB存储引擎)时，所有未提交 (uncommitted)<br>的二进制日志会被记录到一个缓存中去，等该事务提交 (committed)时直按将缓冲中 的 二进制日志写人 二进制日志文件，而该缓冲的大小由binlog_cache_size 决定，默认大 小为32K。</p>
+<ul>
+<li>binlog_cache size 是基于会话(session)的，当一个线程 开始一个事务时，MysQL 会自动分配一个大小为binlog_cache_size 的缓存，因此该值 的设置需要相当小心，<strong>不能设置过大</strong>。</li>
+<li>当一个事务的记录大于设定的binl og_cache_size 时，Mys QL 会把缓冲中的日志写人 一个临时文件中，因此该<strong>值又不能设得太小。</strong></li>
+</ul>
+<h2 id="套接字（socket）文件"><a href="#套接字（socket）文件" class="headerlink" title="套接字（socket）文件"></a>套接字（socket）文件</h2><p>前面提到过，在UNIx 系统下本地连接MysQL可以采用UN区域套接字方式，这 种方式需要一个套接宇 (socket )文件。套接字文件可由参数socket 控制。一般在&#x2F;tmp 目录 下，名为mysql.sock:</p>
+<p>mysq1&gt;SHOW VARIABLES LIKE ‘ s o c k e t ‘\G;</p>
+<h2 id="PID文件"><a href="#PID文件" class="headerlink" title="PID文件"></a>PID文件</h2><p>当MysQL 实例启动时，会將自己的进程1D写人一个文件中一—该文件即为pid 文 件。该文件可由参数pid fil e 控制，默认位于数据库目录下，文件名为主机名pid:</p>
+<p>mysql&gt; show variables like ‘ pid_file’\G;</p>
+<h2 id="表结构定义文件"><a href="#表结构定义文件" class="headerlink" title="表结构定义文件"></a>表结构定义文件</h2><p>因为MySQL 插件式存储引擎的体 系结构的关系，MySQL 数据的存储是根据表进行 的，每个表都会有与之对应的文件。但不论表采用何种存储引擎，MysQL 都有一个以 <strong>frm 为后缀名的文件</strong>，这个文件记录了该<strong>表的表结构定义</strong>。</p>
+<p>frm还用来存放视图的定义，如用户创建了一个v a视图，那么对应地会产生一<br>个v a.frm 文件，用来记录视图的定义，该文件是文本文件，可以直接使用cat 命令进行 查看:</p>
+<h2 id="InnoDB-存储引擎文件"><a href="#InnoDB-存储引擎文件" class="headerlink" title="InnoDB 存储引擎文件"></a>InnoDB 存储引擎文件</h2><p>MySQL 数据库本身的文件，和存储引擎无关。除 了这些文件 外，每个表存储引擎还有其自己独有的文件。</p>
+<p><strong>本节将具体介绍与IonoDB存储引擎密切 相关的文件，这些文件包括重做日志文件(redo log)、表空间文件。</strong></p>
+<h3 id="—表空间文件"><a href="#—表空间文件" class="headerlink" title="—表空间文件"></a>—表空间文件</h3><p>IanoDB采用将存储的数据按表空间 (tablespace )进行存放的设计。在默认配置 下会有一个初始大小为10MB，名为ibdatal 的文件。该文件就是默认的表空间文件 ( tablespac efile)，用戸可以通 参数i nnodb_data_f ile_pat he対其迷行没置，格式如下:<br>innodb_data_file_path&#x3D;datafile_spec1] ; datafile_spec2] . . . 用户可以通过多个文件组成一 个表空间，同时制定文件的属性， 如:<br>[mysqld]<br>innodb _data_file_path &#x3D; &#x2F;db&#x2F;ibdatal :2000M;&#x2F; dr2&#x2F;cb&#x2F;ibdat.a2:2000M:autoextend</p>
+<h3 id="—重做日志文件"><a href="#—重做日志文件" class="headerlink" title="—重做日志文件"></a>—重做日志文件</h3><p>当实例或介质失败 mediafailure)时，重做日志文件就能派上用场。例如，数据库 由于所在主机掉电导致实例失败，Inn oDB 存储引擎会使用重做日志恢复到掉电前的时 刻，以此来保证数据的完整性。</p>
+<p>在InnoDB存储引禁的<strong>数据目录下会有两个名为ib_logfile0 和 ib_logfle1</strong> 的文件。在MysQL 官方手册中将其称为InnoDB<strong>存储引擎的日志文件</strong>，不过更淮确的定义应该是**重做日志文件 (redo log file )**。</p>
+<ul>
+<li><p>参数innodb_1og_file_size 指定每个重做日志文件的大小。在InnoDB1.2.x版本之前， 重 做 日 志 文 件 总 的 大 小 不 得 大 于等 于 4 G B ， 而 1. 2 . x 版 本 将 该 限 制 扩 大 为 了 5 1 2 G B 。 </p>
+</li>
+<li><p>参数innodb_1og_fil es_in_group 指定 了日志文件组中重做日志文件的数量，默认为2。</p>
+</li>
+<li><p>参数innodb_mirrored 1og_eroups 指定了日志镜像文件组的数量，默认为1，表示只 有 一个日志文件组，没有镜像。若磁盘本身已经做了高可用的方案，如磁盘阵列，那么 可以不开启重做日志镜像的功能。</p>
+</li>
+<li><p>最后，参数innodb1oggtouphome dir指定了日志文 件 组 所 在 路 径 ， 默 认 为 !， 表 示 在 M y S Q L 数 据 库 的 数 据 目 录 下 。 以 下 显 示 了 一 个 关 于</p>
+</li>
+</ul>
+<p>重做日志组的配置:<br>mysq1&gt;SHOW VARIABLES LIKE innodblog§’\G;</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171338633.png" srcset="/img/loading.gif" lazyload alt="image-20230702171338633"></p>
+<p>写入重做日志流程：</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702171409408.png" srcset="/img/loading.gif" lazyload alt="image-20230702171409408"></p>
+<ul>
+<li>主 线 程 (m a s t e r t h r e a d )， 知 道 在 主 线 程 中 每 秒 会 将 重 做 日 志缓冲写人磁盘的重做日志文件中，不论事务是否已经提交。</li>
+<li>另 一个触发写磁盘的过程是 由参数inodbfush1og_at trx_comr it 控制，表示在提交(commit)操作时，处理重做 • 日志的方式。</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>本 章 介 绍 了与 M y S Q L 数 据 库 相 关 的 一 些 文 件 ， 并 了 解 了 文 件 可 以 分 为 M y s Q L 数 据库文件以及与各存储引擎相关的文件。与MysQL 数据库有关的文件中，错误文件和 二进制日志文件非常重要。当MysQL 数据库发生任何错误时，DBA 首先就应该去查看错 误文件，从文件提示的内容中找出问题的所在。当然，错误文件不仅记录了错误的内容， 也 记 录 了 警 告 的 信 息 ， 通 过 一些 警 告 也 有 助 于 D B A 对 于 数 据 库 和 存 储 号l 擎 进 行 优 化 。</li>
+<li>二进制 日志的作用 非常 关键，可以用来进行point in time 的恢复以及复制<br>(replication)环境的搭建。因此，建议在任何时候时都启用 二进制日志的记录。从 MysQL 5.1开始，二进制日志支特STATEMENT、ROW、MIX 三种格式，这样可以更 好地保证从数据库与主数据库之问数据的 一致性。当然DBA应该十分清楚这三种不同 格式之间的差异。</li>
+<li>本章的最后介绍了和InnoDB 存储引擎相关的文件，包括表空间文件和重做日志文 件。<ul>
+<li>表空间文件是用来管理IanoDB存储引擎的存储，分为共享表空间和独立表空间。 </li>
+<li>重做日志非常的重要，用来记录InnoDB 存储引攀的事务日志，也因为重做日志的存在， 才使得InnoDB 存储引擎可以提供可靠的事务。</li>
+</ul>
+</li>
+</ul>
+<h1 id="第四章-表"><a href="#第四章-表" class="headerlink" title="第四章 表"></a>第四章 表</h1><h2 id="索引组织表"><a href="#索引组织表" class="headerlink" title="索引组织表"></a>索引组织表</h2><h2 id="InnoDB逻辑存储结构"><a href="#InnoDB逻辑存储结构" class="headerlink" title="InnoDB逻辑存储结构"></a>InnoDB逻辑存储结构</h2><h3 id="—表空间"><a href="#—表空间" class="headerlink" title="—表空间"></a>—表空间</h3><h2 id="—段"><a href="#—段" class="headerlink" title="—段"></a>—段</h2><h3 id="—区"><a href="#—区" class="headerlink" title="—区"></a>—区</h3><h3 id="—页"><a href="#—页" class="headerlink" title="—页"></a>—页</h3><h3 id="—行"><a href="#—行" class="headerlink" title="—行"></a>—行</h3><h2 id="InnoDB行记录格式"><a href="#InnoDB行记录格式" class="headerlink" title="InnoDB行记录格式"></a>InnoDB行记录格式</h2><h3 id="—Compact-行记录格式"><a href="#—Compact-行记录格式" class="headerlink" title="—Compact 行记录格式"></a>—Compact 行记录格式</h3><p>Compact 行记录是在<strong>MysQL 5.0中引人</strong>的，其设计目标是高效地存储数据。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702154636656.png" srcset="/img/loading.gif" lazyload alt="image-20230702154636656"></p>
+<ul>
+<li><strong>非NULL 变长字段长度列 表</strong>，并且其是按照列的顺序逆序放置的，其长度为:<ul>
+<li>又 若列的长度小于 255 字节，用 1 字节表示;</li>
+<li>又若大于255 个字节，用2 字节表示。</li>
+</ul>
+</li>
+<li>变长字段之后的第 二个部分是NULL 标志位，该位指示了 该行数据中是否有NULL 值，有则用1表示。该部分所占的宇节应该为1字节。</li>
+<li>是 记 录 头 信 息 (r e c o r d h e a d e r ) ， 固 定 占 用 5 字 节 (4 0 位 )， 每 位 的 含 义 见 表 4 - 1 。</li>
+</ul>
+<h3 id="—Redundant-行记录格式"><a href="#—Redundant-行记录格式" class="headerlink" title="—Redundant 行记录格式"></a>—Redundant 行记录格式</h3><p>Redundant是<strong>MysQL5.0版本之前</strong>InoDB的行记录存储方式</p>
+<h3 id="—行溢出数据"><a href="#—行溢出数据" class="headerlink" title="—行溢出数据"></a>—行溢出数据</h3><p>从错误消息可以看到InnoDB 存储引擎并不支持65535 长度的VARCHAR。这是因 为还有别的开销，通过实际测试发现能存放VARCHIAR类型的最大长度为65532。</p>
+<h3 id="—Compressed-和-Dynamic-行记录格式"><a href="#—Compressed-和-Dynamic-行记录格式" class="headerlink" title="—Compressed 和 Dynamic 行记录格式"></a>—Compressed 和 Dynamic 行记录格式</h3><p>InnoDB 1.0.x 版本开始引人了新的文件格式 (fle format，用户可以理解为新的页格式)， </p>
+<ul>
+<li>以前支持的Compact 和Redundant 格式称为Antelope 文件格式，</li>
+<li>新的文件格式称为Barracuda 文件格式。Barracuda 文件格式下拥有两种新的行记录格式:Compressed 和Dynamic</li>
+</ul>
+<p>存放行溢出数据 off page</p>
+<ul>
+<li>对于存放在BLOB 中的数据采用 了完全的行溢出的方式， 如 图4-5所示，在数据页中只存放20个字节的指针，实际的数据都存放在Off Page 中， </li>
+<li>而之前的Compact 和Redundant 两种格式会存放768 个前缀字节。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702160128036.png" srcset="/img/loading.gif" lazyload alt="image-20230702160128036"></p>
+<p>Compressed 行记录格式的另一个功能就是，存储在其中的行数据会以zli b 的算法进 行 压 缩， 因 此 对 于B L O B 、T E X T 、 V A R C H A R 这 类 大长 度 类 型 的数 据 能 够 进 行 非常 有 效 的存储</p>
+<h2 id="NamedFileFormats机制"><a href="#NamedFileFormats机制" class="headerlink" title="NamedFileFormats机制"></a>NamedFileFormats机制</h2><p>InnoDB存储引擎将1.0.x版本之前的文件格式(file format)定义为Antelope，将这 个版本支持的 文件格式定义为Barracuda 。新的文件格式总是包含 于之前的版本的页格 式。</p>
+<p>InnoDB存储引通过Named File Formats 机制来解决 不 同 版 本 下页 结 构 兼 容 性 的 问 题 。</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702160354901.png" srcset="/img/loading.gif" lazyload alt="image-20230702160354901"></p>
+<h3 id="—CHAR的行结构存储"><a href="#—CHAR的行结构存储" class="headerlink" title="—CHAR的行结构存储"></a>—CHAR的行结构存储</h3><h2 id="Inno-DB-数据页结构"><a href="#Inno-DB-数据页结构" class="headerlink" title="Inno DB 数据页结构"></a>Inno DB 数据页结构</h2><p>InnoDB数据页由以下了个部分组成，如图4-6 所示。 </p>
+<ul>
+<li><p>FileHeader (文件头)</p>
+</li>
+<li><p>Page Header (页头)</p>
+</li>
+<li><p>• Infimun #ll Supremum Records</p>
+</li>
+<li><p>User Records (用户记录，即行记录) </p>
+</li>
+<li><p>FreeSpace (空闲空间) </p>
+</li>
+<li><p>PageDirectory (页目录)</p>
+</li>
+<li><p>FileTrailer (文件结尾信息)</p>
+</li>
+</ul>
+<p>其中File Header 、Page Header 、File Trailer 的大小是固定的，分别为38、56、8 字 节，这些空间用来标记该页的一些信息，如Checksum，数据页所在B+树索引的层数 等。UserRecords、FreeSpace、Page Directory这些部分为实际的行记录存储空间，因此 大小是动态的</p>
+<h2 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h2><h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>视图在数据库中发挥着重要的作用。视图的主要用途之一是被用做 一个抽象装置， 特 别 是 对 于 一些 应 用 程 序 ， 程 序 本 身 不 需 要 关 心 基 表 (b a s e t a b l e ) 的 结 构 ， 只 需 要 按 照 祝阁定义来取数据或更新数据，因此，视因同时在 一定程度上起到 一个安全层的作用</p>
+<h3 id="—物化视图"><a href="#—物化视图" class="headerlink" title="—物化视图"></a>—物化视图</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><ul>
+<li><p>Oracle 数据库支特物化视图——该视图不是基于基表的虚表，而是根据基表实际存 在的实表，即物化视图的数据存储在非易失的存储设备上。</p>
+<ul>
+<li>物化视因可以用于预先计算 并保存多表的链接(JOIN)或聚集(GROUP BY)符耗时较多的SQL操作结果。这样， 在执行复杂有询时，就可以避免进行这些耗时的操作，从而快速得到结果。</li>
+<li>物化视图的好处是对于一些复杂的统计类查询能直接查出结果。</li>
+</ul>
+</li>
+<li><p>在Microsoft SQL Server 数据库中，称这种视图为索引视图。</p>
+</li>
+<li><p>MySQL不支持物化视图，但是可以通过触发器等机制自己实现</p>
+</li>
+</ul>
+<h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><p>物化视图的创建方式包括以下两种:</p>
+<ul>
+<li><p>BUILD IMMEDIATE  （立即）</p>
+</li>
+<li><p>BUILD DEFERRED（referred - 使用时）</p>
+</li>
+</ul>
+<p>BUILDI MEDIATE是默认的创建方式，在创建物化视图的时候就生成数据，而 BUILDDEFERED 则在创建物化视图时不生成数据，以后根据需要再生成数据。</p>
+<h4 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h4><p>物化视图的刷新是指当基表发生了DML 操作后，物化视图何时采用哪种方式和基 表进行同步。刷新的模式有两种:</p>
+<ul>
+<li>ON DEMAND </li>
+<li>ON COMMIT<br>ON DEMAND 意味着物化视图在用户需要的时候进行刷新，ON COMMIT 意味着物 化视图在对基表的DML 操作提交的同时进行刷新。</li>
+</ul>
+<h4 id="刷新"><a href="#刷新" class="headerlink" title="刷新"></a>刷新</h4><p> 刷 新 的 方法 有 四 种  :</p>
+<ul>
+<li>FAST</li>
+<li>COMPLETE</li>
+<li>FORCE </li>
+<li>NEVER<ul>
+<li>F A S T 刷 新 采 用 增 量 刷 新 ， 只 刷 新 自 上次 刷 新 以 后 进 行 的 修 改 。</li>
+<li>C O M P L E T E 刷 新 是 对整个物化视图进行完全的刷新。</li>
+<li>如果选择FORCE方式，则数据库在刷新时会去判断是否可以进行快速刷新，如果可以，则采用FAST 方式，否则采用COMPLETE的方式。 </li>
+<li>NEVER 是指物化视因不进行任何刷新。</li>
+</ul>
+</li>
+</ul>
+<h2 id="分区表"><a href="#分区表" class="headerlink" title="分区表"></a>分区表</h2><h3 id="—分区概述"><a href="#—分区概述" class="headerlink" title="—分区概述"></a>—分区概述</h3><p>分区的过程是将<strong>一个表或素引分 解为多个更小、更可管理的部分。</strong></p>
+<p>就访问数据库的应用而言，从逻辑 上讲，只有一个表 或 一个素引，但是在物理上这个表或素引可能由数十个物理分区组成。每个分区都是独 立的对象，可以独自处理，地可以作为一个更大对象的一部分进行处理。</p>
+<ul>
+<li><p>Mys QL 数据库支持的分区类型为水平分区，并不支持垂直分区</p>
+</li>
+<li><p>MysQL 数 据 库 的 分 区 是 局 部 分 区 索 引 ， 一个 分 区 中 既 存 放 了 数 据 又 存 放 了 素 引 。 </p>
+</li>
+<li><p>而 全 局 分 区 是 指，数据存放在各个分区中，但是所有数据的素引放在一个对象中。</p>
+</li>
+<li><p>◎ 水平分区，指将同一表中不同行的记录分配到不同的物理文件中。 -</p>
+</li>
+<li><p>垂直分区，指将同一表中不同列的记录分配到不同的物理 文体中。</p>
+</li>
+</ul>
+<h3 id="—分区类型"><a href="#—分区类型" class="headerlink" title="—分区类型"></a>—分区类型</h3><p>当前MysQL 数据库支持以下几种类型的分区。</p>
+<ul>
+<li>R A N G E 分 区 : 行 数 据 基 于 屈 于 一个 给 定 连 续 区 间 的 列 值 被 放 人 分 区 。 M y S Q L 5 . 5 开始支持 RANGE COLUMNS 的分区。</li>
+<li>LIST 分区:和RANGE分区类型，只是LIST 分区面向的是离散的值。MysQL 5. 5 开 始 支持 L I S T C O L U M N S 的 分 区 。 </li>
+<li>HASH分区:根据用户自定义的表达式的返回值来进行分区，返回值不能为负数。 </li>
+<li>KEY 分区:根据MySQL 数据库提供的哈希两数来进行分区</li>
+</ul>
+<h3 id="—子分区（复合）"><a href="#—子分区（复合）" class="headerlink" title="—子分区（复合）"></a>—子分区（复合）</h3><p>子分区 (subpartitioning)是在分区的基础上再进行分区，有时也称这种分区为复合 分区(composite partitioning)。MySQL数据库允许在RANGE和LIST的分区上再进行 H A S H 或 K E Y 的 子分 区</p>
+<p>数据库的应用分为两类:</p>
+<ul>
+<li>一类是OLTP (在线事务处理)，如Blog、电子商务、网络 游戏等;</li>
+<li>另 一类是OLAP (在线分析处理)，如数据仓库、数据集市</li>
+</ul>
+<p>对 于OLAP 的应用，分区的确 是可以很好地提高查询的性能，因为OL AP 应用大多 数查询需要频繁地扫描 一张很大的表。</p>
+<p>对于OLTP 的应用，分区应该非常小心。在这种应用下，通常不可能会获取一 张大表中10%的数据，大部分都是通过素引返回几条记录即可。而根据B+树索引的原<br>理可知，对于一张大表，一般的B+树需要2 ~3次的磁密10。因此B+树可以很好地 完成操作，不需要分区的帮助，并且设计不好的分区会带来严重的性能问题。</p>
+<h1 id="第五章-索引与算法"><a href="#第五章-索引与算法" class="headerlink" title="第五章 索引与算法"></a>第五章 索引与算法</h1><h2 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+ 树索引"></a>B+ 树索引</h2><h2 id="全文检索"><a href="#全文检索" class="headerlink" title="全文检索"></a>全文检索</h2><p>从InnoDB 1. 2. x 版本开始，InnoDB 存储引擎开始支持全文检素，其支持MyISAM 存储引擎的全部功能，并且还支持其他的一些特性</p>
+<h3 id="—倒排索引"><a href="#—倒排索引" class="headerlink" title="—倒排索引"></a>—倒排索引</h3><p>全文检索通常使用倒排素引(inverted index)来实现。倒排索引同B+树素引一样， 也是一种素引结构。它在辅助表(auxiliarytabie)中存储了单词与单词自身在 一个或多 个文档中所在位置之间的映射。这通常利用关联数组实现，其拥有两种表现形式:</p>
+<ul>
+<li>i n v e r t e d f l e i n d e x ， 其 表 现形 式 为 { 单 词， 单 词 所 在 文 档 的 1 D ;</li>
+<li>fall invertedindex，其表现形式为{单词，(单词所在文档的D，在具体文档中的位置)</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702162832102.png" srcset="/img/loading.gif" lazyload alt="image-20230702162832102"></p>
+<p>Documentid 表示进行全文检索文档的Id，Text 表示存储的内容</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702162900509.png" srcset="/img/loading.gif" lazyload alt="image-20230702162900509"></p>
+<p> 单 词 c o d e 存 在 于 文 档 1 和 4 中 ， 单 词 d a y s 存 在 与 文 档 了和 6 中 。 之 厦 要 要进行全文查询就简单了，可以直接根据Documents 得到包含查询关键字的文档。</p>
+<ul>
+<li>“对 于inverted fle index，其仅存取文档Id，而full inverted index存储的是对(pair)，即 ( D o c u m e n t i d ， P o s i t i o n ) ，</li>
+<li>而full inverted index存储的是对(pair)，即 ( D o c u m e n t i d ， P o s i t i o n ) ， 因 此 其 存 储 的 倒 排 素 引 如 表 5- 8 所 示 。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230702162925149.png" srcset="/img/loading.gif" lazyload alt="image-20230702162925149"></p>
+<p>f u l l i n v e r t e d i n d e x 还 存 储 了 单 词 所 在 的 位 置 信 息 ， 如 c o d e 这 个 单 词 出 现 在 ( 1 : 6 )，<br>即文档1的第6 个单词为code。相比之下，full inverted index 占用更多的空间，但是能 更好地定位数据，并扩充一些其他的搜索特性。</p>
+<h3 id="—InnoDB全文检索"><a href="#—InnoDB全文检索" class="headerlink" title="—InnoDB全文检索"></a>—InnoDB全文检索</h3><p>InnoDB存储引擎从1.2.x版本开始支持全文检索的技术，其采用full inverted index 的方式。在InnoDB存储引擎中，将(Documentld，Position)视为一个“iist ”。因此在全文检素的表中（<strong>创建倒排索引后的那张表</strong>，类似5-8），有两个列， 一个是word宇段，另 一个是ilist 字段，并且在word 宇段上 有设有索引。</p>
+<p>。在IanoDB存储引擎中，为了提高全文检素的并行性能，共 有6张AuxiliaryTable</p>
+<ul>
+<li>Auxili ary Table 是持久的表，存放于磁盘 上。然而在InnoDB 存储引擎的全文索引 中，还有另外一个重要的概念FTSIndexCache (全文检素素引缓存)，其用来提高全文<br>检索的性能。</li>
+<li>FTSIndexCache是一个红黑树结构，其根据(word, ilist)进行排序。这意味着插人的数据已经更新了对应的表，但是对全文素引的更新可能在分词操作后还在-FTSIndes Cache 中，Auxiliar y Table 可能込没有更新。<br>InnoDB 存儲引擎会批量対Auxili ary Table 进行更新，而不是每次插人后更新 一次Auxiliary Table。</li>
+</ul>
+<p>说明：<br>当对全文检素进行查询时， Auxiliary Table首先会将在FTSIndexCache中対 的word宇段合并到AuxiliaryTable 中，然后再进行查询。</p>
+<p>这种merge 操作非常类似之前介绍的Insert Buffer 的功能，不同 的是Inser t Buffer 是一个持久的对象，并且其是B+树的结构。然而FTS Index Cache 的<br>作 用 又 和 I n s e r t B u f f e r 是 类 似 的 ， 它 提 高 了 I n n o D B 存 储 引 擎 的 性 能 ， 并 且 由 于其 根 据 红 黑树排序后进行批量插人，其产生的 Auxili ar y Tabl e 相对较小。</p>
+<p>MysQL数据库支持全文检索(Full-Text Search)的查询，其语法为: </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">MATCH</span> (coll, col2, ). AGAINST (expr (<span class="hljs-keyword">search</span> _modifier])<br>search_modifier:<br>&#123;<br>  <span class="hljs-keyword">IN</span> <span class="hljs-keyword">NATURAL</span> <span class="hljs-keyword">LANGUAGE</span> MODE<br>  <span class="hljs-operator">|</span> <span class="hljs-keyword">IN</span> <span class="hljs-keyword">NATURAL</span> <span class="hljs-keyword">LANGUAGE</span> MODE <span class="hljs-keyword">WITH</span> QUERY EXPANSION <br>  <span class="hljs-operator">|</span> <span class="hljs-keyword">IN</span> <span class="hljs-type">BOOLEAN</span> MODE<br>  <span class="hljs-operator">|</span> <span class="hljs-keyword">WITH</span> QUERY EXPANSION<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="第六章-锁"><a href="#第六章-锁" class="headerlink" title="第六章 锁"></a>第六章 锁</h1><h2 id="lock-和-latch"><a href="#lock-和-latch" class="headerlink" title="lock 和 latch"></a>lock 和 latch</h2><ul>
+<li>latch 一般称为门锁 (轻量级的锁)，因为其要求锁定的时间必领非常短。若持续的时间长，则应用的性能会非常差。在InnoDB存储引擎中，latch又可以分为mutex (互斥量)和rwlock (读写锁)。其目的是用来保证并发线程操作临界资源的正确性，并且 通常没有死锁检测的机制。</li>
+<li>lock 的对象是事务，用来锁定的是数据库中的对象，如表、页、行。并且一般lock 的对象仅在事务commit或ro1lback 后进行释放 (不同事务隔离级别释放的时间可能不同 )。 此 外 ， l o c k ， 正 如 在 大 多 数 数 据 库 中 一样 ， 是 有 死 锁 机 制 的</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230703205217439.png" srcset="/img/loading.gif" lazyload alt="image-20230703205217439"></p>
+<h2 id="InnoDB的锁"><a href="#InnoDB的锁" class="headerlink" title="InnoDB的锁"></a>InnoDB的锁</h2><h3 id="—锁类型"><a href="#—锁类型" class="headerlink" title="—锁类型"></a>—锁类型</h3><p>InnoDB 存储引擎实现了如下两种标准的行级锁:</p>
+<ul>
+<li>共 享 锁 (S L o c k )， 允 许 事 务 读 一 行 数 据 。 </li>
+<li>排他锁 (XLock)，允许事务删除或更新一行数据。</li>
+</ul>
+<p> I n n o D B 存 储 引 擎 支 持 多 粒 度 (granular ) 锁 定 ， 这 种 锁 定 允 许 事 务 在 行 级 上 的 锁和表级上的锁同时存在。为了支持在不同粒度上进行加锁操作，InnoDB 存储引孳支持 一 种 额 外 的 锁 方 式 ， 称 之 为 意 向 锁 (I n t e n t i o n L o c k )。 意 向 锁 是 将 锁 定 的 对 象 分 为 多 个 层 次，意向锁意味着事务希望在更细粒度 ( fine granularity )上进行加锁，</p>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230703205431998.png" srcset="/img/loading.gif" lazyload alt="image-20230703205431998"></p>
+<p>InnoDB 存储引擎支持意向锁设计比较简练，其意向锁即为表级别的锁。设计目的 主要是为了在一个事务中揭示下一行將被请求的锁类型。其支持两种意向锁:</p>
+<ul>
+<li>1 ) 意 向 共 享 锁 ( IS Lock )， 事 务 想 要 获 得 一 张 表 中 某 几 行 的 共 享 锁</li>
+<li>2)意向排他锁 (IXLock)，事务想要获得一张表中某几行的排他锁</li>
+</ul>
+<h3 id="—-一致性非锁定读（MVCC）"><a href="#—-一致性非锁定读（MVCC）" class="headerlink" title="— 一致性非锁定读（MVCC）"></a>— 一致性非锁定读（MVCC）</h3><ul>
+<li>在READ COMMITTED 事务隔离级别 下，对于快照数据，非一致 性读总是读取被锁定行的<strong>最新一份快照数据。</strong></li>
+<li>而在REPEATABLE READ事务隔离级别 下，对于快照数据，非一致性读总是读取<strong>事务开始时</strong>的行数据版本</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230703205745290.png" srcset="/img/loading.gif" lazyload alt="image-20230703205745290"></p>
+<h3 id="—一致性锁定读"><a href="#—一致性锁定读" class="headerlink" title="—一致性锁定读"></a>—一致性锁定读</h3><p>对于SELECT 语句支<br>持两种一致性的锁定读 (locking read)操作: </p>
+<ul>
+<li>SELECT-•FOR UPDATE</li>
+<li>SELEC T.. LOCK IN SHARE MODE</li>
+</ul>
+<p>SELECT• FOR UPDATE对读取的行记录加一个×锁，其他事务不能对已锁定的行加上任何锁。</p>
+<p>SELECT• LOCK INSFTAREMODE对读取的行记录加一个s 锁，其他事 务可以向被锁定的行加s 锁，但是如果加×锁，则会被阻塞。</p>
+<p>对 于一致性非锁定读，即使读取的行已被执行了SELECT…•FOR UPDATE，也是可 以进行读取的，这和之前讨论的情况一样。此外，SELECT• FORUPDATE, SELECT• L O C K I N S H A R E M O D E <strong>必 须 在 一 个事 务 中， 当 事 务 提 交 了 ， 锁 也 就 释 放 了</strong> 。 因 此 在 使 用 上述两句SELECT 锁定语句时，务必加上BEGIN, START TRANSACTION 或者SET AUTOCOMMIT&#x3D;0.</p>
+<h3 id="—自增长与锁"><a href="#—自增长与锁" class="headerlink" title="—自增长与锁"></a>—自增长与锁</h3><p>在IonoDB存储引擎中，自增长值的列必须是索引，同时必领是家引的第 个列。如果不是第一个列，则MysQL数据库会抛出异常，而MyISAM存储引擎没着这 个问题</p>
+<h3 id="—外键和锁"><a href="#—外键和锁" class="headerlink" title="—外键和锁"></a>—外键和锁</h3><h2 id="锁的算法"><a href="#锁的算法" class="headerlink" title="锁的算法"></a>锁的算法</h2><h3 id="—行锁的3种算法"><a href="#—行锁的3种算法" class="headerlink" title="—行锁的3种算法"></a>—行锁的3种算法</h3><p>I n n o D B 存 储 引 擎 有 了种 行 锁 的 算 法 ， 其 分 别 是 : </p>
+<ul>
+<li>Record Lock:单个行记录上的锁</li>
+<li>Gap Lock:间隙锁，锁定一个范围，但不包含记录本身</li>
+<li>Next-KeyLock: GapLock+RecordLock，锁定一个范围，并且锁定记录本身</li>
+</ul>
+<h3 id="—解决Phantom-Problem"><a href="#—解决Phantom-Problem" class="headerlink" title="—解决Phantom Problem"></a>—解决Phantom Problem</h3><p>PhantomProblem是指在同 一事务下，连续执行两次同样的SQL语句可能导致不同 的结果，第二次的SQL 语句可能会返回之前不存在的行。</p>
+<ul>
+<li>在默认的事务隔离级别 下，即REPEATABLE READ 下，InnoDB存储引擎采用Next-Key Locking 机制来避免Phantom Problem (幻像问题)。</li>
+<li>这点可能不同于与其他的数据 库 ， 如 Or a c l e 数 据 库， 因 为 其 可 能 需 要 在 S E R I A L I Z A B L E 的 事 务 隔 离 级 别 下才 能 解 決 P h an t o m P r o b l e m 。</li>
+</ul>
+<p>InnoDB存储引擎采用Next-Key Locking 的算法避免Phantom Problem。对于上述的 SQL 语句SELECT*FROMtWHEREa&gt;2FORUPDATE，其锁住的不是5这单个值，而是对(2，十∞)这个范围加了x 锁。因此任何对于这个范围的插人都是不被允许的，从 而避免Phantom Problem。</p>
+<p>InnoDB 存储引擎默认的事务隔离级别是REPEATABLEREAD，在该隔离级别下， 其采用Next-KeyLocking的方式来加锁。<br>而在事务隔离级别READCOMMI TTED下， 其仅采用Record Lock，</p>
+<h2 id="锁问题"><a href="#锁问题" class="headerlink" title="锁问题"></a>锁问题</h2><h3 id="—脏读"><a href="#—脏读" class="headerlink" title="—脏读"></a>—脏读</h3><p>脏读指的就是在不同的事务下，当前事务可以读到另外事务未提交的数据，简单来说 就 是 可 以 读 到 脏 数 据 。 （read uncommit）</p>
+<p>读发生的 条件是需要事务的隔离级别为READUNCOMMITTED</p>
+<h3 id="—不可重复读"><a href="#—不可重复读" class="headerlink" title="—不可重复读"></a>—不可重复读</h3><p> 在 第 一个 事 务 中 的两次读数据之间，由于第二个事务的修改，那么第一个事务两次读到的数据可能是不一样的。这样就发生了在一个事务内两次读到的数据是不一样的情况，这种情况称为不 可重复读。（read commit）</p>
+<p>隔离级别设置为READCOMMITTED，在这种隔离级别下允许不 可重复读的现象。</p>
+<p>InnoDB 存储引擎的默认事务隔离 级别是READREPEATABLE，采用Next-Key Lock 算法，避免了不可重复读的现象。</p>
+<h3 id="—丟失更新"><a href="#—丟失更新" class="headerlink" title="—丟失更新"></a>—丟失更新</h3><p>丢失更新是另一个锁导致的问题，简单来说其就是一个事务的更新操作会被另一个 事务的更新操作所覆盖，从而导致数据的不 一致。</p>
+<ul>
+<li>虽然数据库能阻止丢失更新问题的产生，但是在生产应用中还有另一个逻辑意义的丢失更新问题，而导致该问题的并不是因为数据库本身的问题。</li>
+<li>实际上，在所有多用户 计算机系统环境下都有可能产生这个问题</li>
+</ul>
+<h2 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h2><p>锁 升 级 (L o c k E s c a l a t i o n ) 是 指 将 当 前 锁 的 粒 度 降 低 。 举 例 来 说 ， 数 据 库 可 以 把 一 个表的1000 个行锁升级为 一个页锁，或者将页锁升级为表锁。</p>
+<h1 id="第七章-事务"><a href="#第七章-事务" class="headerlink" title="第七章 事务"></a>第七章 事务</h1><p>InnoDB 存储引擎默认支持的隔离级别是REPEATABLE READ，但是与标准SQL 不同的是，InnoDB存储引警在REPEATABLE READ事务隔离级别下，使用Next-Key L o c k 锁 的 算 法 ， 因 此 避 免 幻 读 的 产 生 。 这 与 其 他 数 据 库 系 统 (如 Mi c r o s o f t S Q L S e r v er<br>数据库)是不同的。所以说，InnoDB存储引擎在默认的REPEATABLE READ的事务隔 离级别下已经能完全保证事务的隔离性要求，即达到SQL 标准的SERI ALIZABLE隔离 级别。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E4%B9%A6%E7%B1%8D/" class="category-chain-item">书籍</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E4%B9%A6%E7%B1%8D/%E7%BB%84%E4%BB%B6/" class="category-chain-item">组件</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B9%A6%E7%B1%8D/">#书籍</a>
+      
+        <a href="/tags/%E7%BB%84%E4%BB%B6/">#组件</a>
+      
+        <a href="/tags/MySQL/">#MySQL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>从Paxos到Zookeeper 分布式一致性原理与实践</div>
+      <div>http://example.com/2023/06/29/书籍-笔记/MySQL技术内幕  InnoDB存储引擎  第2版/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/05/%E5%B7%A5%E5%85%B7/Redis/" title="Redis">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/29/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E4%BB%8EPaxos%E5%88%B0Zookeeper-%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/" title="从Paxos到Zookeeper 分布式一致性原理与实践">
+                        <span class="hidden-mobile">从Paxos到Zookeeper 分布式一致性原理与实践</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
