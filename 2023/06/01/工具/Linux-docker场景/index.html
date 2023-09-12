@@ -16,15 +16,15 @@
   <meta name="author" content="where">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux-docker使用Linux查看cpu使用情况在 Linux 中，可以使用多种命令来查看 CPU 占用情况。以下是几个常用的命令：  top 命令  top 命令可以显示系统中所有活动进程的实时 CPU 使用情况，反复显示进程列表以及有关进程的 CPU 使用情况信息。 命令示例： 1top  该命令将会显示实时的进程列表和 CPU 使用率2. htop 命令 htop 命令是 top 命">
+    <meta name="description" content="Linux-docker使用Linux文件夹覆盖语法要实现覆盖目录的操作，您可以使用rsync命令。请使用以下命令： 1rsync -av --delete oceanus&#x2F; qcloud&#x2F;oceanus&#x2F;  这个命令将会使用rsync命令将oceanus文件夹下的内容复制到qcloud&#x2F;oceanus文件夹中，并覆盖已存在的文件。选项-av表示以递归和详细模式进行复制，--delete">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux-docker使用">
 <meta property="og:url" content="http://example.com/2023/06/01/%E5%B7%A5%E5%85%B7/Linux-docker%E5%9C%BA%E6%99%AF/index.html">
 <meta property="og:site_name" content="where&#39;s blog">
-<meta property="og:description" content="Linux-docker使用Linux查看cpu使用情况在 Linux 中，可以使用多种命令来查看 CPU 占用情况。以下是几个常用的命令：  top 命令  top 命令可以显示系统中所有活动进程的实时 CPU 使用情况，反复显示进程列表以及有关进程的 CPU 使用情况信息。 命令示例： 1top  该命令将会显示实时的进程列表和 CPU 使用率2. htop 命令 htop 命令是 top 命">
+<meta property="og:description" content="Linux-docker使用Linux文件夹覆盖语法要实现覆盖目录的操作，您可以使用rsync命令。请使用以下命令： 1rsync -av --delete oceanus&#x2F; qcloud&#x2F;oceanus&#x2F;  这个命令将会使用rsync命令将oceanus文件夹下的内容复制到qcloud&#x2F;oceanus文件夹中，并覆盖已存在的文件。选项-av表示以递归和详细模式进行复制，--delete">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-11T11:36:37.816Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.909Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="容器">
 <meta property="article:tag" content="工具">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          14k 字
+          15k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          119 分钟
+          128 分钟
         
       </span>
     
@@ -276,7 +276,18 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Linux-docker使用"><a href="#Linux-docker使用" class="headerlink" title="Linux-docker使用"></a>Linux-docker使用</h1><h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="查看cpu使用情况"><a href="#查看cpu使用情况" class="headerlink" title="查看cpu使用情况"></a>查看cpu使用情况</h2><p>在 Linux 中，可以使用多种命令来查看 CPU 占用情况。以下是几个常用的命令：</p>
+                <h1 id="Linux-docker使用"><a href="#Linux-docker使用" class="headerlink" title="Linux-docker使用"></a>Linux-docker使用</h1><h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="文件夹覆盖语法"><a href="#文件夹覆盖语法" class="headerlink" title="文件夹覆盖语法"></a>文件夹覆盖语法</h2><p>要实现覆盖目录的操作，您可以使用<code>rsync</code>命令。请使用以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">rsync -av --delete oceanus/ qcloud/oceanus/<br></code></pre></td></tr></table></figure>
+
+<p>这个命令将会使用<code>rsync</code>命令将oceanus文件夹下的内容复制到qcloud&#x2F;oceanus文件夹中，并覆盖已存在的文件。选项<code>-av</code>表示以递归和详细模式进行复制，<code>--delete</code>表示删除目标文件夹中不存在于源文件夹中的文件。</p>
+<p>请确保您在运行命令之前已经进入到正确的目录，并且oceanus文件夹和qcloud文件夹都存在。</p>
+<h2 id="批量文件打包-语法"><a href="#批量文件打包-语法" class="headerlink" title="批量文件打包 语法"></a>批量文件打包 语法</h2><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">tar -czf org.tar.gz <span class="hljs-constructor">$(<span class="hljs-params">find</span> <span class="hljs-params">org</span> -<span class="hljs-params">type</span> <span class="hljs-params">f</span> -<span class="hljs-params">name</span> &#x27;<span class="hljs-params">scala</span><span class="hljs-operator">*</span>&#x27;)</span> <br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="查看cpu使用情况"><a href="#查看cpu使用情况" class="headerlink" title="查看cpu使用情况"></a>查看cpu使用情况</h2><p>在 Linux 中，可以使用多种命令来查看 CPU 占用情况。以下是几个常用的命令：</p>
 <ol>
 <li>top 命令</li>
 </ol>
@@ -311,7 +322,7 @@
 
 
 
-<h2 id="查看硬盘使用情况"><a href="#查看硬盘使用情况" class="headerlink" title="查看硬盘使用情况"></a>查看硬盘使用情况</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">df</span> -h<br></code></pre></td></tr></table></figure>
+<h2 id="查看硬盘-x2F-文件使用情况"><a href="#查看硬盘-x2F-文件使用情况" class="headerlink" title="查看硬盘&#x2F;文件使用情况"></a>查看硬盘&#x2F;文件使用情况</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">df</span> -h<br><br><span class="hljs-comment">## 文件</span><br><span class="hljs-built_in">du</span> -sh <br>-s 统一显示<br>-h G<br></code></pre></td></tr></table></figure>
 
 
 
@@ -342,7 +353,7 @@
 <li><p>设置用户信息，包括用户名和邮箱：</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.name</span> <span class="hljs-string">&quot;Your Name&quot;</span><br>git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.email</span> <span class="hljs-string">&quot;youremail@example.com&quot;</span><br></code></pre></td></tr></table></figure>
 
-<p>注意，其中的 “Your Name” 和 “<a href="mailto:&#121;&#111;&#x75;&#114;&#101;&#109;&#x61;&#x69;&#x6c;&#x40;&#x65;&#120;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#99;&#x6f;&#109;">&#121;&#111;&#x75;&#114;&#101;&#109;&#x61;&#x69;&#x6c;&#x40;&#x65;&#120;&#x61;&#x6d;&#x70;&#108;&#101;&#x2e;&#99;&#x6f;&#109;</a>” 需要替换为您自己的名字和邮箱。</p>
+<p>注意，其中的 “Your Name” 和 “<a href="mailto:&#x79;&#x6f;&#x75;&#114;&#101;&#x6d;&#97;&#105;&#x6c;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#46;&#x63;&#111;&#x6d;">&#x79;&#x6f;&#x75;&#114;&#101;&#x6d;&#97;&#105;&#x6c;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#46;&#x63;&#111;&#x6d;</a>” 需要替换为您自己的名字和邮箱。</p>
 </li>
 <li><p>设置 Git 的编辑器，在提交代码时会用到：</p>
 <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">git <span class="hljs-built_in">config</span> <span class="hljs-comment">--global core.editor nano</span><br></code></pre></td></tr></table></figure>
@@ -567,6 +578,32 @@
 </li>
 </ol>
 <p>总之，SDKman 可以帮助开发人员简化软件工具的管理过程，并提供方便的命令行界面来安装、切换和管理不同版本的开发工具。这大大提高了开发人员的效率和开发环境的稳定性。</p>
+<h1 id="curl-发起请求"><a href="#curl-发起请求" class="headerlink" title="curl 发起请求"></a>curl 发起请求</h1><p>curl是一个功能强大的命令行工具，用于发送HTTP请求并获取响应。以下是一些curl的使用示例：</p>
+<ol>
+<li><p>发送GET请求并获取响应：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl https:<span class="hljs-regexp">//</span>example.com<br></code></pre></td></tr></table></figure>
+<p>这将向<a target="_blank" rel="noopener" href="https://example.com发送一个get请求,并将响应输出到终端./">https://example.com发送一个GET请求，并将响应输出到终端。</a></p>
+</li>
+<li><p>发送POST请求并传递数据：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl -X POST -d <span class="hljs-string">&quot;name=John&amp;age=25&quot;</span> https:<span class="hljs-regexp">//</span>example.com/api<br></code></pre></td></tr></table></figure>
+<p>这将向<a href="https://example.com/api%E5%8F%91%E9%80%81%E4%B8%80%E4%B8%AAPOST%E8%AF%B7%E6%B1%82%EF%BC%8C%E5%B9%B6%E5%B0%86%22name=John&age=25%22%E4%BD%9C%E4%B8%BA%E8%AF%B7%E6%B1%82%E4%BD%93%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E3%80%82">https://example.com/api发送一个POST请求，并将&quot;name=John&amp;age=25&quot;作为请求体中的数据。</a></p>
+</li>
+<li><p>设置请求头：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> https:<span class="hljs-regexp">//</span>example.com/api<br></code></pre></td></tr></table></figure>
+<p>这将向<a href="https://example.com/api%E5%8F%91%E9%80%81%E4%B8%80%E4%B8%AAGET%E8%AF%B7%E6%B1%82%EF%BC%8C%E5%B9%B6%E8%AE%BE%E7%BD%AE%E8%AF%B7%E6%B1%82%E5%A4%B4%E4%B8%AD%E7%9A%84Content-Type%E4%B8%BAapplication/json%E3%80%82">https://example.com/api发送一个GET请求，并设置请求头中的Content-Type为application/json。</a></p>
+</li>
+<li><p>下载文件：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl -O https:<span class="hljs-regexp">//</span>example.com/file.txt<br></code></pre></td></tr></table></figure>
+<p>这将从<a href="https://example.com/file.txt%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%EF%BC%8C%E5%B9%B6%E4%BF%9D%E5%AD%98%E4%B8%BA%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84file.txt%E3%80%82">https://example.com/file.txt下载文件，并保存为当前目录下的file.txt。</a></p>
+</li>
+<li><p>使用认证：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl -u username:password https:<span class="hljs-regexp">//</span>example.com/api<br></code></pre></td></tr></table></figure>
+<p>这将向<a href="https://example.com/api%E5%8F%91%E9%80%81%E4%B8%80%E4%B8%AAGET%E8%AF%B7%E6%B1%82%EF%BC%8C%E5%B9%B6%E4%BD%BF%E7%94%A8%E5%9F%BA%E6%9C%AC%E8%AE%A4%E8%AF%81%EF%BC%88username%E5%92%8Cpassword%EF%BC%89%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E3%80%82">https://example.com/api发送一个GET请求，并使用基本认证（username和password）进行身份验证。</a></p>
+</li>
+</ol>
+<p>这只是curl的一些基本用法示例，curl还有很多其他功能和选项，可以根据具体需求进行更高级的使用。</p>
+<p>如果您需要更详细的信息，建议使用以下查询词进行搜索：curl使用示例。</p>
+<p>如果您有其他问题，请随时提问。</p>
 <h1 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h1><p>如何查看镜像&#x2F;容器的 <code>文件结构</code> 信息</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle">docker <span class="hljs-keyword">inspect</span><br>docker <span class="hljs-keyword">inspect</span> 镜像id<br>docker <span class="hljs-keyword">inspect</span> 容器name<br></code></pre></td></tr></table></figure>
 

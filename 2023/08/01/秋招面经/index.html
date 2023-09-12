@@ -1,0 +1,836 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="面试常见TCP 粘包&#x2F;拆包1234567891011121314151617181920212223242526272829TCP粘包和拆包是在TCP通信中常见的问题，涉及到数据的传输和接收过程中的数据边界处理。TCP粘包指的是发送方在发送数据时，多个小的数据包被合并成一个大的数据包发送到接收方，导致接收方无法准确地区分出每个小的数据包。这可能会导致接收方在处理数据时出现错误或混乱。TC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="秋招面经">
+<meta property="og:url" content="http://example.com/2023/08/01/%E7%A7%8B%E6%8B%9B%E9%9D%A2%E7%BB%8F/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="面试常见TCP 粘包&#x2F;拆包1234567891011121314151617181920212223242526272829TCP粘包和拆包是在TCP通信中常见的问题，涉及到数据的传输和接收过程中的数据边界处理。TCP粘包指的是发送方在发送数据时，多个小的数据包被合并成一个大的数据包发送到接收方，导致接收方无法准确地区分出每个小的数据包。这可能会导致接收方在处理数据时出现错误或混乱。TC">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:53.236Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>秋招面经 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="秋招面经"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-01 00:00" pubdate>
+          2023年8月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          58 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">秋招面经</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="面试常见"><a href="#面试常见" class="headerlink" title="面试常见"></a>面试常见</h1><h3 id="TCP-粘包-x2F-拆包"><a href="#TCP-粘包-x2F-拆包" class="headerlink" title="TCP 粘包&#x2F;拆包"></a>TCP 粘包&#x2F;拆包</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs">TCP粘包和拆包是在TCP通信中常见的问题，涉及到数据的传输和接收过程中的数据边界处理。<br><br>TCP粘包指的是发送方在发送数据时，多个小的数据包被合并成一个大的数据包发送到接收方，导致接收方无法准确地区分出每个小的数据包。这可能会导致接收方在处理数据时出现错误或混乱。<br><br>TCP拆包指的是发送方在发送数据时，一个大的数据包被拆分成多个小的数据包发送到接收方，导致接收方需要进行数据的组装和处理。<br><br>造成TCP粘包和拆包的原因主要有以下几点：<br><br>TCP传输的特性：TCP是一种面向连接的可靠传输协议，它将应用层的数据流划分为一系列的数据段进行传输。在传输过程中，TCP会对数据进行分段、封装和重组，这可能导致数据包的大小和边界发生变化。<br><br>发送方发送速度和接收方接收速度不一致：如果发送方发送数据的速度快于接收方接收数据的速度，就有可能发生粘包现象。发送方可能会将多个小的数据包合并成一个大的数据包发送，导致接收方无法准确地区分出每个小的数据包。<br><br>网络传输延迟和拥塞：网络传输中的延迟和拥塞也可能导致粘包和拆包现象。当网络延迟较高或发生拥塞时，TCP可能会将多个小的数据包合并成一个大的数据包发送，或者将一个大的数据包拆分成多个小的数据包发送。<br><br>为了解决TCP粘包和拆包问题，可以采取以下几种方法：<br><br>消息长度固定：发送方在发送数据时，可以在每个数据包的开头添加固定长度的消息头，用于指示数据包的长度。接收方在接收数据时，根据消息头中的长度信息来准确地划分出每个小的数据包。<br><br>分隔符：发送方在发送数据时，可以在每个数据包的末尾添加特定的分隔符，用于标识数据包的结束。接收方在接收数据时，根据分隔符来划分出每个小的数据包。<br><br>消息头中包含长度信息：发送方在发送数据时，可以在每个数据包的消息头中添加长度信息，用于指示数据包的长度。接收方在接收数据时，先读取消息头中的长度信息，然后根据长度信息来准确地划分出每个小的数据包。<br><br>应用层协议设计：在应用层设计自定义的协议，用于准确地划分数据包的边界。这需要发送方和接收方都遵循相同的协议规则。<br><br>总之，TCP粘包和拆包是在TCP通信中常见的问题，可以通过固定消息长度、分隔符、长度信息或应用层协议设计等方法来解决。具体的解决方案需要根据实际情况和需求来选择。<br><br>如果您需要更详细的信息，可以使用以下查询词进行搜索：TCP粘包和拆包解决方案、TCP粘包和拆包原因。<br><br>如果您有任何其他问题，请随时提问。<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="GOD-–-可看"><a href="#GOD-–-可看" class="headerlink" title="GOD – 可看"></a>GOD – 可看</h1><h2 id="推荐阅读："><a href="#推荐阅读：" class="headerlink" title="推荐阅读："></a>推荐阅读：</h2><p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129022714">响应式圣经：10W字，实现Spring响应式编程自由</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129004814">全链路异步，让你的 SpringCloud 性能优化10倍+</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128932396">Linux命令大全：2W多字，一次实现Linux自由</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129056726">阿里一面：你做过哪些代码优化？来一个人人可以用的极品案例</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128805374">网易二面：CPU狂飙900%，该怎么处理？</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128848309">阿里二面：千万级、亿级数据，如何性能优化？ 教科书级 答案来了</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128725701">峰值21WQps、亿级DAU，小游戏《羊了个羊》是怎么架构的？</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128533821">场景题：假设10W人突访，你的系统如何做到不 雪崩？</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128697096">2个大厂 100亿级 超大流量 红包 架构方案</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128684641">Nginx面试题（史上最全 + 持续更新）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128671196">K8S面试题（史上最全 + 持续更新）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128708648">操作系统面试题（史上最全、持续更新）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128670335">Docker面试题（史上最全 + 持续更新）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/125057567">Springcloud gateway 底层原理、核心实战 (史上最全)</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/124120506">Flux、Mono、Reactor 实战（史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/125059491">sentinel （史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/125057545">Nacos (史上最全)</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/114527369">TCP协议详解 (史上最全)</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/123420859">分库分表 Sharding-JDBC 底层原理、核心实战（史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/126992542">clickhouse 超底层原理 + 高可用实操 （史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/120702536">nacos高可用（图解+秒懂+史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128264803">队列之王： Disruptor 原理、架构、源码 一文穿透</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128264508">环形队列、 条带环形队列 Striped-RingBuffer （史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/125135726">一文搞定：SpringBoot、SLF4j、Log4j、Logback、Netty之间混乱关系（史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128265067">单例模式（史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/125017316">红黑树（ 图解 + 秒懂 + 史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/109459593">分布式事务 （秒懂）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/128123114">缓存之王：Caffeine 源码、架构、原理（史上最全，10W字 超级长文）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/113751575">缓存之王：Caffeine 的使用（史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/126579528">Java Agent 探针、字节码增强 ByteBuddy（史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/120747767">Docker原理（图解+秒懂+史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/116425814">Redis分布式锁（图解 - 秒懂 - 史上最全）</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/85956246">Zookeeper 分布式锁 - 图解 - 秒懂</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/85922561">Zookeeper Curator 事件监听 - 10分钟看懂</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/83957259">Netty 粘包 拆包 | 史上最全解读</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/83758107">Netty 100万级高并发服务器配置</a>》</p>
+<p>《<a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/102557988">Springcloud 高并发 配置 （一文全懂）</a>》</p>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t0">说在前面</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t1">DDD(Domain Driven Design)理解</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t2">什么是DDD</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t3">DDD的作用</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t4">DDD的基本概念</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t5">领域模型 Domain Model</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t6">实体对象 Entities</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t7">值对象 Value Object</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t8">聚合</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t9">聚合根</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t10">领域服务</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t11">领域事件</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t12">DDD四种模式</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t13">失血模型</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t14">贫血模型</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t15">充血模型</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t16">胀血模型</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t17">DDD建模方法</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t18">用例分析法</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t19">四色建模法</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t20">事件风暴法</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t21">DDD分层架构</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t22">DDD的概念</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t23">传统的三层架构</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t24">DDD领域驱动设计的分层架构</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t25">DDD的特点</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t26">使用DDD的好处</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t27">DDD的难点</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t28">深入DDD</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t29">领域驱动设计一般分为两个阶段</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t30">（1）战略阶段。</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t31">（2）战术阶段。</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t32">领域驱动设计流程</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t33">领域驱动的流程特点</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t34">阶段一：战略阶段</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t35">领域通用语言和限界上下文（Bounded Context）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t36">通用语言 Ubiquitous Language</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t37">领域和子域 （Domain 、SubDomain）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t38">核心域（Core Domain）、通用域和支撑域</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t39">上下文映射图（Context Mapping） - 上下文 Context集成</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t40">阶段二：战术阶段</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t41">实体和值对象</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t42">聚合和聚合根</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t43">领域事件（Domain Event）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t44">领域服务(Domain Service)和应用服务(Application Service)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t45">开发框架设计</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t46">领域驱动落地框架</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t47">1 COLA框架</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t48">2 leave-sample</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t49">3 dddbook</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t50">4 Xtoon</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t51">5 DDD Lite</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t52">6 ruoyi_cloud</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t53">7 Axon Framework</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t54">DDD实战</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t55">step1：学生管理系统的问题空间</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t56">step2：价值需求分析：形成统一语言</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t57">step3： 价值需求分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t58">step4：业务需求分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t59">识别限界上下文及其映射</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t60">step5：领域分析模型</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t61">step6：领域设计模型</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t62">step7：服务设计：</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t63">step8：领域实现建模</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t64">step9：分层架构</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t65">Step10.代码骨架</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t66">DDD 与微服务的关系</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t67">一个BC代表一个微服务吗？</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t68">最后浓缩一下：DDD的四重边界</a></li>
+<li><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t69">附录：什么是POCO和DTO、值对象（Value Object）?</a></li>
+</ol>
+</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/129089926#t70">参考文献：</a></li>
+<li>[推荐阅读：</li>
+</ol>
+<h1 id="自己的"><a href="#自己的" class="headerlink" title="自己的"></a>自己的</h1><h1 id="微云创想"><a href="#微云创想" class="headerlink" title="微云创想"></a>微云创想</h1><h3 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h3><h4 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h4><p>1、先介绍使用的数据结构</p>
+<p>2、介绍使用技巧</p>
+<p>3、介绍达成的效果</p>
+<p>4、介绍作用的过程</p>
+<p>5、对比多种分布式锁的实现方式 </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span>、场景：mysql的<span class="hljs-keyword">where</span> a <span class="hljs-keyword">in</span> (<span class="hljs-keyword">select</span> xx <span class="hljs-keyword">from</span> xx)，如何优化<br><span class="hljs-number">2</span>、mysql 的索引有什么用（快速）<br><span class="hljs-number">3</span>、场景：如何排查前端传递请求乱码问题，<br><span class="hljs-number">4</span>、项目的表有哪些，主要字段、对应关系<br><span class="hljs-number">5</span>、分布式锁实现流程 <span class="hljs-comment">-- 具体到每一步的加锁、解锁</span><br><span class="hljs-number">6</span>、Java 的面向对象有哪些特征，进行说明 <span class="hljs-comment">-- 封装、继承、多态，</span><br><span class="hljs-number">7</span>、接口有什么作用，举例说明；<br><span class="hljs-number">8</span>、Spring 的最终重要的特性，Ioc、AOP<br><span class="hljs-number">9</span>、spring mvc返回json配置，通过注解（<span class="hljs-variable">@RespondBody</span> <span class="hljs-comment">-- @RestController）</span><br><span class="hljs-number">10</span>、idea 常用的快捷键<br><span class="hljs-number">11</span>、<br><br><br>总结：<br><span class="hljs-number">1</span>、千万千万不要自己随意发散，要用最简短的语言概括，用最合理的语言分析<br><span class="hljs-number">2</span>、尝试举出合理的例子，比如，A、B节点说明分布式锁<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="锐锢商城"><a href="#锐锢商城" class="headerlink" title="锐锢商城"></a>锐锢商城</h1><h3 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ada"><span class="hljs-number">1</span>、SPI机制 <span class="hljs-comment">-- JDBC、</span><br><span class="hljs-number">2</span>、PostProposser 有哪些，作用；他的优缺点是什么<br><span class="hljs-number">1</span>、一句话概括实习经历，你做了是什么<br><span class="hljs-number">2</span>、做的最有收获的一件事是什么（思考为什么要选择这个方案，怎么做） <span class="hljs-comment">-- 为什么选择这个方案、这个方案有什么优缺点</span><br><span class="hljs-number">4</span>、网络连接、操作系统IO优化<br><span class="hljs-number">5</span>、<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="一面-1"><a href="#一面-1" class="headerlink" title="一面"></a>一面</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1</span>、自我介绍，上来就嘴瓢，个人信息都没说（学校、掌握技能点、项目、实习经历 <span class="hljs-comment">-- 这些都没说，因为被打断了～）</span><br><span class="hljs-number">1</span>、实习项目介绍（没介绍好，他都没听懂） <span class="hljs-comment">-- 从新梳理逻辑（感觉正常面试都g了50%，我是真的菜啊）</span><br><span class="hljs-number">1</span>、实习中负责什么，实习项目的难点是什么<br><span class="hljs-number">2</span>、第二个项目介绍：<br><span class="hljs-number">2</span>、消息队列的作用<br><span class="hljs-number">3</span>、mysql 如何解决慢查询：为什么会导致慢查询、如何解决（导致：回表、IO、索引；慢查询日志、explain执行计划<span class="hljs-operator">-</span>想起来了不会～）<br><span class="hljs-number">3</span>、mysql 和 redis 如何配合使用（<span class="hljs-keyword">sql</span>复杂查询、redis数据结构、快速响应）<br><span class="hljs-number">4</span>、redis 可能遇到的业务问题（大key、业务问题：缓存雪崩、击穿、穿透）<br><span class="hljs-number">5</span>、redis 为什么使用单线程（基于内存、计算密集型、减少多线程协调问题、）<br><span class="hljs-number">4</span>、消息队列的使用场景、功能（异步解耦、削峰填谷、可靠传输）<br><span class="hljs-number">5</span>、rabbitMQ 的使用，有哪些组件，作用是什么（product、broker、exchange、queue、channel、consumer）<br><span class="hljs-number">5</span>、对自己的点评和总结，实习能够带来哪些提升（开发流程、理论<span class="hljs-operator">-</span>》实践、增长见识）<br><span class="hljs-number">6</span>、反问<br><span class="hljs-number">7</span>、个人问题总结<br>（<span class="hljs-number">30</span>min）<br><br>总结：<br><span class="hljs-number">1</span>、总分总结构，先回答出要点，再进行发散，不要一个点讲多了，其他点还没讲<br><span class="hljs-number">2</span>、这次勉强能够保持清醒，但是问题比较多，rabbitMQ 的使用问题，不够清晰，对项目不太熟悉<br><span class="hljs-number">3</span>、简单自我点评:这次保持了很长时间的“头脑清醒”，才知道自己有多菜。（指:边面试，边想起来这里不会，那里不会[表情][表情] 虽然嘴上没瓢，但是心里瓢了）<br>要是换以前，面完感觉自己又行了～<br><br>问题：<br><span class="hljs-number">1</span>、消息队列结构，作用<br><span class="hljs-number">2</span>、mysql explain<br><span class="hljs-number">3</span>、实习介绍 很垃圾啊<br><span class="hljs-number">4</span>、总分总模式，很垃圾啊<br><span class="hljs-number">5</span>、<br><br><br>总结问题 <span class="hljs-comment">-- redis、msql：</span><br>Redis的布隆过滤器操作命令：<br>Redis并没有提供原生的布隆过滤器数据结构，但可以通过使用Redis的位图（BitMap）数据结构来实现布隆过滤器的功能。以下是一些常用的布隆过滤器操作命令：<br><br>SETBIT key <span class="hljs-keyword">offset</span> <span class="hljs-keyword">value</span>：将指定偏移量上的位设置为指定的值（<span class="hljs-number">0</span>或<span class="hljs-number">1</span>）。<br>GETBIT key <span class="hljs-keyword">offset</span>：获取指定偏移量上的位的值。<br>BITCOUNT key [<span class="hljs-keyword">start</span> <span class="hljs-keyword">end</span>]：计算指定范围内的位为<span class="hljs-number">1</span>的数量。<br>BITOP operation destkey key [key ...]：对多个位图进行逻辑运算，并将结果保存到目标位图中。<br>MySQL的bin日志格式，<span class="hljs-type">row</span>和statement，区别，优缺点：<br>MySQL的bin日志是用于记录数据库的更改操作，以便在主从复制、数据恢复等场景中使用。MySQL提供了两种不同的bin日志格式：<span class="hljs-type">row</span>格式和statement格式。<br><br><span class="hljs-type">Row</span>格式：以行为单位记录每个更改操作的具体内容。它将每个更改操作转换为对受影响行的详细描述，并将这些描述记录到bin日志中。优点是精确记录了每个更改操作的具体细节，可以保证在主从复制中数据的一致性。缺点是bin日志会变得较大，因为需要记录每个更改操作的详细信息。<br><br>Statement格式：以<span class="hljs-keyword">SQL</span>语句为单位记录每个更改操作的原始<span class="hljs-keyword">SQL</span>语句。它将每个更改操作的<span class="hljs-keyword">SQL</span>语句记录到bin日志中。优点是bin日志较小，因为只需要记录<span class="hljs-keyword">SQL</span>语句。缺点是在某些情况下，由于数据库的状态不同，执行相同的<span class="hljs-keyword">SQL</span>语句可能会导致不同的结果，从而可能导致主从复制中的数据不一致。<br><br>选择使用哪种bin日志格式取决于具体的需求和场景。一般来说，<span class="hljs-type">row</span>格式更加安全可靠，但会占用更多的磁盘空间，而statement格式则更加轻量，但在某些情况下可能会导致数据不一致。<br><br>Redis的AOF和RDB持久化的优缺点：<br>Redis提供了两种持久化方式：AOF（Append<span class="hljs-operator">-</span><span class="hljs-keyword">Only</span> File）和RDB（Redis Database）。<br><br>AOF持久化的优点：<br><br>可靠性：AOF持久化记录了每个写操作的日志，可以保证数据的可靠性。<br>恢复速度：在数据恢复时，AOF持久化可以通过重新执行日志中的写操作来恢复数据，恢复速度相对较快。<br>可读性：AOF持久化是以文本格式保存的，易于阅读和理解。<br>AOF持久化的缺点：<br><br>文件大小：AOF文件通常比RDB文件大，占用更多的磁盘空间。<br>恢复时间：在数据恢复时，AOF持久化需要重新执行所有写操作，恢复时间相对较长。<br>RDB持久化的优点：<br><br>文件大小：RDB文件通常比AOF文件小，占用较少的磁盘空间。<br>恢复时间：在数据恢复时，RDB持久化只需要加载一次RDB文件即可完成恢复，恢复时间相对较短。<br>RDB持久化的缺点：<br><br>可靠性：RDB持久化是通过定期将内存中的数据快照保存到磁盘上，如果在持久化之间发生故障，可能会丢失一部分数据。<br>选择使用AOF还是RDB持久化取决于对数据可靠性和恢复速度的需求。一般来说，如果对数据的可靠性要求较高，可以选择AOF持久化；如果对恢复速度和磁盘空间的利用率要求较高，可以选择RDB持久化。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="万物心选"><a href="#万物心选" class="headerlink" title="万物心选"></a>万物心选</h1><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs autoit">```<br><br><br><br><br><br><span class="hljs-meta"># 快手</span><br><br><span class="hljs-meta">## 快手一面- 我</span><br><br><span class="hljs-keyword">static</span>关键字可以修饰哪些东西？<br><br></code></pre></td></tr></table></figure>
+<p>在Java中，static关键字可以修饰以下内容：</p>
+<p>静态变量（Static Variables）：使用static修饰的变量属于类级别，而不是实例级别。静态变量在类加载时被初始化，所有实例共享同一个静态变量的值。</p>
+<p>静态方法（Static Methods）：使用static修饰的方法属于类级别，而不是实例级别。静态方法可以直接通过类名调用，无需创建类的实例。</p>
+<p>静态代码块（Static Initialization Blocks）：使用static修饰的代码块在类加载时执行，用于初始化静态变量或执行其他静态操作。</p>
+<p>静态内部类（Static Inner Classes）：使用static修饰的内部类与外部类之间没有直接的关联，可以直接通过外部类名访问静态内部类，而不需要先创建外部类的实例。</p>
+<p>静态导入（Static Imports）：使用static修饰的导入语句，可以直接导入类的静态成员，使其可以直接使用，而无需使用类名限定。</p>
+<p>需要注意的是，静态成员属于类级别，不依赖于类的实例化。可以通过类名直接访问静态成员，而不需要创建类的实例。静态成员在内存中只有一份拷贝，被所有实例共享。</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>## 快手二面 - 其他<br><br></code></pre></td></tr></table></figure>
+<p>• 项目是怎么用 DDD 一步一步搭建起来的？<br>• 领域的边界为什么要这样划分呢？根据是什么？<br>• 活动库存怎么保证的不超减？<br>• 库存自增完后再判断的话，怎么保证它的原子性呢？<br>• 如果用分布式锁，具体怎么做？<br>• 分布式锁的 value 设置成什么？<br>• 需要设置超时时间吗？设置成多少？<br>• 命令怎么写？你直接用 SETNX + EXPIRE 能保证原子性吗？<br>• 怎么支持可重入呢？<br>• 用 Hash 还能保证原子性吗？<br>• 在 Kafka 中，生产者发送流程和消费者的消费流程是怎样的？<br>• 分库分表用的什么组件？<br>• 用的哪个字段分的？为什么？<br>• xxl-job 用来干什么？<br>• 那你扫描表的时候，是把分库分表的表依次扫描一遍吗？<br>• ThreadLocal 用来干什么？项目中怎么做的？<br>• ThreadLocalMap 保存在哪儿的？Map 中的 key-value 分别是什么？<br>• 为什么 key 要设置成弱引用？<br>• 外部强引用断开时，key 被回收后，value 还有，这不是会造成内存泄漏吗？这时它内部是怎么处理的呢？<br>• 什么情况下会清理这些槽位？只有手动清理吗？<br>• 那为什么 key 不设置成强引用呢？强引用不就不会被垃圾回收了吗？<br>• 线程池提交任务有什么方式？区别是什么？<br>• submit 提交一个任务后，主线程会干什么呢？会挂起？<br>• 如果我要实现多个线程执行完毕后，主线程才继续执行，怎么做？<br>• CountDownLatch 具体调用那个方法来实现？<br>• CountDownLatch 怎么实现的？<br>• AQS 的数据结构是怎样的？<br>• 双向队列里面具体有哪些数据呢？<br>• Spring 初始化 Bean 的过程是怎样的？<br>• 声明 Bean 有哪些注解？<br>• 依赖注入的注解呢？它们有什么区别？<br>• 怎么限制 Bean 的扫描范围？<br>• 初始化 Bean 的时候出现了依赖会怎么样？循环依赖了呢？<br>• MySQL 索引的类型有哪些？<br>• 索引的数据结构是怎样的？<br>• 聚簇索引和非聚簇索引的叶子结点存储的都是数据吗？<br>• 查询时具体是怎么在这棵树上进行扫描的？<br>• 如果是非聚簇索引呢？<br>• 为什么用 B+ 树而不是 B 树或者二叉树？<br>• 手撕：三个线程分别循环打印 111…、222…、333…，实现打印效果为 123123123…<br>• 反问</p>
+<pre><code class="hljs">
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%9D%A2%E8%AF%95/" class="category-chain-item">面试</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%9D%A2%E8%AF%95/">#面试</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>秋招面经</div>
+      <div>http://example.com/2023/08/01/秋招面经/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/03/%E5%B7%A5%E5%85%B7/%E8%84%9A%E6%9C%AC%E6%96%87%E4%BB%B6/" title="脚本文件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">脚本文件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/31/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/Go%20%E5%AD%A6%E4%B9%A0/" title="操作系统 面试题">
+                        <span class="hidden-mobile">操作系统 面试题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

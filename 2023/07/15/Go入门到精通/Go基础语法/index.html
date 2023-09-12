@@ -1,0 +1,2000 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Go基础语法第一部分《基础概念》类型Go语言中有以下基本类型：  布尔类型（bool）：表示真（true）或假（false）的值。  整数类型：  有符号整数类型：int8、int16、int32、int64、int。 无符号整数类型：uint8、uint16、uint32、uint64、uint。   浮点数类型：  浮点数类型：float32、float64。   复数类型：  复数类型：co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go基础语法">
+<meta property="og:url" content="http://example.com/2023/07/15/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/Go%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Go基础语法第一部分《基础概念》类型Go语言中有以下基本类型：  布尔类型（bool）：表示真（true）或假（false）的值。  整数类型：  有符号整数类型：int8、int16、int32、int64、int。 无符号整数类型：uint8、uint16、uint32、uint64、uint。   浮点数类型：  浮点数类型：float32、float64。   复数类型：  复数类型：co">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230716090142689.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-func/23_golang%E9%97%AD%E5%8C%85.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-func/26_golang%20defer.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-func/42_golang%20%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-func/43_golang%20%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/04%20golang%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/05%20golang%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/06%20golang%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/07%20golang%E6%95%B0%E5%80%BC%E5%88%9D%E5%A7%8B%E5%8C%96.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/25%20golang%E4%BB%8E%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA%E5%88%87%E7%89%87.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/26%20golang%E4%BD%BF%E7%94%A8make%E5%88%9B%E5%BB%BA%E5%88%87%E7%89%87.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/27%20golang%E4%BB%8E%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA%E5%88%87%E7%89%87.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/78%20golang%20syncMap.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/130%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/131%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/132%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-collection/133%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/03_goroutine%E8%B0%83%E5%BA%A6.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/04_goroutine%E8%B0%83%E5%BA%A6.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/05_goroutine%E8%B0%83%E5%BA%A6.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/06_goroutine%E5%88%9B%E5%BB%BA.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/08_goroutine%E5%88%9B%E5%BB%BA.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/10_goroutine%E7%AD%89%E5%BE%85%E7%BB%93%E6%9D%9F.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/11_goroutine%E7%AD%89%E5%BE%85%E7%BB%93%E6%9D%9F.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/13_golang%20mutex.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/15_golang%20channel.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/17_golang%20channel%E5%8F%91%E9%80%81%E6%8E%A5%E6%94%B6%E6%95%B0%E6%8D%AE.png">
+<meta property="og:image" content="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/28_golang%20select.png">
+<meta property="article:published_time" content="2023-07-15T14:54:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.849Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230716090142689.png">
+  
+  
+  
+  <title>Go基础语法 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Go基础语法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-15 22:54" pubdate>
+          2023年7月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          32k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          264 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Go基础语法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Go基础语法"><a href="#Go基础语法" class="headerlink" title="Go基础语法"></a>Go基础语法</h1><h1 id="第一部分《基础概念》"><a href="#第一部分《基础概念》" class="headerlink" title="第一部分《基础概念》"></a>第一部分《基础概念》</h1><h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><p>Go语言中有以下基本类型：</p>
+<ol>
+<li><p>布尔类型（bool）：表示真（true）或假（false）的值。</p>
+</li>
+<li><p>整数类型：</p>
+<ul>
+<li>有符号整数类型：int8、int16、int32、int64、int。</li>
+<li>无符号整数类型：uint8、uint16、uint32、uint64、uint。</li>
+</ul>
+</li>
+<li><p>浮点数类型：</p>
+<ul>
+<li>浮点数类型：float32、float64。</li>
+</ul>
+</li>
+<li><p>复数类型：</p>
+<ul>
+<li>复数类型：complex64、complex128。</li>
+</ul>
+</li>
+<li><p>字符串类型（string）：表示一串字符。</p>
+</li>
+<li><p>字符类型（rune）：表示一个Unicode字符。</p>
+</li>
+<li><p>错误类型（error）：表示错误的接口类型。</p>
+</li>
+<li><p>数组类型（array）：表示具有固定长度的同类型元素的集合。</p>
+</li>
+<li><p>切片类型（slice）：表示可变长度的同类型元素的序列。</p>
+</li>
+<li><p>映射类型（map）：表示键值对的集合。</p>
+</li>
+<li><p>结构体类型（struct）：表示多个字段的集合。</p>
+</li>
+<li><p>接口类型（interface）：表示一组方法的集合。</p>
+</li>
+<li><p>函数类型（func）：表示函数的类型。</p>
+</li>
+<li><p>通道类型（channel）：用于协程之间的通信。</p>
+</li>
+</ol>
+<p>除了基本类型，Go语言还提供了指针类型（pointer）、切片类型（slice）、映射类型（map）、结构体类型（struct）、接口类型（interface）和函数类型（func）等复合类型，用于组合和抽象数据。此外，还可以使用关键字<code>type</code>来定义自定义类型。</p>
+<p>需要注意的是，Go语言是静态类型语言，变量在声明时需要指定其类型。同时，Go语言还支持类型推断，可以根据变量的初始值自动推断其类型。</p>
+<p>是的，还有一些常用的类型在Go语言中：</p>
+<ol>
+<li><p>字节类型（byte）：表示一个字节的值，等价于<code>uint8</code>类型。</p>
+</li>
+<li><p>字节切片类型（[]byte）：表示一个字节的切片，常用于处理二进制数据。</p>
+</li>
+<li><p>缓冲区类型（bytes.Buffer）：提供了操作字节切片的缓冲区，可以方便地进行读写操作。</p>
+</li>
+<li><p>输入输出类型（io）：提供了用于输入输出操作的接口和函数，包括读写数据、复制数据、处理流等。</p>
+</li>
+</ol>
+<p>这些类型在Go语言中广泛应用于处理字节数据、缓冲区操作和输入输出操作。字节类型和字节切片类型常用于处理二进制数据，缓冲区类型（bytes.Buffer）提供了方便的缓冲区操作方法，输入输出类型（io）提供了处理输入输出的接口和函数，方便进行数据的读写和流处理。</p>
+<p>需要注意的是，这些类型都属于Go语言标准库中的类型，可以通过<code>import</code>语句引入相应的包来使用。</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>以下是一些常见数据结构、对象和数组的初始化代码模板：</p>
+<ol>
+<li><p>切片（Slice）初始化：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 初始化一个空切片</span><br><span class="hljs-keyword">var</span> slice []Type<br><br><span class="hljs-comment">// 使用字面量初始化切片</span><br>slice := []Type&#123;value1, value2, value3&#125;<br><br><span class="hljs-comment">// 使用make函数初始化指定长度和容量的切片</span><br>slice := <span class="hljs-built_in">make</span>([]Type, length, capacity)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>映射（Map）初始化：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 初始化一个空映射</span><br><span class="hljs-keyword">var</span> m <span class="hljs-keyword">map</span>[KeyType]ValueType<br><br><span class="hljs-comment">// 使用字面量初始化映射</span><br>m := <span class="hljs-keyword">map</span>[KeyType]ValueType&#123;<br>    key1: value1,<br>    key2: value2,<br>    key3: value3,<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>结构体（Struct）初始化：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 定义结构体类型</span><br><span class="hljs-keyword">type</span> StructName <span class="hljs-keyword">struct</span> &#123;<br>    field1 Type1<br>    field2 Type2<br>    <span class="hljs-comment">// ...</span><br>&#125;<br><br><span class="hljs-comment">// 使用字面量初始化结构体</span><br>object := StructName&#123;<br>    field1: value1,<br>    field2: value2,<br>    <span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>数组（Array）初始化：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 静态初始化</span><br>array := [length]Type&#123;value1, value2, value3&#125;<br><br><span class="hljs-comment">// 动态初始化</span><br><span class="hljs-keyword">var</span> array [length]Type<br>array[<span class="hljs-number">0</span>] = value1<br>array[<span class="hljs-number">1</span>] = value2<br>array[<span class="hljs-number">2</span>] = value3<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>需要注意的是，Go语言中没有提供类似Java中的ArrayList和HashSet这样的动态数据结构，而是使用切片和映射来实现类似的功能。同时，根据实际需求，可以根据需要添加更多的元素或键值对。</p>
+<h1 id="Go-运算符"><a href="#Go-运算符" class="headerlink" title="Go 运算符"></a>Go 运算符</h1><p>除去算数运算符（自增&#x2F;子减）和 指针运算符 ，其余运算符大致一样</p>
+<h2 id="运算符优先级表"><a href="#运算符优先级表" class="headerlink" title="运算符优先级表"></a>运算符优先级表</h2><table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>分类</th>
+<th>运算符</th>
+<th>结合性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>逗号运算符</td>
+<td>,</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>2</td>
+<td>赋值运算符</td>
+<td>&#x3D;、+&#x3D;、-&#x3D;、*&#x3D;、&#x2F;&#x3D;、 %&#x3D;、 &gt;&#x3D;、 &lt;&lt;&#x3D;、&amp;&#x3D;、^&#x3D;、|&#x3D;</td>
+<td>从右到左</td>
+</tr>
+<tr>
+<td>3</td>
+<td>逻辑或</td>
+<td>||</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>4</td>
+<td>逻辑与</td>
+<td>&amp;&amp;</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>5</td>
+<td>按位或</td>
+<td>|</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>6</td>
+<td>按位异或</td>
+<td>^</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>7</td>
+<td>按位与</td>
+<td>&amp;</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>8</td>
+<td>相等&#x2F;不等</td>
+<td>&#x3D;&#x3D;、!&#x3D;</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>9</td>
+<td>关系运算符</td>
+<td>&lt;、&lt;&#x3D;、&gt;、&gt;&#x3D;</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>10</td>
+<td>位移运算符</td>
+<td>&lt;&lt;、&gt;&gt;</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>11</td>
+<td>加法&#x2F;减法</td>
+<td>+、-</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>12</td>
+<td>乘法&#x2F;除法&#x2F;取余</td>
+<td>*（乘号）、&#x2F;、%</td>
+<td>从左到右</td>
+</tr>
+<tr>
+<td>13</td>
+<td>单目运算符</td>
+<td>!、*（指针）、&amp; 、++、–、+（正号）、-（负号）</td>
+<td>从右到左</td>
+</tr>
+<tr>
+<td>14</td>
+<td>后缀运算符</td>
+<td>( )、[ ]、-&gt;</td>
+<td>从左到右</td>
+</tr>
+</tbody></table>
+<p><strong>注意：优先级值越大，表示优先级越高。</strong></p>
+<h2 id="算术-运算符"><a href="#算术-运算符" class="headerlink" title="算术 运算符"></a>算术 运算符</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>范例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+</td>
+<td>正号</td>
+<td>+3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>-</td>
+<td>负号</td>
+<td>-4</td>
+<td>-4</td>
+</tr>
+<tr>
+<td>+</td>
+<td>加法运算</td>
+<td>5 + 5</td>
+<td>10</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减法运算</td>
+<td>10 - 5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘法运算</td>
+<td>5 * 2</td>
+<td>10</td>
+</tr>
+<tr>
+<td>&#x2F;</td>
+<td>除法运算</td>
+<td>10 &#x2F; 3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取模运算</td>
+<td>10 % 3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>++</td>
+<td>自增运算</td>
+<td>a &#x3D; 2; a++</td>
+<td>3</td>
+</tr>
+<tr>
+<td>–</td>
+<td>自减运算</td>
+<td>a &#x3D; 10; a–</td>
+<td>9</td>
+</tr>
+<tr>
+<td>+</td>
+<td>字符串拼接</td>
+<td>“Hai” + “Coder”</td>
+<td>“HaiCoder”</td>
+</tr>
+</tbody></table>
+<p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230716090142689.png" srcset="/img/loading.gif" lazyload alt="image-20230716090142689"></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">Golang</span> 中的自增运算和自减运算只能当做一个独立语句使用，Golang 中只支持后自增和后自减。在 Golang 中，+ 可以用于 字符串 的拼接。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h2><h3 id="十进制运算"><a href="#十进制运算" class="headerlink" title="十进制运算"></a>十进制运算</h3><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>范例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x3D;</td>
+<td>将一个表达式的值赋给另一个</td>
+<td>C &#x3D; A + B</td>
+<td>C &#x3D; A + B</td>
+</tr>
+<tr>
+<td>+&#x3D;</td>
+<td>相加后再赋值</td>
+<td>C +&#x3D; A</td>
+<td>C &#x3D; C + A</td>
+</tr>
+<tr>
+<td>-&#x3D;</td>
+<td>相减后再赋值</td>
+<td>C -&#x3D; A</td>
+<td>C &#x3D; C - A</td>
+</tr>
+<tr>
+<td>*&#x3D;</td>
+<td>相乘后再赋值</td>
+<td>C *&#x3D; A</td>
+<td>C &#x3D; C * A</td>
+</tr>
+<tr>
+<td>&#x2F;&#x3D;</td>
+<td>相除后再赋值</td>
+<td>C &#x2F;&#x3D; A</td>
+<td>C &#x3D; C &#x2F; A</td>
+</tr>
+<tr>
+<td>%&#x3D;</td>
+<td>求余后再赋值</td>
+<td>C %&#x3D; A</td>
+<td>C &#x3D; C % A</td>
+</tr>
+</tbody></table>
+<h3 id="二进制运算"><a href="#二进制运算" class="headerlink" title="二进制运算"></a>二进制运算</h3><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>范例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&lt;&lt;&#x3D;</td>
+<td>左移后赋值</td>
+<td>C &lt;&lt;&#x3D; 2</td>
+<td>C &#x3D; C &lt;&lt; 2</td>
+</tr>
+<tr>
+<td>&gt;&gt;&#x3D;</td>
+<td>右移后赋值</td>
+<td>C &gt;&gt;&#x3D; 2</td>
+<td>C &#x3D; C &gt;&gt; 2</td>
+</tr>
+<tr>
+<td>&amp;&#x3D;</td>
+<td>按位与后赋值</td>
+<td>C &amp;&#x3D; 2</td>
+<td>C &#x3D; C &amp; 2</td>
+</tr>
+<tr>
+<td>^&#x3D;</td>
+<td>按位异或后赋值</td>
+<td>C ^&#x3D; 2</td>
+<td>C &#x3D; C ^ 2</td>
+</tr>
+<tr>
+<td>|&#x3D;</td>
+<td>按位或后赋值</td>
+<td>C |&#x3D; 2</td>
+<td>C &#x3D; C | 2</td>
+</tr>
+</tbody></table>
+<h2 id="比较运算符语法"><a href="#比较运算符语法" class="headerlink" title="比较运算符语法"></a>比较运算符语法</h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>范例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x3D;&#x3D;</td>
+<td>相等</td>
+<td>4 &#x3D;&#x3D; 3</td>
+<td>false</td>
+</tr>
+<tr>
+<td>!&#x3D;</td>
+<td>不等于</td>
+<td>4 !&#x3D; 3</td>
+<td>true</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>小于</td>
+<td>4 &lt; 3</td>
+<td>false</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>大于</td>
+<td>4 &gt; 3</td>
+<td>true</td>
+</tr>
+<tr>
+<td>&lt;&#x3D;</td>
+<td>小于等于</td>
+<td>4 &lt;&#x3D; 3</td>
+<td>false</td>
+</tr>
+<tr>
+<td>&gt;&#x3D;</td>
+<td>大于等于</td>
+<td>4 &gt;&#x3D; 3</td>
+<td>true</td>
+</tr>
+</tbody></table>
+<h2 id="针运算符详解"><a href="#针运算符详解" class="headerlink" title="针运算符详解"></a>针运算符详解</h2><h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>范例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&amp;</td>
+<td>返回变量的地址</td>
+<td>&amp;A</td>
+</tr>
+<tr>
+<td>*</td>
+<td>获取指针变量对应的值</td>
+<td>*A</td>
+</tr>
+</tbody></table>
+<h1 id="Go-格式化输出"><a href="#Go-格式化输出" class="headerlink" title="Go 格式化输出"></a>Go 格式化输出</h1><h2 id="格式化占位符教程"><a href="#格式化占位符教程" class="headerlink" title="格式化占位符教程"></a>格式化占位符教程</h2><p>在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Golang</a></strong> 中，格式化的输入与输出，都需要使用到格式化占位符。比如获取用户输入的数据的函数 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-scanf.html">fmt.Scanf()</a></strong> ，格式化输出的函数 **<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-printf.html">fmt.Printf()</a>**。</p>
+<p>Go 语言的格式化占位符大概可分为普通占位符、**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-bool.html">布尔</a>** 占位符、**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-int.html">整数</a>** 占位符、**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-float.html">浮点数</a>** 和 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-complex.html">复数</a></strong> 占位符、**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">字符串</a>** 与 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-slice.html">字节切片</a></strong> 占位符、**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-pointer.html">指针</a>** 占位符以及其它标记等。</p>
+<h2 id="普通占位符"><a href="#普通占位符" class="headerlink" title="普通占位符"></a>普通占位符</h2><table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+<th>举例</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%v</td>
+<td>相应值的默认格式</td>
+<td>Printf(“%v”, webSite)</td>
+<td>{HaiCoder}</td>
+</tr>
+<tr>
+<td>%+v</td>
+<td>打印结构体时，会添加字段名</td>
+<td>Printf(“%+v”, webSite)</td>
+<td>{Name:HaiCoder}</td>
+</tr>
+<tr>
+<td>%#v</td>
+<td>相应值的Go语法表示</td>
+<td>Printf(“#v”, webSite)</td>
+<td>main.WebSite{Name:”HaiCoder”}</td>
+</tr>
+<tr>
+<td>%T</td>
+<td>相应值的类型的Go语法表示</td>
+<td>Printf(“%T”, webSite)</td>
+<td>main.WebSite</td>
+</tr>
+<tr>
+<td>%%</td>
+<td>字面上的百分号，并非值的占位符</td>
+<td>Printf(“%%”)</td>
+<td>%</td>
+</tr>
+</tbody></table>
+<h2 id="布尔占位符"><a href="#布尔占位符" class="headerlink" title="布尔占位符"></a>布尔占位符</h2><table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+<th>举例</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%t</td>
+<td>true 或 false</td>
+<td>Printf(“%t”, true)</td>
+<td>true</td>
+</tr>
+</tbody></table>
+<h2 id="整数占位符"><a href="#整数占位符" class="headerlink" title="整数占位符"></a>整数占位符</h2><table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+<th>举例</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%b</td>
+<td>二进制表示</td>
+<td>Printf(“%b”, 5)</td>
+<td>101</td>
+</tr>
+<tr>
+<td>%c</td>
+<td>相应 Unicode 码点所表示的字符</td>
+<td>Printf(“%c”, 0x4E2D)</td>
+<td>中</td>
+</tr>
+<tr>
+<td>%d</td>
+<td>十进制表示</td>
+<td>Printf(“%d”, 0x12)</td>
+<td>18</td>
+</tr>
+<tr>
+<td>%o</td>
+<td>八进制表示</td>
+<td>Printf(“%d”, 10)</td>
+<td>12</td>
+</tr>
+<tr>
+<td>%q</td>
+<td>单引号围绕的字符字面值，由Go语法安全地转义</td>
+<td>Printf(“%q”, 0x4E2D)</td>
+<td>‘中’</td>
+</tr>
+<tr>
+<td>%x</td>
+<td>十六进制表示，字母形式为小写 a-f</td>
+<td>Printf(“%x”, 13)</td>
+<td>d</td>
+</tr>
+<tr>
+<td>%X</td>
+<td>十六进制表示，字母形式为大写 A-F</td>
+<td>Printf(“%x”, 13)</td>
+<td>D</td>
+</tr>
+<tr>
+<td>%U</td>
+<td>Unicode格式：U+1234，等同于 “U+%04X”</td>
+<td>Printf(“%U”, 0x4E2D)</td>
+<td>U+4E2D</td>
+</tr>
+</tbody></table>
+<h2 id="浮点数和复数的组成部分（实部和虚部）"><a href="#浮点数和复数的组成部分（实部和虚部）" class="headerlink" title="浮点数和复数的组成部分（实部和虚部）"></a>浮点数和复数的组成部分（实部和虚部）</h2><table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+<th>举例</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%b</td>
+<td>无小数部分的，指数为二的幂的科学计数法，与 strconv.FormatFloat 的 ‘b’ 转换格式一致。例如 -123456p-78</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>%e</td>
+<td>科学计数法，例如 -1234.456e+78</td>
+<td>Printf(“%e”, 10.2)</td>
+<td>1.020000e+01</td>
+</tr>
+<tr>
+<td>%E</td>
+<td>科学计数法，例如 -1234.456E+78</td>
+<td>Printf(“%e”, 10.2)</td>
+<td>1.020000E+01</td>
+</tr>
+<tr>
+<td>%f</td>
+<td>有小数点而无指数，例如 123.456</td>
+<td>Printf(“%f”, 10.2)</td>
+<td>10.200000</td>
+</tr>
+<tr>
+<td>%g</td>
+<td>根据情况选择 %e 或 %f 以产生更紧凑的（无末尾的0）</td>
+<td>输出 Printf(“%g”, 10.20)</td>
+<td>10.2</td>
+</tr>
+<tr>
+<td>%G</td>
+<td>根据情况选择 %E 或 %f 以产生更紧凑的（无末尾的0）</td>
+<td>输出 Printf(“%G”, 10.20+2i)</td>
+<td>(10.2+2i)</td>
+</tr>
+</tbody></table>
+<h2 id="字符串与字节切片"><a href="#字符串与字节切片" class="headerlink" title="字符串与字节切片"></a>字符串与字节切片</h2><table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+<th>举例</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%s</td>
+<td>输出字符串表示（string类型或[]byte)</td>
+<td>Printf(“%s”, []byte(“Go语言”))</td>
+<td>Go语言</td>
+</tr>
+<tr>
+<td>%q</td>
+<td>双引号围绕的字符串，由Go语法安全地转义</td>
+<td>Printf(“%q”, “Go语言”)</td>
+<td>“Go语言”</td>
+</tr>
+<tr>
+<td>%x</td>
+<td>十六进制，小写字母，每字节两个字符</td>
+<td>Printf(“%x”, “golang”)</td>
+<td>686a6c61164a</td>
+</tr>
+<tr>
+<td>%X</td>
+<td>十六进制，大写字母，每字节两个字符</td>
+<td>Printf(“%X”, “golang”)</td>
+<td>686F6A616C61</td>
+</tr>
+</tbody></table>
+<h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+<th>举例</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%p</td>
+<td>十六进制表示，前缀 0x</td>
+<td>Printf(“%p”, &amp;people)</td>
+<td>0x4a56a0</td>
+</tr>
+</tbody></table>
+<h2 id="其它标记"><a href="#其它标记" class="headerlink" title="其它标记"></a>其它标记</h2><table>
+<thead>
+<tr>
+<th>占位符</th>
+<th>说明</th>
+<th>举例</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+</td>
+<td>总打印数值的正负号；对于%q（%+q）保证只输出ASCII编码的字符。</td>
+<td>Printf(“%+q”, “中文”) “\u4e2d\u6587”</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>在右侧而非左侧填充空格（左对齐该区域）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>#</td>
+<td>备用格式：为八进制添加前导 0（%#o）为十六进制添加前导 0x（%#x）或 0X（%#X），为 %p（%#p）去掉前导 0x；如果可能的话，%q（%#q）会打印原始 （即反引号围绕的）字符串；如果是可打印字符，%U（%#U）会写出该字符的Unicode 编码形式（如字符 x 会被打印成 U+0078 ‘x’）</td>
+<td>Printf(“%#U”, ‘中’)</td>
+<td>U+4E2D</td>
+</tr>
+<tr>
+<td>’ ‘</td>
+<td>空格)为数值中省略的正负号留出空白（% d）</td>
+<td>以十六进制（% x, % X）打印字符串或切片时，在字节之间用空格隔开</td>
+<td></td>
+</tr>
+<tr>
+<td>0</td>
+<td>填充前导的0而非空格；对于数字，这会将填充移到正负号之后</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="Go语言格式化占位符总结"><a href="#Go语言格式化占位符总结" class="headerlink" title="Go语言格式化占位符总结"></a>Go语言格式化占位符总结</h2><p>Go语言的格式化占位符大概可分为普通占位符、布尔占位符、整数占位符、浮点数和复数占位符、字符串与字节切片占位符、指针占位符以及其它标记等。</p>
+<h1 id="Go-函数"><a href="#Go-函数" class="headerlink" title="Go 函数"></a>Go 函数</h1><h2 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 1</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">funName</span><span class="hljs-params">(args ...paramType)</span></span>&#123;<br>&#125;<br><span class="hljs-comment">// 2</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">funName</span><span class="hljs-params">(args ...<span class="hljs-keyword">interface</span>&#123;&#125;)</span></span>&#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="函数变量"><a href="#函数变量" class="headerlink" title="函数变量"></a>函数变量</h2><p>在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中，**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a>** 也是一种类型，可以和其他 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-datatype.html">数据类型</a></strong> 一样保存在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable.html">变量</a></strong> 中。</p>
+<h3 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">fun</span><span class="hljs-params">()</span></span> &#123;   <br>&#125;<br> <span class="hljs-keyword">var</span> f <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span><br> f = fun<br></code></pre></td></tr></table></figure>
+
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>我们首先定义了一个 fun 的函数，接着我们声明了一个类型是 func 的函数变量 f，并且将 fun 函数赋值给变量 f。</p>
+<h3 id="2、定义"><a href="#2、定义" class="headerlink" title="2、定义"></a>2、定义</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">fun</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span></span><span class="hljs-type">string</span> &#123;   <br>&#125;<br> <span class="hljs-keyword">var</span> f <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span></span> <span class="hljs-type">string</span><br> f = fun<br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h3><p>我们首先定义了一个 fun 的函数，函数的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func-paramter.html">参数</a></strong> 为一个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-int.html">int 类型</a></strong> 的参数， 函数的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func-return.html">返回值</a></strong> 为一个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">string</a></strong> 类型的值，接着我们声明了同样类型的函数变量 f，并且将 fun 函数赋值给变量 f。</p>
+<h2 id="匿名函数"><a href="#匿名函数" class="headerlink" title="匿名函数"></a>匿名函数</h2><p>的匿名函数可以作为一种类型被赋值给函数类型的变量，匿名函数也往往以变量方式传递。匿名函数<strong>定义</strong>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(paramters)</span></span>(returnvals)&#123;<br>    <span class="hljs-comment">//do something</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>匿名函数<strong>调用</strong>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(paramters)</span></span>(returnvals)&#123;<br>    <span class="hljs-comment">//do something</span><br>&#125;(realParamters)<br></code></pre></td></tr></table></figure>
+
+<p>案例</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//定义并调用Go语言的匿名函数</span><br>	<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;Hello HaiCoder&quot;</span>)<br>	&#125;()<br>&#125;<br>---------------------------------------------<br><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//定义并调用带参数的匿名函数</span><br>	<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(num1, num2 <span class="hljs-type">int</span>)</span></span>&#123;<br>		fmt.Println(num1, <span class="hljs-string">&quot; + &quot;</span>, num2, <span class="hljs-string">&quot; = &quot;</span>, num1+num2)<br>	&#125;(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="函数闭包"><a href="#函数闭包" class="headerlink" title="函数闭包"></a>函数闭包</h2><p>概念：在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中闭包是引用了 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable.html">自由变量</a></strong> 的函数，被引用的自由变量和函数一同存在，即使已经离开了自由变量的环境也不会被释放或者删除，在闭包中可以继续使用这个自由变量。</p>
+<p>记忆功能： Go 语言中，被捕获到闭包中的变量让闭包本身拥有了记忆效应，<strong>闭包中的逻辑可以修改闭包捕获的变量，变量会跟随闭包生命期一直存在</strong>，闭包本身就如同变量一样拥有了记忆功能。</p>
+<h3 id="闭包记忆效应"><a href="#闭包记忆效应" class="headerlink" title="闭包记忆效应"></a>闭包记忆效应</h3><p>Go 语言闭包记忆效应，实现累加</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">AddUpper</span><span class="hljs-params">()</span></span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span></span><span class="hljs-type">int</span>&#123;<br>	<span class="hljs-keyword">var</span> n <span class="hljs-type">int</span> = <span class="hljs-number">20</span><br>	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(x <span class="hljs-type">int</span>)</span></span> <span class="hljs-type">int</span> &#123;<br>		n = n + x<br>		<span class="hljs-keyword">return</span> n<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//Go语言闭包记忆效应，实现累加</span><br>	f := AddUpper()<br>	fmt.Println(<span class="hljs-string">&quot;闭包返回：&quot;</span>,f(<span class="hljs-number">1</span>))<br>	fmt.Println(<span class="hljs-string">&quot;闭包返回：&quot;</span>,f(<span class="hljs-number">2</span>))<br>	fmt.Println(<span class="hljs-string">&quot;闭包返回：&quot;</span>,f(<span class="hljs-number">3</span>))<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-func/23_golang%E9%97%AD%E5%8C%85.png" srcset="/img/loading.gif" lazyload alt="23_golang闭包.png"></p>
+<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><p>在我们编写 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a></strong> 时，经常需要创建资源（比如：数据库连接、文件句柄、锁等），为了在函数执行完毕后，及时释放资源，**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a>** 设计者提供了 defer(延时机制)。</p>
+<p>如果一个函数里面有多个 defer 语句，那么这些 defer 语句将会按照书写的逆序进行，也就是说，先被 defer 的语句最后被执行，最后被 defer 的语句，最先被执行。</p>
+<h3 id="多个defer执行顺序"><a href="#多个defer执行顺序" class="headerlink" title="多个defer执行顺序"></a>多个defer执行顺序</h3><p>多个 defer 执行顺序是逆序执行</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">sum</span><span class="hljs-params">(n1, n2 <span class="hljs-type">int</span>)</span></span>(result <span class="hljs-type">int</span>)&#123;<br>	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;n1 =&quot;</span>, n1)<br>	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;n2 =&quot;</span>,n2)<br>	result = n1 + n2<br>	fmt.Println(<span class="hljs-string">&quot;Result =&quot;</span>, result)<br>	<span class="hljs-keyword">return</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//多个defer执行顺序是逆序执行</span><br>	sum(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-func/26_golang%20defer.png" srcset="/img/loading.gif" lazyload alt="26_golang defer.png"></p>
+<p>备注：如果同一个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a></strong> 中，既有 defer 语句，同时也有 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func-return.html">return</a></strong> 语句，那么 defer 语句会在 return 语句的后面执行。</p>
+<p>函数异常&#x2F;错误</p>
+<h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">funcName</span><span class="hljs-params">(param paramType)</span></span>(returnVal1 returnType, err <span class="hljs-type">error</span>)&#123;<br>   <span class="hljs-comment">// do something</span><br>&#125;<br><br><br><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;errors&quot;</span><br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-comment">// 定义除数为0的错误</span><br><span class="hljs-keyword">var</span> errDiv = errors.New(<span class="hljs-string">&quot;division by zero&quot;</span>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">div</span><span class="hljs-params">(dividend, divisor <span class="hljs-type">int</span>)</span></span> (<span class="hljs-type">int</span>, <span class="hljs-type">error</span>) &#123;<br>	<span class="hljs-comment">// 判断除数为0的情况并返回</span><br>	<span class="hljs-keyword">if</span> divisor == <span class="hljs-number">0</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>, errDiv<br>	&#125;<br>	<span class="hljs-comment">// 正常计算，返回空错误</span><br>	<span class="hljs-keyword">return</span> dividend / divisor, <span class="hljs-literal">nil</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>    <span class="hljs-comment">// 函数返回错误信息</span><br>	<span class="hljs-keyword">if</span> ret, err := div(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>); err != <span class="hljs-literal">nil</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;Div err, Err =&quot;</span>, err)<br>	&#125;<span class="hljs-keyword">else</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;Div ok, Ret =&quot;</span>, ret)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="函数中止-panic"><a href="#函数中止-panic" class="headerlink" title="函数中止 panic"></a>函数中止 panic</h2><p>在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中，如果我们的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a></strong> 或者程序出现了非常严重的问题，遇到此类问题程序不应该继续往下运行了，那么我们就应该终止程序的执行。</p>
+<p>在 Go 语言中，处理类似致命的错误的方法一般是通过 panic 的方式来终止我们程序的执行。</p>
+<h2 id="Recover"><a href="#Recover" class="headerlink" title="Recover"></a>Recover</h2><p>在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中，如果我们的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a></strong> 或者程序出现了非常严重的问题，或者说我们的程序遇到了 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-panic.html">panic</a></strong> 异常，此时我们的程序会终止运行。</p>
+<p>但是，我们希望我们程序在发生错误后，我们能够做一些处理，保证程序可以继续运行，那么这时候，我们就需要使用异常恢复，即 <strong>recover</strong>。Golang 中的 recover 一般都是配套 <strong>defer</strong> 一起使用。</p>
+<h3 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">defer</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">if</span> r := <span class="hljs-built_in">recover</span>(); r != <span class="hljs-literal">nil</span> &#123;<br>        fmt.Println(<span class="hljs-string">&quot;Recovered in f&quot;</span>, r)<br>    &#125;<br>&#125;()<br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-2"><a href="#说明-2" class="headerlink" title="说明"></a>说明</h3><p>我们在 defer 中，使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-if.html">if 判断</a></strong> ，如果程序出现了异常，那么我们使用 <strong>recover 尝试恢复</strong>，并且打印异常信息。</p>
+<h3 id="panic和recover使用原则"><a href="#panic和recover使用原则" class="headerlink" title="panic和recover使用原则"></a>panic和recover使用原则</h3><ul>
+<li>defer 需要放在 panic 之前定义，另外 recover 只有在 defer 调用的函数中才有效。</li>
+<li>recover 处理异常后，逻辑并不会恢复到 panic 那个点去，函数跑到 defer 之后的那个点。</li>
+<li>多个 defer 会形成 defer 栈，后定义的 defer 语句会被最先调用</li>
+</ul>
+<h3 id="Go语言panic和recover的关系"><a href="#Go语言panic和recover的关系" class="headerlink" title="Go语言panic和recover的关系"></a>Go语言panic和recover的关系</h3><p><strong>如果有 panic 但没有 recover，那么程序会宕机。如果有 panic 也有 recover，程序不会宕机</strong>，执行完对应的 defer 后，从宕机点退出当前函数后继续执行。</p>
+<p>(因此，<strong>panic不仅会关闭当前函数，还会导致整个程序的终止。为了避免程序因为panic而终止</strong>，可以在适当的地方使用recover函数来捕获panic，并进行错误处理或者恢复程序的正常执行。)</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs go">在Go语言中，当函数中发生<span class="hljs-built_in">panic</span>时，会导致当前函数的执行立即停止，并且会沿着函数调用栈向上层函数传播，直到被<span class="hljs-built_in">recover</span>捕获或者达到最顶层的goroutine，此时程序会终止。<br><br>当<span class="hljs-built_in">panic</span>发生时，会触发一系列的延迟函数（<span class="hljs-keyword">defer</span>）的执行，然后程序会中止当前函数的执行并向上返回。如果在当前函数的调用栈中没有<span class="hljs-built_in">recover</span>函数来捕获<span class="hljs-built_in">panic</span>，那么程序将会终止，打印<span class="hljs-built_in">panic</span>信息和堆栈跟踪信息。<br><br>因此，<span class="hljs-built_in">panic</span>不仅会关闭当前函数，还会导致整个程序的终止。为了避免程序因为<span class="hljs-built_in">panic</span>而终止，可以在适当的地方使用<span class="hljs-built_in">recover</span>函数来捕获<span class="hljs-built_in">panic</span>，并进行错误处理或者恢复程序的正常执行。<br></code></pre></td></tr></table></figure>
+
+
+
+<p>虽然 panic&#x2F;recover 能模拟其他语言的异常机制，但并不建议在编写普通函数时也经常性使用这种特性。在 panic 触发的 defer 函数内，可以继续调用 panic，进一步将错误外抛，直到程序整体崩溃。</p>
+<h2 id="main"><a href="#main" class="headerlink" title="main"></a>main</h2><p>我们在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-main.html">main 函数</a></strong> 里面，通过 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 的 os.Args 可以获取命令行参数。</p>
+<h3 id="语法-4"><a href="#语法-4" class="headerlink" title="语法"></a>语法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>   args = os.Args<br>   arg_num := <span class="hljs-built_in">len</span>(os.Args)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="flag-获取参数"><a href="#flag-获取参数" class="headerlink" title="flag 获取参数"></a>flag 获取参数</h2><p><strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 程序的命令行，除了可以使用 os.Args 来获取，还可以通过 flag 包相关的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a></strong> 来获取。</p>
+<p>os.Args 获取方式只能根据索引一个个去遍历获取，但 flag 包提供的方式更为灵活，可以通过 key 和 value 的形式来获取。</p>
+<h3 id="语法-5"><a href="#语法-5" class="headerlink" title="语法"></a>语法</h3><p>( key : default value    — comment)</p>
+<p>-u root “xxxx”</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">flag.<span class="hljs-constructor">StringVar(&amp;<span class="hljs-params">user</span>, <span class="hljs-string">&quot;u&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>, <span class="hljs-string">&quot;账号，默认为root&quot;</span>)</span><br>flag.<span class="hljs-constructor">IntVar(&amp;<span class="hljs-params">port</span>, <span class="hljs-string">&quot;P&quot;</span>, 3306, <span class="hljs-string">&quot;端口号，默认为3306&quot;</span>)</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>StringVar</em></td>
+<td>获取命令行参数的对应的类型，常用的有 IntVar，StringVar，BoolVar，Float64Var，Int64Var，Uint64Var，UintVar 等，分别用户获取 **<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-int.html">int</a><strong>，</strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">string</a><strong>，</strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-bool.html">bool</a><strong>，</strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-float.html">float64</a>**，int64，uint64 和 uint 类型的参数。</td>
+</tr>
+<tr>
+<td><em>&amp;user</em></td>
+<td>所获取的值，存储的变量。</td>
+</tr>
+<tr>
+<td><em>u</em></td>
+<td>命令行的 key。</td>
+</tr>
+<tr>
+<td><em>root</em></td>
+<td>命令行的默认值。</td>
+</tr>
+<tr>
+<td><em>账号</em></td>
+<td>文字说明。</td>
+</tr>
+</tbody></table>
+<h3 id="说明-3"><a href="#说明-3" class="headerlink" title="说明"></a>说明</h3><p>我们分别通过了 flag.StringVar 和 flag.IntVar 解析了命令行的字符串类型的参数和 int 类型的参数。</p>
+<h3 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h3><p>通过 flag 包解析命令行参数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;flag&quot;</span><br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">// 定义几个变量，用于接收命令行的参数值</span><br>	<span class="hljs-keyword">var</span> user        <span class="hljs-type">string</span><br>	<span class="hljs-keyword">var</span> password    <span class="hljs-type">string</span><br>	<span class="hljs-keyword">var</span> host        <span class="hljs-type">string</span><br>	<span class="hljs-keyword">var</span> port        <span class="hljs-type">int</span><br>	<span class="hljs-comment">// &amp;user 就是接收命令行中输入 -u 后面的参数值，其他同理</span><br>	flag.StringVar(&amp;user, <span class="hljs-string">&quot;u&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>, <span class="hljs-string">&quot;账号，默认为root&quot;</span>)<br>	flag.StringVar(&amp;password, <span class="hljs-string">&quot;p&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;密码，默认为空&quot;</span>)<br>	flag.StringVar(&amp;host, <span class="hljs-string">&quot;h&quot;</span>, <span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-string">&quot;主机名，默认为localhost&quot;</span>)<br>	flag.IntVar(&amp;port, <span class="hljs-string">&quot;P&quot;</span>, <span class="hljs-number">3306</span>, <span class="hljs-string">&quot;端口号，默认为3306&quot;</span>)<br>	<span class="hljs-comment">// 解析命令行参数写入注册的flag里</span><br>	flag.Parse()<br>	<span class="hljs-comment">// 输出结果</span><br>	fmt.Printf(<span class="hljs-string">&quot;user：%v\npassword：%v\nhost：%v\nport：%v\n&quot;</span>,<br>		user, password, host, port)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-func/42_golang%20%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0.png" srcset="/img/loading.gif" lazyload alt="42_golang 命令行参数.png"></p>
+<p>我们在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-main.html">main</a></strong> 函数里面解析命令行参数，最后运行的时候，我们发现，我们指定了参数 u 和 p ，因此最终的 user 和 password 参数的值就是我们指定的值，而我们没有指定的参数 h 和 P ，就使用的是默认值。</p>
+<h3 id="方案二-1"><a href="#方案二-1" class="headerlink" title="方案二"></a>方案二</h3><p>通过 flag 包解析命令行参数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;flag&quot;</span><br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">// 定义几个变量，用于接收命令行的参数值</span><br>	<span class="hljs-keyword">var</span> user        *<span class="hljs-type">string</span><br>	<span class="hljs-keyword">var</span> password    *<span class="hljs-type">string</span><br>	<span class="hljs-keyword">var</span> host        *<span class="hljs-type">string</span><br>	<span class="hljs-keyword">var</span> port        *<span class="hljs-type">int</span><br>	<span class="hljs-comment">// &amp;user 就是接收命令行中输入 -u 后面的参数值，其他同理</span><br>	user = flag.String(<span class="hljs-string">&quot;u&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>, <span class="hljs-string">&quot;账号，默认为root&quot;</span>)<br>	password = flag.String(<span class="hljs-string">&quot;p&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;密码，默认为空&quot;</span>)<br>	host = flag.String(<span class="hljs-string">&quot;h&quot;</span>, <span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-string">&quot;主机名，默认为localhost&quot;</span>)<br>	port = flag.Int(<span class="hljs-string">&quot;P&quot;</span>, <span class="hljs-number">3306</span>, <span class="hljs-string">&quot;端口号，默认为3306&quot;</span>)<br>	<span class="hljs-comment">// 解析命令行参数写入注册的flag里</span><br>	flag.Parse()<br>	<span class="hljs-comment">// 输出结果</span><br>	fmt.Printf(<span class="hljs-string">&quot;user：%v\npassword：%v\nhost：%v\nport：%v\n&quot;</span>,<br>		*user, *password, *host, *port)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-func/43_golang%20%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0.png" srcset="/img/loading.gif" lazyload alt="43_golang 命令行参数.png"></p>
+<p>这一种方法类似第一种，同样实现了命令行参数的解析。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>flag 包提供的命令行参数解析的方式可以通过 key 和 value 的形式来获取。Go 语言解析命令行参数语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go">flag.StringVar(&amp;user, <span class="hljs-string">&quot;u&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>, <span class="hljs-string">&quot;账号，默认为root&quot;</span>)<br>flag.IntVar(&amp;port, <span class="hljs-string">&quot;P&quot;</span>, <span class="hljs-number">3306</span>, <span class="hljs-string">&quot;端口号，默认为3306&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>也可以使用：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go">flag.String(<span class="hljs-string">&quot;u&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>, <span class="hljs-string">&quot;账号，默认为root&quot;</span>)<br>value :=.flag.Int(<span class="hljs-string">&quot;P&quot;</span>, <span class="hljs-number">3306</span>, <span class="hljs-string">&quot;端口号，默认为3306&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="init-函数"><a href="#init-函数" class="headerlink" title="init  函数"></a>init  函数</h2><p><strong>Go 语言</strong> 程序每一个源文件都可以包含一个 init 函数，该 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a></strong> 会在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-main.html">main</a></strong> 函数之前执行，被 Go 语言框架调用，也就是说 init 会在 main 函数之前被调用。</p>
+<p>如果一个文件同时包含 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable-scope.html">全局变量定义</a></strong> ，init 函数和 main 函数，那么最先执行的是全局变量的定义，接着是 init 函数，最后执行的时候 main 函数</p>
+<h3 id="语法-6"><a href="#语法-6" class="headerlink" title="语法"></a>语法</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">func</span> init()&#123;<br>   <span class="hljs-regexp">//</span> <span class="hljs-keyword">do</span> something<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-4"><a href="#说明-4" class="headerlink" title="说明"></a>说明</h3><p>init 函数可以有 **<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func-return.html">返回值</a>**，也可以没有返回值。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>Go 语言程序每一个源文件都可以包含一个 init 函数，该函数会在 main 函数之前执行，被 Go 语言框架调用，也就是说 init 会在 main 函数之前被调用。</p>
+<p>如果一个文件同时包含全局变量定义 ，init 函数和 main 函数，那么最先执行的是全局变量的定义，接着是 init 函数，最后执行的时候 main 函数。</p>
+<h1 id="第二部分《数据结构-函数》"><a href="#第二部分《数据结构-函数》" class="headerlink" title="第二部分《数据结构 - 函数》"></a>第二部分《数据结构 - 函数》</h1><p>在程序开发的过程中，很多场景，我们需要保存很多的数据，或者说我们需要保存一组数据，使用普通的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-datatype.html">数据类型</a></strong> 是不能满足我们需求的。</p>
+<p><strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 为开发者提供了内置的四种常用数据结构：**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-array.html">数组</a><strong>、</strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-slice.html">切片（slice）</a><strong>、</strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-list.html">列表(list)</a>** 以及 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-map.html">字典（map）</a></strong> 用来保存一组数据。</p>
+<h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><h3 id="数组初始化"><a href="#数组初始化" class="headerlink" title="数组初始化"></a>数组初始化</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> varName [count]Type = [count]Type&#123;element1, element2, element3&#125;<br><br><span class="hljs-keyword">var</span> varName = [count]Type&#123;element1, element2, element3&#125;<br><br><span class="hljs-keyword">var</span> varName = [...]Type&#123;element1, element2, element3&#125;<br><br><span class="hljs-keyword">var</span> varName = [...]Type&#123;index0:element1, index1:element2, index2:element3&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>创建数组时，即给数组设置初值</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//创建数组时，即给数组设置初值</span><br>	<span class="hljs-keyword">var</span> arrHaiCoder [<span class="hljs-number">3</span>]<span class="hljs-type">string</span> = [<span class="hljs-number">3</span>]<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-string">&quot;嗨客网&quot;</span>, <span class="hljs-string">&quot;HaiCoder&quot;</span>&#125;<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder0 =&quot;</span>, arrHaiCoder[<span class="hljs-number">0</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder1 =&quot;</span>, arrHaiCoder[<span class="hljs-number">1</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder2 =&quot;</span>, arrHaiCoder[<span class="hljs-number">2</span>])<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/04%20golang%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96.png" srcset="/img/loading.gif" lazyload alt="04 golang数组初始化.png"></p>
+<p>我们创建了一个有三个元素，每个元素都是 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">string</a></strong> 类型的数组，定义数组的同时，我们直接给数组赋初值。最后，我们使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-printf.html">print</a></strong> 打印数组的内容，我们发现，数组的内容就是我们所设置的三个值。</p>
+<h3 id="数组初始化-1"><a href="#数组初始化-1" class="headerlink" title="数组初始化"></a>数组初始化</h3><p>创建数组时，即给数组设置初值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> main<br><span class="hljs-title function_">import</span> <span class="hljs-params">(</span><br><span class="hljs-params">	<span class="hljs-string">&quot;fmt&quot;</span></span><br><span class="hljs-params">)</span><br>func <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//创建数组时，即给数组设置初值</span><br>	<span class="hljs-type">var</span> <span class="hljs-variable">arrHaiCoder</span> <span class="hljs-operator">=</span> [<span class="hljs-number">3</span>]string&#123;<span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-string">&quot;嗨客网&quot;</span>, <span class="hljs-string">&quot;HaiCoder&quot;</span>&#125;<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder0 =&quot;</span>, arrHaiCoder[<span class="hljs-number">0</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder1 =&quot;</span>, arrHaiCoder[<span class="hljs-number">1</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder2 =&quot;</span>, arrHaiCoder[<span class="hljs-number">2</span>])<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/05%20golang%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96.png" srcset="/img/loading.gif" lazyload alt="05 golang数组初始化.png"></p>
+<p>我们创建了一个有三个元素，每个元素都是 string <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-typedef.html">类型</a></strong> 的数组，定义数组的同时，我们直接给数组赋初值。</p>
+<h3 id="数组初始化-2"><a href="#数组初始化-2" class="headerlink" title="数组初始化"></a>数组初始化</h3><p>创建数组时，即给数组设置初值</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//创建数组时，即给数组设置初值</span><br>	<span class="hljs-keyword">var</span> arrHaiCoder = [...]<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-string">&quot;嗨客网&quot;</span>, <span class="hljs-string">&quot;HaiCoder&quot;</span>&#125;<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder0 =&quot;</span>, arrHaiCoder[<span class="hljs-number">0</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder1 =&quot;</span>, arrHaiCoder[<span class="hljs-number">1</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder2 =&quot;</span>, arrHaiCoder[<span class="hljs-number">2</span>])<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/06%20golang%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96.png" srcset="/img/loading.gif" lazyload alt="06 golang数组初始化.png"></p>
+<p>我们创建了一个有三个元素，每个元素都是 string 类型的数组，定义数组的同时，我们直接给数组赋初值。这里定义的数组，我们没有设置元素的个数，而是使用 …，表示是根据元素的个数直接推导。</p>
+<h3 id="数组初始化-3"><a href="#数组初始化-3" class="headerlink" title="数组初始化"></a>数组初始化</h3><p>创建数组时，即给数组设置初值</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//创建数组时，即给数组设置初值</span><br>	<span class="hljs-keyword">var</span> arrHaiCoder = [...]<span class="hljs-type">string</span>&#123;<span class="hljs-number">1</span>:<span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-number">0</span>:<span class="hljs-string">&quot;嗨客网&quot;</span>, <span class="hljs-number">2</span>:<span class="hljs-string">&quot;HaiCoder&quot;</span>&#125;<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder0 =&quot;</span>, arrHaiCoder[<span class="hljs-number">0</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder1 =&quot;</span>, arrHaiCoder[<span class="hljs-number">1</span>])<br>	fmt.Println(<span class="hljs-string">&quot;arrHaiCoder2 =&quot;</span>, arrHaiCoder[<span class="hljs-number">2</span>])<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/07%20golang%E6%95%B0%E5%80%BC%E5%88%9D%E5%A7%8B%E5%8C%96.png" srcset="/img/loading.gif" lazyload alt="07 golang数值初始化.png"></p>
+<p>我们创建了一个有三个元素，每个元素都是 string 类型的数组，定义数组的同时，我们直接给数组赋初值。这里，赋值我们使用的索引的方式。</p>
+<p>索引为 0 的元素赋值为 “嗨客网”，索引为 1 的元素赋值为 “Hello”，索引为 2 的元素赋值为 “HaiCoder”。</p>
+<h3 id="x3D-x3D-比较"><a href="#x3D-x3D-比较" class="headerlink" title="&#x3D;&#x3D; 比较"></a>&#x3D;&#x3D; 比较</h3><p>（比较数组内每一个 元素的值是否相同）</p>
+<p>Go 语言的数组的比较，是使用 &#x3D;&#x3D; 的方式，如果数组的元素个数不相同，那么不能比较数组。Go 语言数组比较语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">arr == arr1<br></code></pre></td></tr></table></figure>
+
+<h3 id="多维"><a href="#多维" class="headerlink" title="多维"></a>多维</h3><p>Go 语言的数组是支持多维的，如果是二维数组，那么数组的每一个元素都是一个一维数组，如果数组是三维数组，那么每一个元素都是一个二维数组。Go 语言二维数组定义：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">var</span> varName <span class="hljs-selector-attr">[count]</span><span class="hljs-selector-attr">[count2]</span>Type<br></code></pre></td></tr></table></figure>
+
+<p>Go 语言三维数组定义：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">var</span> varName <span class="hljs-selector-attr">[count]</span><span class="hljs-selector-attr">[count2]</span><span class="hljs-selector-attr">[count3]</span>Type<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h1><p>切片的英文是 slice，**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Golang</a>** 中的切片是 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-array.html">数组</a></strong> 的一个引用，因此切片是<strong>引用类型，</strong>在进行传递时，遵守引用的传递机制。</p>
+<p>切片的使用和数组类似，遍历切片、访问切片的元素和求切片的长度 len 与数组都一样。但切片的长度是可以变化的，不像数组是固定的，因此也可以说<strong>切片是一个可以动态变化的数组</strong></p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>Golang 中的切片是数组的一个引用，因此切片是引用类型。Go 语言切片定义：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> sliceName []Type  <span class="hljs-comment">//区别于数组 -- 未指定count，即为初始化内存</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建切片"><a href="#创建切片" class="headerlink" title="创建切片"></a>创建切片</h2><h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><p>Go 语言创建切片有三种方式，分别为：从数组创建切片、使用 make 创建切片和指定数组创建切片。从数组创建切片语法：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">var</span> sliceName = arr<span class="hljs-selector-attr">[index1:index2]</span><br></code></pre></td></tr></table></figure>
+
+<p>使用 make 创建切片语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> sliceName []<span class="hljs-keyword">type</span>= <span class="hljs-built_in">make</span>([]<span class="hljs-keyword">type</span>, <span class="hljs-built_in">len</span>, [<span class="hljs-built_in">cap</span>])  <br></code></pre></td></tr></table></figure>
+
+<p>指定数组创建切片语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> sliceName []<span class="hljs-type">string</span> = []<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;HaiCoder&quot;</span>, <span class="hljs-string">&quot;haicoder&quot;</span>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="数组创建切片"><a href="#数组创建切片" class="headerlink" title="数组创建切片"></a>数组创建切片</h3><p>语法</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">var</span> sliceName = arr<span class="hljs-selector-attr">[index1:index2]</span><br></code></pre></td></tr></table></figure>
+
+<p>参数</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>var</em></td>
+<td>定义切片变量使用的关键字。</td>
+</tr>
+<tr>
+<td><em>sliceName</em></td>
+<td>切片变量名。</td>
+</tr>
+<tr>
+<td><em>arr</em></td>
+<td>数组名。</td>
+</tr>
+<tr>
+<td><em>index1</em></td>
+<td>数组的开始索引。</td>
+</tr>
+<tr>
+<td><em>index2</em></td>
+<td>数组的结束索引。</td>
+</tr>
+</tbody></table>
+<h3 id="使用make创建切片"><a href="#使用make创建切片" class="headerlink" title="使用make创建切片"></a>使用make创建切片</h3><p>语法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> sliceName []<span class="hljs-keyword">type</span>= <span class="hljs-built_in">make</span>([]<span class="hljs-keyword">type</span>, <span class="hljs-built_in">len</span>, [<span class="hljs-built_in">cap</span>])<br></code></pre></td></tr></table></figure>
+
+<p>参数</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>var</em></td>
+<td>定义切片变量使用的关键字。</td>
+</tr>
+<tr>
+<td><em>sliceName</em></td>
+<td>切片变量名。</td>
+</tr>
+<tr>
+<td><em>type</em></td>
+<td>切片的每一个元素的类型。</td>
+</tr>
+<tr>
+<td><em>len</em></td>
+<td>切片的长度。</td>
+</tr>
+<tr>
+<td><em>cap</em></td>
+<td>可选，切片的容量。</td>
+</tr>
+</tbody></table>
+<p>说明</p>
+<p>创建一个切片 sliceName，该切片每一个元素的类型是 type，切片的长度为 len，容量为 cap。make 函数的第三个参数 cap，是可选参数，如果 cap 定义了值，那么 cap 的值必须大于等于 len。</p>
+<h3 id="指定数组创建切片"><a href="#指定数组创建切片" class="headerlink" title="指定数组创建切片"></a>指定数组创建切片</h3><p>语法</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">var</span> sliceName []<span class="hljs-built_in">string</span> = []<span class="hljs-built_in">string</span>&#123;<span class="hljs-string">&quot;HaiCoder&quot;</span>, <span class="hljs-string">&quot;haicoder&quot;</span>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>说明</p>
+<p>创建一个切片 sliceName，该切片的内容就是后面的数组元素。</p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="从数组创建切片"><a href="#从数组创建切片" class="headerlink" title="从数组创建切片"></a>从数组创建切片</h3><p>从已存在的数组的内容创建切片</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//从已存在的数组的内容创建切片</span><br>	<span class="hljs-keyword">var</span> arrHaiCoder = [<span class="hljs-number">3</span>]<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-string">&quot;嗨客网&quot;</span>, <span class="hljs-string">&quot;HaiCoder&quot;</span>&#125;<br>	<span class="hljs-keyword">var</span> sliceHaiCoder = arrHaiCoder[<span class="hljs-number">1</span>:<span class="hljs-number">3</span>]<br>	fmt.Println(<span class="hljs-string">&quot;sliceHaiCoder =&quot;</span>, sliceHaiCoder)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/25%20golang%E4%BB%8E%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA%E5%88%87%E7%89%87.png" srcset="/img/loading.gif" lazyload alt="25 golang从数组创建切片.png"></p>
+<p>我们首先创建了一个有三个元素，每个元素都是 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">string</a></strong> 类型的数组，接着，我们使用数组索引从 1 开始到 3 结束的元素创建一个切片，并使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-printf.html">print</a></strong> 打印切片内容。</p>
+<h3 id="使用make创建切片-1"><a href="#使用make创建切片-1" class="headerlink" title="使用make创建切片"></a>使用make创建切片</h3><p>使用 make 指定切片的长度和容量创建切片</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//使用make指定切片的长度和容量创建切片</span><br>	<span class="hljs-keyword">var</span> sliceHaiCoder = <span class="hljs-built_in">make</span>([]<span class="hljs-type">string</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>)<br>	sliceHaiCoder[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;Hello&quot;</span><br>	sliceHaiCoder[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;嗨客网&quot;</span><br>	sliceHaiCoder[<span class="hljs-number">2</span>] = <span class="hljs-string">&quot;HaiCoder&quot;</span><br>	fmt.Println(<span class="hljs-string">&quot;sliceHaiCoder =&quot;</span>, sliceHaiCoder)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/26%20golang%E4%BD%BF%E7%94%A8make%E5%88%9B%E5%BB%BA%E5%88%87%E7%89%87.png" srcset="/img/loading.gif" lazyload alt="26 golang使用make创建切片.png"></p>
+<p>我们使用 make 函数，创建了一个长度为 3 容量为 3 的切片，接着使用索引的形式给切片赋值。</p>
+<h3 id="指定数组创建切片-1"><a href="#指定数组创建切片-1" class="headerlink" title="指定数组创建切片"></a>指定数组创建切片</h3><p>使用 make 指定切片的长度和容量创建切片</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//指定数组创建切片</span><br>	<span class="hljs-keyword">var</span> sliceHaiCoder = []<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-string">&quot;HaiCoder&quot;</span>&#125;<br>	fmt.Println(<span class="hljs-string">&quot;sliceHaiCoder =&quot;</span>, sliceHaiCoder)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/27%20golang%E4%BB%8E%E6%95%B0%E7%BB%84%E5%88%9B%E5%BB%BA%E5%88%87%E7%89%87.png" srcset="/img/loading.gif" lazyload alt="27 golang从数组创建切片.png"></p>
+<p>创建切片时，直接指定切片的内容。</p>
+<h2 id="访问切片"><a href="#访问切片" class="headerlink" title="访问切片"></a>访问切片</h2><p>类似于数组，但是数组的 索引获取的切片，切片</p>
+<p><strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 访问 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-slice.html">切片</a></strong> 元素可以使用索引的形式或者索引切片的形式。</p>
+<h3 id="访问单个切片元素"><a href="#访问单个切片元素" class="headerlink" title="访问单个切片元素"></a>访问单个切片元素</h3><p>语法</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">sliceName[<span class="hljs-keyword">index</span>]<br></code></pre></td></tr></table></figure>
+
+<p>参数</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>sliceName</em></td>
+<td>切片变量名。</td>
+</tr>
+<tr>
+<td><em>index</em></td>
+<td>要访问的切片的索引。</td>
+</tr>
+</tbody></table>
+<p>说明</p>
+<p>获取切片 sliceName 的索引为 index 处的元素。</p>
+<h3 id="索引切片获取切片元素"><a href="#索引切片获取切片元素" class="headerlink" title="索引切片获取切片元素"></a>索引切片获取切片元素</h3><p>语法</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">sliceName<span class="hljs-selector-attr">[index1:index2]</span><br></code></pre></td></tr></table></figure>
+
+<p>参数</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>sliceName</em></td>
+<td>切片变量名。</td>
+</tr>
+<tr>
+<td><em>index1</em></td>
+<td>要访问的切片的开始索引。</td>
+</tr>
+<tr>
+<td><em>index2</em></td>
+<td>要访问的切片的结束索引。</td>
+</tr>
+</tbody></table>
+<p>说明</p>
+<p>获取切片 sliceName 的索引为 index1 到 index2 处的元素，不包含索引为 index2 的元素。如果 index1 省略，那么就时默认值 0，如果 index2 省略，那么就是切片的长度。</p>
+<h1 id="map"><a href="#map" class="headerlink" title="map"></a>map</h1><h2 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> mapName <span class="hljs-keyword">map</span>[keyType]valueType<br>mapName = <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[keyType]valueType, <span class="hljs-built_in">len</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>var</em></td>
+<td>声明变量使用的关键字。</td>
+</tr>
+<tr>
+<td><em>mapName</em></td>
+<td>声明的 map 变量的变量名。</td>
+</tr>
+<tr>
+<td><em>map</em></td>
+<td>声明 map 变量的关键字。</td>
+</tr>
+<tr>
+<td><em>keyType</em></td>
+<td>map 的键的类型。</td>
+</tr>
+<tr>
+<td><em>valueType</em></td>
+<td>map 的值的类型。</td>
+</tr>
+<tr>
+<td><em>len</em></td>
+<td>map 的长度。</td>
+</tr>
+</tbody></table>
+<h3 id="说明-5"><a href="#说明-5" class="headerlink" title="说明"></a>说明</h3><h3 id="语法-7"><a href="#语法-7" class="headerlink" title="语法"></a>语法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">mapName := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[keyType]valueType, <span class="hljs-built_in">len</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="sync-Map"><a href="#sync-Map" class="headerlink" title="sync.Map"></a>sync.Map</h2><p><strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-map.html">map</a></strong> 如果在并发读的情况下是线程安全的，如果是在并发写的情况下，则是线程不安全的。Golang 为我们提供了一个 <strong>sync.Map 是并发写安全</strong>的。</p>
+<p>Golang 中的 map 的 key 和 value 的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-typedef.html">类型</a></strong> 必须是一致的，但 sync.Map 的 key 和 value 不一定是要相同的类型，不同的类型也是支持的。</p>
+<h3 id="Go语言sync-Map特性"><a href="#Go语言sync-Map特性" class="headerlink" title="Go语言sync.Map特性"></a>Go语言sync.Map特性</h3><p>Go 语言 sync.Map 无须初始化，直接声明即可使用。</p>
+<p>sync.Map 不能使用 map 的方式进行取值和设置等操作，而是使用 sync.Map 的方法进行调用，**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-syncmap-store.html">Store</a>** 表示存储，**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-syncmap-load.html">Load</a>** 表示获取，**<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-syncmap-delete.html">Delete</a>** 表示删除。</p>
+<p>使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-syncmap-range.html">Range</a></strong> 配合一个回调函数进行遍历操作，通过回调函数返回内部遍历出来的值，Range 参数中回调函数的返回值在需要继续迭代遍历时，返回 true ，终止迭代遍历时，返回 false。</p>
+<h3 id="创建sync-Map"><a href="#创建sync-Map" class="headerlink" title="创建sync.Map"></a>创建sync.Map</h3><p>sync.Map 声明完之后，可以立即使用</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs stylus">package <span class="hljs-selector-tag">main</span><br>import (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;sync&quot;</span><br>)<br>func <span class="hljs-selector-tag">main</span>() &#123;<br>	fmt<span class="hljs-selector-class">.Println</span>(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//sync.Map 声明完之后，可以立即使用</span><br>	<span class="hljs-selector-tag">var</span> mapHaiCoder sync<span class="hljs-selector-class">.Map</span><br>	mapHaiCoder<span class="hljs-selector-class">.Store</span>(<span class="hljs-string">&quot;Server&quot;</span>, <span class="hljs-string">&quot;Golang&quot;</span>)<br>	mapHaiCoder<span class="hljs-selector-class">.Store</span>(<span class="hljs-string">&quot;JavaScript&quot;</span>, <span class="hljs-string">&quot;Vue&quot;</span>)<br>	mapHaiCoder<span class="hljs-selector-class">.Store</span>(<span class="hljs-string">&quot;Db&quot;</span>, <span class="hljs-string">&quot;Redis&quot;</span>)<br>	fmt<span class="hljs-selector-class">.Println</span>(mapHaiCoder)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/78%20golang%20syncMap.png" srcset="/img/loading.gif" lazyload alt="78 golang syncMap.png"></p>
+<p>我们创建了一个有三个元素的 map，该 map 定义完之后可以直接使用， map 的三个 key 分别为 “Server”，“JavaScript” 和 “Db”。</p>
+<h1 id="new-和-make"><a href="#new-和-make" class="headerlink" title="new 和 make"></a>new 和 make</h1><p><strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中 new 和 make 是两个内置 **<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a>**，主要用来创建并分配内存。Golang 中的 new 与 make 的区别是 new 只分配内存，而 make 只能用于 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-slice.html">slice</a><strong>、</strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-map.html">map</a></strong> 和 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-channel.html">channel</a></strong> 的初始化。</p>
+<h2 id="new和make主要区别"><a href="#new和make主要区别" class="headerlink" title="new和make主要区别"></a>new和make主要区别</h2><ul>
+<li>make 只能用来分配及初始化类型为 slice、map、chan 的数据，而 new 可以分配任意类型的数据。</li>
+<li>new 分配返回的是指针，即类型 *Type。make 返回引用，即 Type。</li>
+<li>new 分配的空间被清零。make 分配空间后，会进行初始化。</li>
+</ul>
+<h2 id="new函数"><a href="#new函数" class="headerlink" title="new函数"></a>new函数</h2><h3 id="语法-8"><a href="#语法-8" class="headerlink" title="语法"></a>语法</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">func <span class="hljs-keyword">new</span>(<span class="hljs-keyword">Type</span>) *<span class="hljs-keyword">Type</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-6"><a href="#说明-6" class="headerlink" title="说明"></a>说明</h3><p>new 函数只接受一个参数，这个参数是一个 Golang 的 **<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-datatype.html">数据类型</a>**，并且返回一个指向该类型内存地址的指针。同时 new 函数会把分配的内存置为零，也就是类型的零值。</p>
+<h2 id="make函数"><a href="#make函数" class="headerlink" title="make函数"></a>make函数</h2><h3 id="语法-9"><a href="#语法-9" class="headerlink" title="语法"></a>语法</h3><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs excel">func make(<span class="hljs-built_in">t</span> <span class="hljs-built_in">Type</span>, size ...IntegerType) <span class="hljs-built_in">Type</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-7"><a href="#说明-7" class="headerlink" title="说明"></a>说明</h3><p>make 也是用于内存分配的，make 函数的 t 参数必须是 chan（通道）、map（字典）、slice（切片）中的一个。</p>
+<p>make 和 new 不同，它只用于 chan、map 以及 slice 的内存创建，而且它返回的类型就是这三个类型本身，而不是他们的指针类型，因为这三种类型就是引用类型，所以就没有必要返回他们的指针了。</p>
+<h2 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a>案例</h2><h3 id="new分配内存空间"><a href="#new分配内存空间" class="headerlink" title="new分配内存空间"></a>new分配内存空间</h3><p>使用 new 为 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-int.html">int</a></strong> 类型的数据，分配空间</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs dart">package main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br>func main() &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//使用 new 为 int 类型的数据，分配空间</span><br>	<span class="hljs-keyword">var</span> <span class="hljs-built_in">num</span> *<span class="hljs-built_in">int</span><br>	<span class="hljs-built_in">num</span> = <span class="hljs-keyword">new</span>(<span class="hljs-built_in">int</span>)<br>	*<span class="hljs-built_in">num</span> = <span class="hljs-number">1024</span><br>	fmt.Println(<span class="hljs-string">&quot;Num =&quot;</span>, *<span class="hljs-built_in">num</span>, <span class="hljs-string">&quot;Addr =&quot;</span>, <span class="hljs-built_in">num</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/130%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png" srcset="/img/loading.gif" lazyload alt="130 golang new与make区别.png"></p>
+<p>首先，我们定义了一个 int指针类型的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable.html">变量</a></strong> num，接着，我们使用 new 为变量 num 分配内存，接着为 num 变量赋值为 1024。</p>
+<p>最后，我们使用 print 打印 num 的值和 num 变量的地址。</p>
+<h3 id="new自定义类型分配内存空间"><a href="#new自定义类型分配内存空间" class="headerlink" title="new自定义类型分配内存空间"></a>new自定义类型分配内存空间</h3><p>使用 new 为自定义类型，分配空间</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;<br>	Name <span class="hljs-type">string</span><br>	Age <span class="hljs-type">int</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//使用 new 为自定义类型，分配空间</span><br>	<span class="hljs-keyword">var</span> p *Person<br>	p = <span class="hljs-built_in">new</span>(Person)<br>	p.Name = <span class="hljs-string">&quot;HaiCoder&quot;</span><br>	p.Age = <span class="hljs-number">18</span><br>	fmt.Println(<span class="hljs-string">&quot;Person =&quot;</span>, p)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/131%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png" srcset="/img/loading.gif" lazyload alt="131 golang new与make区别.png"></p>
+<p>首先，我们定义了一个结构体 Person，该结构体有两个字段，一个是 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">string</a></strong> 类型的 Name，另一个是 int 类型的 Age。</p>
+<p>接着，我们在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-main.html">main</a></strong> 函数里面定义一个 Person 指针类型的变量 p，并使用 new 为其分配内存，并为结构体变量的字段赋值。最后，我们打印结构体变量 p 。</p>
+<h3 id="make分配内存空间"><a href="#make分配内存空间" class="headerlink" title="make分配内存空间"></a>make分配内存空间</h3><p>使用 make 为切片分配空间</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//使用 make 为切片分配空间</span><br>	<span class="hljs-keyword">var</span> nums []<span class="hljs-type">int</span><br>	nums = <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>, <span class="hljs-number">0</span>, <span class="hljs-number">10</span>)<br>	nums = <span class="hljs-built_in">append</span>(nums, <span class="hljs-number">1</span>)<br>	nums = <span class="hljs-built_in">append</span>(nums, <span class="hljs-number">2</span>)<br>	nums = <span class="hljs-built_in">append</span>(nums, <span class="hljs-number">3</span>)<br>	fmt.Println(<span class="hljs-string">&quot;Nums =&quot;</span>, nums)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/132%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png" srcset="/img/loading.gif" lazyload alt="132 golang new与make区别.png"></p>
+<p>首先，我们定义了一个 int 切片类型的变量 nums，接着使用 make 为其分配内存，并使用 append 为切片变量添加数据。</p>
+<p>最后，我们使用 print 打印打印切片变量 nums 的值。</p>
+<h3 id="make分配内存空间-1"><a href="#make分配内存空间-1" class="headerlink" title="make分配内存空间"></a>make分配内存空间</h3><p>使用 make 为map分配空间</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">//使用 make 为map分配空间</span><br>	<span class="hljs-keyword">var</span> mNum = <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">string</span>, <span class="hljs-number">10</span>)<br>	mNum[<span class="hljs-number">0</span>] = <span class="hljs-string">&quot;Hello&quot;</span><br>	mNum[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;HaiCoder&quot;</span><br>	mNum[<span class="hljs-number">2</span>] = <span class="hljs-string">&quot;嗨客网&quot;</span><br>	fmt.Println(<span class="hljs-string">&quot;mNum =&quot;</span>, mNum)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-collection/133%20golang%20new%E4%B8%8Emake%E5%8C%BA%E5%88%AB.png" srcset="/img/loading.gif" lazyload alt="133 golang new与make区别.png"></p>
+<p>首先，我们定义了一个 map 类型的变量 mNum，接着使用 make 为其分配内存。</p>
+<h2 id="Go语言中new和make区别总结"><a href="#Go语言中new和make区别总结" class="headerlink" title="Go语言中new和make区别总结"></a>Go语言中new和make区别总结</h2><ul>
+<li>make 只能用来分配及初始化类型为 slice、map、chan 的数据，而 new 可以分配任意类型的数据。</li>
+<li>new 分配返回的是指针，即类型 *Type。make 返回引用，即 Type。</li>
+<li>new 分配的空间被清零。make 分配空间后，会进行初始化。</li>
+</ul>
+<h1 id="第三部分《Go-并发编程》"><a href="#第三部分《Go-并发编程》" class="headerlink" title="第三部分《Go 并发编程》"></a>第三部分《Go 并发编程》</h1><h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="进程、线程、协程"><a href="#进程、线程、协程" class="headerlink" title="进程、线程、协程"></a>进程、线程、协程</h2><h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><p>进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动，进程是系统进行资源分配和调度的一个独立单位。</p>
+<p>每个进程都有自己的独立内存空间，不同进程通过进程间通信来通信。由于进程比较重量，占据独立的内存，所以上下文进程间的切换开销（栈、寄存器、虚拟内存、文件句柄等）比较大，但相对比较稳定安全。</p>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><p>线程是指进程内的一个执行单元，也是进程内的可调度实体。线程是进程的一个实体，是 CPU 调度和分派的基本单位，它是比进程更小的能独立运行的基本单位。</p>
+<p>线程自己基本上不拥有系统资源，只拥有一点在运行中必不可少的资源(如程序计数器,一组寄存器和栈)，但是它可与同属一个进程的其他的线程共享进程所拥有的全部资源。</p>
+<p>线程间通信主要通过共享内存，上下文切换很快，资源开销较少，但相比进程不够稳定容易丢失数据。</p>
+<h3 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h3><p>协程是一种用户态的轻量级线程，协程的调度完全由用户控制。从技术的角度来说，“协程就是你可以暂停执行的函数”。协程拥有自己的寄存器上下文和栈。</p>
+<p>协程调度切换时，将寄存器上下文和栈保存到其他地方，在切回来的时候，恢复先前保存的寄存器上下文和栈，直接操作栈则基本没有内核切换的开销，可以不加锁的访问全局变量，所以上下文的切换非常快。</p>
+<h2 id="线程与进程的区别"><a href="#线程与进程的区别" class="headerlink" title="线程与进程的区别"></a>线程与进程的区别</h2><h3 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h3><p>线程是进程内的一个执行单元，进程内至少有一个线程，它们共享进程的地址空间，而进程有自己独立的地址空间。</p>
+<h3 id="资源拥有"><a href="#资源拥有" class="headerlink" title="资源拥有"></a>资源拥有</h3><p>进程是资源分配和拥有的单位，同一个进程内的线程共享进程的资源。</p>
+<h3 id="调度单位"><a href="#调度单位" class="headerlink" title="调度单位"></a>调度单位</h3><p>线程是处理器调度的基本单位,但进程不是。进程与线程二者均可并发执行。</p>
+<h3 id="能否单独执行"><a href="#能否单独执行" class="headerlink" title="能否单独执行"></a>能否单独执行</h3><p>每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口，但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制。</p>
+<h2 id="协程与线程的区别"><a href="#协程与线程的区别" class="headerlink" title="协程与线程的区别"></a>协程与线程的区别</h2><ul>
+<li>一个线程可以多个协程，一个进程也可以单独拥有多个协程。</li>
+<li>线程进程都是同步机制，而协程则是异步。</li>
+<li>协程能保留上一次调用时的状态，每次过程重入时，就相当于进入上一次调用的状态。</li>
+<li>线程是抢占式，而协程是非抢占式的，所以需要用户自己释放使用权来切换到其他协程，因此同一时间其实只有一个协程拥有运行权，相当于单线程的能力。</li>
+<li>协程并不是取代线程, 而且抽象于线程之上, 线程是被分割的 CPU 资源, 协程是组织好的代码流程, 协程需要线程来承载运行, 线程是协程的资源, 但协程不会直接使用线程, 协程直接利用的是执行器(Interceptor), 执行器可以关联任意线程或线程池, 可以使当前线程, UI线程, 或新建新程.。</li>
+<li>线程是协程的资源。协程通过 Interceptor 来间接使用线程这个资源。</li>
+</ul>
+<h1 id="协程-goruntine"><a href="#协程-goruntine" class="headerlink" title="协程 goruntine"></a>协程 goruntine</h1><h2 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h2><p>goroutine 可以看作是 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-goroutine.html">协程</a></strong> 的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 实现。</p>
+<h3 id="goroutine特点"><a href="#goroutine特点" class="headerlink" title="goroutine特点"></a>goroutine特点</h3><p>goroutine 是协程的 Go 语言实现，它是语言原生支持的，相对于一般由库实现协程的方式，goroutine 更加强大，它的调度一定程度上是由 go 运行时（runtime）管理。</p>
+<p>其好处之一是，当某 goroutine 发生阻塞时（例如同步IO操作等），会自动出让 CPU 给其它 goroutine。</p>
+<p>goroutine是非常轻量级的，它就是一段代码，一个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a></strong> 入口，以及在堆上为其分配的一个堆栈（初始大小为4K，会随着程序的执行自动增长删除）。所以它非常廉价，我们可以很轻松的创建上万个 goroutine。</p>
+<h3 id="go运行时调度"><a href="#go运行时调度" class="headerlink" title="go运行时调度"></a>go运行时调度</h3><p>默认的，所有 goroutine 会在一个原生线程里跑，也就是只使用了一个 CPU 核。在同一个原生线程里，如果当前goroutine 不发生阻塞，它是不会让出 CPU 时间给其他同线程的 goroutines 的。除了被系统调用阻塞的线程外，Go 运行库最多会启动 $GOMAXPROCS 个线程来运行 goroutine。</p>
+<p>那么 goroutine 究竟是如何被调度的呢？我们从 go 程序启动开始说起。在go程序启动时会首先创建一个特殊的内核线程 sysmon，从名字就可以看出来它的职责是负责监控的，goroutine 背后的调度可以说就是靠它来搞定。</p>
+<p>接下来，我们再看看它的调度模型，go 语言当前的实现是 N:M。即一定数量的用户线程映射到一定数量的 OS 线程上，这里的用户线程在 go 中指的就是 goroutine。go语言的调度模型需要弄清楚三个概念：M、P 和 G，如下图表示：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/03_goroutine%E8%B0%83%E5%BA%A6.png" srcset="/img/loading.gif" lazyload alt="03_goroutine调度.png"></p>
+<p>M 代表 OS 线程，G 代表 goroutine，P 的概念比较重要，它表示执行的上下文，其数量由 $GOMAXPROCS 决定，一般来说正好等于处理器的数量。M 必须和 P 绑定才能执行 G，调度器需要保证所有的 P 都有 G 执行，以保证并行度。如下图：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/04_goroutine%E8%B0%83%E5%BA%A6.png" srcset="/img/loading.gif" lazyload alt="04_goroutine调度.png"></p>
+<p>从图中我们可以看见，当前有两个 P，各自绑定了一个 M，并分别执行了一个 goroutine，我们还可以看见每个 P上还挂了一个 G 的队列，这个队列是代表私有的任务队列，它们实际上都是 runnable 状态的 goroutine。当使用go 关键字声明时，一个 goroutine 便被加入到运行队列的尾部。一旦一个 goroutine 运行到一个调度点，上下文便从运行队列中取出一个 goroutine，设置好栈和指令指针，便开始运行新的 goroutine。</p>
+<h3 id="goroutine的调度点"><a href="#goroutine的调度点" class="headerlink" title="goroutine的调度点"></a>goroutine的调度点</h3><h4 id="调用-runtime·gosched-函数"><a href="#调用-runtime·gosched-函数" class="headerlink" title="调用 runtime·gosched 函数"></a>调用 runtime·gosched 函数</h4><p>goroutine 主动放弃 CPU，该 goroutine 会被设置为 runnable 状态，然后放入一个全局等待队列中，而 P 将继续执行下一个 goroutine。使用 runtime·gosched 函数是一个主动的行为，一般是在执行长任务时又想其它goroutine 得到执行的机会时调用。</p>
+<h4 id="调用runtime·park函数"><a href="#调用runtime·park函数" class="headerlink" title="调用runtime·park函数"></a>调用runtime·park函数</h4><p>goroutine 进入 waitting 状态，除非对其调用 runtime·ready 函数，否则该 goroutine 将永远不会得到执行。而 P 将继续执行下一个 goroutine。使用 runtime·park 函数一般是在某个条件如果得不到满足就不能继续运行下去时调用，当条件满足后需要使用 runtime·ready 以唤醒它（这里唤醒之后是否会加入全局等待队列还有待研究）。像 channel 操作，定时器中，网络 poll 等都有可能 park goroutine。</p>
+<h4 id="慢系统调用"><a href="#慢系统调用" class="headerlink" title="慢系统调用"></a>慢系统调用</h4><p>这样的系统调用会阻塞等待，为了使该 P 上挂着的其它 G 也能得到执行的机会，需要将这些 goroutine 转到另一个 OS 线程上去。具体的做法是：首先将该 P 设置为 syscall 状态，然后该线程进入系统调用阻塞等待。之前提到过的 sysmom 线程会定期扫描所有的 P，发现一个 P 处于了 syscall 的状态，就将 M 和 P 分离（实际上只有当 Syscall 执行时间超出某个阈值时，才会将 M 与 P 分离）。RUNTIME 会再分配一个 M 和这个 P 绑定，从而继续执行队列中的其它 G。而当之前阻塞的 M 从系统调用中返回后，会将该 goroutine 放入全局等待队列中，自己则sleep 去。</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/05_goroutine%E8%B0%83%E5%BA%A6.png" srcset="/img/loading.gif" lazyload alt="05_goroutine调度.png"></p>
+<p>调度点的情况说清楚了，但整个模型还并不完整。我们知道当使用 go 去调用一个函数，会生成一个新的goroutine 放入当前P的队列中，那么什么时候生成别的 OS 线程，各个 OS 线程又是如何做负载均衡的呢？</p>
+<p>当 M 从队列中拿到一个可执行的 G 后，首先会去检查一下，自己的队列中是否还有等待的 G，如果还有等待的 G，并且也还有空闲的 P，此时就会通知 runtime 分配一个新的 M（如果有在睡觉的OS线程，则直接唤醒它，没有的话则生成一个新的OS线程）来分担任务。</p>
+<p>如果某个 M 发现队列为空之后，会首先从全局队列中取一个 G 来处理。如果全局队列也空了，则会随机从别的 P那里直接截取一半的队列过来（偷窃任务），如果发现所有的 P 都没有可供偷窃的 G 了，该 M 就会陷入沉睡。</p>
+<p>整个调度模型大致就是这样子了，和所有协程的调度一样，在响应时间上，这种协作式调度是硬伤。很容易导致某个协程长时间无法得到执行。但总体来说，它带来的好处更加让人惊叹。</p>
+<h2 id="初始化-2"><a href="#初始化-2" class="headerlink" title="初始化"></a>初始化</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>在 Go 程序中使用 go 关键字为一个函数创建一个 goroutine。在 golang 中，创建 goroutine 有两种方法，分别为：使用普通函数创建和使用匿名函数创建。普通函数创建 goroutine 语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> funcName(paramlist)<br></code></pre></td></tr></table></figure>
+
+<p>匿名函数创建 goroutine 语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">( paramlist )</span></span>&#123;<br>    <span class="hljs-comment">//do something</span><br>&#125;( paramlist2 )<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="普通函数创建goroutine"><a href="#普通函数创建goroutine" class="headerlink" title="普通函数创建goroutine"></a>普通函数创建goroutine</h3><p>使用普通函数，加上 go 关键字，创建 goroutine</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">printInfo</span><span class="hljs-params">(s <span class="hljs-type">string</span>)</span></span>&#123;<br>	<span class="hljs-keyword">for</span>&#123;<br>		fmt.Println(<span class="hljs-string">&quot;Info =&quot;</span>, s)<br>		<span class="hljs-comment">// 延时1秒</span><br>		time.Sleep(time.Second)<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">// 使用普通函数，加上 go 关键字，创建 goroutine</span><br>	<span class="hljs-keyword">go</span> printInfo(<span class="hljs-string">&quot;HaiCoder Golang&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/06_goroutine%E5%88%9B%E5%BB%BA.png" srcset="/img/loading.gif" lazyload alt="06_goroutine创建.png"></p>
+<h3 id="匿名函数创建goroutine"><a href="#匿名函数创建goroutine" class="headerlink" title="匿名函数创建goroutine"></a>匿名函数创建goroutine</h3><p>使用匿名函数，加上 go 关键字，创建 goroutine</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">// 使用匿名函数，加上 go 关键字，创建 goroutine</span><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(s <span class="hljs-type">string</span>)</span></span> &#123;<br>		<span class="hljs-keyword">for</span>&#123;<br>			fmt.Println(<span class="hljs-string">&quot;Info =&quot;</span>, s)<br>			<span class="hljs-comment">// 延时1秒</span><br>			time.Sleep(time.Second)<br>		&#125;<br>	&#125;(<span class="hljs-string">&quot;嗨客网 Golang&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/08_goroutine%E5%88%9B%E5%BB%BA.png" srcset="/img/loading.gif" lazyload alt="08_goroutine创建.png"></p>
+<h2 id="等待goruntine"><a href="#等待goruntine" class="headerlink" title="等待goruntine"></a>等待goruntine</h2><p><strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中要等待 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-goroutine.html">goroutine</a></strong> 的结束，可以使用 <code>sync.WaitGroup</code> 相关的操作，首先，使用 <code>wg.Add</code> 方法增加需要等到的协程的数量，然后没执行完一个协程，使用 <code>wg.Done</code> 表明协程结束，最后使用 <code>wg.Wait</code> 等到所有的协程结束。</p>
+<h3 id="Go语言等待协程结束"><a href="#Go语言等待协程结束" class="headerlink" title="Go语言等待协程结束"></a>Go语言等待协程结束</h3><h4 id="语法-10"><a href="#语法-10" class="headerlink" title="语法"></a>语法</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs go">wg sync.WaitGroup<br><span class="hljs-comment">// 设置需要等待的协程数</span><br>wg.Add(num)<br><span class="hljs-comment">// 一个协程处理结束</span><br>wg.Done()<br><span class="hljs-comment">// 等到所有的协程结束</span><br>wg.Wait()<br></code></pre></td></tr></table></figure>
+
+<h4 id="说明-8"><a href="#说明-8" class="headerlink" title="说明"></a>说明</h4><p>首先，使用 <code>wg.Add</code> 设置我们需要等到的协程的数量，接着，每执行完一个协程之后，使用 <code>wg.Done</code> 表明协程结束，最后使用 <code>wg.Wait</code> 等待所有的协程结束。</p>
+<h3 id="案例-2"><a href="#案例-2" class="headerlink" title="案例"></a>案例</h3><p>使用 sync.WaitGroup 等待协程结束</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;sync&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><span class="hljs-keyword">var</span>(<br>	wg sync.WaitGroup<br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">printInfo</span><span class="hljs-params">(s <span class="hljs-type">string</span>)</span></span>&#123;<br>	<span class="hljs-keyword">defer</span> wg.Done()<br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">2</span>; i++&#123;<br>		fmt.Println(<span class="hljs-string">&quot;Info =&quot;</span>, s, <span class="hljs-string">&quot;i =&quot;</span>, i)<br>		<span class="hljs-comment">// 延时1秒</span><br>		time.Sleep(time.Second)<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	wg.Add(<span class="hljs-number">1</span>)<br>	<span class="hljs-comment">// 使用 sync.WaitGroup 等待协程结束</span><br>	<span class="hljs-keyword">go</span> printInfo(<span class="hljs-string">&quot;HaiCoder Golang&quot;</span>)<br>	wg.Wait()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/10_goroutine%E7%AD%89%E5%BE%85%E7%BB%93%E6%9D%9F.png" srcset="/img/loading.gif" lazyload alt="10_goroutine等待结束.png"></p>
+<p>首先，我们定义了一个 <code>sync.WaitGroup</code> 类型的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable-scope.html">全局变量</a></strong> <code>wg</code>，同时，我们创建了一个 printInfo **<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-func.html">函数</a>**，该函数接受一个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">string</a></strong> 类型的参数，没有任何返回值，在该函数里，我们通过 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-for.html">for</a></strong> 循环执行两次输出语句，每次输出完之后，使用 Sleep 函数实现睡眠一秒钟。</p>
+<p>同时，在 printInfo 函数里，我们使用 defer 实现，在该函数执行完毕时，调用 <code>wg.Done()</code> 表明一个协程执行结束。</p>
+<p>最后，在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-main.html">main</a></strong> 函数，我们首先使用 <code>wg.Add</code> 设置我们需要等到的协程数，为 1，接着使用 go 创建一个协程，并使用 <code>wg.Wait</code> 等待协程的结束。</p>
+<p>我们看到，程序输出了两次之后，程序退出了，这里，我们使用了 <code>sync.WaitGroup</code> 的相关操作，实现了等待所有的协程退出。</p>
+<h3 id="等待多个goroutine结束"><a href="#等待多个goroutine结束" class="headerlink" title="等待多个goroutine结束"></a>等待多个goroutine结束</h3><p>使用 sync.WaitGroup 等待多个协程结束</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;sync&quot;</span><br>)<br><span class="hljs-keyword">var</span>(<br>	wg sync.WaitGroup<br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">sum</span><span class="hljs-params">(num <span class="hljs-type">int</span>)</span></span><span class="hljs-type">int</span>&#123;<br>	<span class="hljs-keyword">defer</span> wg.Done()<br>	result := <span class="hljs-number">0</span><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">1</span>; i &lt;= num; i++&#123;<br>		result += i<br>	&#125;<br>	fmt.Println(<span class="hljs-string">&quot;Sum =&quot;</span>, result)<br>	<span class="hljs-keyword">return</span> result<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">mul</span><span class="hljs-params">(num <span class="hljs-type">int</span>)</span></span><span class="hljs-type">int</span>&#123;<br>	<span class="hljs-keyword">defer</span> wg.Done()<br>	result := <span class="hljs-number">1</span><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">1</span>; i &lt;= num; i++&#123;<br>		result *= i<br>	&#125;<br>	fmt.Println(<span class="hljs-string">&quot;Mul =&quot;</span>, result)<br>	<span class="hljs-keyword">return</span> result<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	wg.Add(<span class="hljs-number">2</span>)<br>	<span class="hljs-comment">// 使用 sync.WaitGroup 等待多个协程结束</span><br>	<span class="hljs-keyword">go</span> sum(<span class="hljs-number">100</span>)<br>	<span class="hljs-keyword">go</span> mul(<span class="hljs-number">10</span>)<br>	wg.Wait()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/11_goroutine%E7%AD%89%E5%BE%85%E7%BB%93%E6%9D%9F.png" srcset="/img/loading.gif" lazyload alt="11_goroutine等待结束.png"></p>
+<h2 id="sync"><a href="#sync" class="headerlink" title="sync"></a>sync</h2><p>锁的作用就是某个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-goroutine.html">协程</a></strong> （线程）在访问某个资源时先锁住，防止其它协程的访问，等访问完毕解锁后其他协程再来加锁进行访问。</p>
+<p><strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中的 sync 包提供了两种锁类型，分别为：sync.Mutex 和 sync.RWMutex，即互斥锁和 **<a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-rwmutex.html">读写锁</a>**。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 定义互斥锁变量 mutex</span><br><span class="hljs-keyword">var</span> mutex sync.Mutex<br><span class="hljs-comment">// 对需要访问的资源加锁</span><br>mutex.Lock( )<br><span class="hljs-comment">// 资源访问结束解锁</span><br>mutex.Unlock( )<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="案例-3"><a href="#案例-3" class="headerlink" title="案例"></a>案例</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;sync&quot;</span><br>)<br><span class="hljs-keyword">var</span>(<br>	<span class="hljs-comment">// 计数器</span><br>	count <span class="hljs-type">int</span><br>	<span class="hljs-comment">// count 变量的互斥锁</span><br>	countMux sync.Mutex<br>)<br><span class="hljs-comment">// 返回当前计数器的值</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Count</span><span class="hljs-params">()</span></span><span class="hljs-type">int</span>&#123;<br>	countMux.Lock()<br>	<span class="hljs-keyword">defer</span> countMux.Unlock()<br>	<span class="hljs-keyword">return</span> count<br>&#125;<br><span class="hljs-comment">// 对计数器的值加一</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">IncCount</span><span class="hljs-params">()</span></span>&#123;<br>	countMux.Lock()<br>	<span class="hljs-keyword">defer</span> countMux.Unlock()<br>	count++<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	IncCount()<br>	count := Count()<br>	fmt.Println(<span class="hljs-string">&quot;Count =&quot;</span>, count)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行，如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/13_golang%20mutex.png" srcset="/img/loading.gif" lazyload alt="13_golang mutex.png"></p>
+<h1 id="chan"><a href="#chan" class="headerlink" title="chan"></a>chan</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>chan 是 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Go 语言</a></strong> 中的一个核心 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-datatype.html">类型</a><strong>，可以把它看成一个管道</strong>，通过它并发核心单元就可以发送或者接收数据进行通讯。</strong></p>
+<p>chan 的本质是一个队列，且 chan 是线程安全的, 也就是自带 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-mutex.html">锁</a></strong> 的功能。</p>
+<h3 id="声明chan"><a href="#声明chan" class="headerlink" title="声明chan"></a>声明chan</h3><h5 id="语法-11"><a href="#语法-11" class="headerlink" title="语法"></a>语法</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> chanName <span class="hljs-keyword">chan</span> chanType<br></code></pre></td></tr></table></figure>
+
+<h4 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>var</em></td>
+<td>声明变量使用的关键字。</td>
+</tr>
+<tr>
+<td><em>chanName</em></td>
+<td>管道变量名。</td>
+</tr>
+<tr>
+<td><em>chan</em></td>
+<td>声明管道变量类型使用的关键字。</td>
+</tr>
+<tr>
+<td><em>chanType</em></td>
+<td>管道变量的具体类型。</td>
+</tr>
+</tbody></table>
+<h4 id="说明-9"><a href="#说明-9" class="headerlink" title="说明"></a>说明</h4><p>我们声明了一个 chan 类型的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable.html">变量</a></strong> ，变量名为 chanName，变量的类型为 chan chanType。注意 chanName 的变量类型为 chan chanType。</p>
+<p>此时，chanName 的值为 nil，声明之后需要使用 make 创建完毕之后，才可以使用。</p>
+<h3 id="创建通道"><a href="#创建通道" class="headerlink" title="创建通道"></a>创建通道</h3><p>通道是引用类型，需要使用 make 进行创建，格式如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">chanName := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> chanType)<br></code></pre></td></tr></table></figure>
+
+<p>使用 make 创建一个类型为 chan chanType 的管道 chanName。</p>
+<h4 id="案例-4"><a href="#案例-4" class="headerlink" title="案例"></a>案例</h4><h4 id="创建管道"><a href="#创建管道" class="headerlink" title="创建管道"></a>创建管道</h4><p>使用 make 创建管道</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">// 使用 make 创建一个 chan int 类型的管道</span><br>	<span class="hljs-keyword">var</span> chanInt <span class="hljs-keyword">chan</span> <span class="hljs-type">int</span><br>	fmt.Println(<span class="hljs-string">&quot;chanInt =&quot;</span>, chanInt)<br>	chanInt = <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br>	fmt.Println(<span class="hljs-string">&quot;chanInt =&quot;</span>, chanInt)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/15_golang%20channel.png" srcset="/img/loading.gif" lazyload alt="15_golang channel.png"></p>
+<p>首先，我们定义了一个 <code>chan int</code> 类型的管道 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable.html">变量</a></strong> chanInt ，接着，我们使用 print 打印该管道，发现该管道为 nil。</p>
+<p>接着，我们使用 make 创建该管道，创建完之后，再次打印该管道，此时管道已经不是 nil，因此，<strong>我们在使用管道之前一定要先 make，后使用。</strong></p>
+<h2 id="初始化（有-x2F-无）缓冲区"><a href="#初始化（有-x2F-无）缓冲区" class="headerlink" title="初始化（有&#x2F;无）缓冲区"></a>初始化（有&#x2F;无）缓冲区</h2><h4 id="无缓冲通道和带缓冲通道区别"><a href="#无缓冲通道和带缓冲通道区别" class="headerlink" title="无缓冲通道和带缓冲通道区别"></a>无缓冲通道和带缓冲通道区别</h4><p><strong>无缓冲的通道保证进行发送和接收的 goroutine 会在同一时间进行数据交换，而有缓冲的通道没有这种保证。</strong></p>
+<p>在无缓冲通道的基础上，为通道增加一个有限大小的存储空间形成带缓冲通道。带缓冲通道在发送时无需等待接收方接收即可完成发送过程，并且不会发生阻塞，只有当存储空间满时才会发生阻塞。同理，如果缓冲通道中有数据，接收时将不会发生阻塞，直到通道中没有数据可读时，通道将会再度阻塞。</p>
+<p><strong>无缓冲通道保证收发过程同步。而无缓冲是异步的收发过程，因此效率可以有明显的提升。</strong></p>
+<h3 id="无缓冲区"><a href="#无缓冲区" class="headerlink" title="无缓冲区"></a>无缓冲区</h3><p>无缓冲的通道是指在接收前没有能力保存任何值的通道。这种类型的通道要求发送 goroutine 和接收 goroutine 同时准备好，才能完成发送和接收操作。</p>
+<p>如果两个 goroutine 没有同时准备好，通道会导致先执行发送或接收操作的 goroutine 阻塞等待。Go 语言无缓冲 channel 创建:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">c1 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="有缓冲区"><a href="#有缓冲区" class="headerlink" title="有缓冲区"></a>有缓冲区</h3><p>带缓冲的通道是一种在被接收前能存储一个或者多个值的通道。这种类型的通道并不强制要求 goroutine 之间必须同时完成发送和接收。Go 语言带缓冲 channel 创建:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">c1:= <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>, bufferSize)<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="chan发送数据"><a href="#chan发送数据" class="headerlink" title="chan发送数据"></a>chan发送数据</h2><h3 id="语法-12"><a href="#语法-12" class="headerlink" title="语法"></a>语法</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clean">msg_chan &lt;- <span class="hljs-string">&quot;msg&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="参数-3"><a href="#参数-3" class="headerlink" title="参数"></a>参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>msg_chan</em></td>
+<td>管道变量。</td>
+</tr>
+<tr>
+<td><em>msg</em></td>
+<td>要发送的数据。</td>
+</tr>
+</tbody></table>
+<h3 id="说明-10"><a href="#说明-10" class="headerlink" title="说明"></a>说明</h3><p>chan 发送数据的语法格式为 chan 变量 &lt;- 加上要发送的数据，因此，我们这里是使用 chan 类型的 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable.html">变量</a></strong> msg_chan 发送一个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">字符串</a></strong> 类型的数据。</p>
+<h2 id="chan接收数据"><a href="#chan接收数据" class="headerlink" title="chan接收数据"></a>chan接收数据</h2><h3 id="语法-13"><a href="#语法-13" class="headerlink" title="语法"></a>语法</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clean">msg := &lt;- msg_chan<br></code></pre></td></tr></table></figure>
+
+<h3 id="参数-4"><a href="#参数-4" class="headerlink" title="参数"></a>参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>msg_chan</em></td>
+<td>管道变量。</td>
+</tr>
+<tr>
+<td><em>msg</em></td>
+<td>要接受的数据存放的变量。</td>
+</tr>
+</tbody></table>
+<h3 id="说明-11"><a href="#说明-11" class="headerlink" title="说明"></a>说明</h3><p>chan 接收数据的语法格式为 待接收的变量 &lt;- chan 变量，因此，我们这里是使用的变量 msg 来接受 chan 类型的变量 msg_chan 的数据。</p>
+<h2 id="chan接收数据-1"><a href="#chan接收数据-1" class="headerlink" title="chan接收数据"></a>chan接收数据</h2><h3 id="语法-14"><a href="#语法-14" class="headerlink" title="语法"></a>语法</h3><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><span class="hljs-built_in">msg,</span> ok := &lt;- msg_chan<br></code></pre></td></tr></table></figure>
+
+<h3 id="参数-5"><a href="#参数-5" class="headerlink" title="参数"></a>参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>msg_chan</em></td>
+<td>管道变量。</td>
+</tr>
+<tr>
+<td><em>msg</em></td>
+<td>要接受的数据存放的变量。</td>
+</tr>
+<tr>
+<td><em>ok</em></td>
+<td>管道是否已经关闭。</td>
+</tr>
+</tbody></table>
+<h3 id="说明-12"><a href="#说明-12" class="headerlink" title="说明"></a>说明</h3><p>msg 为管道接受的数据，ok 表示管道是否 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-channel-close.html">关闭</a></strong> 或者是否为空。</p>
+<h2 id="案例-5"><a href="#案例-5" class="headerlink" title="案例"></a>案例</h2><h3 id="Go语言chan发送字符串数据"><a href="#Go语言chan发送字符串数据" class="headerlink" title="Go语言chan发送字符串数据"></a>Go语言chan发送字符串数据</h3><p>使用 Go 语言的 chan 发送一个字符串类型的数据</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-comment">// 使用 Go 语言的 chan 发送一个字符串类型的数据</span><br>	chanStr := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">string</span>)<br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		chanStr &lt;- <span class="hljs-string">&quot;Hello HaiCoder Golang&quot;</span><br>		time.Sleep(time.Duration(<span class="hljs-number">1</span>) * time.Second)<br>	&#125;()<br>	<span class="hljs-comment">//接受数据</span><br>	msg := &lt;- chanStr<br>	fmt.Println(<span class="hljs-string">&quot;chan Msg =&quot;</span>, msg)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/17_golang%20channel%E5%8F%91%E9%80%81%E6%8E%A5%E6%94%B6%E6%95%B0%E6%8D%AE.png" srcset="/img/loading.gif" lazyload alt="17_golang channel发送接收数据.png"></p>
+<h2 id="Go语言chan关闭"><a href="#Go语言chan关闭" class="headerlink" title="Go语言chan关闭"></a>Go语言chan关闭</h2><h3 id="语法-15"><a href="#语法-15" class="headerlink" title="语法"></a>语法</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">close</span><span class="hljs-params">(msg_chan)</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="参数-6"><a href="#参数-6" class="headerlink" title="参数"></a>参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>msg_chan</em></td>
+<td>需要关闭的管道。</td>
+</tr>
+</tbody></table>
+<h3 id="说明-13"><a href="#说明-13" class="headerlink" title="说明"></a>说明</h3><p>当我们的管道，不需要使用时，需要使用 close 关闭该管道。</p>
+<h2 id="Go语言chan是否关闭"><a href="#Go语言chan是否关闭" class="headerlink" title="Go语言chan是否关闭"></a>Go语言chan是否关闭</h2><h3 id="语法-16"><a href="#语法-16" class="headerlink" title="语法"></a>语法</h3><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><span class="hljs-built_in">msg,</span> ok := &lt;- msg_chan<br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-14"><a href="#说明-14" class="headerlink" title="说明"></a>说明</h3><p>我们在使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-variable.html">变量</a></strong> 接受管道返回的数据后，第二个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-bool.html">bool</a></strong> 类型的返回值表示管道是否关闭，如果为 false，则表明管道已经关闭。</p>
+<h1 id="select多路复用"><a href="#select多路复用" class="headerlink" title="select多路复用"></a>select多路复用</h1><h2 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h2><p>在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Golang</a></strong> 程序中，使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-channel.html">通道</a></strong> 时，如果想同时接收多个通道的数据是一件很困难的事情。通道在接收数据时，如果没有数据可以接收将会发生阻塞。</p>
+<p>Go 语言中提供了 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-select.html">select</a></strong> 关键字，可以同时响应多个通道的操作。select 的用法与 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-switch.html">switch</a></strong> 语句非常类似，由 select 开始一个新的选择块，每个选择条件由 case 语句来描述。</p>
+<p>但 select 又与 switch 不同，select 有比较多的限制，其中最重要的一条限制就是每个 case 语句里必须是一个 IO 操作。</p>
+<p>并且，select 后面并不带判断条件，而是直接去查看 case 语句。每个 case 语句都必须是一个面向 channel 的操作。当 select 里面有多个 case 都满足条件出发时，则 select 会随机选取一个 case 执行。</p>
+<h2 id="Go语言select使用"><a href="#Go语言select使用" class="headerlink" title="Go语言select使用"></a>Go语言select使用</h2><h3 id="语法-17"><a href="#语法-17" class="headerlink" title="语法"></a>语法</h3><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-keyword">select</span>&#123;<br>    <span class="hljs-keyword">case</span> operator1:<br>        <span class="hljs-comment">//statement1</span><br>    <span class="hljs-keyword">case</span> oprtator2:<br>        <span class="hljs-comment">//statement2</span><br>    …<br>    <span class="hljs-literal">default</span>:<br>        <span class="hljs-comment">//</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-15"><a href="#说明-15" class="headerlink" title="说明"></a>说明</h3><p>当操作 operator1 触发时，则执行 statement1 对应的语句，当操作 operator2 触发时，则执行 statement2 对应的语句，这里的操作可以有任意多个。</p>
+<p>如果，以上所有的 case 都不满足，那么就执行 default 语句里面的逻辑。</p>
+<h2 id="案例-6"><a href="#案例-6" class="headerlink" title="案例"></a>案例</h2><h3 id="select监听多个channel"><a href="#select监听多个channel" class="headerlink" title="select监听多个channel"></a>select监听多个channel</h3><p>select 执行 default case</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">pythonSender</span><span class="hljs-params">(ch <span class="hljs-keyword">chan</span> <span class="hljs-type">string</span>)</span></span>&#123;<br>	time.Sleep(<span class="hljs-number">10</span> * time.Second)<br>	ch &lt;- <span class="hljs-string">&quot;Python Sender&quot;</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">golangSender</span><span class="hljs-params">(ch <span class="hljs-keyword">chan</span> <span class="hljs-type">string</span>)</span></span>&#123;<br>	time.Sleep(<span class="hljs-number">5</span> * time.Second)<br>	ch &lt;- <span class="hljs-string">&quot;Golang Sender&quot;</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	chStr1 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">string</span>)<br>	chStr2 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">string</span>)<br>	<span class="hljs-keyword">go</span> pythonSender(chStr1)<br>	<span class="hljs-keyword">go</span> golangSender(chStr2)<br>    <span class="hljs-comment">// 使用 select 监听多个 channel</span><br>	<span class="hljs-keyword">select</span>&#123;<br>	<span class="hljs-keyword">case</span> str1 := &lt;-chStr1:<br>		fmt.Println(str1)<br>	<span class="hljs-keyword">case</span> str2 := &lt;- chStr2:<br>		fmt.Println(str2)<br>	<span class="hljs-keyword">default</span>:<br>		fmt.Println(<span class="hljs-string">&quot;Run default case&quot;</span>)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>程序运行后，控制台输出如下：</p>
+<p><img src="https://haicoder.net/uploads/pic/server/golang/golang-concurrent/28_golang%20select.png" srcset="/img/loading.gif" lazyload alt="28_golang select.png"></p>
+<p>首先，我们使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-new-make.html">make</a></strong> 创建了两个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-nobuffer-channel.html">无缓冲</a></strong> 的管道 chStr1 和 chStr2，接着， 使用 go 创建了两个个协程，分别为 pythonSender 和 golangSender。</p>
+<p>在两个子协程里，我们都使用 sleep 让协程先等待一定的时间，接着，使用 channel 分别都发送一个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-string.html">字符串</a></strong> 消息。</p>
+<p>最后，在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-main.html">main</a></strong> 协程里，我们使用 select 监听管道 chStr1 和 chStr2 发送的消息，并使用 default case，如果没有接收到数据，那么就执行 default 语句。</p>
+<p>最后，程序运行结果，我们发现程序执行了 default 的 case，因为，我们的 select 从第一个 case 依次往下判断，前面两个子协程都使用 sleep 等到了几秒后才执行，因此前面两个 case 不会立刻接收到数据。所以，最后程序执行到 default case 后，程序退出。</p>
+<h2 id="select超时处理"><a href="#select超时处理" class="headerlink" title="select超时处理"></a>select超时处理</h2><p>在 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-tutorial.html">Golang</a></strong> 中，当我们使用 select 监听多个 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-channel.html">channel</a></strong> 时，如果一直没有满足的 case 触发，并且 select 没有 default case 时，那么 select 就会永久的等待，那么如果等待的时间过长，select 很可能就一直阻塞程序。</p>
+<p>在 select 中，我们可以使用 <code>time.After</code> 来实现 select 的超时控制，同时，我们还可以使用 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-break.html">break</a></strong> 语句，来结束 select 语句，就像我们之前结束 <strong><a target="_blank" rel="noopener" href="https://haicoder.net/golang/golang-for.html">for 循环</a></strong> 一样。</p>
+<h3 id="语法-18"><a href="#语法-18" class="headerlink" title="语法"></a>语法</h3><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs verilog">select&#123;<br>    <span class="hljs-keyword">case</span> operator1:<br>        <span class="hljs-comment">//statement1</span><br>    <span class="hljs-keyword">case</span> oprtator2:<br>        <span class="hljs-comment">//statement2</span><br>    <span class="hljs-keyword">case</span> &lt;-<span class="hljs-keyword">time</span><span class="hljs-variable">.After</span>(second * <span class="hljs-keyword">time</span><span class="hljs-variable">.Second</span>):<br>		<span class="hljs-comment">//timeout</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="说明-16"><a href="#说明-16" class="headerlink" title="说明"></a>说明</h3><p>当 operator1 和 operator2 这两个 case 都不满足时，且等待 second 秒后，会触发 <code>time.After</code> case，通过该 case 可以避免 select 一直等到而阻塞进程。</p>
+<h1 id="第四部分《反射》"><a href="#第四部分《反射》" class="headerlink" title="第四部分《反射》"></a>第四部分《反射》</h1><p>使用反射获取变量基本类型的语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">reflect.TypeOf(varname)<br></code></pre></td></tr></table></figure>
+
+<p>使用反射获取变量值的基本语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">reflect.ValueOf(varname)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;reflect&quot;</span><br>)<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	fmt.Println(<span class="hljs-string">&quot;嗨客网(www.haicoder.net)&quot;</span>)<br>	<span class="hljs-keyword">var</span> x = <span class="hljs-number">1024</span><br>	<span class="hljs-keyword">var</span> str = <span class="hljs-string">&quot;HaiCoder&quot;</span><br>	fmt.Println(<span class="hljs-string">&quot;x type =&quot;</span>, reflect.TypeOf(x))<br>	fmt.Println(<span class="hljs-string">&quot;X value =&quot;</span>, reflect.ValueOf(x))<br>	fmt.Println(<span class="hljs-string">&quot;str type =&quot;</span>, reflect.TypeOf(str))<br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Go/" class="category-chain-item">Go</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Go/">#Go</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Go基础语法</div>
+      <div>http://example.com/2023/07/15/Go入门到精通/Go基础语法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/16/Java%E7%B2%BE%E9%80%9A/JVM-%E7%AC%94%E8%AE%B0--%E5%AE%8B%E7%BA%A2%E5%BA%B7/" title="JVM 笔记 -宋红康">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JVM 笔记 -宋红康</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/15/%E4%B8%9A%E5%8A%A1/%E7%9B%B4%E6%92%AD%E4%B8%9A%E5%8A%A1/" title="直播业务">
+                        <span class="hidden-mobile">直播业务</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

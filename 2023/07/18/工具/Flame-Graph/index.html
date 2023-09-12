@@ -1,0 +1,1134 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Flame Graph安装pref工具在Mac上安装火焰图和perf工具可以通过以下步骤完成：  首先，下载并解压火焰图工具，可以在GitHub上找到该工具。 确保你的Mac系统中已经安装了perf工具，如果没有安装，可以使用以下命令进行安装：1brew install linux-tools 注意，这里需要使用brew包管理器来安装。 使用perf工具采集程序的性能数据，可以使用以下命令：1pe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flame Graph">
+<meta property="og:url" content="http://example.com/2023/07/18/%E5%B7%A5%E5%85%B7/Flame-Graph/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Flame Graph安装pref工具在Mac上安装火焰图和perf工具可以通过以下步骤完成：  首先，下载并解压火焰图工具，可以在GitHub上找到该工具。 确保你的Mac系统中已经安装了perf工具，如果没有安装，可以使用以下命令进行安装：1brew install linux-tools 注意，这里需要使用brew包管理器来安装。 使用perf工具采集程序的性能数据，可以使用以下命令：1pe">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-a9fb405f67431a0e3218d3766c7b9e95_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-6901e768ba5c1830a7274493679a1b35_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-d0f37c70f3e7c81689a4e8706268dc67_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-1a0cd39584458af0078787b5a2af2a54_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-751e862b3edb7b19320d32001a4e4d45_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-29e411323f08d52e14b6e16af347de45_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-d6bb2d0cef704b5cdd54a2b23829f265_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-265f5e568f86f924bb4d6aee42ad5dc7_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-ba5bc64f771153bb83ed5af7ece6a4fa_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-93c1f53846bde1be46bab519a1c1d9ce_1440w.webp">
+<meta property="article:published_time" content="2023-07-18T06:20:01.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.908Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="性能调优">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-a9fb405f67431a0e3218d3766c7b9e95_1440w.webp">
+  
+  
+  
+  <title>Flame Graph - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flame Graph"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-18 14:20" pubdate>
+          2023年7月18日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          113 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Flame Graph</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Flame-Graph"><a href="#Flame-Graph" class="headerlink" title="Flame Graph"></a>Flame Graph</h1><h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="pref工具"><a href="#pref工具" class="headerlink" title="pref工具"></a>pref工具</h2><p>在Mac上安装火焰图和perf工具可以通过以下步骤完成：</p>
+<ol>
+<li>首先，下载并解压火焰图工具，可以在GitHub上找到该工具。</li>
+<li>确保你的Mac系统中已经安装了perf工具，如果没有安装，可以使用以下命令进行安装：<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">brew </span><span class="hljs-keyword">install </span>linux-tools<br></code></pre></td></tr></table></figure>
+注意，这里需要使用brew包管理器来安装。</li>
+<li>使用perf工具采集程序的性能数据，可以使用以下命令：<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">perf record -g -<span class="hljs-keyword">p</span> <span class="hljs-symbol">&lt;pid&gt;</span> --<span class="hljs-keyword">sleep</span> <span class="hljs-symbol">&lt;duration&gt;</span><br></code></pre></td></tr></table></figure>
+其中，<code>&lt;pid&gt;</code>是你要监测的程序的进程ID，<code>&lt;duration&gt;</code>是采集数据的时间。</li>
+<li>将perf工具采集到的性能数据转换成火焰图，可以使用以下命令：<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq">perf script | <span class="hljs-type">stackcollapse</span>-perf.pl | <span class="hljs-type">flamegraph</span>.pl &gt; perf.svg<br></code></pre></td></tr></table></figure>
+这将把转换后的火焰图保存为<code>perf.svg</code>文件。</li>
+<li>现在，你可以打开<code>perf.svg</code>文件，查看生成的火焰图了。</li>
+</ol>
+<p>请注意，以上步骤是基于Linux系统的perf工具的。在不同的操作系统下，安装和使用火焰图工具的步骤可能会有所不同。此外，由于现在的perf工具还不支持WSL2，所以在Windows系统上使用火焰图工具可能会有一些限制。</p>
+<p>参考链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://codeantenna.com/a/yrSR4pH3sR">Mac电脑使用火焰图async-profiler - CodeAntenna</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wx170119/p/11459995.html">火焰图（Flame Graphs）的安装和基本用法 - 博客园</a><br>参考搜索结果:</li>
+</ul>
+<p>[5]Mac电脑使用火焰图async-profiler - CodeAntenna<br>[8]火焰图（Flame Graphs）的安装和基本用法 - 博客园</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>根据我找到的资料，以下是关于火焰图的推荐阅读数据：</p>
+<ol>
+<li><p>知乎专栏《<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/402188023?utm_id=0">火焰图生成与分析</a>》</p>
+</li>
+<li><p>稀土掘金《<a target="_blank" rel="noopener" href="https://juejin.cn/post/7243203130153533497">“火焰图”也可以是源码阅读的利器</a>》</p>
+</li>
+<li><p>稀土掘金《<a target="_blank" rel="noopener" href="https://juejin.cn/post/7220730324752465979">一目了然-火焰图初探</a>》</p>
+</li>
+<li><p>腾讯云开发者社区《<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1873597">如何看懂火焰图</a>》</p>
+</li>
+<li><p>博客园《<a target="_blank" rel="noopener" href="https://www.cnblogs.com/icanwrite/p/15592190.html">火焰图- 可以书</a>》</p>
+</li>
+<li><p>博客园《<a target="_blank" rel="noopener" href="https://www.cnblogs.com/sky-heaven/p/13492229.html">Linux下用火焰图进行性能分析【转】</a>》</p>
+</li>
+</ol>
+<p>希望这些资料可以帮助您深入了解火焰图。<br>参考搜索结果:</p>
+<p>[1]火焰图生成与分析 - 知乎专栏<br>[4]”火焰图”也可以是源码阅读的利器 - 稀土掘金<br>[5]一目了然-火焰图初探 - 稀土掘金<br>[6]如何看懂火焰图 - 腾讯云- Tencent<br>[7]火焰图- 可以书 - 博客园<br>[8]Linux下用火焰图进行性能分析【转】 - Sky&amp;Zhang - 博客园</p>
+<h1 id="火焰图生成与分析"><a href="#火焰图生成与分析" class="headerlink" title="火焰图生成与分析"></a>火焰图生成与分析</h1><p>[![沃德锅](<a target="_blank" rel="noopener" href="https://picx.zhimg.com/v2-69a737928572fa7c7f0d37cddfd934be_l.jpg?source=172ae18b">https://picx.zhimg.com/v2-69a737928572fa7c7f0d37cddfd934be_l.jpg?source=172ae18b</a></p>
+<p>火焰图仅用一张小图，就可以定量展示所有的性能瓶颈的全景图，而不论目标软件有多么复杂。<br>传统的性能分析工具通常会给用户展示大量的细节信息和数据， 而用户很难看到全貌，反而容易去优化那些并不重要的地方，经常浪费大量时间和精力却看不到明显效果。传统分析器的另一个缺点是，它们通常会孤立地显示每个函数调用的延时，但很难看出各个函数调用的上下文，而且用户还须刻意区分当前函数本身运行的时间（exclusive time）和包括了其调用其他函数的时间在内的总时间（inclusive time）。</p>
+<p>而相比之下，火焰图可以把大量信息压缩到一个大小相对固定的图片当中（通常一屏就可以显示全）。 不怎么重要的代码路径会在图上自然地淡化乃至消失，而真正重要的代码路径则会自然地凸显出来。越重要的，则会显示得越明显。火焰图总是为用户提供最适当的信息量，不多，也不少。</p>
+<h2 id="1-火焰图简介"><a href="#1-火焰图简介" class="headerlink" title="1 火焰图简介"></a>1 火焰图简介</h2><p>官方博客：<a href="https://link.zhihu.com/?target=https://www.brendangregg.com/flamegraphs.html">https://www.brendangregg.com/flamegraphs.html</a>，火焰图的源资料皆出自该博客。</p>
+<p>火焰图能做什么：</p>
+<ul>
+<li>可以分析函数执行的频繁程度</li>
+<li>可以分析哪些函数经常阻塞</li>
+<li>可以分析哪些函数频繁分配内存</li>
+</ul>
+<p>以分析程序的性能瓶颈。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-a9fb405f67431a0e3218d3766c7b9e95_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>火焰图整个图形看起来就像一个跳动的火焰，这就是它名字的由来。<br>火焰图有以下特征（这里以 on-cpu 火焰图为例）：</p>
+<ul>
+<li>每一列代表一个调用栈，每一个格子代表一个函数</li>
+<li>纵轴展示了栈的深度，按照调用关系从下到上排列。最顶上格子代表采样时，正在占用 cpu 的函数。</li>
+<li>横轴的意义是指：火焰图将采集的多个调用栈信息，通过按字母横向排序的方式将众多信息聚合在一起。需要注意的是它并不代表时间。</li>
+<li>横轴格子的宽度代表其在采样中出现频率，所以一个格子的宽度越大，说明它是瓶颈原因的可能性就越大。</li>
+<li>火焰图格子的颜色是随机的暖色调，方便区分各个调用信息。</li>
+<li>其他的采样方式也可以使用火焰图， on-cpu 火焰图横轴是指 cpu 占用时间，off-cpu 火焰图横轴则代表阻塞时间。</li>
+<li>采样可以是单线程、多线程、多进程甚至是多 host，进阶用法可以参考附录进阶阅读。</li>
+</ul>
+<h3 id="1-1-火焰图类型"><a href="#1-1-火焰图类型" class="headerlink" title="1.1 火焰图类型"></a>1.1 火焰图类型</h3><p>常见的火焰图类型有 On-CPU，Off-CPU，还有 Memory，Hot&#x2F;Cold，Differential 等等。它们有各自适合处理的场景。</p>
+<table>
+<thead>
+<tr>
+<th>火焰图类型</th>
+<th>横轴含义</th>
+<th>纵轴含义</th>
+<th>解决问题</th>
+<th>采样方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>on-cpu火焰图</td>
+<td>cpu占用时间</td>
+<td>调用栈</td>
+<td>找出cpu占用搞的问题函数；分析代码热路径</td>
+<td>固定频率采样cpu调用栈</td>
+</tr>
+<tr>
+<td>off-cpu火焰图</td>
+<td>阻塞时间</td>
+<td>调用栈</td>
+<td>i&#x2F;o、网络等阻塞场景导致的性能下降；锁竞争、死锁导致的性能下降问题</td>
+<td>固定频率采样阻塞事件调用栈</td>
+</tr>
+<tr>
+<td>内存火焰图</td>
+<td>内存申请&#x2F;释放函数调用次数</td>
+<td>调用栈</td>
+<td>内存泄漏问题；内存占用高的对象&#x2F;申请内存多的函数；虚拟内存或物理内存泄漏问题</td>
+<td>有四种方式：跟踪malloc&#x2F;free；跟踪brk；跟踪mmap；跟踪页错误</td>
+</tr>
+<tr>
+<td>Hot&#x2F;Cold火焰图</td>
+<td>on-cpu和off-cpu综合展示</td>
+<td>调用栈</td>
+<td>需要结合cpu占用以及阻塞分析的场景；off-cpu火焰图无法直观判断的场景</td>
+<td>on-cpu火焰图和off-cpu火焰图结合</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="1-2-什么时候使用-On-CPU-火焰图-什么时候使用-Off-CPU-火焰图呢"><a href="#1-2-什么时候使用-On-CPU-火焰图-什么时候使用-Off-CPU-火焰图呢" class="headerlink" title="1.2 什么时候使用 On-CPU 火焰图? 什么时候使用 Off-CPU 火焰图呢?"></a>1.2 什么时候使用 On-CPU 火焰图? 什么时候使用 Off-CPU 火焰图呢?</h3><p><img src="https://pic2.zhimg.com/80/v2-6901e768ba5c1830a7274493679a1b35_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>取决于当前的瓶颈到底是什么：</p>
+<ul>
+<li>如果是 CPU 则使用 On-CPU 火焰图,</li>
+<li>如果是 IO 或锁则使用 Off-CPU 火焰图.</li>
+<li>如果无法确定, 那么可以通过压测工具来确认：</li>
+<li>通过压测工具看看能否让 <strong>CPU 使用率趋于饱和</strong>, 如果能那么使用 On-CPU 火焰图</li>
+<li>如果不管怎么压, <strong>CPU 使用率始终上不来</strong>, 那么多半说明程序被 IO 或锁卡住了, 此时适合使用 Off-CPU 火焰图.</li>
+<li>如果还是确认不了, 那么不妨 On-CPU 火焰图和 Off-CPU 火焰图都搞搞, 正常情况下它们的差异会比较大, 如果两张火焰图长得差不多, 那么通常认为 CPU 被其它进程抢占了.</li>
+</ul>
+<h3 id="1-3-火焰图分析技巧"><a href="#1-3-火焰图分析技巧" class="headerlink" title="1.3 火焰图分析技巧"></a>1.3 火焰图分析技巧</h3><ol>
+<li>纵轴代表调用栈的深度（栈桢数），用于表示函数间调用关系：下面的函数是上面函数的父函数。</li>
+<li>横轴代表调用频次，一个格子的宽度越大，越说明其可能是瓶颈原因。</li>
+<li>不同类型火焰图适合优化的场景不同，比如 on-cpu 火焰图适合分析 cpu 占用高的问题函数，off-cpu 火焰图适合解决阻塞和锁抢占问题。</li>
+<li>无意义的事情：横向先后顺序是为了聚合，跟函数间依赖或调用关系无关；火焰图各种颜色是为方便区分，本身不具有特殊含义</li>
+<li>多练习：进行性能优化有意识的使用火焰图的方式进行性能调优（如果时间充裕）</li>
+</ol>
+<h2 id="2-如何绘制火焰图？"><a href="#2-如何绘制火焰图？" class="headerlink" title="2 如何绘制火焰图？"></a>2 如何绘制火焰图？</h2><h3 id="2-1-生成火焰图的流程"><a href="#2-1-生成火焰图的流程" class="headerlink" title="2.1 生成火焰图的流程"></a>2.1 生成火焰图的流程</h3><p>Brendan D. Gregg 的 Flame Graph 工程实现了一套生成火焰图的脚本。Flame Graph 项目位于 GitHub上<br><a href="https://link.zhihu.com/?target=https://github.com/brendangregg/FlameGraph">https://github.com/brendangregg/FlameGraph</a></p>
+<p>当GitHub网络不通畅的时候可以使用码云的链接：<br>git clone <a href="https://link.zhihu.com/?target=https://gitee.com/mirrors/FlameGraph.git">https://gitee.com/mirrors/FlameGraph.git</a></p>
+<p>用 git 将其 clone下来</p>
+<p>生成和创建火焰图需要如下几个步骤</p>
+<table>
+<thead>
+<tr>
+<th>流程</th>
+<th>描述</th>
+<th>脚本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>捕获堆栈</td>
+<td>使用 perf&#x2F;systemtap&#x2F;dtrace 等工具抓取程序的运行堆栈</td>
+<td>perf&#x2F;systemtap&#x2F;dtrace</td>
+</tr>
+<tr>
+<td>折叠堆栈</td>
+<td>trace 工具抓取的系统和程序运行每一时刻的堆栈信息, 需要对他们进行分析组合, 将重复的堆栈累计在一起, 从而体现出负载和关键路径</td>
+<td>FlameGraph 中的 stackcollapse 程序</td>
+</tr>
+<tr>
+<td>生成火焰图</td>
+<td>分析 stackcollapse 输出的堆栈信息生成火焰图</td>
+<td>flamegraph.pl</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>不同的 trace 工具抓取到的信息不同, 因此 Flame Graph 提供了一系列的 stackcollapse 工具.</p>
+<table>
+<thead>
+<tr>
+<th>stackcollapse</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stackcollapse.pl</td>
+<td>for DTrace stacks</td>
+</tr>
+<tr>
+<td>stackcollapse-perf.pl</td>
+<td>for Linux perf_events “perf script” output</td>
+</tr>
+<tr>
+<td>stackcollapse-pmc.pl</td>
+<td>for FreeBSD pmcstat -G stacks</td>
+</tr>
+<tr>
+<td>stackcollapse-stap.pl</td>
+<td>for SystemTap stacks</td>
+</tr>
+<tr>
+<td>stackcollapse-instruments.pl</td>
+<td>for XCode Instruments</td>
+</tr>
+<tr>
+<td>stackcollapse-vtune.pl</td>
+<td>for Intel VTune profiles</td>
+</tr>
+<tr>
+<td>stackcollapse-ljp.awk</td>
+<td>for Lightweight Java Profiler</td>
+</tr>
+<tr>
+<td>stackcollapse-jstack.pl</td>
+<td>for Java jstack(1) output</td>
+</tr>
+<tr>
+<td>stackcollapse-gdb.pl</td>
+<td>for gdb(1) stacks</td>
+</tr>
+<tr>
+<td>stackcollapse-go.pl</td>
+<td>for Golang pprof stacks</td>
+</tr>
+<tr>
+<td>stackcollapse-vsprof.pl</td>
+<td>for Microsoft Visual Studio profiles</td>
+</tr>
+</tbody></table>
+<p><strong>查看帮助</strong><br><code>./FlameGraph/flamegraph.pl -h</code></p>
+<p>2.2 安装 perf工具<br>perf 命令(performance 的缩写)讲起, 它是 Linux 系统原生提供的性能分析工具, 会返回 CPU 正在执行的函数名以及调用栈(stack)</p>
+<p>具体用法：</p>
+<ul>
+<li><strong>perf Examples</strong> <a href="https://link.zhihu.com/?target=https://www.brendangregg.com/perf.html">https://www.brendangregg.com/perf.html</a></li>
+<li><strong>Linux kernel profiling with perf</strong> <a href="https://link.zhihu.com/?target=https://perf.wiki.kernel.org/index.php/Tutorial">https://perf.wiki.kernel.org/index.php/Tutorial</a></li>
+</ul>
+<h3 id="2-2-1-安装perf"><a href="#2-2-1-安装perf" class="headerlink" title="2.2.1 安装perf"></a>2.2.1 安装perf</h3><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs console"><span class="hljs-meta prompt_"># </span><span class="language-bash">apt install linux-tools-common</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-2-测试perf是否可用"><a href="#2-2-2-测试perf是否可用" class="headerlink" title="2.2.2 测试perf是否可用"></a>2.2.2 测试perf是否可用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># perf record -F 99 -a -g -- sleep 10    </span><br></code></pre></td></tr></table></figure>
+
+<p>如果报错</p>
+<blockquote>
+<p>WARNING: perf not found for kernel <strong>4.15.0-48</strong></p>
+<p>You may need to install the following packages for this specific kernel:<br>linux-tools-4.15.0-48-generic<br>linux-cloud-tools-4.15.0-48-generic</p>
+<p>You may also want to install one of the following packages to keep up to date:<br>linux-tools-generic<br>linux-cloud-tools-generic</p>
+<p>apt install linux-tools-generic<br>apt install linux-cloud-tools-generic</p>
+</blockquote>
+<p>则需要安装linux-tools-generic和linux-cloud-tools-generic，但需选择对应的版本，比如提示的是<strong>4.15.0-48，则我们安装4.15.0-48版本</strong>。</p>
+<blockquote>
+<p># apt-get install linux-tools-4.15.0-48-generic linux-cloud-tools-4.15.0-48-generic linux-tools-generic linux-cloud-tools-generic</p>
+</blockquote>
+<p>再次测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># perf record -F 99 -a -g -- sleep 10    </span><br></code></pre></td></tr></table></figure>
+
+<p>如果没有报错则在执行的目录产生perf.data</p>
+<p><img src="https://pic4.zhimg.com/80/v2-d0f37c70f3e7c81689a4e8706268dc67_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="2-2-3-perf常用命令"><a href="#2-2-3-perf常用命令" class="headerlink" title="2.2.3 perf常用命令"></a>2.2.3 perf常用命令</h3><p><strong>查看帮助文档，perf功能非常强大，我们这里只关注record和report功能，record和report也可以继续通过二级命令查询帮助文档。</strong></p>
+<p><strong>perf -h</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">root@ceph-admin:/home/lqf/flamegraph<span class="hljs-comment"># perf -h</span><br><br> usage: perf [--version] [--<span class="hljs-built_in">help</span>] [OPTIONS] COMMAND [ARGS]<br><br> The most commonly used perf commands are:<br>   annotate        Read perf.data (created by perf record) and display annotated code<br>   archive         Create archive with object files with build-ids found <span class="hljs-keyword">in</span> perf.data file<br>   bench           General framework <span class="hljs-keyword">for</span> benchmark suites<br>   buildid-cache   Manage build-id cache.<br>    ....<br>   lock            Analyze lock events<br>   mem             Profile memory accesses<br>   record          Run a <span class="hljs-built_in">command</span> and record its profile into perf.data<br>   report          Read perf.data (created by perf record) and display the profile<br></code></pre></td></tr></table></figure>
+
+<p>常用的五个命令：</p>
+<ul>
+<li>perf list：查看当前软硬件环境支持的性能事件</li>
+<li>perf stat：分析指定程序的性能概况</li>
+<li>perf top：实时显示系统&#x2F;进程的性能统计信息</li>
+<li><strong>perf record</strong>：记录一段时间内系统&#x2F;进程的性能事件perf report：读取perf record生成的perf.data文件，并显示分析数据（生成火焰图用的采集命令）</li>
+</ul>
+<p><strong>perf record -h</strong><br>常用命令</p>
+<ul>
+<li>-e <event>：指定性能事件（可以是多个，用,分隔列表）</li>
+<li>-p <pid>：指定待分析进程的 pid（可以是多个，用,分隔列表）</li>
+<li>-t <tid>：指定待分析线程的 tid（可以是多个，用,分隔列表）</li>
+<li>-u <uid>：指定收集的用户数据，uid为名称或数字</li>
+<li>-a：从所有 CPU 收集系统数据</li>
+<li>-g：开启 call-graph (stack chain&#x2F;backtrace) 记录</li>
+<li>-C <cpu-list>：只统计指定 CPU 列表的数据，如：0,1,3或1-2</li>
+<li>-r <RT priority>：perf 程序以SCHED_FIFO实时优先级RT priority运行这里填入的数值越大，进程优先级越高（即 nice 值越小）</li>
+<li>-c <count>： 事件每发生 count 次采一次样</li>
+<li>-F <n>：每秒采样 n 次</li>
+<li>-o &lt;output.data&gt;：指定输出文件output.data，默认输出到perf.data</li>
+</ul>
+<h3 id="2-3-perf-采集数据"><a href="#2-3-perf-采集数据" class="headerlink" title="2.3 perf 采集数据"></a>2.3 perf 采集数据</h3><p># perf record -F 99 -p 3887 -g – sleep 30</p>
+<p>perf record 表示采集系统事件, 没有使用 -e 指定采集事件, 则默认采集 cycles(即 CPU clock 周期), -F 99 表示每秒 99 次, -p 13204 是进程号, 即对哪个进程进行分析, -g 表示记录调用栈, sleep 30 则是持续 30 秒.</p>
+<blockquote>
+<p>-F 指定采样频率为 99Hz(每秒99次), 如果 99次 都返回同一个函数名, 那就说明 CPU 这一秒钟都在执行同一个函数, 可能存在性能问题.</p>
+</blockquote>
+<p>运行后会产生一个庞大的文本文件. 如果一台服务器有 16 个 CPU, 每秒抽样 99 次, 持续 30 秒, 就得到 47,520 个调用栈, 长达几十万甚至上百万行.</p>
+<p>为了便于阅读, perf record 命令可以统计每个调用栈出现的百分比, 然后从高到低排列.</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elm"># perf re<span class="hljs-keyword">port</span> -n <span class="hljs-comment">--stdio</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-4-生成火焰图"><a href="#2-4-生成火焰图" class="headerlink" title="2.4 生成火焰图"></a>2.4 生成火焰图</h3><ol>
+<li>首先用 <strong>perf script</strong> 工具对 perf.data 进行解析</li>
+</ol>
+<blockquote>
+<p># 生成折叠后的调用栈<br>perf script -i perf.data &amp;&gt; perf.unfold</p>
+</blockquote>
+<p>\2. 然后将解析出来的信息存下来, 供生成火焰图</p>
+<p>用 <strong>stackcollapse-perf.pl</strong> 将 perf 解析出的内容 <strong>perf.unfold</strong> 中的符号进行折叠 :</p>
+<blockquote>
+<p># 生成火焰图<br># .&#x2F;FlameGraph&#x2F;stackcollapse-perf.pl perf.unfold &amp;&gt; perf.folded</p>
+</blockquote>
+<p>\3. 最后生成 svg 图</p>
+<blockquote>
+<p># .&#x2F;FlameGraph&#x2F;flamegraph.pl<br>perf.folded &gt; perf.svg</p>
+</blockquote>
+<p>我们可以使用管道将上面的流程简化为一条命令</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text"># perf script | ./FlameGraph/stackcollapse-perf.pl | ./FlameGraph/flamegraph.pl &gt; process.svg<br></code></pre></td></tr></table></figure>
+
+<p>解析火焰图<br>最后就可以用浏览器打开火焰图进行分析啦.</p>
+<p>3.1 火焰图的含义<br>火焰图是基于 stack 信息生成的 SVG 图片, 用来展示 CPU 的调用栈。</p>
+<ul>
+<li><p>y 轴表示调用栈, 每一层都是一个函数. 调用栈越深, 火焰就越高, 顶部就是正在执行的函数, 下方都是它的父函数.</p>
+</li>
+<li><p>x 轴表示抽样数, 如果一个函数在 x 轴占据的宽度越宽, 就表示它被抽到的次数多, 即执行的时间长. 注意, x 轴不代表时间, 而是所有的调用栈合并后, 按字母顺序排列的.</p>
+</li>
+<li><p>火焰图就是看顶层的哪个函数占据的宽度最大. 只要有 “平顶”(plateaus), 就表示该函数可能存在性能问题。</p>
+</li>
+<li><p>颜色没有特殊含义, 因为火焰图表示的是 CPU 的繁忙程度, 所以一般选择暖色调.</p>
+</li>
+</ul>
+<h2 id="4-互动性-火焰图是-SVG-图片，可以与用户互动。"><a href="#4-互动性-火焰图是-SVG-图片，可以与用户互动。" class="headerlink" title="4 互动性 火焰图是 SVG 图片，可以与用户互动。"></a>4 互动性 火焰图是 SVG 图片，可以与用户互动。</h2><p>范例：<a href="https://link.zhihu.com/?target=https://queue.acm.org/downloads/2016/Gregg5.svg">https://queue.acm.org/downloads/2016/Gregg5.svg</a> <strong>（1）鼠标悬浮</strong> 火焰的每一层都会标注函数名，鼠标悬浮时会显示完整的函数名、抽样抽中的次数、占据总抽样次数的百分比。下面是一个例子。</p>
+<blockquote>
+<p>mysqld’JOIN::exec (272,959 samples, 78.34 percent)</p>
+</blockquote>
+<p>off-cpu是否也是如此？</p>
+<p><strong>（2）点击放大</strong> 在某一层点击，火焰图会水平放大，该层会占据所有宽度，显示详细信息。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-1a0cd39584458af0078787b5a2af2a54_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>左上角会同时显示”Reset Zoom</strong>“，点击该链接，图片就会恢复原样。</p>
+<p><strong>（3）搜索</strong><br>按下 Ctrl + F 会显示一个搜索框，用户可以输入关键词或正则表达式，所有符合条件的函数名会高亮显示。</p>
+<h2 id="5-火焰图示例"><a href="#5-火焰图示例" class="headerlink" title="5 火焰图示例"></a>5 火焰图示例</h2><p>下面是一个简化的火焰图例子。<br>首先，CPU 抽样得到了三个调用栈。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp">func_c <br>func_b <br>func_a <br>start_thread <br><br>func_d <br>func_a <br>start_thread <br><br>func_d <br>func_a <br>start_thread<br></code></pre></td></tr></table></figure>
+
+<p>上面代码中，start_thread是启动线程，调用了func_a。后者又调用了func_b和func_d，而func_b又调用了func_c。<br>经过合并处理后，得到了下面的结果，即存在两个调用栈，第一个调用栈抽中1次，第二个抽中2次。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">start_thread;func_a;func_b;func_c <span class="hljs-number">1</span>  start_thread;func_a;func_d <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+
+<p>有了这个调用栈统计，火焰图工具就能生成 SVG 图片。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-751e862b3edb7b19320d32001a4e4d45_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>上面图片中，最顶层的函数g()占用 CPU 时间最多。d()的宽度最大，但是它直接耗用 CPU 的部分很少。b()和c()没有直接消耗 CPU。因此，如果要调查性能问题，首先应该调查g()，其次是i()。</p>
+<p>另外，从图中可知a()有两个分支b()和h()，这表明a()里面可能有一个条件语句，而b()分支消耗的 CPU 大大高于h()。</p>
+<h2 id="6-局限"><a href="#6-局限" class="headerlink" title="6 局限"></a>6 局限</h2><p>两种情况下，无法画出火焰图，需要修正系统行为。<br><strong>（1）调用栈不完整</strong><br>当调用栈过深时，某些系统只返回前面的一部分（比如前10层）。<br><strong>（2）函数名缺失</strong><br>有些函数没有名字，编译器只用内存地址来表示（比如匿名函数）。</p>
+<h2 id="7-实践-ZeroMQ-REQ-REP模型测试-测试两种情况"><a href="#7-实践-ZeroMQ-REQ-REP模型测试-测试两种情况" class="headerlink" title="7 实践-ZeroMQ REQ-REP模型测试 测试两种情况"></a>7 实践-ZeroMQ REQ-REP模型测试 测试两种情况</h2><ul>
+<li>hwserver不休眠直接返回 on-cpu火焰图</li>
+<li>hwserver休眠10ms返回 off-cpu火焰图</li>
+</ul>
+<p>测试程序：src-flamegraph\libzmq-test</p>
+<ul>
+<li>hwserver.c</li>
+<li>hwclient.c</li>
+</ul>
+<h3 id="7-1-on-cpu火焰图-7-1-1-使用perf采集"><a href="#7-1-on-cpu火焰图-7-1-1-使用perf采集" class="headerlink" title="7.1 on-cpu火焰图 7.1.1 使用perf采集"></a>7.1 on-cpu火焰图 7.1.1 使用perf采集</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada"># perf <span class="hljs-keyword">record</span> -F <span class="hljs-number">99</span> -p <span class="hljs-number">34631</span> -g <span class="hljs-comment">-- sleep 120</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="7-1-2-生成火焰图"><a href="#7-1-2-生成火焰图" class="headerlink" title="7.1.2 生成火焰图"></a>7.1.2 生成火焰图</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"># perf script | .<span class="hljs-regexp">/FlameGraph/</span>stackcollapse-perf.pl | .<span class="hljs-regexp">/FlameGraph/</span>flamegraph.pl &gt; zeromq-req-rep.svg<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://pic2.zhimg.com/80/v2-29e411323f08d52e14b6e16af347de45_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>7.2 off-cpu火焰图<br><a href="https://link.zhihu.com/?target=https://www.brendangregg.com/blog/2015-02-26/linux-perf-off-cpu-flame-graph.html">https://www.brendangregg.com/blog/2015-02-26/linux-perf-off-cpu-flame-graph.html</a><br>Off-CPU Analysis<br><a href="https://link.zhihu.com/?target=https://www.brendangregg.com/offcpuanalysis.html">https://www.brendangregg.com/offcpuanalysis.html</a></p>
+<p><img src="https://pic2.zhimg.com/80/v2-d6bb2d0cef704b5cdd54a2b23829f265_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="7-2-1-使能sched-schedstats统计-需要在root权限下使能"><a href="#7-2-1-使能sched-schedstats统计-需要在root权限下使能" class="headerlink" title="7.2.1 使能sched_schedstats统计 需要在root权限下使能"></a>7.2.1 使能sched_schedstats统计 需要在root权限下使能</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"># echo <span class="hljs-number">1</span> &gt; <span class="hljs-regexp">/proc/</span>sys<span class="hljs-regexp">/kernel/</span>sched_schedstats<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-2-使用perf采集"><a href="#7-2-2-使用perf采集" class="headerlink" title="7.2.2 使用perf采集"></a>7.2.2 使用perf采集</h3><p>-p 是对应要采集程序的进程ID</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># perf record -e sched:sched_stat_sleep -e sched:sched_switch -e sched:sched_process_exit -p 43777 -g -o perf.data.raw sleep 10 </span><br><br><span class="hljs-comment"># perf inject -v -s -i perf.data.raw -o perf.data</span><br></code></pre></td></tr></table></figure>
+
+<p>通过perf分别记录<strong>sched:sched_stat_sleep、sched:sched_switch、sched:sched_process_exit</strong>三种事件，这三种事件分别表示：进程主动放弃 CPU 而进入睡眠的等待事件、进程由于I&#x2F;O和锁等待等原因被调度器切换而进入睡眠的等待事件、进程的退出事件。</p>
+<h3 id="7-2-3-生成火焰图"><a href="#7-2-3-生成火焰图" class="headerlink" title="7.2.3 生成火焰图"></a>7.2.3 生成火焰图</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">perf script -F comm,pid,tid,cpu,time,period,event,ip,sym,dso,trace | awk &#x27;<br>    NF &gt; 4 &#123; exec = $1; period_ms = int($5 / 1000000) &#125;<br>    NF &gt; 1 &amp;&amp; NF &lt;= 4 &amp;&amp; period_ms &gt; 0 &#123; print $2 &#125;<br>    NF &lt; 2 &amp;&amp; period_ms &gt; 0 &#123; printf &quot;%s\n%d\n\n&quot;, exec, period_ms &#125;&#x27; | \<br>    ./FlameGraph/stackcollapse.pl | \<br>    ./FlameGraph/flamegraph.pl --countname=ms --title=&quot;Off-CPU Time Flame Graph&quot; --colors=io &gt; offcpu.svg<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://pic4.zhimg.com/80/v2-265f5e568f86f924bb4d6aee42ad5dc7_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="8-实践nginx-http"><a href="#8-实践nginx-http" class="headerlink" title="8 实践nginx http"></a>8 实践nginx http</h2><h3 id="8-1-配置和启动nginx"><a href="#8-1-配置和启动nginx" class="headerlink" title="8.1 配置和启动nginx"></a>8.1 配置和启动nginx</h3><ol>
+<li><strong>修改nginx.conf，配置web页面路径</strong></li>
+</ol>
+<p>主要是修改root &#x2F;mnt&#x2F;hgfs&#x2F;ubuntu&#x2F;vip&#x2F;20210821-flamegraph&#x2F;<strong>0voice_webrtc</strong>; 对应web页面的路径。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#user  nobody;</span><br>worker_processes  1;<br><br><span class="hljs-comment">#error_log  logs/error.log;</span><br><span class="hljs-comment">#error_log  logs/error.log  notice;</span><br><span class="hljs-comment">#error_log  logs/error.log  info;</span><br><br><span class="hljs-comment">#pid        logs/nginx.pid;</span><br><br><br>events &#123;<br>    worker_connections  1024;<br>&#125;<br><br><br>http &#123;<br>    include       mime.types;<br>    default_type  application/octet-stream;<br>    <br>    sendfile        on;<br>    <span class="hljs-comment">#tcp_nopush     on;</span><br><br>    <span class="hljs-comment">#keepalive_timeout  0;</span><br>    keepalive_timeout  65;<br><br>    <span class="hljs-comment">#gzip  on;</span><br><br>    server &#123;<br>        listen       80;<br>        server_name  localhost;<br><br>        location / &#123;<br>						root /mnt/hgfs/ubuntu/vip/20210821-flamegraph/0voice_webrtc;<br>            index  index.html index.htm;<br>        &#125;<br><br>        <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>        <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>        <span class="hljs-comment">#</span><br>        error_page   500 502 503 504  /50x.html;<br>        location = /50x.html &#123;<br>            root   html;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>2. 然后重新启动nginx</strong></p>
+<h3 id="8-2-HTTP压测工具wrk使用指南"><a href="#8-2-HTTP压测工具wrk使用指南" class="headerlink" title="8.2 HTTP压测工具wrk使用指南"></a>8.2 <a href="https://link.zhihu.com/?target=https://www.cnblogs.com/liufarui/p/11063328.html">HTTP压测工具wrk使用指南</a></h3><p>8.2.1 安装wk</p>
+<p>从github上下载源码<br><code>git clone https://github.com/wg/wrk</code></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">cd</span> wrk<br><span class="hljs-keyword">make</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="8-2-2-基本参数说明-以下是使用wrk查看到的一些基本参数信息"><a href="#8-2-2-基本参数说明-以下是使用wrk查看到的一些基本参数信息" class="headerlink" title="8.2.2 基本参数说明  以下是使用wrk查看到的一些基本参数信息"></a>8.2.2 基本参数说明  以下是使用wrk查看到的一些基本参数信息</h3><table>
+<thead>
+<tr>
+<th>-c</th>
+<th>–connections</th>
+<th>N</th>
+<th>跟服务器建立并保持的TCP连接数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-d</td>
+<td>–duration</td>
+<td>T</td>
+<td>压测时间</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>–threads</td>
+<td>N</td>
+<td>使用多少个线程进行压测</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>–script</td>
+<td>S</td>
+<td>指定Lua脚本路径</td>
+</tr>
+<tr>
+<td>-H</td>
+<td>–header</td>
+<td>H</td>
+<td>为每一个HTTP请求添加HTTP头</td>
+</tr>
+<tr>
+<td>–latency</td>
+<td></td>
+<td></td>
+<td>在压测结束后，打印延迟统计信息</td>
+</tr>
+<tr>
+<td>–timeout</td>
+<td></td>
+<td>T</td>
+<td>超时时间</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>–version</td>
+<td></td>
+<td>打印正在使用的wrk的详细版本信息</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>N</strong>代表<strong>数字</strong>参数，支持国际单位 (1k, 1M, 1G)</li>
+<li><strong>T</strong>代表<strong>时间</strong>参数，支持时间单位 (2s, 2m, 2h)</li>
+</ul>
+<p>wrk <strong>-c</strong> 20 <strong>-t</strong> 2 <strong>-d</strong> 20s <strong>–latency</strong> <a href="https://link.zhihu.com/?target=http://192.168.31.248/">http://192.168.31.248</a></p>
+<p>建立20个<strong>TCP连接</strong>，使用<strong>两个线程</strong>，用时<strong>20秒</strong>，对<a href="https://link.zhihu.com/?target=http://192.168.31.248/">http://192.168.31.248</a>进行压测。</p>
+<h3 id="8-2-3-输出内容"><a href="#8-2-3-输出内容" class="headerlink" title="8.2.3 输出内容"></a>8.2.3 输出内容</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs text">lqf@ceph-admin:~/flamegraph/wrk$ ./wrk -c 20 -t 2 -d 20s --latency http://192.168.31.248<br>Running 20s test @ http://192.168.31.248<br>  2 threads and 20 connections<br>  Thread Stats   Avg      Stdev     Max   +/- Stdev<br>              （平均值）（标准差）（最大值）（正负一个标准差所占比例）<br>    Latency     9.35ms    1.91ms  81.96ms   96.92%<br>    （延迟）<br>    Req/Sec     1.08k    73.16     1.52k    88.50%<br>    （处理中的请求数）<br>  Latency Distribution（延迟分布）<br>     50%    9.03ms<br>     75%    9.45ms<br>     90%    9.97ms<br>     99%   17.26ms（99分位的延迟）<br>  43019 requests in 20.03s, 170.79MB read（20.03s秒内共处理完成了43019个请求，读取了170.79MB数据）<br>Requests/sec:   2148.24    （平均每秒处理完成2148.24个请求）<br>Transfer/sec:      8.53MB （平均每秒读取数据8.53MB）<br><br>lqf@ceph-admin:~/flamegraph/wrk$ ./wrk -c 20 -t 2 -d 20s --latency http://120.27.131.197<br>Running 20s test @ http://120.27.131.197<br>  2 threads and 20 connections<br>  Thread Stats   Avg      Stdev     Max   +/- Stdev<br>    Latency    44.10ms   69.76ms 509.32ms   92.73%<br>    Req/Sec   382.88     80.68   470.00     88.14%<br>  Latency Distribution<br>     50%   23.98ms<br>     75%   26.97ms<br>     90%   58.56ms<br>     99%  404.74ms<br>  14363 requests in 20.02s, 5.03MB read<br>Requests/sec:    717.38<br>Transfer/sec:    257.11KB <br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>Latency <strong>延迟</strong>时间</li>
+<li>Req&#x2F;Sec <strong>每秒处理</strong>的请求数</li>
+<li><strong>平均值</strong>(Avg)，</li>
+<li><strong>标准偏差</strong>(Stdev)，</li>
+<li><strong>最大值</strong>(Max)</li>
+<li>正负一个<strong>标准差占比</strong>(+&#x2F;-) Stdev</li>
+</ul>
+<p>一般主要关注<strong>Avg和Max</strong>。<strong>Stdev</strong>如果太大说明样本本身<strong>离散程度</strong>比较高，有可能系统性能波动很大。</p>
+<h3 id="8-3-on-cpu火焰图分析nginx"><a href="#8-3-on-cpu火焰图分析nginx" class="headerlink" title="8.3 on-cpu火焰图分析nginx"></a>8.3 on-cpu火焰图分析nginx</h3><h3 id="8-3-1-使用wrk压测-压测的时间要大于perf采集的时间"><a href="#8-3-1-使用wrk压测-压测的时间要大于perf采集的时间" class="headerlink" title="8.3.1 使用wrk压测 压测的时间要大于perf采集的时间"></a>8.3.1 使用wrk压测 压测的时间要大于perf采集的时间</h3><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-string">./wrk</span> -c 20 -t 2 -d 5M <span class="hljs-params">--latency</span> http:<span class="hljs-string">//192.168.31.248</span><br></code></pre></td></tr></table></figure>
+
+<p>8.3.2 使用perf采集</p>
+<ol>
+<li><strong>查找nginx worker进程pid</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ps -ef | grep nginx</span><br>root      85453  16908  0 00:03 ?        00:00:00 nginx: master process /usr/local/nginx/sbin/nginx<br>nobody    85454  85453  0 00:03 ?        00:00:36 nginx: worker process<br>root      97907  56681  0 21:18 pts/22   00:00:00 grep --color=auto nginx<br></code></pre></td></tr></table></figure>
+
+<p>查找到对应work pid为85454</p>
+<ol>
+<li><strong>采集数据</strong></li>
+</ol>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada"># perf <span class="hljs-keyword">record</span> -F <span class="hljs-number">99</span> -p <span class="hljs-number">85454</span> -g <span class="hljs-comment">-- sleep 60</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="8-3-3-生成on-cpu火焰图"><a href="#8-3-3-生成on-cpu火焰图" class="headerlink" title="8.3.3 生成on-cpu火焰图"></a>8.3.3 生成on-cpu火焰图</h3><p><code># perf script | ./FlameGraph/stackcollapse-perf.pl | ./FlameGraph/flamegraph.pl &gt; nginx-on-cpu.svg</code></p>
+<p><img src="https://pic3.zhimg.com/80/v2-ba5bc64f771153bb83ed5af7ece6a4fa_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="8-4-off-cpu火焰图分析nginx"><a href="#8-4-off-cpu火焰图分析nginx" class="headerlink" title="8.4 off-cpu火焰图分析nginx"></a>8.4 off-cpu火焰图分析nginx</h3><p>8.4.1 使能sched_schedstats统计<br>需要在root权限下使能<br><code># echo 1 &gt; /proc/sys/kernel/sched_schedstats</code></p>
+<p>8.4.2 使用perf采集</p>
+<ol>
+<li><strong>查找nginx worker进程pid</strong></li>
+</ol>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ps -ef | grep nginx</span><br><span class="hljs-attribute">root</span> <span class="hljs-number">85453</span> <span class="hljs-number">16908</span> <span class="hljs-number">0</span> <span class="hljs-number">00</span>:<span class="hljs-number">03</span> ? <span class="hljs-number">00</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span> nginx: master process /usr/local/nginx/sbin/nginx<br></code></pre></td></tr></table></figure>
+
+<p><code>nobody 85454 85453 0 00:03 ? 00:00:36 nginx: worker process root 97907 56681 0 21:18 pts/22 00:00:00 grep --color=auto nginx</code><br>查找到对应work pid为85454</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">perf record -e <span class="hljs-built_in">sched</span>:sched_stat_sleep -e <span class="hljs-built_in">sched</span>:sched_switch -e <span class="hljs-built_in">sched</span>:sched_process_exit -p 85454 -g -o perf.data.raw <span class="hljs-built_in">sleep</span> 10</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">perf inject -v -s -i perf.data.raw -o perf.data</span><br></code></pre></td></tr></table></figure>
+
+<p>8.4.3 生成off-cpu火焰图<br><code>perf script -F comm,pid,tid,cpu,time,period,event,ip,sym,dso,trace | awk &#39; NF &gt; 4 &#123; exec = $1; period_ms = int($5 / 1000000) &#125;</code></p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">NF &gt; 1 &amp;&amp; NF &lt;= 4 &amp;&amp; period_ms &gt; 0 &#123; print $2 &#125;<br>NF &lt; 2 &amp;&amp; period_ms &gt; 0 &#123; printf <span class="hljs-string">&quot;%s\n%d\n\n&quot;</span>, exec, period_ms &#125;&#x27; | \ <span class="hljs-string">./FlameGraph/stackcollapse.pl</span> | \<br><span class="hljs-string">./FlameGraph/flamegraph.pl</span> <span class="hljs-params">--countname=ms</span> <span class="hljs-params">--title=</span><span class="hljs-string">&quot;Off-CPU Time Flame Graph&quot;</span> <span class="hljs-params">--colors=io</span> &gt; nginx-off-cpu.svg<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://pic3.zhimg.com/80/v2-93c1f53846bde1be46bab519a1c1d9ce_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://link.zhihu.com/?target=https://blog.openresty.com.cn/cn/authors/%E7%AB%A0%E4%BA%A6%E6%98%A5">章亦春</a> 动态追踪技术漫谈 <a href="https://link.zhihu.com/?target=https://blog.openresty.com.cn/cn/dynamic-tracing/">https://blog.openresty.com.cn/cn/dynamic-tracing/</a></li>
+<li>内存火焰图 <a href="https://link.zhihu.com/?target=https://www.brendangregg.com/FlameGraphs/memoryflamegraphs.html">https://www.brendangregg.com/FlameGraphs/memoryflamegraphs.html</a></li>
+<li>perf Examples <a href="https://link.zhihu.com/?target=https://www.brendangregg.com/perf.html">https://www.brendangregg.com/perf.html</a></li>
+<li><a href="https://link.zhihu.com/?target=http://queue.acm.org/detail.cfm?id=2927301">火焰图的介绍论文</a><a href="https://link.zhihu.com/?target=http://queue.acm.org/detail.cfm?id=2927301">http://queue.acm.org/detail.cfm?id=2927301</a></li>
+<li><a href="https://link.zhihu.com/?target=http://www.brendangregg.com/flamegraphs.html">火焰图官方主页</a><a href="https://link.zhihu.com/?target=http://www.brendangregg.com/flamegraphs.html">http://www.brendangregg.com/flamegraphs.html</a></li>
+<li><a href="https://link.zhihu.com/?target=https://github.com/brendangregg/FlameGraph">火焰图生成工具</a><a href="https://link.zhihu.com/?target=https://github.com/brendangregg/FlameGraph">https://github.com/brendangregg/FlameGraph</a></li>
+<li>借助PERF工具分析CPU使用率<a href="https://link.zhihu.com/?target=http://linuxperf.com/?p=36">http://linuxperf.com/?p=36</a></li>
+</ul>
+<p>发布于 2021-08-22 14:41</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/topic/20838049">Linux性能优化（书籍）</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/topic/19601705">C &#x2F; C++</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/topic/21714476">Linux服务器开发</a></p>
+<p>- </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-chain-item">工具</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/">#java</a>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
+      
+        <a href="/tags/%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/">#性能调优</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flame Graph</div>
+      <div>http://example.com/2023/07/18/工具/Flame-Graph/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/18/%E5%B7%A5%E5%85%B7/Java%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/" title="Java性能调优">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java性能调优</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/16/Java%E7%B2%BE%E9%80%9A/JVM-%E7%AC%94%E8%AE%B0--%E5%AE%8B%E7%BA%A2%E5%BA%B7/" title="JVM 笔记 -宋红康">
+                        <span class="hidden-mobile">JVM 笔记 -宋红康</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -16,24 +16,29 @@
   <meta name="author" content="where">
   <meta name="keywords" content="">
   
-    <meta name="description" content="数据密集型应用设计（DDIA）DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com) 第三章：存储与检索 (vonng.com) 第一部分：数据系统基础第一章 可靠性、可伸缩性和可维护性第二章 数据模型与查询语言数据模型在计算机科学和数据库中，常见的数据模型包括以下几种：  层次模型（Hierarchical Model）：层次模型是一种树状的数据结构，其中数据组织成为一个以父节点和">
+    <meta name="description" content="数据密集型应用设计（DDIA）DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com) 第三章：存储与检索 (vonng.com) 《第一部分：数据系统基础》第一章 可靠性、可伸缩性和可维护性第二章 数据模型与查询语言数据模型在计算机科学和数据库中，常见的数据模型包括以下几种：  层次模型（Hierarchical Model）：层次模型是一种树状的数据结构，其中数据组织成为一个以父节">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据密集型应用设计（DDIA）">
 <meta property="og:url" content="http://example.com/2023/05/07/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1%EF%BC%88DDIA%EF%BC%89/index.html">
 <meta property="og:site_name" content="where&#39;s blog">
-<meta property="og:description" content="数据密集型应用设计（DDIA）DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com) 第三章：存储与检索 (vonng.com) 第一部分：数据系统基础第一章 可靠性、可伸缩性和可维护性第二章 数据模型与查询语言数据模型在计算机科学和数据库中，常见的数据模型包括以下几种：  层次模型（Hierarchical Model）：层次模型是一种树状的数据结构，其中数据组织成为一个以父节点和">
+<meta property="og:description" content="数据密集型应用设计（DDIA）DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com) 第三章：存储与检索 (vonng.com) 《第一部分：数据系统基础》第一章 可靠性、可伸缩性和可维护性第二章 数据模型与查询语言数据模型在计算机科学和数据库中，常见的数据模型包括以下几种：  层次模型（Hierarchical Model）：层次模型是一种树状的数据结构，其中数据组织成为一个以父节">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig3-2.png">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig3-3.png">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig3-5.png">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig3-9.png">
+<meta property="og:image" content="http://ddia.vonng.com/img/fig5-1.png">
 <meta property="og:image" content="http://ddia.vonng.com/img/fig6-4.png">
 <meta property="og:image" content="http://ddia.vonng.com/img/fig6-5.png">
 <meta property="og:image" content="http://ddia.vonng.com/img/fig6-6.png">
 <meta property="article:published_time" content="2023-05-07T02:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-11T11:36:37.803Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.882Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="分布式系统">
 <meta property="article:tag" content="书籍">
 <meta property="article:tag" content="笔记">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://ddia.vonng.com/img/fig6-4.png">
+<meta name="twitter:image" content="http://ddia.vonng.com/img/fig3-2.png">
   
   
   
@@ -226,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.5k 字
+          11k 字
         
       </span>
     
@@ -237,7 +242,7 @@
         
         
         
-          30 分钟
+          95 分钟
         
       </span>
     
@@ -282,7 +287,7 @@
                 
                 <h1 id="数据密集型应用设计（DDIA）"><a href="#数据密集型应用设计（DDIA）" class="headerlink" title="数据密集型应用设计（DDIA）"></a>数据密集型应用设计（DDIA）</h1><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/beta/article/1676119">DDIA 笔记-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
 <p><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3">第三章：存储与检索 (vonng.com)</a></p>
-<h1 id="第一部分：数据系统基础"><a href="#第一部分：数据系统基础" class="headerlink" title="第一部分：数据系统基础"></a>第一部分：数据系统基础</h1><h2 id="第一章-可靠性、可伸缩性和可维护性"><a href="#第一章-可靠性、可伸缩性和可维护性" class="headerlink" title="第一章 可靠性、可伸缩性和可维护性"></a>第一章 可靠性、可伸缩性和可维护性</h2><h2 id="第二章-数据模型与查询语言"><a href="#第二章-数据模型与查询语言" class="headerlink" title="第二章 数据模型与查询语言"></a>第二章 数据模型与查询语言</h2><h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p>在计算机科学和数据库中，常见的数据模型包括以下几种：</p>
+<h1 id="《第一部分：数据系统基础》"><a href="#《第一部分：数据系统基础》" class="headerlink" title="《第一部分：数据系统基础》"></a>《第一部分：数据系统基础》</h1><h1 id="第一章-可靠性、可伸缩性和可维护性"><a href="#第一章-可靠性、可伸缩性和可维护性" class="headerlink" title="第一章 可靠性、可伸缩性和可维护性"></a>第一章 可靠性、可伸缩性和可维护性</h1><h1 id="第二章-数据模型与查询语言"><a href="#第二章-数据模型与查询语言" class="headerlink" title="第二章 数据模型与查询语言"></a>第二章 数据模型与查询语言</h1><h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p>在计算机科学和数据库中，常见的数据模型包括以下几种：</p>
 <ol>
 <li><p>层次模型（Hierarchical Model）：<br>层次模型是一种树状的数据结构，其中数据组织成为一个以父节点和子节点之间具有父子关系的层级结构。这种模型适合表示具有明确父子关系的数据。层次模型的代表是IBM的IMS（Information Management System）。</p>
 </li>
@@ -298,8 +303,220 @@
 </li>
 </ol>
 <p>这些是常见的数据模型，并且每种模型有其特定的使用场景和优势。根据实际需求和数据结构，可以选择适合的数据模型来组织和管理数据。</p>
-<h2 id="存储与检索"><a href="#存储与检索" class="headerlink" title="存储与检索"></a>存储与检索</h2><p>存储数据结构结构 ：散列索引、B树、SSTable、LSM树</p>
-<h1 id="第二部分：分布式数据"><a href="#第二部分：分布式数据" class="headerlink" title="第二部分：分布式数据"></a>第二部分：分布式数据</h1><h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><h2 id="分区（片）"><a href="#分区（片）" class="headerlink" title="分区（片）"></a>分区（片）</h2><blockquote>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs subunit">在其父记录中存储嵌套记录（图 2<span class="hljs-string">-1</span> 中的一对多关系，如 positions，education 和 contact_info），而不是在单独的表中。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="2-1-关系模型与文档模型"><a href="#2-1-关系模型与文档模型" class="headerlink" title="2.1 关系模型与文档模型"></a>2.1 关系模型与文档模型</h2><h3 id="2-1-1-一对多，多对多"><a href="#2-1-1-一对多，多对多" class="headerlink" title="2.1.1 一对多，多对多"></a>2.1.1 一对多，多对多</h3><p>当实体之间存在多对多、一对多和没有关系的情况时，可以根据具体的需求和数据特点选择适合的数据模型。以下是针对不同关系的建议：</p>
+<ol>
+<li><p>多对多关系：</p>
+<ul>
+<li>关系型数据库模型（如关系型数据库表）：可以使用中间表来表示多对多关系。中间表包含两个外键，分别指向两个实体的主键。这种模型适用于需要对关系进行复杂查询和操作的场景。</li>
+<li>图形模型：可以使用图形模型来表示多对多关系。每个实体作为图的节点，关系作为图的边。这种模型适用于需要进行复杂关系分析和图算法的场景。</li>
+</ul>
+</li>
+<li><p>一对多关系：</p>
+<ul>
+<li>关系型数据库模型：可以使用外键来表示一对多关系。在多的一方添加一个外键，指向一的一方的主键。这种模型适用于需要进行一对多关系查询和操作的场景。</li>
+<li>文档数据库模型：可以使用嵌套文档或引用文档的方式来表示一对多关系。在一的一方嵌套多的一方的文档，或者在多的一方引用一的一方的文档。这种模型适用于需要以文档为单位进行查询和操作的场景。</li>
+</ul>
+</li>
+<li><p>没有关系：</p>
+<ul>
+<li>关系型数据库模型：如果实体之间没有关系，可以将它们分别存储在不同的表中。每个表代表一个实体，没有外键关联。这种模型适用于需要对实体进行独立查询和操作的场景。</li>
+<li>文档数据库模型：可以将每个实体作为一个独立的文档存储，没有嵌套或引用关系。这种模型适用于需要以文档为单位进行查询和操作的场景。</li>
+</ul>
+</li>
+</ol>
+<p>选择适合的数据模型需要考虑以下因素：</p>
+<ul>
+<li>数据查询和操作的需求：不同的数据模型对查询和操作的支持程度不同，需要根据具体需求选择适合的模型。</li>
+<li>数据的复杂性和规模：如果数据之间的关系复杂且数据量大，图形模型可能更适合。如果数据之间的关系简单且数据量较小，关系型数据库模型可能更适合。</li>
+<li>数据一致性和完整性要求：关系型数据库模型通常提供更严格的数据一致性和完整性约束，适用于对数据完整性要求较高的场景。</li>
+</ul>
+<p>需要根据具体的业务需求和数据特点进行评估和选择合适的数据模型。</p>
+<h2 id="2-2-数据查询语言"><a href="#2-2-数据查询语言" class="headerlink" title="2.2 数据查询语言"></a>2.2 数据查询语言</h2><p>当引入关系模型时，关系模型包含了一种查询数据的新方法：SQL 是一种 <strong>声明式</strong> 查询语言，而 IMS 和 CODASYL 使用 <strong>命令式</strong> 代码来查询数据库。</p>
+<p><strong>命令式语言告诉计算机以特定顺序执行某些操作。</strong>可以想象一下，逐行地遍历代码，评估条件，更新变量，并决定是否再循环一遍。</p>
+<p>在声明式查询语言（如 SQL 或关系代数）中，你只需指定所需数据的模式 - 结果必须符合哪些条件，以及如何将数据转换（例如，排序，分组和集合） - 但不是如何实现这一目标。数据库系统的查询优化器决定使用哪些索引和哪些连接方法，以及以何种顺序执行查询的各个部分。</p>
+<h3 id="2-2-1-声明式"><a href="#2-2-1-声明式" class="headerlink" title="2.2.1 声明式"></a>2.2.1 声明式</h3><h3 id="2-2-2-命令式"><a href="#2-2-2-命令式" class="headerlink" title="2.2.2 命令式"></a>2.2.2 命令式</h3><h1 id="第三章-存储与检索"><a href="#第三章-存储与检索" class="headerlink" title="第三章 存储与检索"></a>第三章 存储与检索</h1><p><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3">第三章：存储与检索 (vonng.com)</a></p>
+<p>存储数据结构结构 ：散列索引、B树、SSTable、LSM树</p>
+<h2 id="3-1-驱动数据库的数据结构"><a href="#3-1-驱动数据库的数据结构" class="headerlink" title="3.1 驱动数据库的数据结构"></a>3.1 驱动数据库的数据结构</h2><p>数据库存储的数据结构 通常考虑 <strong>内存模型 + 硬盘模型；</strong><br>对比数据结构的优劣也要从这两方面出发。</p>
+<h3 id="3-1-1-散列索引"><a href="#3-1-1-散列索引" class="headerlink" title="3.1.1 散列索引"></a>3.1.1 散列索引</h3><p><strong>必须存储在内存中。</strong></p>
+<p>（AOF）是在<strong>追加写入一个文件</strong> —— 所以如何避免最终用完硬盘空间？一种好的解决方案是，将日志分为特定大小的 <strong>段（segment）</strong>，当日志增长到特定尺寸时关闭当前段文件，并开始写入一个新的段文件。然后，我们就可以对这些段进行 <strong>压缩（compaction）</strong>，如 <a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/img/fig3-2.png">图 3-2</a> 所示。这里的压缩意味着在日志中丢弃重复的键，只保留每个键的最近更新。</p>
+<p><strong>（压缩 和 分段合并）</strong></p>
+<p><img src="http://ddia.vonng.com/img/fig3-2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>图 3-2 键值更新日志（统计猫咪视频的播放次数）的压缩，只保留每个键的最近值</strong></p>
+<p><img src="http://ddia.vonng.com/img/fig3-3.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>图 3-3 同时执行压缩和分段合并</strong></p>
+<p>下面几点都是实现过程中需要认真考虑的问题：</p>
+<ul>
+<li><p>文件格式</p>
+<p>CSV 不是日志的最佳格式。使用二进制格式更快，更简单：首先以字节为单位对字符串的长度进行编码，然后是原始的字符串（不需要转义）。</p>
+</li>
+<li><p>删除记录</p>
+<p>如果要删除一个键及其关联的值，则必须在数据文件中追加一个特殊的删除记录（逻辑删除，有时被称为墓碑，即 tombstone）。当日志段被合并时，合并过程会通过这个墓碑知道要将被删除键的所有历史值都丢弃掉。</p>
+</li>
+<li><p>崩溃恢复</p>
+<p>如果数据库重新启动，则内存散列映射将丢失。原则上，你可以通过从头到尾读取整个段文件并记录下来每个键的最近值来恢复每个段的散列映射。但是，如果段文件很大，可能需要很长时间，这会使服务的重启比较痛苦。 Bitcask 通过将每个段的散列映射的快照存储在硬盘上来加速恢复，可以使散列映射更快地加载到内存中。</p>
+</li>
+<li><p>部分写入记录</p>
+<p>数据库随时可能崩溃，包括在将记录追加到日志的过程中。 Bitcask 文件包含校验和，允许检测和忽略日志中的这些损坏部分。</p>
+</li>
+<li><p>并发控制</p>
+<p>由于写操作是以严格的顺序追加到日志中的，所以常见的实现是只有一个写入线程。也因为数据文件段是仅追加的或者说是不可变的，所以它们可以被多个线程同时读取。</p>
+</li>
+</ul>
+<p>乍一看，仅追加日志似乎很浪费：为什么不直接在文件里更新，用新值覆盖旧值？仅追加的设计之所以是个好的设计，有如下几个原因：</p>
+<ul>
+<li>追加和分段合并都是顺序写入操作，通常比随机写入快得多，尤其是在磁性机械硬盘上。在某种程度上，顺序写入在基于闪存的 <strong>固态硬盘（SSD）</strong> 上也是好的选择【4】。我们将在“<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=%E6%AF%94%E8%BE%83b%E6%A0%91%E5%92%8Clsm%E6%A0%91">比较 B 树和 LSM 树</a>”中进一步讨论这个问题。</li>
+<li>如果段文件是仅追加的或不可变的，并发和崩溃恢复就简单多了。例如，当一个数据值被更新的时候发生崩溃，你不用担心文件里将会同时包含旧值和新值各自的一部分。</li>
+<li>合并旧段的处理也可以避免数据文件随着时间的推移而碎片化的问题。</li>
+</ul>
+<p>但是，散列表索引也有其局限性：</p>
+<ul>
+<li>散列表必须能放进内存。如果你有非常多的键，那真是倒霉。原则上可以在硬盘上维护一个散列映射，不幸的是硬盘散列映射很难表现优秀。它需要大量的随机访问 I&#x2F;O，而后者耗尽时想要再扩充是很昂贵的，并且需要很烦琐的逻辑去解决散列冲突【5】。</li>
+<li>范围查询效率不高。例如，你无法轻松扫描 kitty00000 和 kitty99999 之间的所有键 —— 你必须在散列映射中单独查找每个键。</li>
+</ul>
+<h3 id="3-1-2-SSTable-和-LSM-树"><a href="#3-1-2-SSTable-和-LSM-树" class="headerlink" title="3.1.2 SSTable 和 LSM 树"></a>3.1.2 SSTable 和 LSM 树</h3><p><strong>排序字符串表（Sorted String Table）</strong>（ Log Struct Merge 树）</p>
+<p><img src="http://ddia.vonng.com/img/fig3-5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>图 3-5 具有内存索引的 SSTable</strong></p>
+<p><strong>内存表：</strong></p>
+<h4 id="构建和维护SSTables"><a href="#构建和维护SSTables" class="headerlink" title="构建和维护SSTables"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=%E6%9E%84%E5%BB%BA%E5%92%8C%E7%BB%B4%E6%8A%A4sstables">构建和维护SSTables</a></h4><p>到目前为止还不错，但是如何让你的数据能够预先排好序呢？毕竟我们接收到的写入请求可能以任何顺序发生。</p>
+<p>虽然在硬盘上维护有序结构也是可能的（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=b%E6%A0%91">B 树</a>”），但在内存保存则要容易得多。有许多可以使用的众所周知的树形数据结构，例如红黑树或 AVL 树【2】。使用这些数据结构，你可以按任何顺序插入键，并按排序顺序读取它们。</p>
+<p>现在我们可以让我们的存储引擎以如下方式工作：</p>
+<ul>
+<li>有新写入时，将其添加到内存中的平衡树数据结构（例如红黑树）。这个内存树有时被称为 <strong>内存表（memtable）</strong>。</li>
+<li>当 <strong>内存表</strong> 大于某个阈值（通常为几兆字节）时，将其作为 SSTable 文件写入硬盘。这可以高效地完成，因为树已经维护了按键排序的键值对。新的 SSTable 文件将成为数据库中最新的段。当该 SSTable 被写入硬盘时，新的写入可以在一个新的内存表实例上继续进行。</li>
+<li>收到读取请求时，首先尝试在内存表中找到对应的键，如果没有就在最近的硬盘段中寻找，如果还没有就在下一个较旧的段中继续寻找，以此类推。</li>
+<li>时不时地，在后台运行一个合并和压缩过程，以合并段文件并将已覆盖或已删除的值丢弃掉。</li>
+</ul>
+<p>这个方案效果很好。它只会遇到一个问题：如果数据库崩溃，则最近的写入（在内存表中，但尚未写入硬盘）将丢失。为了避免这个问题，我们可以在硬盘上保存一个单独的日志，每个写入都会立即被追加到这个日志上，就像在前面的章节中所描述的那样。这个日志没有按排序顺序，但这并不重要，因为它的唯一目的是在崩溃后恢复内存表。每当内存表写出到 SSTable 时，相应的日志都可以被丢弃。</p>
+<h4 id="用SSTables制作LSM树"><a href="#用SSTables制作LSM树" class="headerlink" title="用SSTables制作LSM树"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=%E7%94%A8sstables%E5%88%B6%E4%BD%9Clsm%E6%A0%91">用SSTables制作LSM树</a></h4><p>硬盘结构模型 LSM</p>
+<p>这种索引结构最早由 Patrick O’Neil 等人发明，且被命名为<strong>日志结构合并树</strong>（或 LSM 树）【10】，它是基于更早之前的日志结构文件系统【11】来构建的。基于这种合并和压缩排序文件原理的存储引擎通常被称为 LSM 存储引擎。</p>
+<h3 id="3-1-3-B-树"><a href="#3-1-3-B-树" class="headerlink" title="3.1.3 B 树"></a>3.1.3 B 树</h3><h3 id="3-1-4-其他索引结构"><a href="#3-1-4-其他索引结构" class="headerlink" title="3.1.4 其他索引结构"></a>3.1.4 其他索引结构</h3><h2 id="3-2-事务-x2F-分析（Transition-x2F-Analysis）"><a href="#3-2-事务-x2F-分析（Transition-x2F-Analysis）" class="headerlink" title="3.2 事务 &#x2F;分析（Transition &#x2F; Analysis）"></a>3.2 事务 &#x2F;分析（Transition &#x2F; Analysis）</h2><blockquote>
+<p>事务不一定具有 ACID（原子性，一致性，隔离性和持久性）属性。事务处理只是意味着允许客户端进行低延迟的读取和写入 —— 而不是只能定期运行（例如每天一次）的批处理作业。</p>
+</blockquote>
+<p><strong>表 3-1 比较事务处理和分析系统的特点</strong></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>事务处理系统 OLTP</th>
+<th>分析系统 OLAP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主要读取模式</td>
+<td>查询少量记录，按键读取</td>
+<td>在大批量记录上聚合</td>
+</tr>
+<tr>
+<td>主要写入模式</td>
+<td>随机访问，写入要求低延时</td>
+<td>批量导入（ETL）或者事件流</td>
+</tr>
+<tr>
+<td>主要用户</td>
+<td>终端用户，通过 Web 应用</td>
+<td>内部数据分析师，用于决策支持</td>
+</tr>
+<tr>
+<td>处理的数据</td>
+<td>数据的最新状态（当前时间点）</td>
+<td>随时间推移的历史事件</td>
+</tr>
+<tr>
+<td>数据集尺寸</td>
+<td>GB ~ TB</td>
+<td>TB ~ PB</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-1-数据仓库"><a href="#3-2-1-数据仓库" class="headerlink" title="3.2.1 数据仓库"></a>3.2.1 数据仓库</h3><p>数据仓库是一个独立的数据库，分析人员可以查询他们想要的内容而不影响 OLTP 操作</p>
+<h3 id="3-2-2-星型和雪花型"><a href="#3-2-2-星型和雪花型" class="headerlink" title="3.2.2 星型和雪花型"></a>3.2.2 星型和雪花型</h3><p>分析型业务中，数据模型的多样性则少得多。许多数据仓库都以相当公式化的方式使用，被称为星型模式（也称为维度建模【55】）</p>
+<p>图3.9中的示例模式 显示了可能在食品零售商处找到的数据仓库。<strong>在模式的中心是一个所谓的事实表</strong>（在这个例子中，它被称为 <code>fact_sales</code>）。<strong>事实表的每一行代表在特定时间发生的事件</strong>（这里，每一行代表客户购买的产品）。如果我们分析的是网站流量而不是零售量，则每行可能代表一个用户的页面浏览或点击。</p>
+<p><img src="http://ddia.vonng.com/img/fig3-9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>图 3-9 用于数据仓库的星型模式的示例</strong></p>
+<p><strong>事实被视为单独的事件</strong>，因为这样可以在以后分析中获得最大的灵活性。但是，这意味着事实表可以变得非常大。像苹果、沃尔玛或 eBay 这样的大企业在其数据仓库中可能有几十 PB 的交易历史，其中大部分保存在事实表中【56】。</p>
+<p><strong>事实表中的一些列是属性</strong>，例如产品销售的价格和从供应商那里购买的成本（可以用来计算利润率）。事实表中的其他列是对其他表（称为维度表）的外键引用。由于<strong>事实表中的每一行都表示一个事件，因此这些维度代表事件发生的对象、内容、地点、时间、方式和原因。</strong></p>
+<h2 id="3-3-列式存储"><a href="#3-3-列式存储" class="headerlink" title="3.3 列式存储"></a>3.3 列式存储</h2><h1 id="第四章-编码与演化"><a href="#第四章-编码与演化" class="headerlink" title="第四章 编码与演化"></a>第四章 编码与演化</h1><p>当数据 <strong>格式（format）</strong> 或 <strong>模式（schema）</strong> 发生变化时，通常需要对应用程序代码进行相应的更改（例如，为记录添加新字段，然后修改程序开始读写该字段）。但在大型应用程序中，代码变更通常不会立即完成：</p>
+<ul>
+<li>对于 <strong>服务端（server-side）</strong> 应用程序，可能需要执行 <strong>滚动升级 （rolling upgrade）</strong> （也称为 <strong>阶段发布（staged rollout）</strong> ），一次将新版本部署到少数几个节点，检查新版本是否运行正常，然后逐渐部完所有的节点。这样无需中断服务即可部署新版本，为频繁发布提供了可行性，从而带来更好的可演化性。</li>
+<li>对于 <strong>客户端（client-side）</strong> 应用程序，升不升级就要看用户的心情了。用户可能相当长一段时间里都不会去升级软件。</li>
+</ul>
+<p>这意味着，新旧版本的代码，以及新旧数据格式可能会在系统中同时共处。系统想要继续顺利运行，就需要保持 <strong>双向兼容性</strong>：</p>
+<ul>
+<li><p>向后兼容 (backward compatibility)</p>
+<p>新的代码可以读取由旧的代码写入的数据。</p>
+</li>
+<li><p>向前兼容 (forward compatibility)</p>
+<p>旧的代码可以读取由新的代码写入的数据。</p>
+</li>
+</ul>
+<p>向后兼容性通常并不难实现：新代码的作者当然知道由旧代码使用的数据格式，因此可以显示地处理它（最简单的办法是，保留旧代码即可读取旧数据）。</p>
+<p>向前兼容性可能会更棘手，因为旧版的程序需要忽略新版数据格式中新增的部分。</p>
+<p>本章中将介绍<strong>几种编码数据的格式，包括 JSON、XML、Protocol Buffers、Thrift 和 Avro。</strong>尤其将关注这些格式如何应对模式变化，以及它们如何对新旧代码数据需要共存的系统提供支持。然后将讨论如何<strong>使用这些格式进行数据存储和通信</strong>：在 Web 服务中，<strong>表述性状态传递（REST）</strong> 和 <strong>远程过程调用（RPC）</strong>，以及 <strong>消息传递系统</strong>（如 Actor 和消息队列）。</p>
+<h2 id="4-1-编码数据的格式"><a href="#4-1-编码数据的格式" class="headerlink" title="4.1 编码数据的格式"></a>4.1 编码数据的格式</h2><p>程序通常（至少）使用两种形式的数据：</p>
+<ol>
+<li>在内存中，数据保存在对象、结构体、列表、数组、散列表、树等中。 这些数据结构针对 CPU 的高效访问和操作进行了优化（通常使用指针）。</li>
+<li>如果要将数据写入文件，或通过网络发送，则必须将其 <strong>编码（encode）</strong> 为某种自包含的字节序列（例如，JSON 文档）。 由于每个进程都有自己独立的地址空间，一个进程中的指针对任何其他进程都没有意义，所以这个字节序列表示会与通常在内存中使用的数据结构完全不同 [^i]。</li>
+</ol>
+<h2 id="4-2-数据流的类型"><a href="#4-2-数据流的类型" class="headerlink" title="4.2 数据流的类型"></a>4.2 数据流的类型</h2><p>数据如何在流程之间流动的一些最常见的方式：</p>
+<ul>
+<li>通过数据库（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch4?id=%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81">数据库中的数据流</a>”）</li>
+<li>通过服务调用（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch4?id=%E6%9C%8D%E5%8A%A1%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%EF%BC%9Arest%E4%B8%8Erpc">服务中的数据流：REST 与 RPC</a>”）</li>
+<li>通过异步消息传递（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch4?id=%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81">消息传递中的数据流</a>”）</li>
+</ul>
+<h3 id="4-2-1-数据库中的数据流"><a href="#4-2-1-数据库中的数据流" class="headerlink" title="4.2.1 数据库中的数据流"></a>4.2.1 数据库中的数据流</h3><h3 id="4-2-2-服务中的数据流：REST-与-RPC"><a href="#4-2-2-服务中的数据流：REST-与-RPC" class="headerlink" title="4.2.2 服务中的数据流：REST 与 RPC"></a>4.2.2 服务中的数据流：REST 与 RPC</h3><h3 id="4-2-3-消息传递中的数据流"><a href="#4-2-3-消息传递中的数据流" class="headerlink" title="4.2.3 消息传递中的数据流"></a>4.2.3 消息传递中的数据流</h3><h1 id="《第二部分：分布式数据》"><a href="#《第二部分：分布式数据》" class="headerlink" title="《第二部分：分布式数据》"></a>《第二部分：分布式数据》</h1><h1 id="第五章-复制"><a href="#第五章-复制" class="headerlink" title="第五章 复制"></a>第五章 复制</h1><p>望能复制数据，可能出于各种各样的原因：</p>
+<ul>
+<li>使得数据与用户在地理上接近（从而减少延迟）</li>
+<li>即使系统的一部分出现故障，系统也能继续工作（从而提高可用性）</li>
+<li>伸缩可以接受读请求的机器数量（从而提高读取吞吐量）</li>
+</ul>
+<p>三种流行的变更复制算法：<strong>单领导者（single leader，单主）</strong>，<strong>多领导者（multi leader，多主）</strong> 和 <strong>无领导者（leaderless，无主）</strong>。</p>
+<p>在 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch5?id=%E5%A4%8D%E5%88%B6%E5%BB%B6%E8%BF%9F%E9%97%AE%E9%A2%98">复制延迟问题</a>” 一节，我们将更加精确地了解最终一致性，并讨论诸如 <strong>读己之写（read-your-writes）</strong> 和 <strong>单调读（monotonic read）</strong> 等内容。</p>
+<h2 id="5-1-领导者和追随者"><a href="#5-1-领导者和追随者" class="headerlink" title="5.1 领导者和追随者"></a>5.1 领导者和追随者</h2><p>每一次向数据库的写入操作都需要传播到所有副本上，否则副本就会包含不一样的数据。最常见的解决方案被称为 <strong>基于领导者的复制（leader-based replication）</strong> （也称 <strong>主动&#x2F;被动（active&#x2F;passive）</strong> 复制或 <strong>主&#x2F;从（master&#x2F;slave）</strong> 复制），如 <a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch5?id=fig5-1.png">图 5-1</a> 所示。它的工作原理如下：</p>
+<ol>
+<li>其中一个副本被指定为 <strong>领导者（leader）</strong>，也称为 <strong>主库（master|primary）</strong> 。当客户端要向数据库写入时，它必须将请求发送给该 <strong>领导者</strong>，其会将新数据写入其本地存储。</li>
+<li>其他副本被称为 <strong>追随者（followers）</strong>，亦称为 <strong>只读副本（read replicas）</strong>、<strong>从库（slaves）</strong>、<strong>备库（ secondaries）</strong> 或 <strong>热备（hot-standby）</strong>[^i]。每当领导者将新数据写入本地存储时，它也会将数据变更发送给所有的追随者，称之为 <strong>复制日志（replication log）</strong> 或 <strong>变更流（change stream）</strong>。每个跟随者从领导者拉取日志，并相应更新其本地数据库副本，方法是按照与领导者相同的处理顺序来进行所有写入。</li>
+<li>当客户想要从数据库中读取数据时，它可以向领导者或任一追随者进行查询。但只有领导者才能接受写入操作（从客户端的角度来看从库都是只读的）。</li>
+</ol>
+<blockquote>
+<p>[^i]: 不同的人对 <strong>热（hot）</strong>、<strong>温（warm）</strong> 和 <strong>冷（cold）</strong> 备份服务器有不同的定义。例如在 PostgreSQL 中，<strong>热备（hot standby）</strong> 指的是能接受客户端读请求的副本。而 <strong>温备（warm standby）</strong> 只是追随领导者，但不处理客户端的任何查询。</p>
+</blockquote>
+<p><img src="http://ddia.vonng.com/img/fig5-1.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>图 5-1 基于领导者的（主&#x2F;从）复制</strong></p>
+<h3 id="5-1-1-同步-x2F-异步-复制"><a href="#5-1-1-同步-x2F-异步-复制" class="headerlink" title="5.1.1 同步 &#x2F; 异步 复制"></a>5.1.1 同步 &#x2F; 异步 复制</h3><h3 id="5-1-5-复制日志的实现"><a href="#5-1-5-复制日志的实现" class="headerlink" title="5.1.5 复制日志的实现"></a>5.1.5 复制日志的实现</h3><h4 id="语句复制"><a href="#语句复制" class="headerlink" title="语句复制"></a>语句复制</h4><p>在最简单的情况下，主库记录下它执行的每个写入请求（<strong>语句</strong>，即 statement）并将该语句日志发送给从库。对于关系数据库来说，这意味着每个 <code>INSERT</code>、<code>UPDATE</code> 或 <code>DELETE</code> 语句都被转发给每个从库，每个从库解析并执行该 SQL 语句，就像直接从客户端收到一样。</p>
+<h4 id="预写日志（WAL）"><a href="#预写日志（WAL）" class="headerlink" title="预写日志（WAL）"></a>预写日志（WAL）</h4><p>write ahead log</p>
+<p>在 <a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3">第三章</a> 中，我们讨论了存储引擎如何在磁盘上表示数据，我们也发现了通常会将写操作追加到日志中：</p>
+<ul>
+<li>对于日志结构存储引擎（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=sstables%E5%92%8Clsm%E6%A0%91">SSTables 和 LSM 树</a>”），日志是主要的存储位置。日志段在后台压缩，并进行垃圾回收。</li>
+<li>对于覆写单个磁盘块的 <a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=b%E6%A0%91">B 树</a>，每次修改都会先写入 <strong>预写式日志（Write Ahead Log, WAL）</strong>，以便崩溃后索引可以恢复到一个一致的状态。</li>
+</ul>
+<p>虽然听上去很合理，但有很多问题会搞砸这种复制方式：</p>
+<ul>
+<li>任何调用 <strong>非确定性函数（nondeterministic）</strong> 的语句，可能会在每个副本上生成不同的值。例如，使用 <code>NOW()</code> 获取当前日期时间，或使用 <code>RAND()</code> 获取一个随机数。</li>
+<li>如果语句使用了 <strong>自增列（auto increment）</strong>，或者依赖于数据库中的现有数据（例如，<code>UPDATE ... WHERE &lt;某些条件&gt;</code>），则必须在每个副本上按照完全相同的顺序执行它们，否则可能会产生不同的效果。当有多个并发执行的事务时，这可能成为一个限制。</li>
+<li>有副作用的语句（例如：触发器、存储过程、用户定义的函数）可能会在每个副本上产生不同的副作用，除非副作用是绝对确定性的。</li>
+</ul>
+<h4 id="传输预写式日志（WAL）"><a href="#传输预写式日志（WAL）" class="headerlink" title="传输预写式日志（WAL）"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch5?id=%E4%BC%A0%E8%BE%93%E9%A2%84%E5%86%99%E5%BC%8F%E6%97%A5%E5%BF%97%EF%BC%88wal%EF%BC%89">传输预写式日志（WAL）</a></h4><p>在 <a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3">第三章</a> 中，我们讨论了存储引擎如何在磁盘上表示数据，我们也发现了通常会将写操作追加到日志中：</p>
+<ul>
+<li>对于日志结构存储引擎（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=sstables%E5%92%8Clsm%E6%A0%91">SSTables 和 LSM 树</a>”），日志是主要的存储位置。日志段在后台压缩，并进行垃圾回收。</li>
+<li>对于覆写单个磁盘块的 <a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch3?id=b%E6%A0%91">B 树</a>，每次修改都会先写入 <strong>预写式日志（Write Ahead Log, WAL）</strong>，以便崩溃后索引可以恢复到一个一致的状态。</li>
+</ul>
+<h4 id="逻辑日志复制（基于行）"><a href="#逻辑日志复制（基于行）" class="headerlink" title="逻辑日志复制（基于行）"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch5?id=%E9%80%BB%E8%BE%91%E6%97%A5%E5%BF%97%E5%A4%8D%E5%88%B6%EF%BC%88%E5%9F%BA%E4%BA%8E%E8%A1%8C%EF%BC%89">逻辑日志复制（基于行）</a></h4><p>另一种方法是对复制和存储引擎使用不同的日志格式，这样可以将复制日志从存储引擎的内部实现中解耦出来。这种复制日志被称为逻辑日志（logical log），以将其与存储引擎的（物理）数据表示区分开来。</p>
+<p>关系数据库的逻辑日志通常是以行的粒度来描述对数据库表的写入记录的序列：</p>
+<ul>
+<li>对于插入的行，日志包含所有列的新值。</li>
+<li>对于删除的行，日志包含足够的信息来唯一标识被删除的行，这通常是主键，但如果表上没有主键，则需要记录所有列的旧值。</li>
+<li>对于更新的行，日志包含足够的信息来唯一标识被更新的行，以及所有列的新值（或至少所有已更改的列的新值）。</li>
+</ul>
+<h4 id="基于触发器的复制"><a href="#基于触发器的复制" class="headerlink" title="基于触发器的复制"></a><a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch5?id=%E5%9F%BA%E4%BA%8E%E8%A7%A6%E5%8F%91%E5%99%A8%E7%9A%84%E5%A4%8D%E5%88%B6">基于触发器的复制</a></h4><p>到目前为止描述的复制方法是由数据库系统实现的，不涉及任何应用程序代码。在很多情况下，这就是你想要的。但在某些情况下需要更多的灵活性。例如，如果你只想复制数据的一个子集，或者想从一种数据库复制到另一种数据库，或者如果你需要冲突解决逻辑（请参阅 “<a target="_blank" rel="noopener" href="http://ddia.vonng.com/#/ch5?id=%E5%A4%84%E7%90%86%E5%86%99%E5%85%A5%E5%86%B2%E7%AA%81">处理写入冲突</a>”），则可能需要将复制操作上移到应用程序层。</p>
+<p>一些工具，如 Oracle Golden Gate【19】，可以通过读取数据库日志，使得其他应用程序可以使用数据。另一种方法是使用许多关系数据库自带的功能：触发器和存储过程。</p>
+<p>触发器允许你将数据更改（写入事务）发生时自动执行的自定义应用程序代码注册在数据库系统中。触发器有机会将更改记录到一个单独的表中，使用外部程序读取这个表，再加上一些必要的业务逻辑，就可以将数据变更复制到另一个系统去。例如，Databus for Oracle【20】和 Bucardo for Postgres【21】就是这样工作的。</p>
+<p>基于触发器的复制通常比其他复制方法具有更高的开销，并且比数据库内置的复制更容易出错，也有很多限制。然而由于其灵活性，它仍然是很有用的。</p>
+<h2 id="5-2-复制延迟问题"><a href="#5-2-复制延迟问题" class="headerlink" title="5.2 复制延迟问题"></a>5.2 复制延迟问题</h2><h2 id="5-3-多主复制"><a href="#5-3-多主复制" class="headerlink" title="5.3 多主复制"></a>5.3 多主复制</h2><h2 id="5-4-无主复制"><a href="#5-4-无主复制" class="headerlink" title="5.4 无主复制"></a>5.4 无主复制</h2><h1 id="第六章-分区（片）"><a href="#第六章-分区（片）" class="headerlink" title="第六章 分区（片）"></a>第六章 分区（片）</h1><blockquote>
 <p>**分区 (partition)**，在 MongoDB，Elasticsearch 和 Solr Cloud 中被称为 **分片 (shard)**，在 HBase 中称之为 **区域 (Region)**，Bigtable 中则是 **表块（tablet）**，Cassandra 和 Riak 中是 **虚节点（vnode)**，Couchbase 中叫做 **虚桶 (vBucket)*<em>。但是 *<em>分区 (partitioning)</em></em> 是最约定俗成的叫法。</p>
 </blockquote>
 <h3 id="键值数据模型-–-的分区"><a href="#键值数据模型-–-的分区" class="headerlink" title="键值数据模型  – 的分区"></a>键值数据模型  – 的分区</h3><p>键范围分区</p>
@@ -441,9 +658,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%A6%82%E8%BF%B0/" title="消息队列概述">
+                      <a href="/2023/06/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">消息队列概述</span>
+                        <span class="hidden-mobile">计算机网络</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

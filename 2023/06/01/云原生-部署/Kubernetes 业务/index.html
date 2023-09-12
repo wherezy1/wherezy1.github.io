@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Kubernetes 业务Oceanus Yaml1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux">
+<meta property="og:url" content="http://example.com/2023/06/01/%E4%BA%91%E5%8E%9F%E7%94%9F-%E9%83%A8%E7%BD%B2/Kubernetes%20%E4%B8%9A%E5%8A%A1/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Kubernetes 业务Oceanus Yaml1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.885Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="云原生">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Linux - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-01 00:00" pubdate>
+          2023年6月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          18k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          152 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Kubernetes-业务"><a href="#Kubernetes-业务" class="headerlink" title="Kubernetes 业务"></a>Kubernetes 业务</h1><h1 id="Oceanus-Yaml"><a href="#Oceanus-Yaml" class="headerlink" title="Oceanus Yaml"></a>Oceanus Yaml</h1><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br><span class="line">680</span><br><span class="line">681</span><br><span class="line">682</span><br><span class="line">683</span><br><span class="line">684</span><br><span class="line">685</span><br><span class="line">686</span><br><span class="line">687</span><br><span class="line">688</span><br><span class="line">689</span><br><span class="line">690</span><br><span class="line">691</span><br><span class="line">692</span><br><span class="line">693</span><br><span class="line">694</span><br><span class="line">695</span><br><span class="line">696</span><br><span class="line">697</span><br><span class="line">698</span><br><span class="line">699</span><br><span class="line">700</span><br><span class="line">701</span><br><span class="line">702</span><br><span class="line">703</span><br><span class="line">704</span><br><span class="line">705</span><br><span class="line">706</span><br><span class="line">707</span><br><span class="line">708</span><br><span class="line">709</span><br><span class="line">710</span><br><span class="line">711</span><br><span class="line">712</span><br><span class="line">713</span><br><span class="line">714</span><br><span class="line">715</span><br><span class="line">716</span><br><span class="line">717</span><br><span class="line">718</span><br><span class="line">719</span><br><span class="line">720</span><br><span class="line">721</span><br><span class="line">722</span><br><span class="line">723</span><br><span class="line">724</span><br><span class="line">725</span><br><span class="line">726</span><br><span class="line">727</span><br><span class="line">728</span><br><span class="line">729</span><br><span class="line">730</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">annotations:</span><br>    <span class="hljs-attr">description:</span> <span class="hljs-string">cle</span><br>    <span class="hljs-attr">internal.eks.tke.cloud.tencent.com/pod_eth_idx:</span> <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-attr">stke.platform/recommend-requests:</span> <span class="hljs-string">&#x27;&#123;&quot;tkex-oceanus-galileo&quot;:&#123;&quot;cpu&quot;:&quot;200m&quot;,&quot;memory&quot;:&quot;844103679&quot;&#125;&#125;&#x27;</span><br>    <span class="hljs-attr">stke.platform/requests-ratio-status:</span> <span class="hljs-string">recommend-annotation</span><br>    <span class="hljs-attr">tke.cloud.tencent.com/device-type-cmdb:</span> <span class="hljs-string">VNCLOUD-1-1-50</span><br>    <span class="hljs-attr">tke.cloud.tencent.com/networks-status:</span> <span class="hljs-string">|-</span><br><span class="hljs-string">      [&#123;</span><br><span class="hljs-string">          &quot;name&quot;: &quot;tke-route-eni&quot;,</span><br><span class="hljs-string">          &quot;interface&quot;: &quot;eth1&quot;,</span><br><span class="hljs-string">          &quot;ips&quot;: [</span><br><span class="hljs-string">              &quot;11.150.253.13&quot;</span><br><span class="hljs-string">          ],</span><br><span class="hljs-string">          &quot;mac&quot;: &quot;5a:99:7c:59:8e:be&quot;,</span><br><span class="hljs-string">          &quot;default&quot;: true,</span><br><span class="hljs-string">          &quot;dns&quot;: &#123;&#125;</span><br><span class="hljs-string">      &#125;]</span><br><span class="hljs-string"></span>    <span class="hljs-attr">tke.cloud.tencent.com/vpc-eni-cni-ip:</span> <span class="hljs-string">&#x27;true&#x27;</span><br>  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-string">&#x27;2023-07-26T02:13:59Z&#x27;</span><br>  <span class="hljs-attr">generateName:</span> <span class="hljs-string">oceanus-galileo-env-56943590-</span><br>  <span class="hljs-attr">labels:</span><br>    <span class="hljs-attr">cle.tencent.com/environment:</span> <span class="hljs-string">&#x27;56943590&#x27;</span><br>    <span class="hljs-attr">cle.tencent.com/project:</span> <span class="hljs-string">CloudOceanus</span><br>    <span class="hljs-attr">clusterId:</span> <span class="hljs-string">cls-m6mqfwik</span><br>    <span class="hljs-attr">controller-revision-hash:</span> <span class="hljs-string">oceanus-galileo-env-56943590-fc9668977</span><br>    <span class="hljs-attr">env:</span> <span class="hljs-string">test</span><br>    <span class="hljs-attr">k8s-app:</span> <span class="hljs-string">oceanus-galileo-env-56943590</span><br>    <span class="hljs-attr">moduleFourId:</span> <span class="hljs-string">&#x27;1547029&#x27;</span><br>    <span class="hljs-attr">projectName:</span> <span class="hljs-string">prjb74md</span><br>    <span class="hljs-attr">qcloud-app:</span> <span class="hljs-string">oceanus-galileo-env-56943590</span><br>    <span class="hljs-attr">region:</span> <span class="hljs-string">ap-guangzhou</span><br>    <span class="hljs-attr">statefulsetplus.kubernetes.io/pod-name:</span> <span class="hljs-string">oceanus-galileo-env-56943590-0</span><br>    <span class="hljs-attr">tkex-projectName:</span> <span class="hljs-string">prjb74md</span><br>    <span class="hljs-attr">tkex-workload-kind:</span> <span class="hljs-string">statefulsetplus</span><br>    <span class="hljs-attr">tkex-workload-name:</span> <span class="hljs-string">oceanus-galileo-env-56943590</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">oceanus-galileo-env-56943590-0</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">ns-prjb74md-1547029-test</span><br>  <span class="hljs-attr">ownerReferences:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">platform.stke/v1alpha1</span><br>      <span class="hljs-attr">blockOwnerDeletion:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">controller:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">kind:</span> <span class="hljs-string">StatefulSetPlus</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">oceanus-galileo-env-56943590</span><br>      <span class="hljs-attr">uid:</span> <span class="hljs-string">3bd8eb4f-3f10-11ed-92f3-525400c44b37</span><br>  <span class="hljs-attr">resourceVersion:</span> <span class="hljs-string">&#x27;20491925692&#x27;</span><br>  <span class="hljs-attr">selfLink:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">    /api/v1/namespaces/ns-prjb74md-1547029-test/pods/oceanus-galileo-env-56943590-0</span><br><span class="hljs-string"></span>  <span class="hljs-attr">uid:</span> <span class="hljs-string">150592cc-2b5a-11ee-976e-5254007662b3</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">affinity:</span><br>    <span class="hljs-attr">nodeAffinity:</span><br>      <span class="hljs-attr">preferredDuringSchedulingIgnoredDuringExecution:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">preference:</span><br>            <span class="hljs-attr">matchExpressions:</span><br>              <span class="hljs-bullet">-</span> <span class="hljs-attr">key:</span> <span class="hljs-string">isOldMachineType</span><br>                <span class="hljs-attr">operator:</span> <span class="hljs-string">In</span><br>                <span class="hljs-attr">values:</span><br>                  <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;true&#x27;</span><br>          <span class="hljs-attr">weight:</span> <span class="hljs-number">100</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">preference:</span><br>            <span class="hljs-attr">matchExpressions:</span><br>              <span class="hljs-bullet">-</span> <span class="hljs-attr">key:</span> <span class="hljs-string">tkex.kubernetes.io/instance-type</span><br>                <span class="hljs-attr">operator:</span> <span class="hljs-string">In</span><br>                <span class="hljs-attr">values:</span><br>                  <span class="hljs-bullet">-</span> <span class="hljs-string">vk</span><br>          <span class="hljs-attr">weight:</span> <span class="hljs-number">50</span><br>      <span class="hljs-attr">requiredDuringSchedulingIgnoredDuringExecution:</span><br>        <span class="hljs-attr">nodeSelectorTerms:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-attr">matchExpressions:</span><br>              <span class="hljs-bullet">-</span> <span class="hljs-attr">key:</span> <span class="hljs-string">qgpu-device-enable</span><br>                <span class="hljs-attr">operator:</span> <span class="hljs-string">NotIn</span><br>                <span class="hljs-attr">values:</span><br>                  <span class="hljs-bullet">-</span> <span class="hljs-string">enable</span><br>    <span class="hljs-attr">podAntiAffinity:</span><br>      <span class="hljs-attr">preferredDuringSchedulingIgnoredDuringExecution:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">podAffinityTerm:</span><br>            <span class="hljs-attr">labelSelector:</span><br>              <span class="hljs-attr">matchExpressions:</span><br>                <span class="hljs-bullet">-</span> <span class="hljs-attr">key:</span> <span class="hljs-string">k8s-app</span><br>                  <span class="hljs-attr">operator:</span> <span class="hljs-string">In</span><br>                  <span class="hljs-attr">values:</span><br>                    <span class="hljs-bullet">-</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>            <span class="hljs-attr">topologyKey:</span> <span class="hljs-string">kubernetes.io/hostname</span><br>          <span class="hljs-attr">weight:</span> <span class="hljs-number">100</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">podAffinityTerm:</span><br>            <span class="hljs-attr">labelSelector:</span><br>              <span class="hljs-attr">matchExpressions:</span><br>                <span class="hljs-bullet">-</span> <span class="hljs-attr">key:</span> <span class="hljs-string">k8s-app</span><br>                  <span class="hljs-attr">operator:</span> <span class="hljs-string">In</span><br>                  <span class="hljs-attr">values:</span><br>                    <span class="hljs-bullet">-</span> <span class="hljs-string">oceanus-galileo-env-56943590</span><br>            <span class="hljs-attr">topologyKey:</span> <span class="hljs-string">kubernetes.io/hostname</span><br>          <span class="hljs-attr">weight:</span> <span class="hljs-number">100</span><br>  <span class="hljs-attr">containers:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">env:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEPLOY_TIME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;2023-07-26-10:13:08&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_TRACE_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">725e69ab-7f29-49de-b978-97c48b3dc490</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_SERVICE_ENV</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">production</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;71975&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZHIYAN_ENV_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;71975&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_TYPE</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">TESTING</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-master-chengdu</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZHIYAN_ENV_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-master-chengdu</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_PROJECT_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;9635&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_GROUP</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">docker</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEP_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEP_LABEL</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ART_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_UIN</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_TMPL_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-cle</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">RAINBOW_IGNORE_EXIST</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;true&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">RAINBOW_SDK_APP_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">0a379579-8b02-4e3a-97ba-4a05c5db6a7f</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">RAINBOW_SDK_ENV_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">Oceanus_test</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">RAINBOW_SDK_URL</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;api.rainbow.oa.com:8080&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TZ</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">Asia/Shanghai</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_CONTAINER_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_UID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.uid</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.name</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZONE_ID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">&#x27;metadata.annotations[&#x27;</span><span class="hljs-string">&#x27;zoneid&#x27;</span><span class="hljs-string">&#x27;]&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NODE_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.hostIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_NODE_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">spec.nodeName</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.podIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAMESPACE</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.namespace</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_REGION</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">gz</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CLUSTER</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">cls-m6mqfwik</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CPU</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;0.500000&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_MEM</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;2048&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CONTAINER_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NVIDIA_VISIBLE_DEVICES</span><br>      <span class="hljs-attr">image:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        csighub.tencentyun.com/environment-docker-test/tkex-oceanus-galileo:dev-9.7-download-dependency-url-8a94faf7-6.9.0-log-simplify</span><br><span class="hljs-string"></span>      <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">Always</span><br>      <span class="hljs-attr">livenessProbe:</span><br>        <span class="hljs-attr">failureThreshold:</span> <span class="hljs-number">1</span><br>        <span class="hljs-attr">initialDelaySeconds:</span> <span class="hljs-number">60</span><br>        <span class="hljs-attr">periodSeconds:</span> <span class="hljs-number">30</span><br>        <span class="hljs-attr">successThreshold:</span> <span class="hljs-number">1</span><br>        <span class="hljs-attr">tcpSocket:</span><br>          <span class="hljs-attr">port:</span> <span class="hljs-number">5021</span><br>        <span class="hljs-attr">timeoutSeconds:</span> <span class="hljs-number">10</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>      <span class="hljs-attr">readinessProbe:</span><br>        <span class="hljs-attr">failureThreshold:</span> <span class="hljs-number">1</span><br>        <span class="hljs-attr">initialDelaySeconds:</span> <span class="hljs-number">60</span><br>        <span class="hljs-attr">periodSeconds:</span> <span class="hljs-number">30</span><br>        <span class="hljs-attr">successThreshold:</span> <span class="hljs-number">1</span><br>        <span class="hljs-attr">tcpSocket:</span><br>          <span class="hljs-attr">port:</span> <span class="hljs-number">5021</span><br>        <span class="hljs-attr">timeoutSeconds:</span> <span class="hljs-number">10</span><br>      <span class="hljs-attr">resources:</span><br>        <span class="hljs-attr">limits:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">500m</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">2Gi</span><br>          <span class="hljs-attr">tke.cloud.tencent.com/eni-ip:</span> <span class="hljs-string">&#x27;1&#x27;</span><br>        <span class="hljs-attr">requests:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">200m</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">1288490188800m</span><br>          <span class="hljs-attr">tke.cloud.tencent.com/eni-ip:</span> <span class="hljs-string">&#x27;1&#x27;</span><br>      <span class="hljs-attr">securityContext:</span><br>        <span class="hljs-attr">capabilities:</span><br>          <span class="hljs-attr">add:</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-string">SYS_RESOURCE</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-string">NET_ADMIN</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-string">SYS_ADMIN</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-string">IPC_LOCK</span><br>            <span class="hljs-bullet">-</span> <span class="hljs-string">SYS_PTRACE</span><br>        <span class="hljs-attr">privileged:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">stdin:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span><br>      <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span><br>      <span class="hljs-attr">tty:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">volumeMounts:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/dev/shm</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">shm</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/data</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">data</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/usr/local/services/galileo/etc/conf</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">conf</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/var/run/secrets/kubernetes.io/serviceaccount</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">default-token-b4lk7</span><br>          <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/sys/fs/cgroup</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">cgroup</span><br>          <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">true</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/etc/podinfo</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">tkex-oceanus-galileopodinfo</span><br>  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span><br>  <span class="hljs-attr">enableServiceLinks:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">hostAliases:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">tlinux-mirrorlist.tencent-cloud.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">tlinux-mirror.tencent-cloud.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">10.240</span><span class="hljs-number">.99</span><span class="hljs-number">.238</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">tlinux-mirrorlist.tencent-cloud.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">tlinux-mirror.tencent-cloud.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">10.168</span><span class="hljs-number">.134</span><span class="hljs-number">.78</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">tlinux-mirrorlist.tencent-cloud.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">tlinux-mirror.tencent-cloud.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">10.12</span><span class="hljs-number">.216</span><span class="hljs-number">.232</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">ntpupdate.tencentyun.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">9.71</span><span class="hljs-number">.142</span><span class="hljs-number">.111</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">test.galileo.tencentoceanus.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">trade.itd.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">test.wtag.tencentyun.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">test.list.cam.tencentyun.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">test.tag.tencentyun.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">auth.cam.logical.server.console.tencentyun.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">test.api-gateway.billing.tencentyun.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">msgqueue.itd.com</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">qbilling.itd.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">9.139</span><span class="hljs-number">.137</span><span class="hljs-number">.40</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">api.rainbow.oa.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">100.115</span><span class="hljs-number">.83</span><span class="hljs-number">.56</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostnames:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">monitor.handler.cle.woa.com</span><br>      <span class="hljs-attr">ip:</span> <span class="hljs-number">11.187</span><span class="hljs-number">.191</span><span class="hljs-number">.164</span><br>  <span class="hljs-attr">hostname:</span> <span class="hljs-string">oceanus-galileo-env-56943590-0</span><br>  <span class="hljs-attr">imagePullSecrets:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">csighub-maksimguo</span><br>  <span class="hljs-attr">initContainers:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">env:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEPLOY_TIME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;2023-07-26-10:13:08&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_TRACE_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">725e69ab-7f29-49de-b978-97c48b3dc490</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_SERVICE_ENV</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">production</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;71975&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZHIYAN_ENV_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;71975&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_TYPE</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">TESTING</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-master-chengdu</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZHIYAN_ENV_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-master-chengdu</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_PROJECT_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;9635&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_GROUP</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">docker</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEP_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEP_LABEL</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ART_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_UIN</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_TMPL_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-cle</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">RAINBOW_IGNORE_EXIST</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;true&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_PLUGIN_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-stke-init</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_CONTAINER_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-stke-init</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAMESPACE</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.namespace</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_UID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.uid</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.name</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZONE_ID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">&#x27;metadata.annotations[&#x27;</span><span class="hljs-string">&#x27;zoneid&#x27;</span><span class="hljs-string">&#x27;]&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NODE_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.hostIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_NODE_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">spec.nodeName</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.podIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_REGION</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">gz</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CLUSTER</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">cls-m6mqfwik</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CPU</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;0.000000&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_MEM</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CONTAINER_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-stke-init</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NVIDIA_VISIBLE_DEVICES</span><br>      <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;csighub.tencentyun.com/testmoney/cle_plugin:latest&#x27;</span><br>      <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">Always</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">oceanus-stke-init</span><br>      <span class="hljs-attr">resources:</span><br>        <span class="hljs-attr">limits:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>        <span class="hljs-attr">requests:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>      <span class="hljs-attr">securityContext:</span><br>        <span class="hljs-attr">privileged:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">stdin:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span><br>      <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span><br>      <span class="hljs-attr">tty:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">volumeMounts:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/var/run/secrets/kubernetes.io/serviceaccount</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">default-token-b4lk7</span><br>          <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">env:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEPLOY_TIME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;2023-07-26-10:13:08&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_TRACE_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">725e69ab-7f29-49de-b978-97c48b3dc490</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_SERVICE_ENV</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">production</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;71975&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZHIYAN_ENV_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;71975&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_TYPE</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">TESTING</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-master-chengdu</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZHIYAN_ENV_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">oceanus-master-chengdu</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_PROJECT_ID</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;9635&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ENV_GROUP</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">docker</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEP_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_DEP_LABEL</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_ART_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_UIN</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_TMPL_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">tkex-oceanus-cle</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">RAINBOW_IGNORE_EXIST</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;true&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">env</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">Oceanus_test</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.name</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">group</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">            0a379579-8b02-4e3a-97ba-4a05c5db6a7f/cle.$(CLE_DEP_NAME).$(CLE_ENV_NAME)</span><br><span class="hljs-string"></span>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CLE_CONTAINER_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">rainbow-agent</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAMESPACE</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.namespace</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_UID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.uid</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZONE_ID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">&#x27;metadata.annotations[&#x27;</span><span class="hljs-string">&#x27;zoneid&#x27;</span><span class="hljs-string">&#x27;]&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NODE_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.hostIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_NODE_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">spec.nodeName</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.podIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_REGION</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">gz</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CLUSTER</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">cls-m6mqfwik</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CPU</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;0.000000&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_MEM</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CONTAINER_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">rainbow-agent</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NVIDIA_VISIBLE_DEVICES</span><br>      <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;csighub.tencentyun.com/rainbow/rainbow-agent-init:latest&#x27;</span><br>      <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">Always</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">rainbow-agent</span><br>      <span class="hljs-attr">resources:</span><br>        <span class="hljs-attr">limits:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>        <span class="hljs-attr">requests:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">&#x27;0&#x27;</span><br>      <span class="hljs-attr">securityContext:</span><br>        <span class="hljs-attr">privileged:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">stdin:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span><br>      <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span><br>      <span class="hljs-attr">tty:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">volumeMounts:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/dev/shm</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">shm</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/data</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">data</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/usr/local/services/galileo/etc/conf</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">conf</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/var/run/secrets/kubernetes.io/serviceaccount</span><br>          <span class="hljs-attr">name:</span> <span class="hljs-string">default-token-b4lk7</span><br>          <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">true</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">args:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">net.core.somaxconn=2048~</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">net.unix.max_dgram_qlen=1024~</span><br>      <span class="hljs-attr">env:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">ZONE_ID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">&#x27;metadata.annotations[&#x27;</span><span class="hljs-string">&#x27;zoneid&#x27;</span><span class="hljs-string">&#x27;]&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NODE_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.hostIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_NODE_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">spec.nodeName</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_IP</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">status.podIP</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAMESPACE</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.namespace</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_UID</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.uid</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">POD_NAME</span><br>          <span class="hljs-attr">valueFrom:</span><br>            <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.name</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_REGION</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">gz</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CLUSTER</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">cls-m6mqfwik</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_CPU</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;0.100000&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">TKEX_MEM</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">&#x27;100&#x27;</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">CONTAINER_NAME</span><br>          <span class="hljs-attr">value:</span> <span class="hljs-string">initcontainer7860</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">NVIDIA_VISIBLE_DEVICES</span><br>      <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;csighub.tencentyun.com/library/tkex-initcontainer:v1.1&#x27;</span><br>      <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">Always</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">initcontainer7860</span><br>      <span class="hljs-attr">resources:</span><br>        <span class="hljs-attr">limits:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">100m</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">100Mi</span><br>        <span class="hljs-attr">requests:</span><br>          <span class="hljs-attr">cpu:</span> <span class="hljs-string">100m</span><br>          <span class="hljs-attr">memory:</span> <span class="hljs-string">100Mi</span><br>      <span class="hljs-attr">securityContext:</span><br>        <span class="hljs-attr">privileged:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span><br>      <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span><br>  <span class="hljs-attr">nodeName:</span> <span class="hljs-number">30.44</span><span class="hljs-number">.86</span><span class="hljs-number">.218</span><br>  <span class="hljs-attr">priority:</span> <span class="hljs-number">0</span><br>  <span class="hljs-attr">readinessGates:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">conditionType:</span> <span class="hljs-string">platform.tkex/InPlace-Update-Ready</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">conditionType:</span> <span class="hljs-string">platform.tkex/debug-pod</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">conditionType:</span> <span class="hljs-string">cloud.tencent.com/load-balancer-backendgroup-ready</span><br>  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span><br>  <span class="hljs-attr">schedulerName:</span> <span class="hljs-string">default-scheduler</span><br>  <span class="hljs-attr">securityContext:</span> &#123;&#125;<br>  <span class="hljs-attr">serviceAccount:</span> <span class="hljs-string">default</span><br>  <span class="hljs-attr">serviceAccountName:</span> <span class="hljs-string">default</span><br>  <span class="hljs-attr">subdomain:</span> <span class="hljs-string">oceanus-galileo-56943590</span><br>  <span class="hljs-attr">terminationGracePeriodSeconds:</span> <span class="hljs-number">30</span><br>  <span class="hljs-attr">tolerations:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">effect:</span> <span class="hljs-string">NoExecute</span><br>      <span class="hljs-attr">key:</span> <span class="hljs-string">node.kubernetes.io/not-ready</span><br>      <span class="hljs-attr">operator:</span> <span class="hljs-string">Exists</span><br>      <span class="hljs-attr">tolerationSeconds:</span> <span class="hljs-number">300</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">effect:</span> <span class="hljs-string">NoExecute</span><br>      <span class="hljs-attr">key:</span> <span class="hljs-string">node.kubernetes.io/unreachable</span><br>      <span class="hljs-attr">operator:</span> <span class="hljs-string">Exists</span><br>      <span class="hljs-attr">tolerationSeconds:</span> <span class="hljs-number">300</span><br>  <span class="hljs-attr">volumes:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">data</span><br>      <span class="hljs-attr">persistentVolumeClaim:</span><br>        <span class="hljs-attr">claimName:</span> <span class="hljs-string">data-oceanus-galileo-env-56943590-0</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">emptyDir:</span><br>        <span class="hljs-attr">medium:</span> <span class="hljs-string">Memory</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">shm</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">emptyDir:</span><br>        <span class="hljs-attr">medium:</span> <span class="hljs-string">Memory</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">conf</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">default-token-b4lk7</span><br>      <span class="hljs-attr">secret:</span><br>        <span class="hljs-attr">defaultMode:</span> <span class="hljs-number">420</span><br>        <span class="hljs-attr">secretName:</span> <span class="hljs-string">default-token-b4lk7</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">hostPath:</span><br>        <span class="hljs-attr">path:</span> <span class="hljs-string">/sys/fs/cgroup</span><br>        <span class="hljs-attr">type:</span> <span class="hljs-string">&#x27;&#x27;</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">cgroup</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">downwardAPI:</span><br>        <span class="hljs-attr">defaultMode:</span> <span class="hljs-number">420</span><br>        <span class="hljs-attr">items:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">cpu</span><br>            <span class="hljs-attr">resourceFieldRef:</span><br>              <span class="hljs-attr">containerName:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>              <span class="hljs-attr">divisor:</span> <span class="hljs-string">&#x27;1&#x27;</span><br>              <span class="hljs-attr">resource:</span> <span class="hljs-string">limits.cpu</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">memory</span><br>            <span class="hljs-attr">resourceFieldRef:</span><br>              <span class="hljs-attr">containerName:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>              <span class="hljs-attr">divisor:</span> <span class="hljs-string">1Mi</span><br>              <span class="hljs-attr">resource:</span> <span class="hljs-string">limits.memory</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.labels</span><br>            <span class="hljs-attr">path:</span> <span class="hljs-string">labels</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-attr">fieldRef:</span><br>              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br>              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.annotations</span><br>            <span class="hljs-attr">path:</span> <span class="hljs-string">annotations</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">tkex-oceanus-galileopodinfo</span><br><span class="hljs-attr">status:</span><br>  <span class="hljs-attr">conditions:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span><br>      <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:13:59Z&#x27;</span><br>      <span class="hljs-attr">status:</span> <span class="hljs-string">&#x27;True&#x27;</span><br>      <span class="hljs-attr">type:</span> <span class="hljs-string">platform.tkex/InPlace-Update-Ready</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span><br>      <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:13:59Z&#x27;</span><br>      <span class="hljs-attr">status:</span> <span class="hljs-string">&#x27;True&#x27;</span><br>      <span class="hljs-attr">type:</span> <span class="hljs-string">platform.tkex/debug-pod</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span><br>      <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:15:49Z&#x27;</span><br>      <span class="hljs-attr">message:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        Marking condition &quot;cloud.tencent.com/load-balancer-backendgroup-ready&quot;</span><br><span class="hljs-string">        to True.</span><br><span class="hljs-string"></span>      <span class="hljs-attr">reason:</span> <span class="hljs-string">LoadBalancerNetworkGroupReady</span><br>      <span class="hljs-attr">status:</span> <span class="hljs-string">&#x27;True&#x27;</span><br>      <span class="hljs-attr">type:</span> <span class="hljs-string">cloud.tencent.com/load-balancer-backendgroup-ready</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span><br>      <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:37Z&#x27;</span><br>      <span class="hljs-attr">status:</span> <span class="hljs-string">&#x27;True&#x27;</span><br>      <span class="hljs-attr">type:</span> <span class="hljs-string">Initialized</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span><br>      <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:15:49Z&#x27;</span><br>      <span class="hljs-attr">status:</span> <span class="hljs-string">&#x27;True&#x27;</span><br>      <span class="hljs-attr">type:</span> <span class="hljs-string">Ready</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span><br>      <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:15:48Z&#x27;</span><br>      <span class="hljs-attr">status:</span> <span class="hljs-string">&#x27;True&#x27;</span><br>      <span class="hljs-attr">type:</span> <span class="hljs-string">ContainersReady</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span><br>      <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:13:59Z&#x27;</span><br>      <span class="hljs-attr">status:</span> <span class="hljs-string">&#x27;True&#x27;</span><br>      <span class="hljs-attr">type:</span> <span class="hljs-string">PodScheduled</span><br>  <span class="hljs-attr">containerStatuses:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        containerd://e9d14de0475afac6e54b35c56b43798c6f2f1587cdcccdd044eed5057b1e9bf6</span><br><span class="hljs-string"></span>      <span class="hljs-attr">image:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        csighub.tencentyun.com/environment-docker-test/tkex-oceanus-galileo:dev-9.7-download-dependency-url-8a94faf7-6.9.0-log-simplify</span><br><span class="hljs-string"></span>      <span class="hljs-attr">imageID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        csighub.tencentyun.com/environment-docker-test/tkex-oceanus-galileo@sha256:060a88758110bc48e81c12e85af364b985193e6673339abb56d9395a09a9e0ad</span><br><span class="hljs-string"></span>      <span class="hljs-attr">lastState:</span> &#123;&#125;<br>      <span class="hljs-attr">name:</span> <span class="hljs-string">tkex-oceanus-galileo</span><br>      <span class="hljs-attr">ready:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">restartCount:</span> <span class="hljs-number">0</span><br>      <span class="hljs-attr">state:</span><br>        <span class="hljs-attr">running:</span><br>          <span class="hljs-attr">startedAt:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:38Z&#x27;</span><br>  <span class="hljs-attr">hostIP:</span> <span class="hljs-number">30.44</span><span class="hljs-number">.86</span><span class="hljs-number">.218</span><br>  <span class="hljs-attr">initContainerStatuses:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        containerd://ae47f3609ada3f434f51c41d351524c591aaec0e8150e9dbd15e77c0c57f5a32</span><br><span class="hljs-string"></span>      <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;csighub.tencentyun.com/testmoney/cle_plugin:latest&#x27;</span><br>      <span class="hljs-attr">imageID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        csighub.tencentyun.com/testmoney/cle_plugin@sha256:05aae8ff6d567cab67d295110cba6a55b581a0c72de03631a86d36d22cb3c019</span><br><span class="hljs-string"></span>      <span class="hljs-attr">lastState:</span> &#123;&#125;<br>      <span class="hljs-attr">name:</span> <span class="hljs-string">oceanus-stke-init</span><br>      <span class="hljs-attr">ready:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">restartCount:</span> <span class="hljs-number">0</span><br>      <span class="hljs-attr">state:</span><br>        <span class="hljs-attr">terminated:</span><br>          <span class="hljs-attr">containerID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">            containerd://ae47f3609ada3f434f51c41d351524c591aaec0e8150e9dbd15e77c0c57f5a32</span><br><span class="hljs-string"></span>          <span class="hljs-attr">exitCode:</span> <span class="hljs-number">0</span><br>          <span class="hljs-attr">finishedAt:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:32Z&#x27;</span><br>          <span class="hljs-attr">reason:</span> <span class="hljs-string">Completed</span><br>          <span class="hljs-attr">startedAt:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:23Z&#x27;</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        containerd://c509899f7c05a2a2b884609a395258501ac54ffdb02dfb90cf78a384d247c22b</span><br><span class="hljs-string"></span>      <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;csighub.tencentyun.com/rainbow/rainbow-agent-init:latest&#x27;</span><br>      <span class="hljs-attr">imageID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        csighub.tencentyun.com/rainbow/rainbow-agent-init@sha256:2172bafc3d460b900c742d8ec1cf342956aa481ac0d6d7c139de39ec195f5f36</span><br><span class="hljs-string"></span>      <span class="hljs-attr">lastState:</span> &#123;&#125;<br>      <span class="hljs-attr">name:</span> <span class="hljs-string">rainbow-agent</span><br>      <span class="hljs-attr">ready:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">restartCount:</span> <span class="hljs-number">0</span><br>      <span class="hljs-attr">state:</span><br>        <span class="hljs-attr">terminated:</span><br>          <span class="hljs-attr">containerID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">            containerd://c509899f7c05a2a2b884609a395258501ac54ffdb02dfb90cf78a384d247c22b</span><br><span class="hljs-string"></span>          <span class="hljs-attr">exitCode:</span> <span class="hljs-number">0</span><br>          <span class="hljs-attr">finishedAt:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:35Z&#x27;</span><br>          <span class="hljs-attr">reason:</span> <span class="hljs-string">Completed</span><br>          <span class="hljs-attr">startedAt:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:33Z&#x27;</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        containerd://fe55147250f1d17c033073747a31a6840bbb2d771e5c76d64a8459ecbcdd69aa</span><br><span class="hljs-string"></span>      <span class="hljs-attr">image:</span> <span class="hljs-string">&#x27;csighub.tencentyun.com/library/tkex-initcontainer:v1.1&#x27;</span><br>      <span class="hljs-attr">imageID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">        csighub.tencentyun.com/library/tkex-initcontainer@sha256:efe16eb0b03bd1991b7a9c17934f0f4a3b670881dc0e2f042670177c7bd098d3</span><br><span class="hljs-string"></span>      <span class="hljs-attr">lastState:</span> &#123;&#125;<br>      <span class="hljs-attr">name:</span> <span class="hljs-string">initcontainer7860</span><br>      <span class="hljs-attr">ready:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">restartCount:</span> <span class="hljs-number">0</span><br>      <span class="hljs-attr">state:</span><br>        <span class="hljs-attr">terminated:</span><br>          <span class="hljs-attr">containerID:</span> <span class="hljs-string">&gt;-</span><br><span class="hljs-string">            containerd://fe55147250f1d17c033073747a31a6840bbb2d771e5c76d64a8459ecbcdd69aa</span><br><span class="hljs-string"></span>          <span class="hljs-attr">exitCode:</span> <span class="hljs-number">0</span><br>          <span class="hljs-attr">finishedAt:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:37Z&#x27;</span><br>          <span class="hljs-attr">reason:</span> <span class="hljs-string">Completed</span><br>          <span class="hljs-attr">startedAt:</span> <span class="hljs-string">&#x27;2023-07-26T02:14:37Z&#x27;</span><br>  <span class="hljs-attr">phase:</span> <span class="hljs-string">Running</span><br>  <span class="hljs-attr">podIP:</span> <span class="hljs-number">11.150</span><span class="hljs-number">.253</span><span class="hljs-number">.13</span><br>  <span class="hljs-attr">podIPs:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">ip:</span> <span class="hljs-number">11.150</span><span class="hljs-number">.253</span><span class="hljs-number">.13</span><br>  <span class="hljs-attr">qosClass:</span> <span class="hljs-string">Burstable</span><br>  <span class="hljs-attr">startTime:</span> <span class="hljs-string">&#x27;2023-07-26T02:13:59Z&#x27;</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" class="category-chain-item">云原生</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">#云原生</a>
+      
+        <a href="/tags/Kubernetes/">#Kubernetes</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux</div>
+      <div>http://example.com/2023/06/01/云原生-部署/Kubernetes 业务/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%BA%91%E5%8E%9F%E7%94%9F-%E9%83%A8%E7%BD%B2/Istio/" title="Istio">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Istio</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/01/%E4%BA%91%E5%8E%9F%E7%94%9F-%E9%83%A8%E7%BD%B2/Xaas/" title="Xass">
+                        <span class="hidden-mobile">Xass</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

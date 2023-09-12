@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="COLA-项目COLA 4.0：应用架构的最佳实践_cola4.0_张建飞（Frank）的博客-CSDN博客	 主要是项目搭建的架构 ：alibaba&#x2F;COLA: 🥤 COLA: Clean Object-oriented &amp; Layered Architecture (github.com) 架构图 1）适配层（Adapter Layer）：负责对前端展示（web，wirel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COLA-项目">
+<meta property="og:url" content="http://example.com/2023/09/10/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/COLA-%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="COLA-项目COLA 4.0：应用架构的最佳实践_cola4.0_张建飞（Frank）的博客-CSDN博客	 主要是项目搭建的架构 ：alibaba&#x2F;COLA: 🥤 COLA: Clean Object-oriented &amp; Layered Architecture (github.com) 架构图 1）适配层（Adapter Layer）：负责对前端展示（web，wirel">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://camo.githubusercontent.com/7794e7335aa77e2a271b7989c8eb24cd5c5f3cd8efa77aebd71b858524051573/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f36353439323330633637323334343866623361623531636137343832396538302e706e67">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/9f42fc75bfb4f670c6f047b9907ff174.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/1a4e5210301a669f74bff8801e3d9e1d.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1135193/202105/1135193-20210531121458344-516091878.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a90b103dddd04848b7d5daa59f10fc04.png">
+<meta property="og:image" content="https://images-wherezy.oss-cn-hangzhou.aliyuncs.com/images/image-20230911083054682.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/774ccbf6adfe2aaefca46202779b5864.png">
+<meta property="article:published_time" content="2023-09-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:53.210Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="DDD">
+<meta property="article:tag" content="COLA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/7794e7335aa77e2a271b7989c8eb24cd5c5f3cd8efa77aebd71b858524051573/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f36353439323330633637323334343866623361623531636137343832396538302e706e67">
+  
+  
+  
+  <title>COLA-项目 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="COLA-项目"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-10 00:00" pubdate>
+          2023年9月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">COLA-项目</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="COLA-项目"><a href="#COLA-项目" class="headerlink" title="COLA-项目"></a>COLA-项目</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/significantfrank/article/details/110934799">COLA 4.0：应用架构的最佳实践_cola4.0_张建飞（Frank）的博客-CSDN博客</a>	</p>
+<p>主要是项目搭建的架构 ：<a target="_blank" rel="noopener" href="https://github.com/alibaba/COLA">alibaba&#x2F;COLA: 🥤 COLA: Clean Object-oriented &amp; Layered Architecture (github.com)</a></p>
+<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><p><img src="https://camo.githubusercontent.com/7794e7335aa77e2a271b7989c8eb24cd5c5f3cd8efa77aebd71b858524051573/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f36353439323330633637323334343866623361623531636137343832396538302e706e67" srcset="/img/loading.gif" lazyload alt="cola arch"></p>
+<p>1）适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
+<p>2）应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
+<p>3）领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
+<p>4）基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/9f42fc75bfb4f670c6f047b9907ff174.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="https://img-blog.csdnimg.cn/img_convert/1a4e5210301a669f74bff8801e3d9e1d.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1135193/202105/1135193-20210531121458344-516091878.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="Client-和-防腐层-RPC"><a href="#Client-和-防腐层-RPC" class="headerlink" title="Client 和 防腐层 - RPC"></a>Client 和 防腐层 - RPC</h3><p>RPC的interface 应该和 service interface差不多，都在client 层定义，然后在 防腐层调用，在 应用层实现</p>
+<p>限界上下文 Context A 通过控制器（Controller）为其他上下文暴露 REST 服务，而在 Context A内部呢？则调用的自己的应用层的应用服务（Application Service），然后再调用领域层的领域模型（Domain Model）。</p>
+<p>倘若限界上下文 B 需要访问限界上下文A 的rest 服务，由基础设施层的客户端（ 如 Feign Client）完成，这个客户端就是上下文映射模式的防腐层ACL。而在 Context B内部呢？实际不会直接调用Feign，则通过放置在领域层的接口（Interface）去完成，接口（Interface）去 调用由基础设施层的客户端（ 如 Feign Client），完成真正的访问逻辑实现。</p>
+<p><img src="https://img-blog.csdnimg.cn/a90b103dddd04848b7d5daa59f10fc04.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>层次	包名	功能	必选<br>Adapter层	web	处理页面请求的Controller	否<br>Adapter层	wireless	处理无线端的适配	否<br>Adapter层	wap	处理wap端的适配	否<br>App层	executor	处理request，包括command和query	是<br>App层	consumer	处理外部message	否<br>App层	scheduler	处理定时任务	否<br>Domain层	model	领域模型	否<br>Domain层	ability	领域能力，包括DomainService	否<br>Domain层	gateway	领域网关，解耦利器	是<br>Infra层	gatewayimpl	网关实现	是<br>Infra层	mapper	ibatis数据库映射	否<br>Infra层	config	配置信息	否<br>Client SDK	api	服务对外透出的API	是<br>Client SDK	dto	服务对外的DTO	是</p>
+<p><img src="https://images-wherezy.oss-cn-hangzhou.aliyuncs.com/images/image-20230911083054682.png" srcset="/img/loading.gif" lazyload alt="image-20230911083054682"></p>
+<h1 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h1><p>适配器层 </p>
+<p>提供对外访问的 Controller，操作Client </p>
+<h1 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h1><p>用户接口层</p>
+<ul>
+<li>DTO  —- 每一个 command  操作，对应一个DTO （Data Transfer Object）<ul>
+<li>Client Object </li>
+<li>xxxCmd – command 对应的DTO</li>
+<li>Domain Event 领域事件对应的DTO</li>
+</ul>
+</li>
+<li>domain event</li>
+<li>service interface – 应用服务接口（APP 应用层实现）</li>
+</ul>
+<h1 id="APP"><a href="#APP" class="headerlink" title="APP"></a>APP</h1><p>应用层</p>
+<ul>
+<li>命令查询职责分离 - <strong>CQRS</strong>（Command Query Responsibility Segregation）</li>
+<li>service implement – 应用服务</li>
+<li>even handler – 事件处理</li>
+</ul>
+<h1 id="Domain"><a href="#Domain" class="headerlink" title="Domain"></a>Domain</h1><p>领域层</p>
+<ul>
+<li>领域模型 （定义、操作 领域模型）<ul>
+<li>实体 - entity</li>
+<li>聚合</li>
+<li>领域服务</li>
+</ul>
+</li>
+<li>Gateway interface  提供访问领域模型的接口 （基础设施实现）<ul>
+<li>领域层 与 应用层 的媒介</li>
+<li>细致化管理</li>
+</ul>
+</li>
+</ul>
+<p>Gateway interface 到作用- （细致化解耦，减少不合理的依赖）</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">那么在订单域，该如何获取商品和库存信息呢？最直接的方式，无外乎就是RPC调用商品和库存服务，拿到DTO直接使用就完了。<br>原因<br>然而，商品域吐出的是一个大而全的DTO（可能包含几十个字段），而在下单这个阶段，订单所需要的可能只是其中几个字段而已。更合适的做法，应该是在订单域中，使用gateway对商品域和库存域的依赖进行解耦。<br><br>好处：<br>这样做有两个好处，一个是降低了对外域信息依赖的耦合；另一个是通过上下文映射（<span class="hljs-built_in">Context</span> mapping），确保本领域边界上下文（<span class="hljs-keyword">Bounded </span><span class="hljs-built_in">context</span>）下领域知识的完整性，实现了统一语言（Ubiquitous language）。<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/img_convert/774ccbf6adfe2aaefca46202779b5864.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="infrastructure"><a href="#infrastructure" class="headerlink" title="infrastructure"></a>infrastructure</h1><p>基础设施层</p>
+<ul>
+<li>Data Obejct – 操作数据库</li>
+<li>Gateway implement  – 实现领域层 提供接口，</li>
+<li>common <ul>
+<li>事件发布</li>
+<li>异常处理</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%A8%A1%E5%BC%8F/" class="category-chain-item">模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/DDD/">#DDD</a>
+      
+        <a href="/tags/COLA/">#COLA</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>COLA-项目</div>
+      <div>http://example.com/2023/09/10/模式-思想/COLA-项目/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/09/12/%E4%B8%9A%E5%8A%A1/%E4%BA%BF%E4%B8%87%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E9%AB%98%E6%95%88%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/09/%E6%A8%A1%E5%BC%8F-%E6%80%9D%E6%83%B3/DDD-CSDN/" title="DDD-CSDN">
+                        <span class="hidden-mobile">DDD-CSDN</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

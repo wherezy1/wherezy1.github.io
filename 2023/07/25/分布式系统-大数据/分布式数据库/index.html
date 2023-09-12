@@ -1,0 +1,822 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式数据库概念分库分表三分钟理解分库分表 - 知乎 (zhihu.com) 一、单库单表存在的问题假设你要设计一个电商网站，在一开始，User表、Order表、Product表等等各种表都在同一个数据库中，每个表都包含了大量的字段。在用户量比较少，访问量也比较少的时候，单库单表不存在问题。 但是公司可能发展的比较好，用户量开始大量增加，业务也越来越繁杂。一张表的字段可能有几十个甚至上百个，而且一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式数据库">
+<meta property="og:url" content="http://example.com/2023/07/25/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="分布式数据库概念分库分表三分钟理解分库分表 - 知乎 (zhihu.com) 一、单库单表存在的问题假设你要设计一个电商网站，在一开始，User表、Order表、Product表等等各种表都在同一个数据库中，每个表都包含了大量的字段。在用户量比较少，访问量也比较少的时候，单库单表不存在问题。 但是公司可能发展的比较好，用户量开始大量增加，业务也越来越繁杂。一张表的字段可能有几十个甚至上百个，而且一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/da64abd67a5748580c04d32499d572abffe81f7e.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/588aa2a12379506cad4aebb078258517e78525be.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/7ba69bb483eed535cd510ec572e56bb03a745f60.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/e843561a8200a7d324c0f2000c6a2492e109a4d5.png@1256w_638h_!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/e5f7a5731197c8c35ddfc9ad1d6be8e653f8112e.png@1256w_846h_!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/228337e173ac09077f498afcf85b0e5249aaa786.png@1256w_558h_!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/76bed4f9a26391d4313f462a6720bbc0ea299a78.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/8a1db2aee4016cc45e3d72afdca94b9d5b170112.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/aaf4345869617dea30d720b7431172bfa76b8057.png@1256w_260h_!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/4b0a39763895742112326ce2ab9cbb638087461a.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/38e6ff9e8fbb3f1e75d5d5529713482c2f324418.png@1256w_792h_!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/fb878c7bb5068af16ccff99901cb12a49ccba38a.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/84f5b9ead33554bbe7ac4256cd23c0885a3afa9d.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/a24504a676b3a481ed89494eec439f055f9814c4.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/9639cd8aa084847f25771e9088caffce06766a81.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/ec36c36856be6cd74cf49bed7bdfcc197aa94a4d.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/e6ca73befde73af39718245109bebcd024f8a12f.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/8d681feebc717ad7ca5344724bdbd833f6b9f10d.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/3b76ac1dfdcc47f853375d153b4bf82fdf6b623b.png@!web-article-pic.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/2c8ab22a603edf99fe14d108fe6d872add037e79.png@1256w_722h_!web-article-pic.webp">
+<meta property="article:published_time" content="2023-07-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:53.104Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/da64abd67a5748580c04d32499d572abffe81f7e.png@!web-article-pic.webp">
+  
+  
+  
+  <title>分布式数据库 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式数据库"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-25 00:00" pubdate>
+          2023年7月25日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          59 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式数据库</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="分布式数据库"><a href="#分布式数据库" class="headerlink" title="分布式数据库"></a>分布式数据库</h1><h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136963357">三分钟理解分库分表 - 知乎 (zhihu.com)</a></p>
+<h3 id="一、单库单表存在的问题"><a href="#一、单库单表存在的问题" class="headerlink" title="一、单库单表存在的问题"></a><strong>一、单库单表存在的问题</strong></h3><p>假设你要设计一个电商网站，在一开始，User表、Order表、Product表等等各种表都在同一个数据库中，每个表都包含了大量的字段。在用户量比较少，访问量也比较少的时候，单库单表不存在问题。</p>
+<p>但是公司可能发展的比较好，用户量开始大量增加，业务也越来越繁杂。一张表的字段可能有几十个甚至上百个，而且一张表存储的数据还很多，高达几千万数据，更难受的是这样的表还挺多。于是一个数据库的压力就太大了，一张表的压力也比较大。试想一下，我们在一张几千万数据的表中查询数据，压力本来就大，如果这张表还需要关联查询，那时间等等各个方面的压力就更大了。</p>
+<p>（1）单库太大：数据库里面的表太多，所在服务器磁盘空间装不下，IO次数多CPU忙不过来。</p>
+<p>（2）单表太大：一张表的字段太多，数据太多。查询起来困难。</p>
+<p>此时就开始考虑如何解决问题了。</p>
+<h3 id="二、主从复制架构"><a href="#二、主从复制架构" class="headerlink" title="二、主从复制架构"></a><strong>二、主从复制架构</strong></h3><p>单库单表下越来越不满足需求，此时我们先考虑进行读写分离。我们将数据库的写操作和读操作进行分离， 使用多个从库副本（Slaver）负责读，使用主库（Master）负责写， 从库从主库同步更新数据，保持数据一致。</p>
+<p>这在一定程度上可以解决问题，但是用户超级多的时候，比如几个亿用户，此时写操作会越来越多，一个主库（Master）不能满足要求了，那就把主库拆分，这时候为了保证数据的一致性就要开始进行同步，此时会带来一系列问题：</p>
+<p>（1）写操作拓展起来比较困难，因为要保证多个主库的数据一致性。</p>
+<p>（2）复制延时：意思是同步带来的时间消耗。</p>
+<p>（3）锁表率上升：读写分离，命中率少，锁表的概率提升。</p>
+<p>（4）表变大，缓存率下降：此时缓存率一旦下降，带来的就是时间上的消耗。</p>
+<p>注意，此时主从复制还是单库单表，只不过复制了很多份并进行同步。</p>
+<p>主从复制架构随着用户量的增加、访问量的增加、数据量的增加依然会带来大量的问题，那就要考虑换一种解决思路。就是今天所讲的主题，分库分表。</p>
+<h3 id="三、分库分表"><a href="#三、分库分表" class="headerlink" title="三、分库分表"></a><strong>三、分库分表</strong></h3><p>不管是分库还是分表，都有两种切分方式：水平切分和垂直切分。下面我们分别看看如何切分。</p>
+<p><strong>1、分表</strong></p>
+<p>（1）垂直分表</p>
+<p>表中的字段较多，一般将不常用的、 数据较大、长度较长的拆分到“扩展表“。一般情况加表的字段可能有几百列，此时是按照字段进行数竖直切。注意垂直分是列多的情况。</p>
+<p>（2）水平分表</p>
+<p>单表的数据量太大。按照某种规则（RANGE,HASH取模等），切分到多张表里面去。 但是这些表还是在同一个库中，所以库级别的数据库操作还是有IO瓶颈。这种情况是不建议使用的，因为数据量是逐渐增加的，当数据量增加到一定的程度还需要再进行切分。比较麻烦。</p>
+<p><strong>2、分库</strong></p>
+<p>（1）垂直分库</p>
+<p>一个数据库的表太多。此时就会按照一定业务逻辑进行垂直切，比如用户相关的表放在一个数据库里，订单相关的表放在一个数据库里。注意此时不同的数据库应该存放在不同的服务器上，此时磁盘空间、内存、TPS等等都会得到解决。</p>
+<p>（2）水平分库</p>
+<p>水平分库理论上切分起来是比较麻烦的，它是指将单张表的数据切分到多个服务器上去，每个服务器具有相应的库与表，只是表中数据集合不同。 水平分库分表能够有效的缓解单机和单库的性能瓶颈和压力，突破IO、连接数、硬件资源等的瓶颈。</p>
+<h3 id="四、分库分表之后的问题"><a href="#四、分库分表之后的问题" class="headerlink" title="四、分库分表之后的问题"></a><strong>四、分库分表之后的问题</strong></h3><p>1、联合查询困难</p>
+<p>联合查询不仅困难，而且可以说是不可能，因为两个相关联的表可能会分布在不同的数据库，不同的服务器中。</p>
+<p>2、需要支持事务</p>
+<p>分库分表后，就需要支持分布式事务了。数据库本身为我们提供了事务管理功能，但是分库分表之后就不适用了。如果我们自己编程协调事务，代码方面就又开始了麻烦。</p>
+<p>3、跨库join困难</p>
+<p>分库分表后表之间的关联操作将受到限制，我们无法join位于不同分库的表，也无法join分表粒度不同的表， 结果原本一次查询能够完成的业务，可能需要多次查询才能完成。 我们可以使用全局表，所有库都拷贝一份。</p>
+<p>4、结果合并麻烦</p>
+<p>比如我们购买了商品，订单表可能进行了拆分等等，此时结果合并就比较困难。</p>
+<p>OK，这篇文章写完之后感觉还会做大量的补充和修改。因此本篇文章主要针对面试，足够。</p>
+<h1 id="数据库实现"><a href="#数据库实现" class="headerlink" title="数据库实现"></a>数据库实现</h1><p>这篇文章，是对数据库技术的一个小科普，希望能帮大家了解到更多元化的数据库，便于拓宽学习思路和项目的技术选型。</p>
+<h2 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h2><p>首先是我们接触最多的、也是入门后端必学的 关系型数据库 。</p>
+<p>在关系型数据库中，数据以 表 的形式进行组织和存储，每个表就像一个 Excel 表格，包含多个 行 和多个 列 。</p>
+<p>就比如我们经典的学生管理系统，把学生信息存储到关系型数据库中，结构大概是这样的：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/da64abd67a5748580c04d32499d572abffe81f7e.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>上述学生表格中，每一行代表一个学生的信息，每一列代表学生的一个属性。我们可以使用结构化查询语言 SQL 来对关系型数据库表的数据进行灵活地查询、选择、过滤等。</p>
+<p>而关系型数据库最大的特点，就是表和表之间可以 存在关系 。比如学生管理系统中还可以有班级表，结构如下：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/588aa2a12379506cad4aebb078258517e78525be.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>那如果我想知道某个学生所属的班级信息，只需要在查询时将学生表的 所属班级号 和班级表的 班号 进行关联，而不用把所有表格的列存储在一起，非常灵活。</p>
+<p>通过 SQL 可以连接查询多张表，得到下面的查询结果：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/7ba69bb483eed535cd510ec572e56bb03a745f60.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>除了查询灵活、数据表间存在关系外，关系型数据库还具有很多其他的优点。</p>
+<p>比较重要的是 数据一致性 ，关系型数据库遵循 ACID 原则（原子性、一致性、隔离性和持久性），支持事务，可以保证多个操作同时进行时，数据的状态保持一致。比如 A 给 B 转账，A 扣钱 的同时 B 也会加钱，不会出现 A 扣了钱 B 却没收到钱的情况。</p>
+<p>兼顾查询的灵活和写入的准确性，使得关系型数据库几乎可以被应用于任何项目中！比如 CRM（客户关系管理）和 HRM（人力资源管理）等各类管理系统、数据分析系统、金融银行系统等。</p>
+<p>比较经典的关系型数据库产品有 MySQL、Oracle、PostgreSQL、Microsoft SQL Server 等。其中，MySQL 由于开源又易学，已经成为后端开发同学必学的数据库技术。</p>
+<p>关系型数据库的底层核心实现是 基于关系模型的数学理论 ，最常见的实现方式是使用 B+ 树来存储索引结构，基于其平衡性，能够在存储大量数据时保持高效的查询性能，并且兼顾增删改操作的性能。</p>
+<p><img src="https://i0.hdslb.com/bfs/article/e843561a8200a7d324c0f2000c6a2492e109a4d5.png@1256w_638h_!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>对于大多数项目，用 MySQL 等关系型数据库来存储数据就足够了。但关系型数据库不是银弹！在某些场景下，比如要存储的数据间没有关系时，它并不是最佳的选择。</p>
+<p>举个例子，当我们要写一篇文章，没有必要把数据存储到 Excel 表格里，可能直接将单篇文本放到 Word 里会更方便阅读和修改。</p>
+<p>这个时候，我们就需要与之互补的 非关系型数据库 。</p>
+<h2 id="非关系型数据库"><a href="#非关系型数据库" class="headerlink" title="非关系型数据库"></a>非关系型数据库</h2><p>非关系型数据库又叫 NoSQL。最简单的理解方式：关系型数据库适用于存储相互之间 存在关系的数据表 ，那么非关系型数据库适用于关系不强的、结构相对灵活的、需要被快速访问的数据，比如字符串、JSON 等。</p>
+<p>实际项目开发中，最常用的非关系型数据库当属 KV 数据库。</p>
+<p>KV 即 Key-Value，数据是以 键值对 的方式存储在数据库中的。可以理解为一个 HashMap，数据库中存储的每个键都 唯一对应 一个值。键和值都可以是任意类型的数据，例如字符串、数字、数组等，非常灵活。</p>
+<p>比如存储每位用户的个人信息，结构大概是这样的：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/e5f7a5731197c8c35ddfc9ad1d6be8e653f8112e.png@1256w_846h_!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>由于 KV 存储的结构简单清晰，我们能够很轻松地根据某个键查找出对应的值，无论是读写数据性能都非常高。</p>
+<p>此外，KV 数据库还具备良好的可扩展性，由于数据间不存在直接关联，我们可以把键值对放到多个机器上存储，通过数据分片、负载均衡等策略来支持海量数据的高并发访问。</p>
+<p>由于高性能和高可扩展性，KV 数据库被广泛应用于缓存、分布式会话、分布式锁、实时统计等场景。</p>
+<p>最经典的 KV 数据库当属 Redis 了，它是开源的、基于内存的、高性能的数据库，不仅支持丰富的数据类型和功能，还有持久化等重要特性，也是后端同学必学的技术。其他的常用 KV 数据库有 LevelDB、RocksDB、Apache Cassandra 等。</p>
+<p>KV 数据库的底层实现比较灵活，常见的实现方式是使用哈希表来存储键值对。不同类型的值对应的实现方式也不同，比如 Redis 的字符串存储采用简单动态字符串（SDS）实现。</p>
+<p><img src="https://i0.hdslb.com/bfs/article/228337e173ac09077f498afcf85b0e5249aaa786.png@1256w_558h_!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>解决特定问题的数据库<br>相信很多同学对数据库的印象就停留在 MySQL 和 Redis。的确，以上两类数据库几乎已经可以解决所有问题！</p>
+<p>但是，未必是最适合的。</p>
+<p>就像你完全可以用电脑自带的记事本软件来查看和编辑 HTML 网页文件，但是往往会选择一个更专业的开发工具来替代它。</p>
+<p>数据库也是一样，除了传统的关系和非关系型数据库之外，还有很多用于解决特定问题的数据库。它们往往针对特定的数据结构和应用场景进行了专门的优化和设计，能够提供更高效快捷的数据查询和存储，满足特定领域的需求。</p>
+<p>比如下面 8 种数据库：</p>
+<h2 id="搜索引擎数据库"><a href="#搜索引擎数据库" class="headerlink" title="搜索引擎数据库"></a>搜索引擎数据库</h2><p>顾名思义，搜索引擎数据库是为了实现搜索引擎功能的数据库。</p>
+<p>它适用于存储和管理大量的文本内容数据，并提供更快速、准确、灵活的全文检索功能。</p>
+<p>比如想要让用户更轻松地在你的博客内搜索文章，就可以使用搜索引擎数据库。</p>
+<p>为什么它能做到更快更灵活的搜索呢？这是因为在搜索引擎数据库中，数据一般是以 倒排索引 的方式存储的。</p>
+<p>倒排索引和传统的关系表有什么区别呢？</p>
+<p>以存储博客文档为例，传统的关系型数据库存储结构是：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/76bed4f9a26391d4313f462a6720bbc0ea299a78.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>我们能够根据 id 来查找到对应的单篇文档，也可以通过搜索精确的关键词，来查找到多篇文档。</p>
+<p>比如搜索 “鱼皮”，能搜出文档 1、2。</p>
+<p>但是，如果你搜索 “鱼皮程序员”，是无法得到搜索结果的，因为没有任何一个文档的内容，完全包含 “鱼皮程序员” 这个词（文档内容 2 只有 “鱼皮”、“程序员” 这两个词）。</p>
+<p>而在搜索引擎数据库中，首先会将文档内容按照单词进行分割，也就是 分词 。然后再构建单词到文档 id 的映射，示例结构如下：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/8a1db2aee4016cc45e3d72afdca94b9d5b170112.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>有了上述的倒排索引，当用户搜索 “鱼皮程序员” 时，搜索引擎数据库会先对搜索词进行分词，得到 “鱼皮” 和 “程序员”，然后根据这两个词汇就能找到文档 id 1、2 了。不用再去遍历表内所有的数据，实现了更灵活、快速的 模糊搜索 。</p>
+<p>此外，搜索引擎数据库还支持 相关性排序 ，能够根据用户的搜索词对所有搜索结果进行打分，把最接近的文档排到最上面。</p>
+<p>主流的搜索引擎数据库技术有 Elasticsearch、Apache Solr、Apache Lucene 等，一般更建议大家学习 Elasticsearch，这玩意更新迭代地老快了。</p>
+<h2 id="文档数据库"><a href="#文档数据库" class="headerlink" title="文档数据库"></a>文档数据库</h2><p>顾名思义，文档数据库适用于存储和管理 半结构化的 文档数据，比如存储 JSON 格式。</p>
+<p>相比于关系型数据库中明确定义的表格行列，文档数据库的数据结构是类似于文档的层次化结构，每个文档都是独立的，可以包含多个不同类型和格式的数据。</p>
+<p>比如存储博客文章，示例结构如下：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/aaf4345869617dea30d720b7431172bfa76b8057.png@1256w_260h_!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>当我们要给某个文档新增一个字段时，不需要像关系型数据库一样改变表结构，非常灵活！</p>
+<p>除了灵活之外，文档数据库也有很高的可扩展性，适用于内容管理系统（比如博客）、文档协同编辑系统等。</p>
+<p>个人比较推荐学习的文档数据库是 MongoDB，入门难度极低，对前端同学也很友好。当然，Couchbase 也是不错的。</p>
+<h2 id="时序数据库"><a href="#时序数据库" class="headerlink" title="时序数据库"></a>时序数据库</h2><p>时序数据库是一种专门用于高效存储和处理 时间序列 的数据库系统。</p>
+<p>时间序列是指以时间作为主要维度的数据序列，即每个数据单元都包含 时间戳 。</p>
+<p>举个例子，在实时温度监测系统中，我们需要 每分钟连续 收集并观察当前的温度，数据结构示例如下：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/4b0a39763895742112326ce2ab9cbb638087461a.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>有了这些数据，我们就能够按照时间范围进行高效查询、聚合分析、数据可视化。</p>
+<p>因此，时序数据库非常适用于物联网（比如传感器数据）、日志监控、金融交易数据分析等场景。</p>
+<p>主流的时序数据库技术有 InfluxDB、TimescaleDB 等。一般情况下，建议将时序数据库配合 Grafana 监控看板一起使用，实现数据存储 + 快速可视化。</p>
+<p><img src="https://i0.hdslb.com/bfs/article/38e6ff9e8fbb3f1e75d5d5529713482c2f324418.png@1256w_792h_!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>不同时序数据库底层的存储方式也不同，我们可以简单理解为，时序数据库会根据 时间 字段构建索引，查询时通过索引去定位实际数据。比如 InfluxDB 使用 TSM（Time-Structured Merge Tree）作为存储引擎，底层使用 B+ 树来存储时间索引。</p>
+<h2 id="向量数据库"><a href="#向量数据库" class="headerlink" title="向量数据库"></a>向量数据库</h2><p>向量数据库是专门用于存储和处理 高维向量数据 的数据库系统。</p>
+<p>什么是向量？每个向量可以表示一个实体，并且包含多个维度的数值。</p>
+<p>举个例子，在人脸识别系统中，我们可以通过人脸的 特征 来判断是否为熟人。每张人脸图像，都对应一个向量；每个人脸向量有可能包含成百上千个特征，比如鼻子大小、眼睛大小等，每个特征就是一个维度。</p>
+<p>对应的数据结构示例如下：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/fb878c7bb5068af16ccff99901cb12a49ccba38a.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在上述表格中，人脸特征向量是一个浮点数数组。数组的每个下标就表示一个特征（维度），比如下标 0 的数值表示鼻子的大小，下标 1 的数值表示眼睛大小，以此类推。。。</p>
+<p>我们只需要对比向量，就能够判断出人脸的相似度。</p>
+<p>向量数据库能够高效存储多维向量数据、计算向量的相似度、并实现各种不同算法的相似性搜索，适用于图像识别、特征提取和匹配、推荐系统等场景。值得一提的是，AI 技术的发展也带来了一波向量数据库技术的热潮，可以利用向量数据库存储投喂给 AI 的训练 Embeddings 数据。</p>
+<p>主流的向量数据库技术有 Milvus、Pinecone、Faiss 等，有些数据库（比如 PostgreSQL）可能也支持存储向量类型的字段。</p>
+<p>关于向量数据库的底层实现，还是比较复杂的。类似于上面提到的时序数据库，向量数据库的实现关键也是索引的设计。常见的向量索引结构有倒排索引、KD 树、球树等，可以理解为对相似的向量数据进行了分组和编码，从而实现更快速地检索匹配相似向量。此外，向量数据库往往也会采用并行计算来加速处理。</p>
+<h2 id="空间数据库"><a href="#空间数据库" class="headerlink" title="空间数据库"></a>空间数据库</h2><p>空间数据库是专门用于存储和处理 地理空间数据 的数据库系统。</p>
+<p>地理空间数据是指基于地理 坐标系 的 几何对象 ，比如某个物体所处的经纬度或三维坐标（点）、某个物体的轮廓（线）、某个物体的表面（面）等。</p>
+<p>举个例子，假如你想存储自己房间内每个物体的位置信息，对应的数据结构可能是：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/84f5b9ead33554bbe7ac4256cd23c0885a3afa9d.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>使用空间数据库，能够高效地存储、查询和分析空间数据，比如计算两个空间是否相交、对路径进行规划、可视化地理空间等。</p>
+<p>空间数据库不仅是地理信息系统（GIS）的核心组件，还能用于实现位置导航、城市路面规划等场景。</p>
+<p>对于具体的空间数据库技术，我了解得不多，只知道可以用 PostGIS 插件来为 PostgreSQL 支持空间数据管理能力，朋友们可以帮忙补充下。</p>
+<p><img src="https://i0.hdslb.com/bfs/article/a24504a676b3a481ed89494eec439f055f9814c4.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>至于空间数据库的底层实现，最关键的部分依然是索引。常见的 空间索引 结构有 R 树、Quadtree 等，这些结构可以对空间数据进行划分、聚合和编码，从而加速空间范围的查询处理。此外，空间数据库涉及大量的空间分析算法，比如最近邻查询、空间关系查询等。时间有限，不做展开说明了。</p>
+<h2 id="图形数据库"><a href="#图形数据库" class="headerlink" title="图形数据库"></a>图形数据库</h2><p>图形数据库是专门用于存储和处理 图形结构数据 的数据库系统。</p>
+<p>注意，这里的图形可不是三角形、长方形，而是指 由节点和边构成 的图形结构。</p>
+<p>比如我们要存储一个朋友圈关系网（即 FoF：朋友的朋友），对应的图形可能是：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/9639cd8aa084847f25771e9088caffce06766a81.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>上图中，每个用户可以表示为一个节点，用户之间的好友关系可以表示为边。</p>
+<p>在图形数据库中，需要 2 个表格来存储。</p>
+<p>节点信息表：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/ec36c36856be6cd74cf49bed7bdfcc197aa94a4d.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>边信息表：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/e6ca73befde73af39718245109bebcd024f8a12f.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>通过存储这些节点和边的信息，图形数据库就能实现快速 查询及分析 朋友圈网中的用户关系，并且挖掘出用户的社交情况、和其他用户的隐藏关系等。</p>
+<p>由此，图形数据库非常适于构建社交网络关系图谱、推荐系统、知识图谱等。</p>
+<p>比较主流的图形数据库有 Neo4j、TigerGraph 等，都支持复杂的图形操作和算法、以及分布式扩展，能够通过并行计算加速图形处理。</p>
+<p>图形数据库的核心实现相信学过算法的朋友们并不陌生，主要是用了类似邻接表、邻接矩阵等方式实现节点和边数据的存储，并且通过构建图形索引进行加速。</p>
+<h2 id="列存数据库"><a href="#列存数据库" class="headerlink" title="列存数据库"></a>列存数据库</h2><p>这是一种 非常主流 的数据库！区别于传统的行式数据库，列存数据库以列作为基本的存储单位，把每列的数据存储在一起。</p>
+<p>拿鱼皮公司每天的收入来举个例子，传统的行式（关系型）数据库是这么存储的：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/8d681feebc717ad7ca5344724bdbd833f6b9f10d.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>而在列存数据库中，底层大概是这么存储的，相当于对矩阵做了一次转置：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/3b76ac1dfdcc47f853375d153b4bf82fdf6b623b.png@!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这样一来，如果我们要统计这几天公司的总利润，不需要依次读取每一行的数据，直接 读取所需 的利润那一列进行计算即可，从而提高了数据分析和聚合操作的效率。</p>
+<p>此外，从计算机底层来分析，把相同类型的数据在同一列中连续存储，可以实现更好的数据压缩效果、节约空间。</p>
+<p>因此，列存数据库适用于实时数据分析、OLAP、大规模数据仓库等场景。</p>
+<p>比较主流的列存数据库技术有 Apache HBase、ClickHouse、Druid 等，都是大数据方向同学的必修课。</p>
+<p>ClickHouse 官方演示</p>
+<p><img src="https://i0.hdslb.com/bfs/article/2c8ab22a603edf99fe14d108fe6d872add037e79.png@1256w_722h_!web-article-pic.webp" srcset="/img/loading.gif" lazyload alt="ClickHouse 官方演示"></p>
+<h2 id="多模数据库"><a href="#多模数据库" class="headerlink" title="多模数据库"></a>多模数据库</h2><p>最后要讲的数据库也最特别，区别于上面所有存储单一数据模型的数据库，多模数据库能够 同时存储处理多种不同类型的数据 ，比如关系型数据、文档数据、图形数据等，非常灵活。</p>
+<p>就拿大家学编程时最常做的电商系统来举例。如果没有多模数据库，你要用关系型数据库来存储商品简略信息（比如商品名称、价格），要用文档数据库来存储可能长达几十页的商品详情，要用图数据库来存储商品推荐关系。每次看数据库信息时，要分别到三个数据库中查看。</p>
+<p>如果使用多模数据库，可以直接在同一个数据库里统一存储和管理不同类型的数据，非常方便。</p>
+<p>此外，多模数据库还支持事务，能够更轻松地实现数据的一致性和完整性，不需要手动实现跨库事务、跨库数据同步等等。</p>
+<p>比较常用的多模态数据库技术有 ArangoDB、OrientDB 等，不过一般情况下，我们在开发中也很少会用到这种数据库，感兴趣的话再学习即可。 </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">作者：程序员鱼皮 https:<span class="hljs-regexp">//</span>www.bilibili.com<span class="hljs-regexp">/read/</span>cv24934357 出处：bilibili<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式数据库</div>
+      <div>http://example.com/2023/07/25/分布式系统-大数据/分布式数据库/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/Java%20%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Java 面试题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java 面试题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/20/Go%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/Go%E8%AF%AD%E8%A8%80%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Go语言面试题">
+                        <span class="hidden-mobile">Go语言面试题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

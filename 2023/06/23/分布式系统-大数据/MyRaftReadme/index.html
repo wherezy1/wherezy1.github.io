@@ -60,7 +60,7 @@
 <meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0d9c3635c4d245188997538e36cb972d~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5d2ab2d829fe4fa086298245edc24dea~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp">
 <meta property="article:published_time" content="2023-06-23T09:20:01.000Z">
-<meta property="article:modified_time" content="2023-07-11T11:36:37.810Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.895Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="raft">
 <meta property="article:tag" content="分布式共识算法">
@@ -372,33 +372,37 @@
 <p>接下来我们详细讨论下每个转换所发生的场景。</p>
 <h4 id="2-3-3-1-Follower-状态转换过程"><a href="#2-3-3-1-Follower-状态转换过程" class="headerlink" title="2.3.3.1 Follower 状态转换过程"></a>2.3.3.1 Follower 状态转换过程</h4><p>Raft 的选主基于一种心跳机制，集群中每个节点刚启动时都是 follower 身份（<strong>Step: starts up</strong>），leader 会周期性的向所有节点发送心跳包来维持自己的权威，那么首个 leader 是如何被选举出来的呢？方法是如果一个 follower 在一段时间内没有收到任何心跳，也就是选举超时，那么它就会主观认为系统中没有可用的 leader，并发起新的选举（<strong>Step: times out, starts election</strong>）。</p>
 <p>这里有一个问题，即这个“选举超时时间”该如何制定？如果所有节点在同一时刻启动，经过同样的超时时间后同时发起选举，整个集群会变得低效不堪，极端情况下甚至会一直选不出一个主节点。Raft 巧妙的使用了一个随机化的定时器，让每个节点的“超时时间”在一定范围内随机生成，这样就大大的降低了多个节点同时发起选举的可能性。</p>
-<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fc2b320077124da39bade7adeaf7ef08~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> </p>
-<p><em>图：一个五节点 Raft 集群的初始状态，所有节点都是 follower 身份，term 为 1，且每个节点的选举超时定时器不同</em></p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fc2b320077124da39bade7adeaf7ef08~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p> <em>图：一个五节点 Raft 集群的初始状态，所有节点都是 follower 身份，term 为 1，且每个节点的选举超时定时器不同</em></p>
 <p>若 follower 想发起一次选举，follower 需要先增加自己的当前 term，并将身份切换为 candidate。然后它会向集群其它节点发送“请给自己投票”的消息（RequestVote RPC）。</p>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/316b81a42ea843a192cc2f3578fbdb81~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/316b81a42ea843a192cc2f3578fbdb81~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><em>图：S1 率先超时，变为 candidate，term + 1，并向其它节点发出拉票请求</em></p>
 <h4 id="2-3-3-2-Candicate-状态转换过程"><a href="#2-3-3-2-Candicate-状态转换过程" class="headerlink" title="2.3.3.2 Candicate 状态转换过程"></a>2.3.3.2 Candicate 状态转换过程</h4><p>Follower 切换为 candidate 并向集群其他节点发送“请给自己投票”的消息后，接下来会有三种可能的结果，也即上面<strong>节点状态图中 candidate 状态向外伸出的三条线</strong>。</p>
 <p><strong>1. 选举成功（Step: receives votes from majority of servers）</strong></p>
 <p>当candicate从整个集群的<strong>大多数</strong>（N&#x2F;2+1）节点获得了针对同一 term 的选票时，它就赢得了这次选举，立刻将自己的身份转变为 leader 并开始向其它节点发送心跳来维持自己的权威。</p>
-<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a851f56a384b4a0f9da76644d645ae1f~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> <em>图：“大部分”节点都给了 S1 选票</em></p>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a6e0e622b7384ac78f733e471b280c27~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> <em>图：S1 变为 leader，开始发送心跳维持权威</em></p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a851f56a384b4a0f9da76644d645ae1f~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p> <em>图：“大部分”节点都给了 S1 选票</em></p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a6e0e622b7384ac78f733e471b280c27~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p> <em>图：S1 变为 leader，开始发送心跳维持权威</em></p>
 <p>每个节点针对每个 term 只能投出一张票，并且按照先到先得的原则。这个规则确保只有一个 candidate 会成为 leader。</p>
 <p><strong>2. 选举失败（Step: discovers current leader or new term）</strong></p>
 <p>Candidate 在等待投票回复的时候，可能会突然收到其它自称是 leader 的节点发送的心跳包，如果这个心跳包里携带的 term <strong>不小于</strong> candidate 当前的 term，那么 candidate 会承认这个 leader，并将身份切回 follower。这说明其它节点已经成功赢得了选举，我们只需立刻跟随即可。但如果心跳包中的 term 比自己小，candidate 会拒绝这次请求并保持选举状态。</p>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d4ce0c7fdf3b4039a0e4b0b200af731a~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> <em>图：S4、S2 依次开始选举</em></p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2535cfeb9cfb44d4a0a04506f09f7485~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> <em>图：S4 成为 leader，S2 在收到 S4 的心跳包后，由于 term 不小于自己当前的 term，因此会立刻切为 follower 跟随 S4</em></p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d4ce0c7fdf3b4039a0e4b0b200af731a~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p> <em>图：S4、S2 依次开始选举</em></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2535cfeb9cfb44d4a0a04506f09f7485~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p> <em>图：S4 成为 leader，S2 在收到 S4 的心跳包后，由于 term 不小于自己当前的 term，因此会立刻切为 follower 跟随 S4</em></p>
 <p><strong>3. 选举超时（Step: times out, new election）</strong></p>
 <p>第三种可能的结果是 candidate 既没有赢也没有输。如果有多个 follower 同时成为 candidate，选票是可能被瓜分的，如果没有任何一个 candidate 能得到大多数节点的支持，那么每一个 candidate 都会超时。此时 candidate 需要增加自己的 term，然后发起新一轮选举。如果这里不做一些特殊处理，选票可能会一直被瓜分，导致选不出 leader 来。这里的“特殊处理”指的就是前文所述的<strong>随机化选举超时时间</strong>。</p>
-<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/04163db3b7ca4b4c8fbfdf4e7253a98f~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/04163db3b7ca4b4c8fbfdf4e7253a98f~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><em>图：S1 ~ S5 都在参与选举</em></p>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/517e2f7939394b3ca35936702a107f07~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/517e2f7939394b3ca35936702a107f07~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><em>图：没有任何节点愿意给他人投票</em></p>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b52e004bd4654cb1b51cdb409182156f~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b52e004bd4654cb1b51cdb409182156f~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><em>图：如果没有随机化超时时间，所有节点将会继续同时发起选举……</em></p>
 <p>以上便是 candidate 三种可能的选举结果。</p>
 <h4 id="2-3-3-3-Leader-状态转换过程"><a href="#2-3-3-3-Leader-状态转换过程" class="headerlink" title="2.3.3.3 Leader 状态转换过程"></a>2.3.3.3 Leader 状态转换过程</h4><p>节点状态图中的最后一条线是：<strong>discovers server with higher term</strong>。想象一个场景：当 leader 节点发生了宕机或网络断连，此时其它 follower 会收不到 leader 心跳，首个触发超时的节点会变为 candidate 并开始拉票（由于随机化各个 follower 超时时间不同），由于该 candidate 的 term 大于原 leader 的 term，因此所有 follower 都会投票给它，这名 candidate 会变为新的 leader。一段时间后原 leader 恢复了，收到了来自新leader 的心跳包，发现心跳中的 term 大于自己的 term，此时该节点会立刻切换为 follower 并跟随的新 leader。</p>
 <p>上述流程的动画模拟如下：</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/33f858652afc4be6bb1d7b1f1dc33eaa~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> </p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/33f858652afc4be6bb1d7b1f1dc33eaa~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><em>图：S4 作为 term2 的 leader</em></p>
 <p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d45e677f6c2428d9b9db7022416fe26~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp" srcset="/img/loading.gif" lazyload alt="img"> </p>
 <p><em>图：S4 宕机，S5 即将率先超时</em></p>
@@ -773,7 +777,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/22/ECS/docker-compose-yaml/docker-compose-yaml/" title="docker-compose-yaml">
+                      <a href="/2023/06/22/%E4%BA%91%E5%8E%9F%E7%94%9F-%E9%83%A8%E7%BD%B2/docker-compose-yaml/" title="docker-compose-yaml">
                         <span class="hidden-mobile">docker-compose-yaml</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>

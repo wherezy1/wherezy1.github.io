@@ -16,30 +16,83 @@
   <meta name="author" content="where">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Redis概述应用场景(13条消息) Redis 16 个常见使用场景_redis使用场景_Young丶的博客-CSDN博客 11、点赞、签到、打卡用 like:t1001 来维护 t1001 这条微博的所有点赞用户 点赞了这条微博：sadd like:t1001 u3001取消点赞：srem like:t1001 u3001是否点赞：sismember like:t1001 u3001点赞的所有">
+    <meta name="description" content="Redis概述第一部分《基本原理》最详细的Redis五种数据结构详解（理论+实战），建议收藏。 - 知乎 (zhihu.com)  1.1 数据结构-struct String：字符串类型 List：列表类型 Set：无序集合类型 ZSet：有序集合类型 Hash：哈希表类型 HyperLogLog : bitMap类型，计数统计 BitMap ：位图类型，判断存在与否，将10亿个int （4G）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis概述">
 <meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Redis%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="where&#39;s blog">
-<meta property="og:description" content="Redis概述应用场景(13条消息) Redis 16 个常见使用场景_redis使用场景_Young丶的博客-CSDN博客 11、点赞、签到、打卡用 like:t1001 来维护 t1001 这条微博的所有点赞用户 点赞了这条微博：sadd like:t1001 u3001取消点赞：srem like:t1001 u3001是否点赞：sismember like:t1001 u3001点赞的所有">
+<meta property="og:description" content="Redis概述第一部分《基本原理》最详细的Redis五种数据结构详解（理论+实战），建议收藏。 - 知乎 (zhihu.com)  1.1 数据结构-struct String：字符串类型 List：列表类型 Set：无序集合类型 ZSet：有序集合类型 Hash：哈希表类型 HyperLogLog : bitMap类型，计数统计 BitMap ：位图类型，判断存在与否，将10亿个int （4G）">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8f8f2356fb2c4955213c5b114113a811_1440w.webp">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-fc8e2a11644c48b023e4fa974d9bba04_1440w.webp">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODA3NTYwNzYyNy0yMTg4NDU1ODMucG5n?x-oss-process=image/format,png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyNzIzNDM0OTY3Mi01Njg0MDE4NTMucG5n?x-oss-process=image/format,png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODA3NDQwMzQ0MC0xMTE4MzQ3OTMucG5n?x-oss-process=image/format,png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODA4MDY1NTcwMy0xNjAwNzEwOTQ4LnBuZw?x-oss-process=image/format,png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIxMDkyMTYwMS05NDk0MDkzNzUucG5n?x-oss-process=image/format,png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIxMTc0MDQ4Ni0yMjU4NjA0MzkucG5n?x-oss-process=image/format,png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIxNTg1MjczMi0xMDg4ODk2MDIwLnBuZw?x-oss-process=image/format,png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIyMzYwNTA2MC04OTkxMDg2NjMucG5n?x-oss-process=image/format,png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230411075253724.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-960fa322dbb3d976331a73999dc59375_1440w.webp">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-6a84f8a661df7996fbcd4ca65c1a40b6_1440w.webp">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8fd5104994d92443af483d747d631390_1440w.webp">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-102238a40860c08faf37c492f61f6d94_1440w.webp">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-2ae62e4f384bfe7104a4450f72c2f18c_1440w.webp">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/22c7fe97ce5d3c382b08d83a4d8a5b96.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/2b7231b6aabb9a9a2e2390ab3a280b2d-20230309232920063.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/ea4f7e86baf2435af3999e5cd38b6a26.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/03eacec67cc58ff8d5819d0872ddd41e.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/4d850bfe8d712d3d67ff13e59b919452.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/4845008abadaa871613873f5ffdcb542.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/e081b470870daeb763062bb873a4477e.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/2db4831516b9a8b79f833cf0593c1f12.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/5e9e65a4a59b3688fa37cadbd87bb5ac.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%93%A8%E5%85%B5%E6%8F%90%E7%BA%B2.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/db568766644a4d10b8a91cdd2f8a4070.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/775865f6bd894dfba8d373ee54d79af1.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/26f88373d8454682b9e0c1d4fd1611b4-20230309233114856.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/13e4361407ba46979e802eaa654dcf67.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/d0bed80d28a543fd8dcd299d4b06cf04.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E4%B8%BB%E4%BB%8E%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/2db4831516b9a8b79f833cf0593c1f12-20230310003208754.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E9%80%89%E4%B8%BB%E8%BF%87%E7%A8%8B.webp">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%8D%87%E7%BA%A7%E4%BB%8E%E8%8A%82%E7%82%B9%E4%B8%BA%E4%B8%BB%E8%8A%82%E7%82%B9.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%8D%87%E4%B8%BB%E8%8A%82%E7%82%B9%E6%88%90%E5%8A%9F.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E4%BB%8E%E8%8A%82%E7%82%B9%E6%8C%87%E5%90%91%E6%96%B0%E4%B8%BB%E8%8A%82%E7%82%B9.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E4%BB%8E%E8%8A%82%E7%82%B9%E8%BD%AC%E6%8D%A2%E6%88%90%E5%8A%9F.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%93%A8%E5%85%B5%E9%A2%91%E9%81%93.webp">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E6%97%A7%E4%B8%BB%E8%8A%82%E7%82%B9%E5%8F%98%E4%B8%BA%E6%96%B0%E4%B8%BB%E8%8A%82%E7%82%B9.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/a6286053c6884cf58bf397d01674fe80.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com//mysql/other/fdd5f695bb3643258662886f9fba0aab.png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJeFb9JLLIY73sX8jNlo5FPeDhUxAtF4tEI1zmCeiaFZCqJbQwIdQJibFjw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJeLgw9lHZ0dWo4K0NB48unxIwCTov8ly7eINbLlSic72ictYibliaOlqtWkA/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJerex1okUg02G4fvib3ZZznpReQCqj0E5QUFAcJ1qpGZBZs2ibQJWzq4IA/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJeZtSoveOiagRWU8JRVibuZ10tToENDPEg6Iw13Mh94tc9m4OhyWaNQqLw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJebnfqRDPesSU2MYX3Dwfib5EibajOYsLFcrPSKQAGz03hvbYQ5ic46yUNg/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-cb433a8eadf9ca3ab0ffc24f3bda081b_1440w.webp">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-c860405f0c426655102ad1294caebbc2_1440w.webp">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/2020031110064661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200311103429660.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/watermark%252Ctype_ZmFuZ3poZW5naGVpdGk%252Cshadow_10%252Ctext_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWd1YW5nMjEy%252Csize_16%252Ccolor_FFFFFF%252Ct_70">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E8%BF%87%E6%9C%9F%E5%AD%97%E5%85%B8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E8%BF%87%E6%9C%9F%E5%88%A4%E6%96%AD%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E6%83%B0%E6%80%A7%E5%88%A0%E9%99%A4.jpg">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E5%AE%9A%E6%97%B6%E5%88%A0%E9%99%A4%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5.jpg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/952c788e813838d2279187ebaf6d84f7.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/bfa10a38436f4307bd13d706c171417e.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/163c1b8a94b74f19a50677eca66f8589.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/1a89cc60775041c8a4fbdb376db13d20.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/926379093f404a9ca16e9f00ce3e7af9.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/1a83c9e7b2064800801fcbd6eee3be11.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/fd4dcd7254e54bbf8ad309e1de6073e9.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/3bd111efa4fc1e2e75516de22d4351d9.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/ed3142908436f16da26546b9cf2f03b5.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230417142003732.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230417141831965.png">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-11T11:36:37.812Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.903Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="分布式组件">
 <meta property="article:tag" content="概述">
@@ -237,7 +290,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          15k 字
+          45k 字
         
       </span>
     
@@ -248,7 +301,7 @@
         
         
         
-          124 分钟
+          375 分钟
         
       </span>
     
@@ -291,24 +344,9 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Redis概述"><a href="#Redis概述" class="headerlink" title="Redis概述"></a>Redis概述</h1><h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/agonie201218/article/details/123640871">(13条消息) Redis 16 个常见使用场景_redis使用场景_Young丶的博客-CSDN博客</a></p>
-<h2 id="11、点赞、签到、打卡"><a href="#11、点赞、签到、打卡" class="headerlink" title="11、点赞、签到、打卡"></a>11、点赞、签到、打卡</h2><p>用 like:t1001 来维护 t1001 这条微博的所有点赞用户</p>
-<p>点赞了这条微博：sadd like:t1001 u3001<br>取消点赞：srem like:t1001 u3001<br>是否点赞：sismember like:t1001 u3001<br>点赞的所有用户：smembers like:t1001<br>点赞数：scard like:t1001</p>
-<h2 id="16-显示最新的项目列表"><a href="#16-显示最新的项目列表" class="headerlink" title="16 .显示最新的项目列表"></a>16 .显示最新的项目列表</h2><p>比如说，我们的一个Web应用想要列出用户贴出的最新20条评论。在最新的评论边上我们有一个“显示全部”的链接，点击后就可以获得更多的评论。</p>
-<p>每次新评论发表时，我们会将它的ID添加到一个Redis列表。可以限定列表的长度为5000</p>
-<p>LPUSH latest.comments</p>
-<p>在Redis中我们的最新ID使用了常驻缓存，这是一直更新的。但是我们做了限制不能超过5000个ID，因此我们的获取ID函数会一直询问Redis。只有在超出了这个范围的时候，才需要去访问数据库</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_70730532/article/details/125870478">(4条消息) 如何保障 MySQL 和 Redis 的数据一致性？_redis和mysql数据一致性_Java烟雨的博客-CSDN博客</a></p>
-<h2 id="17-HyperLogLog"><a href="#17-HyperLogLog" class="headerlink" title="17.HyperLogLog"></a>17.HyperLogLog</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs cmd">pfadd 添加<br>影响基数估值则返回<span class="hljs-number">1</span>否则返回<span class="hljs-number">0</span>.若key不存在则创建<br>时间复杂度O(<span class="hljs-number">1</span>)<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">1</span><br><span class="hljs-number">2</span><br>pfcount 获得基数值<br>得到基数值，白话就叫做去重值（<span class="hljs-number">1</span>，<span class="hljs-number">1</span>，<span class="hljs-number">2</span>，<span class="hljs-number">2</span>，<span class="hljs-number">3</span>）的插入pfcount得到的是<span class="hljs-number">3</span><br>可一次统计多个key<br>时间复杂度为O(N)，N为key的个数<br>返回值是一个带有 <span class="hljs-number">0</span>.<span class="hljs-number">81</span>% 标准错误（standard error）的近似值.<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m1<br>(integer) <span class="hljs-number">4</span><br><span class="hljs-number">1</span><br><span class="hljs-number">2</span><br><span class="hljs-number">3</span><br><span class="hljs-number">4</span><br>pfmerge 合并多个key<br>取多个key的并集<br>命令只会返回 OK.<br>时间复杂度为O（N）<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m1<br>(integer) <span class="hljs-number">4</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m2 <span class="hljs-number">3</span> <span class="hljs-number">3</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">4</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">5</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">6</span> <span class="hljs-number">6</span> <span class="hljs-number">1</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m2<br>(integer) <span class="hljs-number">5</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfmerge mergeDes m1 m2<br>OK<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount mergeDes<br>(integer) <span class="hljs-number">6</span><br></code></pre></td></tr></table></figure>
-
-
-
-<p>应用场景<br>说明：</p>
-<p>基数不大，数据量不大就用不上，会有点大材小用浪费空间<br>有局限性，就是只能统计基数数量，而没办法去知道具体的内容是什么<br>和bitmap相比，属于两种特定统计情况，简单来说，HyperLogLog 去重比 bitmap 方便很多<br>一般可以bitmap和hyperloglog配合使用，bitmap标识哪些用户活跃，hyperloglog计数<br>一般使用：</p>
-<p>统计注册 IP 数<br>统计每日访问 IP 数<br>统计页面实时 UV 数<br>统计在线用户数<br>统计用户每天搜索不同词条的个数</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/148562122">最详细的Redis五种数据结构详解（理论+实战），建议收藏。 - 知乎 (zhihu.com)</a></p>
+                <h1 id="Redis概述"><a href="#Redis概述" class="headerlink" title="Redis概述"></a>Redis概述</h1><h1 id="第一部分《基本原理》"><a href="#第一部分《基本原理》" class="headerlink" title="第一部分《基本原理》"></a>第一部分《基本原理》</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/148562122">最详细的Redis五种数据结构详解（理论+实战），建议收藏。 - 知乎 (zhihu.com)</a></p>
 <p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-8f8f2356fb2c4955213c5b114113a811_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><ol>
+<h1 id="1-1-数据结构-struct"><a href="#1-1-数据结构-struct" class="headerlink" title="1.1 数据结构-struct"></a>1.1 数据结构-struct</h1><ol>
 <li><code>String</code>：字符串类型</li>
 <li><code>List</code>：列表类型</li>
 <li><code>Set</code>：无序集合类型</li>
@@ -320,7 +358,148 @@
 </ol>
 <h3 id="Redis核心对象"><a href="#Redis核心对象" class="headerlink" title="Redis核心对象"></a>Redis核心对象</h3><p>在Redis中有一个<strong>「核心的对象」</strong>叫做<code>redisObject</code> ，是用来表示所有的key和value的，用redisObject结构体来表示<code>String、Hash、List、Set、ZSet</code>五种数据类型。</p>
 <p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/v2-fc8e2a11644c48b023e4fa974d9bba04_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h2 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h2><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230411075253724.png" srcset="/img/loading.gif" lazyload alt="image-20230411075253724"></p>
+<h2 id="1-简单动态字符串"><a href="#1-简单动态字符串" class="headerlink" title="1. 简单动态字符串"></a>1. 简单动态<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%AD%97%E7%AC%A6%E4%B8%B2&spm=1001.2101.3001.7020">字符串</a></h2><p>第一篇文章我们就说过 Redis 是用 C 语言写的，但是对于Redis的字符串，却不是 C 语言中的字符串（即以空字符’\0’结尾的<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%AD%97%E7%AC%A6%E6%95%B0%E7%BB%84&spm=1001.2101.3001.7020">字符数组</a>），它是自己构建了一种名为 简单动态字符串（simple dynamic string,SDS）的抽象类型，并将 SDS 作为 Redis的默认字符串表示。</p>
+<p><strong>SDS 定义：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sdshdr</span>&#123;<br>     <span class="hljs-comment">//记录buf数组中已使用字节的数量</span><br>     <span class="hljs-comment">//等于 SDS 保存字符串的长度</span><br>     <span class="hljs-type">int</span> len;<br>     <span class="hljs-comment">//记录 buf 数组中未使用字节的数量</span><br>     <span class="hljs-type">int</span> free;<br>     <span class="hljs-comment">//字节数组，用于保存字符串</span><br>     <span class="hljs-type">char</span> buf[];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>用SDS保存字符串 “Redis”具体图示如下：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODA3NTYwNzYyNy0yMTg4NDU1ODMucG5n?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>我们看上面对于 SDS 数据类型的定义：</p>
+<ol>
+<li>len 保存了SDS保存字符串的长度</li>
+<li>buf[] 数组用来保存字符串的每个元素</li>
+<li>free j记录了 buf 数组中未使用的字节数量</li>
+</ol>
+<p>上面的定义相对于C语言对于字符串的定义，多出了 len 属性以及 free 属性。为什么不使用C语言字符串实现，而是使用 SDS呢？这样实现有什么好处？</p>
+<p><strong>1. 常数复杂度获取字符串长度</strong></p>
+<p>由于 len 属性的存在，我们获取 SDS 字符串的长度只需要读取 len 属性，时间复杂度为 O(1)。而对于 C 语言，获取字符串的长度通常是经过遍历计数来实现的，时间复杂度为 O(n)。通过 strlen key 命令可以获取 key 的字符串长度。</p>
+<p><strong>2. 杜绝缓冲区溢出</strong></p>
+<p>我们知道在 C 语言中使用 strcat 函数来进行两个字符串的拼接，一旦没有分配足够长度的内存空间，就会造成缓冲区溢出。而对于 SDS 数据类型，在进行字符修改的时候，会首先根据记录的 len 属性检查内存空间是否满足需求，如果不满足，会进行相应的空间扩展，然后在进行修改操作，所以不会出现缓冲区溢出。</p>
+<p><strong>3. 减少修改字符串的内存重新分配次数</strong></p>
+<p>C语言由于不记录字符串的长度，所以如果要修改字符串，必须要重新分配内存（先释放再申请），因为如果没有重新分配，字符串长度增大时会造成内存缓冲区溢出，字符串长度减小时会造成内存泄露。而对于SDS，由于len属性和free属性的存在，对于修改字符串SDS实现了空间预分配和惰性空间释放两种策略：</p>
+<ol>
+<li>空间预分配：对字符串进行空间扩展的时候，扩展的内存比实际需要的多，这样可以减少连续执行字符串增长操作所需的内存重分配次数。</li>
+<li>惰性空间释放：对字符串进行缩短操作时，程序不立即使用内存重新分配来回收缩短后多余的字节，而是使用 free 属性将这些字节的数量记录下来，等待后续使用。（当然SDS也提供了相应的API，当我们有需要时，也可以手动释放这些未使用的空间。）</li>
+</ol>
+<p><strong>4. 二进制安全</strong></p>
+<p>因为C字符串以空字符作为字符串结束的标识，而对于一些二进制文件（如图片等），内容可能包括空字符串，因此C字符串无法正确存取；而所有 SDS 的API 都是以处理二进制的方式来处理 buf 里面的元素，并且 SDS 不是以空字符串来判断是否结束，而是以 len 属性表示的长度来判断字符串是否结束。</p>
+<p><strong>5. 兼容部分 C 字符串函数</strong></p>
+<p>虽然 SDS 是二进制安全的，但是一样遵从每个字符串都是以空字符串结尾的惯例，这样可以重用 C 语言库&lt;string.h&gt; 中的一部分函数。</p>
+<p><strong>6. 总结</strong></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyNzIzNDM0OTY3Mi01Njg0MDE4NTMucG5n?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>一般来说，SDS 除了保存数据库中的字符串值以外，SDS 还可以作为缓冲区（buffer）：包括 AOF 模块中的AOF缓冲区以及客户端状态中的输入缓冲区。后面在介绍Redis的持久化时会进行介绍。</p>
+<h2 id="2-链表"><a href="#2-链表" class="headerlink" title="2. 链表"></a>2. 链表</h2><p>链表是一种常用的<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84&spm=1001.2101.3001.7020">数据结构</a>，C 语言内部是没有内置这种数据结构的实现，所以Redis自己构建了链表的实现。</p>
+<p>链表定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span>  <span class="hljs-keyword">struct</span> <span class="hljs-title class_">listNode</span>&#123;<br>       <span class="hljs-comment">//前置节点</span><br>       <span class="hljs-keyword">struct</span> <span class="hljs-title class_">listNode</span> *prev;<br>       <span class="hljs-comment">//后置节点</span><br>       <span class="hljs-keyword">struct</span> <span class="hljs-title class_">listNode</span> *next;<br>       <span class="hljs-comment">//节点的值</span><br>       <span class="hljs-type">void</span> *value;  <br>&#125;listNode<br></code></pre></td></tr></table></figure>
+
+<p>通过多个 listNode 结构就可以组成链表，这是一个双端链表，Redis还提供了操作链表的数据结构：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">list</span>&#123;<br>     <span class="hljs-comment">//表头节点</span><br>     listNode *head;<br>     <span class="hljs-comment">//表尾节点</span><br>     listNode *tail;<br>     <span class="hljs-comment">//链表所包含的节点数量</span><br>     <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> len;<br>     <span class="hljs-comment">//节点值复制函数</span><br>     <span class="hljs-built_in">void</span> (*free) (<span class="hljs-type">void</span> *ptr);<br>     <span class="hljs-comment">//节点值释放函数</span><br>     <span class="hljs-built_in">void</span> (*free) (<span class="hljs-type">void</span> *ptr);<br>     <span class="hljs-comment">//节点值对比函数</span><br>     <span class="hljs-built_in">int</span> (*match) (<span class="hljs-type">void</span> *ptr,<span class="hljs-type">void</span> *key);<br>&#125;list;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODA3NDQwMzQ0MC0xMTE4MzQ3OTMucG5n?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Redis链表特性：</p>
+<ol>
+<li>双端：链表具有前置节点和后置节点的引用，获取这两个节点时间复杂度都为O(1)。</li>
+<li>无环：表头节点的 prev 指针和表尾节点的 next 指针都指向 NULL,对链表的访问都是以 NULL 结束。　</li>
+<li>带链表长度计数器：通过 len 属性获取链表长度的时间复杂度为 O(1)。</li>
+<li>多态：链表节点使用 void* 指针来保存节点值，可以保存各种不同类型的值。</li>
+</ol>
+<h2 id="3-字典"><a href="#3-字典" class="headerlink" title="3. 字典"></a>3. 字典</h2><p>字典又称为符号表或者关联数组、或映射（map），是一种用于保存键值对的抽象数据结构。字典中的每一个键 key 都是唯一的，通过 key 可以对值来进行查找或修改。C 语言中没有内置这种数据结构的实现，所以字典依然是 Redis自己构建的。Redis 的字典使用哈希表作为底层实现。</p>
+<p>字典结构定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">dict</span> &#123;</span><br><br>    <span class="hljs-comment">// 类型特定函数</span><br>    dictType *type;	<br><br>    <span class="hljs-comment">// 私有数据</span><br>    <span class="hljs-type">void</span> *privdata;<br><br>    <span class="hljs-comment">// 哈希表</span><br>    dictht ht[<span class="hljs-number">2</span>];<br><br>    <span class="hljs-comment">// rehash 索引</span><br>    <span class="hljs-comment">// 当 rehash 不在进行时，值为 -1</span><br>    <span class="hljs-type">int</span> rehashidx; <span class="hljs-comment">/* rehashing not in progress if rehashidx == -1 */</span><br><br>&#125; dict;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>哈希表结构定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">dictht</span>&#123;<br>     <span class="hljs-comment">//哈希表数组</span><br>     dictEntry **table;<br>     <span class="hljs-comment">//哈希表大小</span><br>     <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> size;<br>     <span class="hljs-comment">//哈希表大小掩码，用于计算索引值</span><br>     <span class="hljs-comment">//总是等于 size-1</span><br>     <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> sizemask;<br>     <span class="hljs-comment">//该哈希表已有节点的数量</span><br>     <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> used;<br> <br>&#125;dictht<br></code></pre></td></tr></table></figure>
+
+<p>哈希表是由数组 table 组成，table 中每个元素都是指向 dict.h&#x2F;dictEntry 结构，dictEntry 结构定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">dictEntry</span>&#123;<br>     <span class="hljs-comment">//键</span><br>     <span class="hljs-type">void</span> *key;<br>     <span class="hljs-comment">//值</span><br>     <span class="hljs-keyword">union</span>&#123;<br>          <span class="hljs-type">void</span> *val;<br>          uint64_tu64;<br>          int64_ts64;<br>     &#125;v;<br> <br>     <span class="hljs-comment">//指向下一个哈希表节点，形成链表</span><br>     <span class="hljs-keyword">struct</span> <span class="hljs-title class_">dictEntry</span> *next;<br>&#125;dictEntry<br></code></pre></td></tr></table></figure>
+
+<p>key 用来保存键，val 属性用来保存值，值可以是一个指针，也可以是uint64_t整数，也可以是int64_t整数。</p>
+<p><strong>注意：</strong>这里还有一个指向下一个哈希表节点的指针，我们知道哈希表最大的问题是存在哈希冲突，如何解决哈希冲突，有开放地址法和链地址法。这里采用的便是链地址法，通过next这个指针可以将多个哈希值相同的键值对连接在一起，用来解决<strong>哈希冲突</strong>。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODA4MDY1NTcwMy0xNjAwNzEwOTQ4LnBuZw?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>1. 哈希算法：Redis计算哈希值和索引值方法如下：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp">#<span class="hljs-number">1</span>、使用字典设置的哈希函数，计算键 key 的哈希值<br><br><br><br>hash = dict-&gt;type-&gt;<span class="hljs-built_in">hashFunction</span>(key);<br><br><br><br>#<span class="hljs-number">2</span>、使用哈希表的sizemask属性和第一步得到的哈希值，计算索引值<br><br><br><br>index = hash &amp; dict-&gt;ht[x].sizemask;<br></code></pre></td></tr></table></figure>
+
+<p><strong>2. 解决哈希冲突：</strong></p>
+<p>这个问题上面我们介绍了，方法是链地址法。通过字典里面的 *next 指针指向下一个具有相同索引值的哈希表节点。</p>
+<p><strong>3. 扩容和收缩：</strong></p>
+<p>当哈希表保存的键值对太多或者太少时，就要通过 rerehash(重新散列）来对哈希表进行相应的扩展或者收缩。具体步骤：</p>
+<ol>
+<li>如果执行扩展操作，会基于原哈希表创建一个大小等于 ht[0].used*2n 的哈希表（也就是每次扩展都是根据原哈希表已使用的空间扩大一倍创建另一个哈希表）。相反如果执行的是收缩操作，每次收缩是根据已使用空间缩小一倍创建一个新的哈希表。</li>
+<li>重新利用上面的哈希算法，计算索引值，然后将键值对放到新的哈希表位置上。</li>
+<li>所有键值对都迁徙完毕后，释放原哈希表的内存空间。</li>
+</ol>
+<p><strong>4. 触发扩容的条件：</strong></p>
+<ol>
+<li>服务器目前没有执行 BGSAVE 命令或者 BGREWRITEAOF 命令，并且负载因子大于等于1。</li>
+<li>服务器目前正在执行 BGSAVE 命令或者 BGREWRITEAOF 命令，并且负载因子大于等于5。</li>
+<li>负载因子 &#x3D; 哈希表已保存节点数量 &#x2F; 哈希表大小。</li>
+</ol>
+<p><strong>5. 渐进式rehash</strong></p>
+<p>什么叫渐进式 rehash？也就是说扩容和收缩操作不是一次性、集中式完成的，而是分多次、渐进式完成的。如果保存在Redis中的键值对只有几个几十个，那么 rehash 操作可以瞬间完成，但是如果键值对有几百万，几千万甚至几亿，那么要一次性的进行 rehash，势必会造成Redis一段时间内不能进行别的操作。所以Redis采用渐进式 rehash,这样在进行渐进式rehash期间，字典的删除查找更新等操作可能会在两个哈希表上进行，第一个哈希表没有找到，就会去第二个哈希表上进行查找。但是进行 增加操作，一定是在新的哈希表上进行的。</p>
+<h2 id="4-整数集合"><a href="#4-整数集合" class="headerlink" title="4. 整数集合"></a>4. 整数集合</h2><p>整数集合（intset）是Redis用于保存整数值的集合抽象数据类型，它可以保存类型为int16_t、int32_t 或者int64_t 的整数值，并且保证集合中不会出现重复元素。</p>
+<p>定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">intset</span>&#123;<br>     <span class="hljs-comment">//编码方式</span><br>     <span class="hljs-type">uint32_t</span> encoding;<br>     <span class="hljs-comment">//集合包含的元素数量</span><br>     <span class="hljs-type">uint32_t</span> length;<br>     <span class="hljs-comment">//保存元素的数组</span><br>     <span class="hljs-type">int8_t</span> contents[];<br> <br>&#125;intset;<br></code></pre></td></tr></table></figure>
+
+<p>整数集合的每个元素都是 contents 数组的一个数据项，它们按照从小到大的顺序排列，并且不包含任何重复项。</p>
+<p>length 属性记录了 contents 数组的大小。</p>
+<p>需要注意的是虽然 contents 数组声明为 int8_t 类型，但是实际上contents 数组并不保存任何 int8_t 类型的值，其真正类型有 encoding 来决定。</p>
+<p><strong>升级</strong></p>
+<p>当我们新增的元素类型比原集合元素类型的长度要大时，需要对整数集合进行升级，才能将新元素放入整数集合中。具体步骤：</p>
+<ol>
+<li>根据新元素类型，扩展整数集合底层数组的大小，并为新元素分配空间。</li>
+<li>将底层数组现有的所有元素都转成与新元素相同类型的元素，并将转换后的元素放到正确的位置，放置过程中，维持整个元素顺序都是有序的。</li>
+<li>将新元素添加到整数集合中（保证有序）。</li>
+</ol>
+<p>升级能极大地节省内存。</p>
+<p><strong>降级</strong></p>
+<p>整数集合不支持降级操作，一旦对数组进行了升级，编码就会一直保持升级后的状态。</p>
+<h2 id="5-跳跃表"><a href="#5-跳跃表" class="headerlink" title="5. 跳跃表"></a>5. 跳跃表</h2><p>跳跃表（skiplist）是一种有序数据结构，它通过在每个节点中维持多个指向其它节点的指针，从而达到快速访问节点的目的。具有如下性质：</p>
+<ol>
+<li>由很多层结构组成；</li>
+<li>每一层都是一个有序的链表，排列顺序为由高层到底层，都至少包含两个链表节点，分别是前面的head节点和后面的nil节点；</li>
+<li>最底层的链表包含了所有的元素；</li>
+<li>如果一个元素出现在某一层的链表中，那么在该层之下的链表也全都会出现（上一层的元素是当前层的元素的子集）；</li>
+<li>链表中的每个节点都包含两个指针，一个指向同一层的下一个链表节点，另一个指向下一层的同一个链表节点；</li>
+</ol>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIxMDkyMTYwMS05NDk0MDkzNzUucG5n?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Redis中跳跃表节点定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">zskiplistNode</span> &#123;<br>     <span class="hljs-comment">//层</span><br>     <span class="hljs-keyword">struct</span> <span class="hljs-title class_">zskiplistLevel</span>&#123;<br>           <span class="hljs-comment">//前进指针</span><br>           <span class="hljs-keyword">struct</span> <span class="hljs-title class_">zskiplistNode</span> *forward;<br>           <span class="hljs-comment">//跨度</span><br>           <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> span;<br>     &#125;level[];<br> <br>     <span class="hljs-comment">//后退指针</span><br>     <span class="hljs-keyword">struct</span> <span class="hljs-title class_">zskiplistNode</span> *backward;<br>     <span class="hljs-comment">//分值</span><br>     <span class="hljs-type">double</span> score;<br>     <span class="hljs-comment">//成员对象</span><br>     robj *obj;<br> <br>&#125; zskiplistNode<br></code></pre></td></tr></table></figure>
+
+<p>多个跳跃表节点构成一个跳跃表：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">zskiplist</span>&#123;<br>     <span class="hljs-comment">//表头节点和表尾节点</span><br>     structz skiplistNode *header, *tail;<br>     <span class="hljs-comment">//表中节点的数量</span><br>     <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> length;<br>     <span class="hljs-comment">//表中层数最大的节点的层数</span><br>     <span class="hljs-type">int</span> level;<br> <br>&#125;zskiplist;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIxMTc0MDQ4Ni0yMjU4NjA0MzkucG5n?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>1. 搜索：</strong></p>
+<p>从最高层的链表节点开始，如果比当前节点要大和比当前层的下一个节点要小，那么则往下找，也就是和当前层的下一层的节点的下一个节点进行比较，以此类推，一直找到最底层的最后一个节点，如果找到则返回，反之则返回空。</p>
+<p><strong>2. 插入：</strong></p>
+<p>首先确定插入的层数，有一种方法是假设抛一枚硬币，如果是正面就累加，直到遇见反面为止，最后记录正面的次数作为插入的层数。当确定插入的层数k后，则需要将新元素插入到从底层到k层。</p>
+<p><strong>3. 删除：</strong></p>
+<p>在各个层中找到包含指定值的节点，然后将节点从链表中删除即可，如果删除以后只剩下头尾两个节点，则删除这一层。</p>
+<h2 id="7-压缩列表"><a href="#7-压缩列表" class="headerlink" title="7. 压缩列表"></a>7. 压缩列表</h2><p>压缩列表（ziplist）是Redis为了节省内存而开发的，是由一系列特殊编码的连续内存块组成的顺序型数据结构，一个压缩列表可以包含任意多个节点（entry），每个节点可以保存一个字节数组或者一个整数值。</p>
+<p><strong>压缩列表的原理：压缩列表并不是对数据利用某种算法进行压缩，而是将数据按照一定规则编码在一块连续的内存区域，目的是节省内存。</strong></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIxNTg1MjczMi0xMDg4ODk2MDIwLnBuZw?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>压缩列表的每个节点构成如下：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWFnZXMyMDE4LmNuYmxvZ3MuY29tL2Jsb2cvMTEyMDE2NS8yMDE4MDUvMTEyMDE2NS0yMDE4MDUyODIyMzYwNTA2MC04OTkxMDg2NjMucG5n?x-oss-process=image/format,png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>previous_entry_ength：</strong>记录压缩列表前一个字节的长度。previous_entry_ength的长度可能是1个字节或者是5个字节，如果上一个节点的长度小于254，则该节点只需要一个字节就可以表示前一个节点的长度了，如果前一个节点的长度大于等于254，则previous length的第一个字节为254，后面用四个字节表示当前节点前一个节点的长度。利用此原理即当前节点位置减去上一个节点的长度即得到上一个节点的起始位置，压缩列表可以从尾部向头部遍历。这么做很有效地减少了内存的浪费。</p>
+<p><strong>encoding：</strong>节点的encoding保存的是节点的content的内容类型以及长度，encoding类型一共有两种，一种字节数组一种是整数，encoding区域长度为1字节、2字节或者5字节长。</p>
+<p><strong>content：</strong>content区域用于保存节点的内容，节点内容类型和长度由encoding决定。</p>
+<h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h2><p>大多数情况下，Redis使用简单字符串SDS作为字符串的表示，相对于C语言字符串，SDS具有常数复杂度获取字符串长度，杜绝了缓存区的溢出，减少了修改字符串长度时所需的内存重分配次数，以及二进制安全能存储各种类型的文件，并且还兼容部分C函数。</p>
+<p>　　通过为链表设置不同类型的特定函数，Redis链表可以保存各种不同类型的值，除了用作列表键，还在发布与订阅、慢查询、监视器等方面发挥作用（后面会介绍）。</p>
+<p>　　Redis的字典底层使用哈希表实现，每个字典通常有两个哈希表，一个平时使用，另一个用于rehash时使用，使用链地址法解决哈希冲突。</p>
+<p>　　跳跃表通常是有序集合的底层实现之一，表中的节点按照分值大小进行排序。</p>
+<p>　　整数集合是集合键的底层实现之一，底层由数组构成，升级特性能尽可能的节省内存。</p>
+<p>　　压缩列表是Redis为节省内存而开发的顺序型数据结构，通常作为列表键和哈希键的底层实现之一。</p>
+<h3 id="ZipList-和-Hash"><a href="#ZipList-和-Hash" class="headerlink" title="ZipList 和 Hash"></a>ZipList 和 Hash</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs awk">ziplist 编码的哈希对象使用压缩列表作为底层实现， 每当有新的键值对要加入到哈希对象时， 程序会先将保存了键的压缩列表节点推入到压缩列表表尾， 然后再将保存了值的压缩列表节点推入到压缩列表表尾， 因此：<br><br>保存了同一键值对的两个节点总是紧挨在一起， 保存键的节点在前， 保存值的节点在后；<br>先添加到哈希对象中的键值对会被放在压缩列表的表头方向， 而后来添加到哈希对象中的键值对会被放在压缩列表的表尾方向。<br><br>作者：one_zheng<br>链接：https:<span class="hljs-regexp">//</span>www.jianshu.com<span class="hljs-regexp">/p/</span><span class="hljs-number">2095</span>df8ae4a8<br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="1-2-底层实现"><a href="#1-2-底层实现" class="headerlink" title="1.2 底层实现"></a>1.2 底层实现</h1><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230411075253724.png" srcset="/img/loading.gif" lazyload alt="image-20230411075253724"></p>
 <p><strong>String类型</strong>的数据结构存储方式有三种<code>int、raw、embstr</code>。</p>
 <p><strong>Hash对象</strong>的实现方式有两种分别是<code>ziplist、hashtable</code></p>
 <p><strong>Set的底层</strong>实现是<strong>「ht和intset」</strong></p>
@@ -369,10 +548,405 @@
 
 
 
-<h1 id="Redis集群模式"><a href="#Redis集群模式" class="headerlink" title="Redis集群模式"></a>Redis集群模式</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0232236688c1">Redis Cluster 原理分析 - 简书 (jianshu.com)</a></p>
+<h1 id="《第二部分》-持久化"><a href="#《第二部分》-持久化" class="headerlink" title="《第二部分》 持久化"></a>《第二部分》 持久化</h1><h1 id="2-1-AOF"><a href="#2-1-AOF" class="headerlink" title="2.1 AOF"></a>2.1 AOF</h1><h1 id="2-2-RDB"><a href="#2-2-RDB" class="headerlink" title="2.2 RDB"></a>2.2 RDB</h1><h1 id="第三部分《Redis集群模式》"><a href="#第三部分《Redis集群模式》" class="headerlink" title="第三部分《Redis集群模式》"></a>第三部分《Redis集群模式》</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0232236688c1">Redis Cluster 原理分析 - 简书 (jianshu.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/100885432">Redis两种持久化机制RDB和AOF详解（面试常问，工作常用） - 知乎 (zhihu.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340082703">面试必问的 Redis：RDB、AOF、混合持久化 - 知乎 (zhihu.com)</a></p>
-<h2 id="集群同步策略"><a href="#集群同步策略" class="headerlink" title="集群同步策略"></a>集群同步策略</h2><p>RDB、AOF、RDB+AOF</p>
+<h1 id="3-1-主从复制"><a href="#3-1-主从复制" class="headerlink" title="3.1 主从复制"></a>3.1 主从复制</h1><p>1、人为修复故障</p>
+<p>2、第一次复制</p>
+<p>3、全量复制（replication_buffer） 和 增量复制（repl_backlog_buffer）</p>
+<p>4、涉及到缓冲区：</p>
+<p><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/master_slave_replication.html">主从复制是怎么实现的？ | 小林coding (xiaolincoding.com)</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>不过，由于数据都是存储在一台服务器上，如果出事就完犊子了，比如：</p>
+<ul>
+<li>如果服务器发生了宕机，由于数据恢复是需要点时间，那么这个期间是无法服务新的请求的；</li>
+<li>如果这台服务器的硬盘出现了故障，可能数据就都丢失了。</li>
+</ul>
+<p>要避免这种单点故障，最好的办法是将数据备份到其他服务器上，让这些服务器也可以对外提供服务，这样即使有一台服务器出现了故障，其他服务器依然可以继续提供服务。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/22c7fe97ce5d3c382b08d83a4d8a5b96.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>多台服务器要保存同一份数据，这里问题就来了。</p>
+<p>这些服务器之间的数据如何保持一致性呢？数据的读写操作是否每台服务器都可以处理？</p>
+<p>Redis 提供了<strong>主从复制模式</strong>，来避免上述的问题。</p>
+<p>这个模式可以保证多台服务器的数据一致性，且主从服务器之间采用的是「读写分离」的方式。</p>
+<p>主服务器可以进行读写操作，当发生写操作时自动将写操作同步给从服务器，而从服务器一般是只读，并接受主服务器同步过来写操作命令，然后执行这条命令。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/2b7231b6aabb9a9a2e2390ab3a280b2d-20230309232920063.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>也就是说，所有的数据修改只在主服务器上进行，然后将最新的数据同步给从服务器，这样就使得主从服务器的数据是一致的。</p>
+<p>同步这两个字说的简单，但是这个同步过程并没有想象中那么简单，要考虑的事情不是一两个。</p>
+<p>我们先来看看，主从服务器间的第一次同步是如何工作的？</p>
+<h2 id="第一次同步"><a href="#第一次同步" class="headerlink" title="#第一次同步"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/master_slave_replication.html#%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%90%8C%E6%AD%A5">#</a>第一次同步</h2><p>多台服务器之间要通过什么方式来确定谁是主服务器，或者谁是从服务器呢？</p>
+<p>我们可以使用 <code>replicaof</code>（Redis 5.0 之前使用 slaveof）命令形成主服务器和从服务器的关系。</p>
+<p>比如，现在有服务器 A 和 服务器 B，我们在服务器 B 上执行下面这条命令：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text"># 服务器 B 执行这条命令<br>replicaof &lt;服务器 A 的 IP 地址&gt; &lt;服务器 A 的 Redis 端口号&gt;<br></code></pre></td></tr></table></figure>
+
+<p>接着，服务器 B 就会变成服务器 A 的「从服务器」，然后与主服务器进行第一次同步。</p>
+<p>主从服务器间的第一次同步的过程可分为三个阶段：</p>
+<ul>
+<li>第一阶段是建立链接、协商同步；</li>
+<li>第二阶段是主服务器同步数据给从服务器；</li>
+<li>第三阶段是主服务器发送新写操作命令给从服务器。</li>
+</ul>
+<p>为了让你更清楚了解这三个阶段，我画了一张图。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/ea4f7e86baf2435af3999e5cd38b6a26.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>接下来，我在具体介绍每一个阶段都做了什么。</p>
+<p><em>第一阶段：建立链接、协商同步</em></p>
+<p>执行了 replicaof 命令后，从服务器就会给主服务器发送 <code>psync</code> 命令，表示要进行数据同步。</p>
+<p>psync 命令包含两个参数，分别是<strong>主服务器的 runID</strong> 和<strong>复制进度 offset</strong>。</p>
+<ul>
+<li>runID，每个 Redis 服务器在启动时都会自动生产一个随机的 ID 来唯一标识自己。当从服务器和主服务器第一次同步时，因为不知道主服务器的 run ID，所以将其设置为 “?”。</li>
+<li>offset，表示复制的进度，第一次同步时，其值为 -1。</li>
+</ul>
+<p>主服务器收到 psync 命令后，会用 <code>FULLRESYNC</code> 作为响应命令返回给对方。</p>
+<p>并且这个响应命令会带上两个参数：主服务器的 runID 和主服务器目前的复制进度 offset。从服务器收到响应后，会记录这两个值。</p>
+<p>FULLRESYNC 响应命令的意图是采用<strong>全量复制</strong>的方式，也就是主服务器会把所有的数据都同步给从服务器。</p>
+<p>所以，第一阶段的工作时为了全量复制做准备。</p>
+<p>那具体怎么全量同步呀呢？我们可以往下看第二阶段。</p>
+<p><em>第二阶段：主服务器同步数据给从服务器</em></p>
+<p>接着，主服务器会执行 bgsave 命令来生成 RDB 文件，然后把文件发送给从服务器。</p>
+<p>从服务器收到 RDB 文件后，会先清空当前的数据，然后载入 RDB 文件。</p>
+<p>这里有一点要注意，主服务器生成 RDB 这个过程是不会阻塞主线程的，因为 bgsave 命令是产生了一个子进程来做生成 RDB 文件的工作，是异步工作的，这样 Redis 依然可以正常处理命令。</p>
+<p>但是，这期间的写操作命令并没有记录到刚刚生成的 RDB 文件中，这时主从服务器间的数据就不一致了。</p>
+<p>那么为了保证主从服务器的数据一致性，<strong>主服务器在下面这三个时间间隙中将收到的写操作命令，写入到 replication buffer 缓冲区里</strong>：</p>
+<ul>
+<li>主服务器生成 RDB 文件期间；</li>
+<li>主服务器发送 RDB 文件给从服务器期间；</li>
+<li>「从服务器」加载 RDB 文件期间；</li>
+</ul>
+<p><em>第三阶段：主服务器发送新写操作命令给从服务器</em></p>
+<p>在主服务器生成的 RDB 文件发送完，从服务器收到 RDB 文件后，丢弃所有旧数据，将 RDB 数据载入到内存。完成 RDB 的载入后，会回复一个确认消息给主服务器。</p>
+<p>接着，主服务器将 replication buffer 缓冲区里所记录的写操作命令发送给从服务器，从服务器执行来自主服务器 replication buffer 缓冲区里发来的命令，这时主从服务器的数据就一致了。</p>
+<p>至此，主从服务器的第一次同步的工作就完成了。</p>
+<h2 id="命令传播"><a href="#命令传播" class="headerlink" title="#命令传播"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/master_slave_replication.html#%E5%91%BD%E4%BB%A4%E4%BC%A0%E6%92%AD">#</a>命令传播</h2><p>主从服务器在完成第一次同步后，双方之间就会维护一个 TCP 连接。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/03eacec67cc58ff8d5819d0872ddd41e.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>后续主服务器可以通过这个连接继续将写操作命令传播给从服务器，然后从服务器执行该命令，使得与主服务器的数据库状态相同。</p>
+<p>而且这个连接是长连接的，目的是避免频繁的 TCP 连接和断开带来的性能开销。</p>
+<p>上面的这个过程被称为<strong>基于长连接的命令传播</strong>，通过这种方式来保证第一次同步后的主从服务器的数据一致性。</p>
+<h2 id="分摊主服务器的压力"><a href="#分摊主服务器的压力" class="headerlink" title="#分摊主服务器的压力"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/master_slave_replication.html#%E5%88%86%E6%91%8A%E4%B8%BB%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8E%8B%E5%8A%9B">#</a>分摊主服务器的压力</h2><p>在前面的分析中，我们可以知道主从服务器在第一次数据同步的过程中，主服务器会做两件耗时的操作：生成 RDB 文件和传输 RDB 文件。</p>
+<p>主服务器是可以有多个从服务器的，如果从服务器数量非常多，而且都与主服务器进行全量同步的话，就会带来两个问题：</p>
+<ul>
+<li>由于是通过 bgsave 命令来生成 RDB 文件的，那么主服务器就会忙于使用 fork() 创建子进程，如果主服务器的内存数据非大，在执行 fork() 函数时是会阻塞主线程的，从而使得 Redis 无法正常处理请求；</li>
+<li>传输 RDB 文件会占用主服务器的网络带宽，会对主服务器响应命令请求产生影响。</li>
+</ul>
+<p>这种情况就好像，刚创业的公司，由于人不多，所以员工都归老板一个人管，但是随着公司的发展，人员的扩充，老板慢慢就无法承担全部员工的管理工作了。</p>
+<p>要解决这个问题，老板就需要设立经理职位，由经理管理多名普通员工，然后老板只需要管理经理就好。</p>
+<p>Redis 也是一样的，从服务器可以有自己的从服务器，我们可以把拥有从服务器的从服务器当作经理角色，它不仅可以接收主服务器的同步数据，自己也可以同时作为主服务器的形式将数据同步给从服务器，组织形式如下图：</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/4d850bfe8d712d3d67ff13e59b919452.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>通过这种方式，<strong>主服务器生成 RDB 和传输 RDB 的压力可以分摊到充当经理角色的从服务器</strong>。</p>
+<p>那具体怎么做到的呢？</p>
+<p>其实很简单，我们在「从服务器」上执行下面这条命令，使其作为目标服务器的从服务器：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">replicaof &lt;目标服务器的IP&gt; 6379<br></code></pre></td></tr></table></figure>
+
+<p>此时如果目标服务器本身也是「从服务器」，那么该目标服务器就会成为「经理」的角色，不仅可以接受主服务器同步的数据，也会把数据同步给自己旗下的从服务器，从而减轻主服务器的负担。</p>
+<h2 id="增量复制"><a href="#增量复制" class="headerlink" title="#增量复制"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/master_slave_replication.html#%E5%A2%9E%E9%87%8F%E5%A4%8D%E5%88%B6">#</a>增量复制</h2><p>主从服务器在完成第一次同步后，就会基于长连接进行命令传播。</p>
+<p>可是，网络总是不按套路出牌的嘛，说延迟就延迟，说断开就断开。</p>
+<p>如果主从服务器间的网络连接断开了，那么就无法进行命令传播了，这时从服务器的数据就没办法和主服务器保持一致了，客户端就可能从「从服务器」读到旧的数据。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/4845008abadaa871613873f5ffdcb542.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>那么问题来了，如果此时断开的网络，又恢复正常了，要怎么继续保证主从服务器的数据一致性呢？</p>
+<p>在 Redis 2.8 之前，如果主从服务器在命令同步时出现了网络断开又恢复的情况，从服务器就会和主服务器重新进行一次全量复制，很明显这样的开销太大了，必须要改进一波。</p>
+<p>所以，从 Redis 2.8 开始，网络断开又恢复后，从主从服务器会采用<strong>增量复制</strong>的方式继续同步，也就是只会把网络断开期间主服务器接收到的写操作命令，同步给从服务器。</p>
+<p>网络恢复后的增量复制过程如下图：</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/e081b470870daeb763062bb873a4477e.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>主要有三个步骤：</p>
+<ul>
+<li>从服务器在恢复网络后，会发送 psync 命令给主服务器，此时的 psync 命令里的 offset 参数不是 -1；</li>
+<li>主服务器收到该命令后，然后用 CONTINUE 响应命令告诉从服务器接下来采用增量复制的方式同步数据；</li>
+<li>然后主服务将主从服务器断线期间，所执行的写命令发送给从服务器，然后从服务器执行这些命令。</li>
+</ul>
+<p>那么关键的问题来了，<strong>主服务器怎么知道要将哪些增量数据发送给从服务器呢？</strong></p>
+<p>答案藏在这两个东西里：</p>
+<ul>
+<li><strong>repl_backlog_buffer</strong>，是一个「<strong>环形</strong>」缓冲区，用于主从服务器断连后，从中找到差异的数据；</li>
+<li><strong>replication offset</strong>，标记上面那个缓冲区的同步进度，主从服务器都有各自的偏移量，主服务器使用 master_repl_offset 来记录自己「<em>写</em>」到的位置，从服务器使用 slave_repl_offset 来记录自己「<em>读</em>」到的位置。</li>
+</ul>
+<p>那 repl_backlog_buffer 缓冲区是什么时候写入的呢？</p>
+<p>在主服务器进行命令传播时，不仅会将写命令发送给从服务器，还会将写命令写入到 repl_backlog_buffer 缓冲区里，因此 这个缓冲区里会保存着最近传播的写命令。</p>
+<p>网络断开后，当从服务器重新连上主服务器时，从服务器会通过 psync 命令将自己的复制偏移量 slave_repl_offset 发送给主服务器，主服务器根据自己的 master_repl_offset 和 slave_repl_offset 之间的差距，然后来决定对从服务器执行哪种同步操作：</p>
+<ul>
+<li>如果判断出从服务器要读取的数据还在 repl_backlog_buffer 缓冲区里，那么主服务器将采用<strong>增量同步</strong>的方式；</li>
+<li>相反，如果判断出从服务器要读取的数据已经不存在 repl_backlog_buffer 缓冲区里，那么主服务器将采用<strong>全量同步</strong>的方式。</li>
+</ul>
+<p>当主服务器在 repl_backlog_buffer 中找到主从服务器差异（增量）的数据后，就会将增量的数据写入到 replication buffer 缓冲区，这个缓冲区我们前面也提到过，它是缓存将要传播给从服务器的命令。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/2db4831516b9a8b79f833cf0593c1f12.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>repl_backlog_buffer 缓行缓冲区的默认大小是 1M，并且由于它是一个环形缓冲区，所以当缓冲区写满后，主服务器继续写入的话，就会覆盖之前的数据。因此，当主服务器的写入速度远超于从服务器的读取速度，缓冲区的数据一下就会被覆盖。</p>
+<p>那么在网络恢复时，如果从服务器想读的数据已经被覆盖了，主服务器就会采用全量同步，这个方式比增量同步的性能损耗要大很多。</p>
+<p>因此，<strong>为了避免在网络恢复时，主服务器频繁地使用全量同步的方式，我们应该调整下 repl_backlog_buffer 缓冲区大小，尽可能的大一些</strong>，减少出现从服务器要读取的数据被覆盖的概率，从而使得主服务器采用增量同步的方式。</p>
+<p>那 repl_backlog_buffer 缓冲区具体要调整到多大呢？</p>
+<p>repl_backlog_buffer 最小的大小可以根据这面这个公式估算。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/5e9e65a4a59b3688fa37cadbd87bb5ac.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>我来解释下这个公式的意思：</p>
+<ul>
+<li>second 为从服务器断线后重新连接上主服务器所需的平均 时间(以秒计算)。</li>
+<li>write_size_per_second 则是主服务器平均每秒产生的写命令数据量大小。</li>
+</ul>
+<p>举个例子，如果主服务器平均每秒产生 1 MB 的写命令，而从服务器断线之后平均要 5 秒才能重新连接主服务器。</p>
+<p>那么 repl_backlog_buffer 大小就不能低于 5 MB，否则新写地命令就会覆盖旧数据了。</p>
+<p>当然，为了应对一些突发的情况，可以将 repl_backlog_buffer 的大小设置为此基础上的 2 倍，也就是 10 MB。</p>
+<p>关于 repl_backlog_buffer 大小修改的方法，只需要修改配置文件里下面这个参数项的值就可以。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">repl-backlog-size 1mb<br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="#总结"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/master_slave_replication.html#%E6%80%BB%E7%BB%93">#</a>总结</h2><p>主从复制共有三种模式：<strong>全量复制、基于长连接的命令传播、增量复制</strong>。</p>
+<p>主从服务器第一次同步的时候，就是采用全量复制，此时主服务器会两个耗时的地方，分别是生成 RDB 文件和传输 RDB 文件。为了避免过多的从服务器和主服务器进行全量复制，可以把一部分从服务器升级为「经理角色」，让它也有自己的从服务器，通过这样可以分摊主服务器的压力。</p>
+<p>第一次同步完成后，主从服务器都会维护着一个长连接，主服务器在接收到写操作命令后，就会通过这个连接将写命令传播给从服务器，来保证主从服务器的数据一致性。</p>
+<p>如果遇到网络断开，增量复制就可以上场了，不过这个还跟 repl_backlog_size 这个大小有关系。</p>
+<p>如果它配置的过小，主从服务器网络恢复时，可能发生「从服务器」想读的数据已经被覆盖了，那么这时就会导致主服务器采用全量复制的方式。所以为了避免这种情况的频繁发生，要调大这个参数的值，以降低主从服务器断开后全量同步的概率。</p>
+<h1 id="3-2-Sentinel-哨兵机制"><a href="#3-2-Sentinel-哨兵机制" class="headerlink" title="3.2 Sentinel - 哨兵机制"></a>3.2 Sentinel - 哨兵机制</h1><p><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89%E5%93%A8%E5%85%B5%E6%9C%BA%E5%88%B6">为什么要有哨兵？ | 小林coding (xiaolincoding.com)</a></p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%93%A8%E5%85%B5%E6%8F%90%E7%BA%B2.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="为什么要有哨兵机制？"><a href="#为什么要有哨兵机制？" class="headerlink" title="为什么要有哨兵机制？"></a>为什么要有哨兵机制？</h2><p>在 Redis 的主从架构中，由于主从模式是读写分离的，如果主节点（master）挂了，那么将没有主节点来服务客户端的写操作请求，也没有主节点给从节点（slave）进行数据同步了。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/db568766644a4d10b8a91cdd2f8a4070.png" srcset="/img/loading.gif" lazyload alt="主节点挂了"></p>
+<p>这时如果要恢复服务的话，需要人工介入，选择一个「从节点」切换为「主节点」，然后让其他从节点指向新的主节点，同时还需要通知上游那些连接 Redis 主节点的客户端，将其配置中的主节点 IP 地址更新为「新主节点」的 IP 地址。</p>
+<p>这样也不太“智能”了，要是有一个节点能监控「主节点」的状态，当发现主节点挂了 ，它自动将一个「从节点」切换为「主节点」的话，那么可以节省我们很多事情啊！</p>
+<p>Redis 在 2.8 版本以后提供的<strong>哨兵（*Sentinel*）机制</strong>，它的作用是实现<strong>主从节点故障转移</strong>。它会监测主节点是否存活，如果发现主节点挂了，它就会选举一个从节点切换为主节点，并且把新主节点的相关信息通知给从节点和客户端。</p>
+<h2 id="职责"><a href="#职责" class="headerlink" title="#职责"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E5%93%A8%E5%85%B5%E6%9C%BA%E5%88%B6%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84">#</a>职责</h2><p>哨兵其实是一个运行在特殊模式下的 Redis 进程，所以它也是一个节点。从“哨兵”这个名字也可以看得出来，它相当于是“观察者节点”，观察的对象是主从节点。</p>
+<p>当然，它不仅仅是观察那么简单，在它观察到有异常的状况下，会做出一些“动作”，来修复异常状态。</p>
+<p>哨兵节点主要负责三件事情：<strong>监控、选主、通知</strong>。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/775865f6bd894dfba8d373ee54d79af1.png" srcset="/img/loading.gif" lazyload alt="哨兵的职责"></p>
+<p>所以，我们重点要学习这三件事情：</p>
+<ul>
+<li>哨兵节点是如何监控节点的？又是如何判断主节点是否真的故障了？</li>
+<li>根据什么规则选择一个从节点切换为主节点？</li>
+<li>怎么把新主节点的相关信息通知给从节点和客户端呢？</li>
+</ul>
+<h2 id="故障判断（主观-客观）"><a href="#故障判断（主观-客观）" class="headerlink" title="故障判断（主观 + 客观）"></a>故障判断（主观 + 客观）</h2><p>主观：单个哨兵</p>
+<p>客观：多个哨兵协同判断</p>
+<p>哨兵会每隔 1 秒给所有主从节点发送 PING 命令，当主从节点收到 PING 命令后，会发送一个响应命令给哨兵，这样就可以判断它们是否在正常运行。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/26f88373d8454682b9e0c1d4fd1611b4-20230309233114856.png" srcset="/img/loading.gif" lazyload alt="哨兵监控主从节点"></p>
+<p>如果主节点或者从节点没有在规定的时间内响应哨兵的 PING 命令，哨兵就会将它们标记为「<strong>主观下线</strong>」。这个「规定的时间」是配置项 <code>down-after-milliseconds</code> 参数设定的，单位是毫秒。</p>
+<blockquote>
+<p>主观下线？难道还有客观下线？</p>
+</blockquote>
+<p>是的没错，客观下线只适用于主节点。</p>
+<p>之所以针对「主节点」设计「主观下线」和「客观下线」两个状态，是因为有可能「主节点」其实并没有故障，可能只是因为主节点的系统压力比较大或者网络发送了拥塞，导致主节点没有在规定时间内响应哨兵的 PING 命令。</p>
+<p>所以，为了减少误判的情况，哨兵在部署的时候不会只部署一个节点，而是用多个节点部署成<strong>哨兵集群</strong>（<em>最少需要三台机器来部署哨兵集群</em>），<strong>通过多个哨兵节点一起判断，就可以就可以避免单个哨兵因为自身网络状况不好，而误判主节点下线的情况</strong>。同时，多个哨兵的网络同时不稳定的概率较小，由它们一起做决策，误判率也能降低。</p>
+<p>具体是怎么判定主节点为「客观下线」的呢？</p>
+<p>当一个哨兵判断主节点为「主观下线」后，就会向其他哨兵发起命令，其他哨兵收到这个命令后，就会根据自身和主节点的网络状况，做出赞成投票或者拒绝投票的响应。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/13e4361407ba46979e802eaa654dcf67.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>当这个哨兵的赞同票数达到哨兵配置文件中的 quorum 配置项设定的值后，这时主节点就会被该哨兵标记为「客观下线」。</p>
+<p>例如，现在有 3 个哨兵，quorum 配置的是 2，那么一个哨兵需要 2 张赞成票，就可以标记主节点为“客观下线”了。这 2 张赞成票包括哨兵自己的一张赞成票和另外两个哨兵的赞成票。</p>
+<p>PS：quorum 的值一般设置为哨兵个数的二分之一加1，例如 3 个哨兵就设置 2。</p>
+<p>哨兵判断完主节点客观下线后，哨兵就要开始在多个「从节点」中，选出一个从节点来做新主节点。</p>
+<h2 id="哨兵选主-leader负责故障转移"><a href="#哨兵选主-leader负责故障转移" class="headerlink" title="哨兵选主- leader负责故障转移"></a>哨兵选主- leader负责故障转移</h2><p>前面说过，为了更加“客观”的判断主节点故障了，一般不会只由单个哨兵的检测结果来判断，而是多个哨兵一起判断，这样可以减少误判概率，所以<strong>哨兵是以哨兵集群的方式存在的</strong>。</p>
+<p>问题来了，由哨兵集群中的哪个节点进行主从故障转移呢？</p>
+<p>所以这时候，还需要在哨兵集群中选出一个 leader，让 leader 来执行主从切换。</p>
+<p>选举 leader 的过程其实是一个投票的过程，在投票开始前，肯定得有个「候选者」。</p>
+<blockquote>
+<p>那谁来作为候选者呢？</p>
+</blockquote>
+<p>哪个哨兵节点判断主节点为「客观下线」，这个哨兵节点就是候选者，所谓的候选者就是想当 Leader 的哨兵。</p>
+<p>举个例子，假设有三个哨兵。当哨兵 B 先判断到主节点「主观下线后」，就会给其他实例发送 is-master-down-by-addr 命令。接着，其他哨兵会根据自己和主节点的网络连接情况，做出赞成投票或者拒绝投票的响应。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/d0bed80d28a543fd8dcd299d4b06cf04.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>当哨兵 B 收到赞成票数达到哨兵配置文件中的 quorum 配置项设定的值后，就会将主节点标记为「客观下线」，此时的哨兵 B 就是一个Leader 候选者。</p>
+<blockquote>
+<p>候选者如何选举成为 Leader？</p>
+</blockquote>
+<p>候选者会向其他哨兵发送命令，表明希望成为 Leader 来执行主从切换，并让所有其他哨兵对它进行投票。</p>
+<p>每个哨兵只有一次投票机会，如果用完后就不能参与投票了，可以投给自己或投给别人，但是只有候选者才能把票投给自己。</p>
+<p>那么在投票过程中，任何一个「候选者」，要满足两个条件：</p>
+<ul>
+<li>第一，拿到半数以上的赞成票；</li>
+<li>第二，拿到的票数同时还需要大于等于哨兵配置文件中的 quorum 值。</li>
+</ul>
+<p>举个例子，假设哨兵节点有 3 个，quorum 设置为 2，那么任何一个想成为 Leader 的哨兵只要拿到 2 张赞成票，就可以选举成功了。如果没有满足条件，就需要重新进行选举。</p>
+<p>这时候有的同学就会问了，如果某个时间点，刚好有两个哨兵节点判断到主节点为客观下线，那这时不就有两个候选者了？这时该如何决定谁是 Leader 呢？</p>
+<p>每位候选者都会先给自己投一票，然后向其他哨兵发起投票请求。如果投票者先收到「候选者 A」的投票请求，就会先投票给它，如果投票者用完投票机会后，收到「候选者 B」的投票请求后，就会拒绝投票。这时，候选者 A 先满足了上面的那两个条件，所以「候选者 A」就会被选举为 Leader。</p>
+<blockquote>
+<p>为什么哨兵节点至少要有 3 个？</p>
+</blockquote>
+<p>如果哨兵集群中只有 2 个哨兵节点，此时如果一个哨兵想要成功成为 Leader，必须获得 2 票，而不是 1 票。</p>
+<p>所以，如果哨兵集群中有个哨兵挂掉了，那么就只剩一个哨兵了，如果这个哨兵想要成为 Leader，这时票数就没办法达到 2 票，就无法成功成为 Leader，这时是无法进行主从节点切换的。</p>
+<p>因此，通常我们至少会配置 3 个哨兵节点。这时，如果哨兵集群中有个哨兵挂掉了，那么还剩下两个个哨兵，如果这个哨兵想要成为 Leader，这时还是有机会达到 2 票的，所以还是可以选举成功的，不会导致无法进行主从节点切换。</p>
+<p>当然，你要问，如果 3 个哨兵节点，挂了 2 个怎么办？这个时候得人为介入了，或者增加多一点哨兵节点。</p>
+<p>再说一个问题，Redis 1 主 4 从，5 个哨兵 ，quorum 设置为 3，如果 2 个哨兵故障，当主节点宕机时，哨兵能否判断主节点“客观下线”？主从能否自动切换？</p>
+<ul>
+<li><strong>哨兵集群可以判定主节点“客观下线”</strong>。哨兵集群还剩下 3 个哨兵，当一个哨兵判断主节点“主观下线”后，询问另外 2 个哨兵后，有可能能拿到 3 张赞同票，这时就达到了 quorum 的值，因此，哨兵集群可以判定主节点为“客观下线”。</li>
+<li><strong>哨兵集群可以完成主从切换</strong>。当有个哨兵标记主节点为「客观下线」后，就会进行选举 Leader 的过程，因为此时哨兵集群还剩下 3 个哨兵，那么还是可以拿到半数以上（5&#x2F;2+1&#x3D;3）的票，而且也达到了 quorum 值，满足了选举 Leader 的两个条件， 所以就能选举成功，因此哨兵集群可以完成主从切换。</li>
+</ul>
+<p>如果 quorum 设置为 2 ，并且如果有 3 个哨兵故障的话。此时哨兵集群还是可以判定主节点为“客观下线”，但是哨兵不能完成主从切换了，大家可以自己推演下。</p>
+<p>如果 quorum 设置为 3，并且如果有 3 个哨兵故障的话，哨兵集群即不能判定主节点为“客观下线”，也不能完成主从切换了。</p>
+<p>可以看到，quorum 为 2 的时候，并且如果有 3 个哨兵故障的话，虽然可以判定主节点为“客观下线”，但是不能完成主从切换，这样感觉「判定主节点为客观下线」这件事情白做了一样，既然这样，还不如不要做，quorum 为 3 的时候，就可以避免这种无用功。</p>
+<p>所以，<strong>quorum 的值建议设置为哨兵个数的二分之一加1</strong>，例如 3 个哨兵就设置 2，5 个哨兵设置为 3，而且<strong>哨兵节点的数量应该是奇数</strong>。</p>
+<h2 id="redis选主-具体过程（故障转移）"><a href="#redis选主-具体过程（故障转移）" class="headerlink" title="redis选主 - 具体过程（故障转移）"></a>redis选主 - 具体过程（故障转移）</h2><p>在哨兵集群中通过投票的方式，选举出了哨兵 leader 后，就可以进行主从故障转移的过程了，如下图：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E4%B8%BB%E4%BB%8E%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>主从故障转移操作包含以下四个步骤：</p>
+<ul>
+<li>第一步：在已下线主节点（旧主节点）属下的所有「从节点」里面，挑选出一个从节点，并将其转换为主节点。</li>
+<li>第二步：让已下线主节点属下的所有「从节点」修改复制目标，修改为复制「新主节点」；</li>
+<li>第三步：将新主节点的 IP 地址和信息，通过「发布者&#x2F;订阅者机制」通知给客户端；</li>
+<li>第四步：继续监视旧主节点，当这个旧主节点重新上线时，将它设置为新主节点的从节点；</li>
+</ul>
+<h3 id="步骤一：选出新主节点"><a href="#步骤一：选出新主节点" class="headerlink" title="#步骤一：选出新主节点"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E6%AD%A5%E9%AA%A4%E4%B8%80-%E9%80%89%E5%87%BA%E6%96%B0%E4%B8%BB%E8%8A%82%E7%82%B9">#</a>步骤一：选出新主节点</h3><p>故障转移操作第一步要做的就是在已下线主节点属下的所有「从节点」中，挑选出一个状态良好、数据完整的从节点，然后向这个「从节点」发送 SLAVEOF no one 命令，将这个「从节点」转换为「主节点」。</p>
+<p>那么多「从节点」，到底选择哪个从节点作为新主节点的？</p>
+<p>随机的方式好吗？随机的方式，实现起来很简单，但是如果选到一个网络状态不好的从节点作为新主节点，那么可能在将来不久又要做一次主从故障迁移。</p>
+<p>所以，我们首先要把网络状态不好的从节点给过滤掉。首先把已经下线的从节点过滤掉，然后把以往网络连接状态不好的从节点也给过滤掉。</p>
+<p>怎么判断从节点之前的网络连接状态不好呢？</p>
+<p>Redis 有个叫 down-after-milliseconds * 10 配置项，其down-after-milliseconds 是主从节点断连的最大连接超时时间。如果在 down-after-milliseconds 毫秒内，主从节点都没有通过网络联系上，我们就可以认为主从节点断连了。如果发生断连的次数超过了 10 次，就说明这个从节点的网络状况不好，不适合作为新主节点。</p>
+<p>至此，我们就把网络状态不好的从节点过滤掉了，接下来要对所有从节点进行三轮考察：<strong>优先级、复制进度、ID 号</strong>。在进行每一轮考察的时候，哪个从节点优先胜出，就选择其作为新主节点。</p>
+<ul>
+<li>第一轮考察：哨兵首先会根据从节点的优先级来进行排序，优先级越小排名越靠前，</li>
+<li>第二轮考察：如果优先级相同，则查看复制的下标，哪个从「主节点」接收的复制数据多，哪个就靠前。</li>
+<li>第三轮考察：如果优先级和下标都相同，就选择从节点 ID 较小的那个。</li>
+</ul>
+<h4 id="第一轮考察：优先级最高的从节点胜出"><a href="#第一轮考察：优先级最高的从节点胜出" class="headerlink" title="#第一轮考察：优先级最高的从节点胜出"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E7%AC%AC%E4%B8%80%E8%BD%AE%E8%80%83%E5%AF%9F-%E4%BC%98%E5%85%88%E7%BA%A7%E6%9C%80%E9%AB%98%E7%9A%84%E4%BB%8E%E8%8A%82%E7%82%B9%E8%83%9C%E5%87%BA">#</a>第一轮考察：优先级最高的从节点胜出</h4><p>Redis 有个叫 slave-priority 配置项，可以给从节点设置优先级。</p>
+<p>每一台从节点的服务器配置不一定是相同的，我们可以根据服务器性能配置来设置从节点的优先级。</p>
+<p>比如，如果 「 A 从节点」的物理内存是所有从节点中最大的， 那么我们可以把「 A 从节点」的优先级设置成最高。这样当哨兵进行第一轮考虑的时候，优先级最高的 A 从节点就会优先胜出，于是就会成为新主节点。</p>
+<h4 id="第二轮考察：复制进度最靠前的从节点胜出"><a href="#第二轮考察：复制进度最靠前的从节点胜出" class="headerlink" title="#第二轮考察：复制进度最靠前的从节点胜出"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E7%AC%AC%E4%BA%8C%E8%BD%AE%E8%80%83%E5%AF%9F-%E5%A4%8D%E5%88%B6%E8%BF%9B%E5%BA%A6%E6%9C%80%E9%9D%A0%E5%89%8D%E7%9A%84%E4%BB%8E%E8%8A%82%E7%82%B9%E8%83%9C%E5%87%BA">#</a>第二轮考察：复制进度最靠前的从节点胜出</h4><p>如果在第一轮考察中，发现优先级最高的从节点有两个，那么就会进行第二轮考察，比较两个从节点哪个复制进度。</p>
+<p>什么是复制进度？主从架构中，主节点会将写操作同步给从节点，在这个过程中，主节点会用 master_repl_offset 记录当前的最新写操作在 repl_backlog_buffer 中的位置（如下图中的「主服务器已经写入的数据」的位置），而从节点会用 slave_repl_offset 这个值记录当前的复制进度（如下图中的「从服务器要读的位置」的位置）。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/2db4831516b9a8b79f833cf0593c1f12-20230310003208754.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>如果某个从节点的 slave_repl_offset 最接近 master_repl_offset，说明它的复制进度是最靠前的，于是就可以将它选为新主节点。</p>
+<h4 id="第三轮考察：ID-号小的从节点胜出"><a href="#第三轮考察：ID-号小的从节点胜出" class="headerlink" title="#第三轮考察：ID 号小的从节点胜出"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E7%AC%AC%E4%B8%89%E8%BD%AE%E8%80%83%E5%AF%9F-id-%E5%8F%B7%E5%B0%8F%E7%9A%84%E4%BB%8E%E8%8A%82%E7%82%B9%E8%83%9C%E5%87%BA">#</a>第三轮考察：ID 号小的从节点胜出</h4><p>如果在第二轮考察中，发现有两个从节点优先级和复制进度都是一样的，那么就会进行第三轮考察，比较两个从节点的 ID 号，ID 号小的从节点胜出。</p>
+<p>什么是 ID 号？每个从节点都有一个编号，这个编号就是 ID 号，是用来唯一标识从节点的。</p>
+<p>到这里，选主的事情终于结束了。简单给大家总结下：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E9%80%89%E4%B8%BB%E8%BF%87%E7%A8%8B.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在选举出从节点后，哨兵 leader 向被选中的从节点发送 <code>SLAVEOF no one</code> 命令，让这个从节点解除从节点的身份，将其变为新主节点。</p>
+<p>如下图，哨兵 leader 向被选中的从节点 server2 发送 <code>SLAVEOF no one</code> 命令，将该从节点升级为新主节点。</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%8D%87%E7%BA%A7%E4%BB%8E%E8%8A%82%E7%82%B9%E4%B8%BA%E4%B8%BB%E8%8A%82%E7%82%B9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在发送 <code>SLAVEOF no one</code> 命令之后，哨兵 leader 会以每秒一次的频率向被升级的从节点发送 <code>INFO</code> 命令（没进行故障转移之前，<code>INFO</code> 命令的频率是每十秒一次），并观察命令回复中的角色信息，当被升级节点的角色信息从原来的 slave 变为 master 时，哨兵 leader 就知道被选中的从节点已经顺利升级为主节点了。</p>
+<p>如下图，选中的从节点 server2 升级成了新主节点：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%8D%87%E4%B8%BB%E8%8A%82%E7%82%B9%E6%88%90%E5%8A%9F.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="步骤二：将从节点指向新主节点"><a href="#步骤二：将从节点指向新主节点" class="headerlink" title="#步骤二：将从节点指向新主节点"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E6%AD%A5%E9%AA%A4%E4%BA%8C-%E5%B0%86%E4%BB%8E%E8%8A%82%E7%82%B9%E6%8C%87%E5%90%91%E6%96%B0%E4%B8%BB%E8%8A%82%E7%82%B9">#</a>步骤二：将从节点指向新主节点</h3><p>当新主节点出现之后，哨兵 leader 下一步要做的就是，让已下线主节点属下的所有「从节点」指向「新主节点」，这一动作可以通过向「从节点」发送 <code>SLAVEOF</code> 命令来实现。</p>
+<p>如下图，哨兵 leader 向所有从节点（server3和server4）发送 <code>SLAVEOF</code> ，让它们成为新主节点的从节点。</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E4%BB%8E%E8%8A%82%E7%82%B9%E6%8C%87%E5%90%91%E6%96%B0%E4%B8%BB%E8%8A%82%E7%82%B9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>所有从节点指向新主节点后的拓扑图如下：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E4%BB%8E%E8%8A%82%E7%82%B9%E8%BD%AC%E6%8D%A2%E6%88%90%E5%8A%9F.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="步骤三：通知客户的主节点已更换"><a href="#步骤三：通知客户的主节点已更换" class="headerlink" title="#步骤三：通知客户的主节点已更换"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E6%AD%A5%E9%AA%A4%E4%B8%89-%E9%80%9A%E7%9F%A5%E5%AE%A2%E6%88%B7%E7%9A%84%E4%B8%BB%E8%8A%82%E7%82%B9%E5%B7%B2%E6%9B%B4%E6%8D%A2">#</a>步骤三：通知客户的主节点已更换</h3><p>经过前面一系列的操作后，哨兵集群终于完成主从切换的工作，那么新主节点的信息要如何通知给客户端呢？</p>
+<p>这主要<strong>通过 Redis 的发布者&#x2F;订阅者机制来实现</strong>的。每个哨兵节点提供发布者&#x2F;订阅者机制，客户端可以从哨兵订阅消息。</p>
+<p>哨兵提供的消息订阅频道有很多，不同频道包含了主从节点切换过程中的不同关键事件，几个常见的事件如下：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E5%93%A8%E5%85%B5%E9%A2%91%E9%81%93.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>客户端和哨兵建立连接后，客户端会订阅哨兵提供的频道。<strong>主从切换完成后，哨兵就会向 <code>+switch-master</code> 频道发布新主节点的 IP 地址和端口的消息，这个时候客户端就可以收到这条信息，然后用这里面的新主节点的 IP 地址和端口进行通信了</strong>。</p>
+<p>通过发布者&#x2F;订阅者机制机制，有了这些事件通知，客户端不仅可以在主从切换后得到新主节点的连接信息，还可以监控到主从节点切换过程中发生的各个重要事件。这样，客户端就可以知道主从切换进行到哪一步了，有助于了解切换进度。</p>
+<h3 id="步骤四：将旧主节点变为从节点"><a href="#步骤四：将旧主节点变为从节点" class="headerlink" title="#步骤四：将旧主节点变为从节点"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E6%AD%A5%E9%AA%A4%E5%9B%9B-%E5%B0%86%E6%97%A7%E4%B8%BB%E8%8A%82%E7%82%B9%E5%8F%98%E4%B8%BA%E4%BB%8E%E8%8A%82%E7%82%B9">#</a>步骤四：将旧主节点变为从节点</h3><p>故障转移操作最后要做的是，继续监视旧主节点，当旧主节点重新上线时，哨兵集群就会向它发送 <code>SLAVEOF</code> 命令，让它成为新主节点的从节点，如下图：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E5%93%A8%E5%85%B5/%E6%97%A7%E4%B8%BB%E8%8A%82%E7%82%B9%E5%8F%98%E4%B8%BA%E6%96%B0%E4%B8%BB%E8%8A%82%E7%82%B9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>至此，整个主从节点的故障转移的工作结束。</p>
+<h2 id="哨兵搭建-原理"><a href="#哨兵搭建-原理" class="headerlink" title="哨兵搭建 - 原理"></a>哨兵搭建 - 原理</h2><p>前面提到了 Redis 的发布者&#x2F;订阅者机制，那就不得不提一下哨兵集群的组成方式，因为它也用到了这个技术。</p>
+<p>在我第一次搭建哨兵集群的时候，当时觉得很诧异。因为在配置哨兵的信息时，竟然只需要填下面这几个参数，设置主节点名字、主节点的 IP 地址和端口号以及 quorum 值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">sentinel monitor &lt;master-name&gt; &lt;ip&gt; &lt;redis-port&gt; &lt;quorum&gt; <br></code></pre></td></tr></table></figure>
+
+<p>不需要填其他哨兵节点的信息，我就好奇它们是如何感知对方的，又是如何组成哨兵集群的？</p>
+<p>后面才了解到，<strong>哨兵节点之间是通过 Redis 的发布者&#x2F;订阅者机制来相互发现的</strong>。</p>
+<p>在主从集群中，主节点上有一个名为<code>__sentinel__:hello</code>的频道，不同哨兵就是通过它来相互发现，实现互相通信的。</p>
+<p>在下图中，哨兵 A 把自己的 IP 地址和端口的信息发布到<code>__sentinel__:hello</code> 频道上，哨兵 B 和 C 订阅了该频道。那么此时，哨兵 B 和 C 就可以从这个频道直接获取哨兵 A 的 IP 地址和端口号。然后，哨兵 B、C 可以和哨兵 A 建立网络连接。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/a6286053c6884cf58bf397d01674fe80.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>通过这个方式，哨兵 B 和 C 也可以建立网络连接，这样一来，哨兵集群就形成了。</p>
+<blockquote>
+<p>哨兵集群会对「从节点」的运行状态进行监控，那哨兵集群如何知道「从节点」的信息？</p>
+</blockquote>
+<p>主节点知道所有「从节点」的信息，所以哨兵会每 10 秒一次的频率向主节点发送 INFO 命令来获取所有「从节点」的信息。</p>
+<p>如下图所示，哨兵 B 给主节点发送 INFO 命令，主节点接受到这个命令后，就会把从节点列表返回给哨兵。接着，哨兵就可以根据从节点列表中的连接信息，和每个从节点建立连接，并在这个连接上持续地对从节点进行监控。哨兵 A 和 C 可以通过相同的方法和从节点建立连接。</p>
+<p><img src="https://cdn.xiaolincoding.com//mysql/other/fdd5f695bb3643258662886f9fba0aab.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>正式通过 Redis 的发布者&#x2F;订阅者机制，哨兵之间可以相互感知，然后组成集群，同时，哨兵又通过 INFO 命令，在主节点里获得了所有从节点连接信息，于是就能和从节点建立连接，并进行监控了。</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="#总结"></a><a target="_blank" rel="noopener" href="https://xiaolincoding.com/redis/cluster/sentinel.html#%E6%80%BB%E7%BB%93">#</a>总结</h2><p>Redis 在 2.8 版本以后提供的<strong>哨兵（*Sentinel*）机制</strong>，它的作用是实现<strong>主从节点故障转移</strong>。它会监测主节点是否存活，如果发现主节点挂了，它就会选举一个从节点切换为主节点，并且把新主节点的相关信息通知给从节点和客户端。</p>
+<p>哨兵一般是以集群的方式部署，至少需要 3 个哨兵节点，哨兵集群主要负责三件事情：<strong>监控、选主、通知</strong>。</p>
+<p>哨兵节点通过 Redis 的发布者&#x2F;订阅者机制，哨兵之间可以相互感知，相互连接，然后组成哨兵集群，同时哨兵又通过 INFO 命令，在主节点里获得了所有从节点连接信息，于是就能和从节点建立连接，并进行监控了。</p>
+<p><em>1、第一轮投票：判断主节点下线</em></p>
+<p>当哨兵集群中的某个哨兵判定主节点下线（主观下线）后，就会向其他哨兵发起命令，其他哨兵收到这个命令后，就会根据自身和主节点的网络状况，做出赞成投票或者拒绝投票的响应。</p>
+<p>当这个哨兵的赞同票数达到哨兵配置文件中的 quorum 配置项设定的值后，这时主节点就会被该哨兵标记为「客观下线」。</p>
+<p><em>2、第二轮投票：选出哨兵leader</em></p>
+<p>某个哨兵判定主节点客观下线后，该哨兵就会发起投票，告诉其他哨兵，它想成为 leader，想成为 leader 的哨兵节点，要满足两个条件：</p>
+<ul>
+<li>第一，拿到半数以上的赞成票；</li>
+<li>第二，拿到的票数同时还需要大于等于哨兵配置文件中的 quorum 值。</li>
+</ul>
+<p><em>3、由哨兵 leader 进行主从故障转移</em></p>
+<p>选举出了哨兵 leader 后，就可以进行主从故障转移的过程了。该操作包含以下四个步骤：</p>
+<ul>
+<li>第一步：在已下线主节点（旧主节点）属下的所有「从节点」里面，挑选出一个从节点，并将其转换为主节点，选择的规则：<ul>
+<li>过滤掉已经离线的从节点；</li>
+<li>过滤掉历史网络连接状态不好的从节点；</li>
+<li>将剩下的从节点，进行三轮考察：优先级、复制进度、ID 号。在每一轮考察过程中，如果找到了一个胜出的从节点，就将其作为新主节点。</li>
+</ul>
+</li>
+<li>第二步：让已下线主节点属下的所有「从节点」修改复制目标，修改为复制「新主节点」；</li>
+<li>第三步：将新主节点的 IP 地址和信息，通过「发布者&#x2F;订阅者机制」通知给客户端；</li>
+<li>第四步：继续监视旧主节点，当这个旧主节点重新上线时，将它设置为新主节点的从节点；</li>
+</ul>
+<p>完！</p>
+<p>参考资料：</p>
+<ul>
+<li>《Redis 核心技术与实战》</li>
+<li>《Redis 设计与实现》</li>
+</ul>
+<h1 id="3-3-Redis-Cluster"><a href="#3-3-Redis-Cluster" class="headerlink" title="3.3 Redis Cluster"></a>3.3 Redis Cluster</h1><p>我们都知道Redis的集群有三种方案：</p>
+<ul>
+<li>1、主从复制模式</li>
+<li>2、Sentinel（哨兵）模式</li>
+<li>3、Redis Cluster模式</li>
+</ul>
+<p>当然使用随着海量数据的存储要求，单台Redis配置有限，已经满足不了我们的需求。我们考虑采用<strong>分布式集群方案</strong>。</p>
+<p>Redis Cluster 采用数据分片机制，定义了 16384个 Slot槽位，集群中的每个Redis 实例负责维护一部分槽以及槽所映射的键值数据。</p>
+<p><strong>客户端可以连接集群中任意一个Redis 实例，发送读写命令，如果当前Redis 实例收到不是自己负责的Slot的请求时，会将该slot所在的正确的Redis 实例地址返回给客户端。</strong></p>
+<p><strong>客户端收到后，自动将原请求重新发到这个新地址，自动操作，外部透明。</strong></p>
+<blockquote>
+<p>★</p>
+<p>是不是有点似曾相识的感觉，HTTP 协议也有重定向功能。玩法跟这个差不多。HTTP 响应头有一个**<code>Location</code><strong>字段，当状态码是</strong><code>301</code><strong>或者</strong><code>302</code>**时，客户端会自动读取 **<code>Location</code>**中的新地址，自动重定向发送请求。</p>
+<p>”</p>
+</blockquote>
+<p><strong>Redis key的路由计算公式：slot  &#x3D; CRC16（key） % 16384</strong></p>
+<p>添加、删除或者修改某一个节点，都不会造成集群不可用的状态。使用哈希槽的好处就在于可以方便的添加或移除节点。</p>
+<p>当需要增加节点时，只需要把其他节点的某些哈希槽挪到新节点；当需要移除节点时，只需要把移除节点上的哈希槽挪到其他节点。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJeFb9JLLIY73sX8jNlo5FPeDhUxAtF4tEI1zmCeiaFZCqJbQwIdQJibFjw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>CRC16的算法原理：</strong></p>
+<ul>
+<li>根据CRC16的标准选择初值CRCIn的值</li>
+<li>将数据的第一个字节与CRCIn高8位异或</li>
+<li>判断最高位，若该位为 0 左移一位，若为 1 左移一位再与多项式Hex码异或</li>
+<li>重复3直至8位全部移位计算结束。</li>
+<li>重复将所有输入数据操作完成以上步骤，所得16位数即16位CRC校验码。</li>
+</ul>
+<p><strong>CRC16 算法最大值</strong></p>
+<p>CRC16 算法，产生的hash值有 16 bit 位，可以产生 65536（2^16）个值 ，也就是说值分布在 0 ~ 65535 之间</p>
+<p><strong>这时候，疑问来了，槽位总数为什么是 16384 ？65536 不可以吗？</strong></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJeLgw9lHZ0dWo4K0NB48unxIwCTov8ly7eINbLlSic72ictYibliaOlqtWkA/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>这个问题，Redis 官方 Issues 也有朋友提出来过</p>
+<blockquote>
+<p>地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/redis/redis/issues/2576">https://github.com/redis/redis/issues/2576</a></p>
+</blockquote>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJerex1okUg02G4fvib3ZZznpReQCqj0E5QUFAcJ1qpGZBZs2ibQJWzq4IA/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><code>antirez</code> 大神对这个问题做了回复，简单归纳起来，有以下原因：</p>
+<ul>
+<li>正常的心跳数据包携带节点的完整配置，它能以幂等方式来更新配置。如果采用 16384 个插槽，占空间 2KB （16384&#x2F;8）；如果采用 65536 个插槽，占空间 8KB (65536&#x2F;8)。</li>
+<li>Redis Cluster 不太可能扩展到超过 1000 个主节点，太多可能导致网络拥堵。</li>
+<li>16384 个插槽范围比较合适，当集群扩展到1000个节点时，也能确保每个master节点有足够的插槽，</li>
+</ul>
+<p>8KB 的心跳包看似不大，但是这个是心跳包每秒都要将本节点的信息同步给集群其他节点。比起 16384 个插槽，头大小增加了4倍，ping消息的消息头太大了，浪费带宽。</p>
+<p>Redis主节点的哈希槽配置信息是通过 bitmap 来保存的</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJeZtSoveOiagRWU8JRVibuZ10tToENDPEg6Iw13Mh94tc9m4OhyWaNQqLw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>传输过程中，会对bitmap进行压缩，bitmap的填充率越低，压缩率越高。</p>
+<blockquote>
+<p>bitmap 填充率 &#x3D; slots &#x2F; N (N表示节点数)，</p>
+</blockquote>
+<p>所以，插槽数偏低的话， 填充率会降低，压缩率会升高。</p>
+<p>综合下来，从心跳包的大小、网络带宽、心跳并发、压缩率等维度考虑，16384 个插槽更有优势且能满足业务需求。</p>
+<blockquote>
+<p>★</p>
+<p>万事万物，都是相互制衡的，”大“ 不一定是最好的，合适最重要。</p>
+</blockquote>
+<p><strong>接下来，我们看下master节点间心跳数据包格式：</strong></p>
+<p>消息格式分为：消息头和消息体。消息头包含发送节点自身状态数据，接收节点根据消息头就可以获取到发送节点的相关数据，</p>
+<blockquote>
+<p>代码位置：</p>
+<p>&#x2F;usr&#x2F;src&#x2F;redis&#x2F;redis-5.0.7&#x2F;src&#x2F;cluster.h</p>
+</blockquote>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/2KTof9YshwcCj0Wvss7MbgI6K7lPzNJebnfqRDPesSU2MYX3Dwfib5EibajOYsLFcrPSKQAGz03hvbYQ5ic46yUNg/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>其中，消息头有一个myslots的char类型数组，<code>unsigned char myslots[CLUSTER_SLOTS/8];</code>，数组长度为 16384&#x2F;8 &#x3D; 2048 。底层存储其实是一个bitmap，每一个位代表一个槽，如果该位为1，表示这个槽是属于这个节点。</p>
+<p>消息体中，会携带一定数量的其他节点信息用于交换，约为集群总节点数量的1&#x2F;10，节点数量越多，消息体内容越大。10个节点的消息体大小约1kb。</p>
+<p><strong>划重点：</strong></p>
+<p>细心的同学可能会有疑问，char不是占2个字节吗？数组长度为什么是 16384&#x2F;8？不应该是 16384&#x2F;16 吗？</p>
+<p>因为，Redis 是 C 语言开发的，char 占用一个 字节；而 Java 语言 char 占用 两个 字节。</p>
+<p><strong>master节点间心跳通讯</strong></p>
+<p>Redis 集群采用 Gossip（流言）协议， Gossip 协议工作原理就是节点彼此不断通信交换信息，一段时间后所有的节点都会知道集群完整的信息，类似流言传播。</p>
+<blockquote>
+<p>集群中每个节点通过一定规则挑选要通信的节点，每个节点可能知道全部节点，也可能仅知道部分节点，只要这些节点彼此可以正常通信，最终它们会达到一致的状态。当节点出现故障、新节点加入、主从角色变化、槽信息变更等事件发生时，通过不断的 ping&#x2F;pong 消息通信，经过一段时间后所有的节点都会知道整个集群 全部节点的最新状态，从而达到集群状态同步的目的。</p>
+</blockquote>
+<p>具体规则如下：</p>
+<ul>
+<li>1、每秒会随机选取5个节点，找出最久没有通信的节点发送ping消息</li>
+<li>2、每隔 100毫秒 都会扫描本地节点列表，如果发现节点最近一次接受pong消息的时间大于cluster-node-timeout&#x2F;2 ，则立刻发送ping消息</li>
+</ul>
+<p>因此，每秒单master节点发出ping消息数量：</p>
+<p>&#x3D; 1 + 10 * num（node.pong_received&gt;cluster_node_timeout&#x2F;2）</p>
+<p><strong>总结：</strong></p>
+<p>1、每秒 redis节点需要发送一定数量的ping消息作为心跳包，如果槽位为 65536，这个ping消息的消息头太大了，浪费带宽。</p>
+<p>2、业务上看，集群主节点数量基本不可能超过1000个。集群节点越多，心跳包的消息体携带的数据越多。如果节点超过1000个，会导致网络拥堵。因此redis作者，不建议redis cluster节点数量超过1000个。</p>
+<p>3、槽位越小，节点少的情况下，压缩率更高</p>
+<h1 id="3-4-其他补充"><a href="#3-4-其他补充" class="headerlink" title="3.4 其他补充"></a>3.4 其他补充</h1><h2 id="集群同步策略"><a href="#集群同步策略" class="headerlink" title="集群同步策略"></a>集群同步策略</h2><p>RDB、AOF、RDB+AOF</p>
 <h3 id="RDB-（Redis-Database）"><a href="#RDB-（Redis-Database）" class="headerlink" title="RDB  - （Redis Database）"></a>RDB  - （Redis Database）</h3><p>触发方式：</p>
 <p><strong>save</strong> : 该命令会阻塞当前Redis服务器，执行save命令期间，Redis不能处理其他命令，直到RDB过程完成为止。</p>
 <p><strong>bgsave</strong> : 执行该命令时，Redis会在后台异步进行快照操作，快照同时还可以响应客户端请求。</p>
@@ -459,7 +1033,8 @@
 
 
 
-<h2 id="二、哨兵模式"><a href="#二、哨兵模式" class="headerlink" title="二、哨兵模式"></a>二、哨兵模式</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">哨兵（sentinel）是一个分布式系统，用于对主从结构中的每台服务器进行监控，当出现故障时通过投票机制选择新的<span class="hljs-literal">master</span>并将所有<span class="hljs-literal">slave</span>连接到新的<span class="hljs-literal">master</span><br></code></pre></td></tr></table></figure>
+<h2 id="二、哨兵模式"><a href="#二、哨兵模式" class="headerlink" title="二、哨兵模式"></a>二、哨兵模式</h2><p><strong>哨兵其实是一个运行在特殊模式下的 Redis 进程，所以它也是一个节点。</strong>(哨兵就是一个redis 服务端节点)</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">哨兵（sentinel）是一个分布式系统，用于对主从结构中的每台服务器进行监控，当出现故障时通过投票机制选择新的<span class="hljs-literal">master</span>并将所有<span class="hljs-literal">slave</span>连接到新的<span class="hljs-literal">master</span><br></code></pre></td></tr></table></figure>
 
 <p>为什么有哨兵<br>主机宕机，如何能够高可用的恢复正常，不用人为进行干预</p>
 <p>作用</p>
@@ -469,13 +1044,207 @@
 <p>不能动态扩充，哨兵模式还是只有一个master</p>
 <h2 id="三、Redis-Cluster"><a href="#三、Redis-Cluster" class="headerlink" title="三、Redis-Cluster"></a>三、Redis-Cluster</h2><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">使用哨兵，redis 每个实例也是全量存储，每个 redis 存储的内容都是完整的数据，浪费内存且有木桶效应。为了最大化利用内存，可以采用 <span class="hljs-keyword">cluster</span> 群集，就是分布式存储。<br></code></pre></td></tr></table></figure>
 
-<h3 id="职责"><a href="#职责" class="headerlink" title="职责"></a>职责</h3><p>Master – 读写， Slave - 备份	</p>
+<h3 id="职责-1"><a href="#职责-1" class="headerlink" title="职责"></a>职责</h3><p>Master – 读写， Slave - 备份	</p>
 <p>在 cluster 架构下，默认的，一般 <strong>redis-master 用于接收读写</strong>，而 <strong>redis-slave 则用于备份</strong>，当有请求是在向 slave 发起时，会直接重定向到对应 key 所在的 master 来处理。但如果不介意读取的是 redis-cluster 中有可能过期的数据并且对写请求不感兴趣时，则亦可通过 readonly 命令，将 slave 设置成可读，然后通过 slave 获取相关的 key，达到读写分离。</p>
 <h3 id="Slot槽"><a href="#Slot槽" class="headerlink" title="Slot槽"></a>Slot槽</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs processing">redis-cluster 架构中，被设计成共有 <span class="hljs-number">16384</span> 个 hash slot。每个 master 分得一部分 slot.<br><br>Redis 集群没有并使用传统的一致性哈希来分配数据，而是采用另外一种叫做哈希槽 (hash slot)的方式来分配的。redis cluster 默认分配了 <span class="hljs-number">16384</span> 个slot，当我们<span class="hljs-built_in">set</span>一个<span class="hljs-built_in">key</span> 时，会用CRC16算法来取模得到所属的slot，然后将这个<span class="hljs-built_in">key</span> 分到哈希槽区间的节点上，具体算法就是：<span class="hljs-title function_">CRC16</span>(<span class="hljs-built_in">key</span>) % <span class="hljs-number">16384</span>。<br></code></pre></td></tr></table></figure>
 
 
 
-<h1 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h1><h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/363323742">Zookeeper实现分布式锁 - 知乎 (zhihu.com)</a></p>
+
+
+
+
+<h1 id="第四部分《策略》"><a href="#第四部分《策略》" class="headerlink" title="第四部分《策略》"></a>第四部分《策略》</h1><h2 id="4-1-key-过期删除策略"><a href="#4-1-key-过期删除策略" class="headerlink" title="4.1 key 过期删除策略"></a>4.1 key 过期删除策略</h2><p>拥有过期时间的是 key，与 value无关；</p>
+<p>Redis 是可以对 key 设置过期时间的，因此需要有相应的机制将已过期的键值对删除，而做这个工作的就是过期键值删除策略。</p>
+<h3 id="设置过期时间"><a href="#设置过期时间" class="headerlink" title="设置过期时间"></a>设置过期时间</h3><p>先说一下对 key 设置过期时间的命令。 设置 key 过期时间的命令一共有 4 个：</p>
+<ul>
+<li><code>expire &lt;key&gt; &lt;n&gt;</code>：设置 key 在 n 秒后过期，比如 expire key 100 表示设置 key 在 100 秒后过期；</li>
+<li><code>pexpire &lt;key&gt; &lt;n&gt;</code>：设置 key 在 n 毫秒后过期，比如 pexpire key2 100000 表示设置 key2 在 100000 毫秒（100 秒）后过期。</li>
+<li><code>expireat &lt;key&gt; &lt;n&gt;</code>：设置 key 在某个时间戳（精确到秒）之后过期，比如 expireat key3 1655654400 表示 key3 在时间戳 1655654400 后过期（精确到秒）；</li>
+<li><code>pexpireat &lt;key&gt; &lt;n&gt;</code>：设置 key 在某个时间戳（精确到毫秒）之后过期，比如 pexpireat key4 1655654400000 表示 key4 在时间戳 1655654400000 后过期（精确到毫秒）</li>
+</ul>
+<p>当然，在设置字符串时，也可以同时对 key 设置过期时间，共有 3 种命令：</p>
+<ul>
+<li><code>set &lt;key&gt; &lt;value&gt; ex &lt;n&gt;</code> ：设置键值对的时候，同时指定过期时间（精确到秒）；</li>
+<li><code>set &lt;key&gt; &lt;value&gt; px &lt;n&gt;</code> ：设置键值对的时候，同时指定过期时间（精确到毫秒）；</li>
+<li><code>setex &lt;key&gt; &lt;n&gt; &lt;valule&gt;</code> ：设置键值对的时候，同时指定过期时间（精确到秒）。</li>
+</ul>
+<p>如果你想查看某个 key 剩余的存活时间，可以使用 <code>TTL &lt;key&gt;</code> 命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 设置键值对的时候，同时指定过期时间位 60 秒</span><br>&gt; setex key1 60 value1<br>OK<br><br><span class="hljs-comment"># 查看 key1 过期时间还剩多少</span><br>&gt; ttl key1<br>(<span class="hljs-built_in">integer</span>) 56<br>&gt; ttl key1<br>(<span class="hljs-built_in">integer</span>) 52<br></code></pre></td></tr></table></figure>
+
+<p>如果突然反悔，取消 key 的过期时间，则可以使用 <code>PERSIST &lt;key&gt;</code> 命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 取消 key1 的过期时间</span><br>&gt; persist key1<br>(<span class="hljs-built_in">integer</span>) 1<br><br><span class="hljs-comment"># 使用完 persist 命令之后，</span><br><span class="hljs-comment"># 查下 key1 的存活时间结果是 -1，表明 key1 永不过期 </span><br>&gt; ttl key1 <br>(<span class="hljs-built_in">integer</span>) -1<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="过期字典"><a href="#过期字典" class="headerlink" title="过期字典"></a>过期字典</h3><p>保存过期时间 – 快速检索</p>
+<p>每当我们对一个 key 设置了过期时间时，Redis 会把该 key 带上过期时间存储到一个<strong>过期字典</strong>（expires dict）中，也就是说「过期字典」保存了数据库中所有 key 的过期时间。</p>
+<p>过期字典存储在 redisDb 结构中，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">redisDb</span> &#123;</span><br>    dict *dict;    <span class="hljs-comment">/* 数据库键空间，存放着所有的键值对 */</span><br>    dict *expires; <span class="hljs-comment">/* 键的过期时间 */</span><br>    ....<br>&#125; redisDb;<br></code></pre></td></tr></table></figure>
+
+<p>过期字典数据结构结构如下：</p>
+<ul>
+<li>过期字典的 key 是一个指针，指向某个键对象；</li>
+<li>过期字典的 value 是一个 long long 类型的整数，这个整数保存了 key 的过期时间；</li>
+</ul>
+<p>过期字典的数据结构如下图所示：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E8%BF%87%E6%9C%9F%E5%AD%97%E5%85%B8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>字典实际上是哈希表，哈希表的最大好处就是让我们可以用 O(1) 的时间复杂度来快速查找。当我们查询一个 key 时，Redis 首先检查该 key 是否存在于过期字典中：</p>
+<ul>
+<li>如果不在，则正常读取键值；</li>
+<li>如果存在，则会获取该 key 的过期时间，然后与当前系统时间进行比对，如果比系统时间大，那就没有过期，否则判定该 key 已过期。</li>
+</ul>
+<p>过期键判断流程如下图所示：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E8%BF%87%E6%9C%9F%E5%88%A4%E6%96%AD%E6%B5%81%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="三种-删除key-策略"><a href="#三种-删除key-策略" class="headerlink" title="三种 删除key 策略"></a>三种 删除key 策略</h3><p>在说 Redis 过期删除策略之前，先跟大家介绍下，常见的三种过期删除策略：</p>
+<ul>
+<li>定时删除；</li>
+<li>惰性删除；</li>
+<li>定期删除；</li>
+</ul>
+<p>接下来，分别分析它们的优缺点。</p>
+<blockquote>
+<p>定时删除策略是怎么样的？</p>
+</blockquote>
+<p>定时删除策略的做法是，<strong>在设置 key 的过期时间时，同时创建一个定时事件，当时间到达时，由事件处理器自动执行 key 的删除操作。</strong></p>
+<p>定时删除策略的<strong>优点</strong>：</p>
+<ul>
+<li>可以保证过期 key 会被尽快删除，也就是内存可以被尽快地释放。因此，定时删除对内存是最友好的。</li>
+</ul>
+<p>定时删除策略的<strong>缺点</strong>：</p>
+<ul>
+<li>在过期 key 比较多的情况下，删除过期 key 可能会占用相当一部分 CPU 时间，在内存不紧张但 CPU 时间紧张的情况下，将 CPU 时间用于删除和当前任务无关的过期键上，无疑会对服务器的响应时间和吞吐量造成影响。所以，定时删除策略对 CPU 不友好。</li>
+</ul>
+<blockquote>
+<p>惰性删除策略是怎么样的？</p>
+</blockquote>
+<p>惰性删除策略的做法是，<strong>不主动删除过期键，每次从数据库访问 key 时，都检测 key 是否过期，如果过期则删除该 key。</strong></p>
+<p>惰性删除策略的<strong>优点</strong>：</p>
+<ul>
+<li>因为每次访问时，才会检查 key 是否过期，所以此策略只会使用很少的系统资源，因此，惰性删除策略对 CPU 时间最友好。</li>
+</ul>
+<p>惰性删除策略的<strong>缺点</strong>：</p>
+<ul>
+<li>如果一个 key 已经过期，而这个 key 又仍然保留在数据库中，那么只要这个过期 key 一直没有被访问，它所占用的内存就不会释放，造成了一定的内存空间浪费。所以，惰性删除策略对内存不友好。</li>
+</ul>
+<blockquote>
+<p>定期删除策略是怎么样的？</p>
+</blockquote>
+<p>定期删除策略的做法是，<strong>每隔一段时间「随机」从数据库中取出一定数量的 key 进行检查，并删除其中的过期key。</strong></p>
+<p>定期删除策略的<strong>优点</strong>：</p>
+<ul>
+<li>通过限制删除操作执行的时长和频率，来减少删除操作对 CPU 的影响，同时也能删除一部分过期的数据减少了过期键对空间的无效占用。</li>
+</ul>
+<p>定期删除策略的<strong>缺点</strong>：</p>
+<ul>
+<li>内存清理方面没有定时删除效果好，同时没有惰性删除使用的系统资源少。</li>
+<li>难以确定删除操作执行的时长和频率。如果执行的太频繁，定期删除策略变得和定时删除策略一样，对CPU不友好；如果执行的太少，那又和惰性删除一样了，过期 key 占用的内存不会及时得到释放。</li>
+</ul>
+<h3 id="Redis：惰性-定期删除"><a href="#Redis：惰性-定期删除" class="headerlink" title="Redis：惰性 + 定期删除"></a>Redis：惰性 + 定期删除</h3><p>前面介绍了三种过期删除策略，每一种都有优缺点，仅使用某一个策略都不能满足实际需求。</p>
+<p>所以， <strong>Redis 选择「惰性删除+定期删除」这两种策略配和使用</strong>，以求在合理使用 CPU 时间和避免内存浪费之间取得平衡。</p>
+<blockquote>
+<p>Redis 是怎么实现惰性删除的？</p>
+</blockquote>
+<p>Redis 的惰性删除策略由 db.c 文件中的 <code>expireIfNeeded</code> 函数实现，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">expireIfNeeded</span><span class="hljs-params">(redisDb *db, robj *key)</span> &#123;<br>    <span class="hljs-comment">// 判断 key 是否过期</span><br>    <span class="hljs-keyword">if</span> (!keyIsExpired(db,key)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    ....<br>    <span class="hljs-comment">/* 删除过期键 */</span><br>    ....<br>    <span class="hljs-comment">// 如果 server.lazyfree_lazy_expire 为 1 表示异步删除，反之同步删除；</span><br>    <span class="hljs-keyword">return</span> server.lazyfree_lazy_expire ? dbAsyncDelete(db,key) :<br>                                         dbSyncDelete(db,key);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Redis 在访问或者修改 key 之前，都会调用 expireIfNeeded 函数对其进行检查，检查 key 是否过期：</p>
+<ul>
+<li>如果过期，则删除该 key，至于选择异步删除，还是选择同步删除，根据 <code>lazyfree_lazy_expire</code> 参数配置决定（Redis 4.0版本开始提供参数），然后返回 null 客户端；</li>
+<li>如果没有过期，不做任何处理，然后返回正常的键值对给客户端；</li>
+</ul>
+<p>惰性删除的流程图如下：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E6%83%B0%E6%80%A7%E5%88%A0%E9%99%A4.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<blockquote>
+<p>Redis 是怎么实现定期删除的？</p>
+</blockquote>
+<p>再回忆一下，定期删除策略的做法：<strong>每隔一段时间「随机」从数据库中取出一定数量的 key 进行检查，并删除其中的过期key。</strong></p>
+<p><em>1、这个间隔检查的时间是多长呢？</em></p>
+<p>在 Redis 中，默认每秒进行 10 次过期检查一次数据库，此配置可通过 Redis 的配置文件 redis.conf 进行配置，配置键为 hz 它的默认值是 hz 10。</p>
+<p>特别强调下，每次检查数据库并不是遍历过期字典中的所有 key，而是从数据库中随机抽取一定数量的 key 进行过期检查。</p>
+<p><em>2、随机抽查的数量是多少呢？</em></p>
+<p>我查了下源码，定期删除的实现在 expire.c 文件下的 <code>activeExpireCycle</code> 函数中，其中随机抽查的数量由 <code>ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP</code> 定义的，它是写死在代码中的，数值是 20。</p>
+<p>也就是说，数据库每轮抽查时，会随机选择 20 个 key 判断是否过期。</p>
+<p>接下来，详细说说 Redis 的定期删除的流程：</p>
+<ol>
+<li>从过期字典中随机抽取 20 个 key；</li>
+<li>检查这 20 个 key 是否过期，并删除已过期的 key；</li>
+<li>如果本轮检查的已过期 key 的数量，超过 5 个（20&#x2F;4），也就是「已过期 key 的数量」占比「随机抽取 key 的数量」大于 25%，则继续重复步骤 1；如果已过期的 key 比例小于 25%，则停止继续删除过期 key，然后等待下一轮再检查。</li>
+</ol>
+<p>可以看到，定期删除是一个循环的流程。</p>
+<p>那 Redis 为了保证定期删除不会出现循环过度，导致线程卡死现象，为此增加了定期删除循环流程的时间上限，默认不会超过 25ms。</p>
+<p>针对定期删除的流程，我写了个伪代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">do</span> &#123;<br>    <span class="hljs-comment">//已过期的数量</span><br>    expired = <span class="hljs-number">0</span>；<br>    <span class="hljs-comment">//随机抽取的数量</span><br>    num = <span class="hljs-number">20</span>;<br>    <span class="hljs-keyword">while</span> (num--) &#123;<br>        <span class="hljs-comment">//1. 从过期字典中随机抽取 1 个 key</span><br>        <span class="hljs-comment">//2. 判断该 key 是否过期，如果已过期则进行删除，同时对 expired++</span><br>    &#125;<br>    <br>    <span class="hljs-comment">// 超过时间限制则退出</span><br>    <span class="hljs-keyword">if</span> (timelimit_exit) <span class="hljs-keyword">return</span>;<br><br>  <span class="hljs-comment">/* 如果本轮检查的已过期 key 的数量，超过 25%，则继续随机抽查，否则退出本轮检查 */</span><br>&#125; <span class="hljs-keyword">while</span> (expired &gt; <span class="hljs-number">20</span>/<span class="hljs-number">4</span>); <br></code></pre></td></tr></table></figure>
+
+<p>定期删除的流程如下：</p>
+<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E5%AE%9A%E6%97%B6%E5%88%A0%E9%99%A4%E6%B5%81%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="4-2-内存（不足）淘汰策略"><a href="#4-2-内存（不足）淘汰策略" class="headerlink" title="4.2 内存（不足）淘汰策略"></a>4.2 内存（不足）淘汰策略</h2><p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/redis/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="4-3-mysql-和redis一致性保证"><a href="#4-3-mysql-和redis一致性保证" class="headerlink" title="4.3 mysql 和redis一致性保证"></a>4.3 mysql 和redis一致性保证</h2><p>说明：来自<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_70730532/article/details/125870478">(6条消息) 如何保障 MySQL 和 Redis 的数据一致性？_redis和mysql数据一致性_Java烟雨的博客-CSDN博客</a></p>
+<p>策略：都在考虑多线程并发 更新 &#x2F; 查询同一个 mysql记录</p>
+<p>之前也看了很多相关的文章，但是感觉讲的都不好，很多文章都会去讲各种策略，比如（旁路缓存）策略、（读穿 &#x2F; 写穿）策略和（写回）策略等，感觉意义真的不大，然后有的文章也只讲了部分情况，也没有告诉最优解。</p>
+<p>我直接先抛一下结论：在满足实时性的条件下，不存在两者完全保存一致的方案，只有最终一致性方案。 根据网上的众多解决方案，总结出 6 种，直接看目录：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/952c788e813838d2279187ebaf6d84f7.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>不好的方案</p>
+<h3 id="1、先写-MySQL，再写-Redis"><a href="#1、先写-MySQL，再写-Redis" class="headerlink" title="1、先写 MySQL，再写 Redis"></a>1、先写 MySQL，再写 Redis</h3><p><img src="https://img-blog.csdnimg.cn/bfa10a38436f4307bd13d706c171417e.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>图解说明：</p>
+<p>这是一副时序图，描述请求的先后调用顺序；</p>
+<p>橘黄色的线是请求 A，黑色的线是请求 B；</p>
+<p>橘黄色的文字，是 MySQL 和 Redis 最终不一致的数据；</p>
+<p>数据是从 10 更新为 11；</p>
+<p>后面所有的图，都是这个含义，不再赘述。</p>
+<p>请求 A、B 都是先写 MySQL，然后再写 Redis，在高并发情况下，如果请求 A 在写 Redis 时卡了一会，请求 B 已经依次完成数据的更新，就会出现图中的问题。</p>
+<p>这个图已经画的很清晰了，我就不用再去啰嗦了吧，不过这里有个前提，就是对于读请求，先去读 Redis，如果没有，再去读 DB，但是读请求不会再回写 Redis。 大白话说一下，就是读请求不会更新 Redis。</p>
+<h3 id="2、先写-Redis，再写-MySQL"><a href="#2、先写-Redis，再写-MySQL" class="headerlink" title="2、先写 Redis，再写 MySQL"></a>2、先写 Redis，再写 MySQL</h3><p><img src="https://img-blog.csdnimg.cn/163c1b8a94b74f19a50677eca66f8589.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>同“先写 MySQL，再写 Redis”，看图可秒懂。</p>
+<h3 id="3、先删除-Redis，再写-MySQL"><a href="#3、先删除-Redis，再写-MySQL" class="headerlink" title="3、先删除 Redis，再写 MySQL"></a>3、先删除 Redis，再写 MySQL</h3><p>  这幅图和上面有些不一样，前面的请求 A 和 B 都是更新请求，这里的请求 A 是更新请求，但是请求 B 是读请求，且请求 B 的读请求会回写 Redis。</p>
+<p><img src="https://img-blog.csdnimg.cn/1a89cc60775041c8a4fbdb376db13d20.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>请求 A 先删除缓存，可能因为卡顿，数据一直没有更新到 MySQL，导致两者数据不一致。</p>
+<p>这种情况出现的概率比较大，因为请求 A 更新 MySQL 可能耗时会比较长，而请求 B 的前两步都是查询，会非常快。</p>
+<h3 id="好的方案"><a href="#好的方案" class="headerlink" title="好的方案"></a>好的方案</h3><h3 id="4、先删除-Redis，再写-MySQL，再删除-Redis"><a href="#4、先删除-Redis，再写-MySQL，再删除-Redis" class="headerlink" title="4、先删除 Redis，再写 MySQL，再删除 Redis"></a>4、先删除 Redis，再写 MySQL，再删除 Redis</h3><p>  对于“先删除 Redis，再写 MySQL”，如果要解决最后的不一致问题，其实再对 Redis 重新删除即可，这个也是大家常说的“缓存双删”。</p>
+<p><img src="https://img-blog.csdnimg.cn/926379093f404a9ca16e9f00ce3e7af9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>为了便于大家看图，对于蓝色的文字，“删除缓存 10”必须在“回写缓存10”后面，那如何才能保证一定是在后面呢？网上给出的第一个方案是，让请求 A 的最后一次删除，等待 500ms。</p>
+<p>对于这种方案，看看就行，反正我是不会用，太 Low 了，风险也不可控。</p>
+<p>那有没有更好的方案呢，我建议异步串行化删除，即删除请求入队列</p>
+<p><img src="https://img-blog.csdnimg.cn/1a83c9e7b2064800801fcbd6eee3be11.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>异步删除对线上业务无影响，串行化处理保障并发情况下正确删除。</p>
+<p>如果双删失败怎么办，网上有给 Redis 加一个缓存过期时间的方案，这个不敢苟同。个人建议整个重试机制，可以借助消息队列的重试机制，也可以自己整个表，记录重试次数，方法很多。</p>
+<p>简单小结一下：</p>
+<p>“缓存双删”不要用无脑的 sleep 500 ms；</p>
+<p>通过消息队列的异步&amp;串行，实现最后一次缓存删除；</p>
+<p>缓存删除失败，增加重试机制。</p>
+<h3 id="5、先写-MySQL，再删除-Redis"><a href="#5、先写-MySQL，再删除-Redis" class="headerlink" title="5、先写 MySQL，再删除 Redis"></a>5、先写 MySQL，再删除 Redis</h3><p><img src="https://img-blog.csdnimg.cn/fd4dcd7254e54bbf8ad309e1de6073e9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>对于上面这种情况，对于第一次查询，请求 B 查询的数据是 10，但是 MySQL 的数据是 11，只存在这一次不一致的情况，对于不是强一致性要求的业务，可以容忍。（那什么情况下不能容忍呢，比如秒杀业务、库存服务等。）</p>
+<p>当请求 B 进行第二次查询时，因为没有命中 Redis，会重新查一次 DB，然后再回写到 Reids。</p>
+<p>那什么情况下会出现不一致的情况呢？</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/3bd111efa4fc1e2e75516de22d4351d9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这里需要满足 2 个条件：</p>
+<p>缓存刚好自动失效；</p>
+<p>请求 B 从数据库查出 10，回写缓存的耗时，比请求 A 写数据库，并且删除缓存的还长。</p>
+<p>对于第二个条件，我们都知道更新 DB 肯定比查询耗时要长，所以出现这个情况的概率很小，同时满足上述条件的情况更小。</p>
+<h3 id="6、先写-MySQL，通过-Binlog，异步更新-Redis"><a href="#6、先写-MySQL，通过-Binlog，异步更新-Redis" class="headerlink" title="6、先写 MySQL，通过 Binlog，异步更新 Redis"></a>6、先写 MySQL，通过 Binlog，异步更新 Redis</h3><p>这种方案，主要是监听 MySQL 的 Binlog，然后通过异步的方式，将数据更新到 Redis，这种方案有个前提，查询的请求，不会回写 Redis。</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/ed3142908436f16da26546b9cf2f03b5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这个方案，会保证 MySQL 和 Redis 的最终一致性，但是如果中途请求 B 需要查询数据，如果缓存无数据，就直接查 DB；如果缓存有数据，查询的数据也会存在不一致的情况。</p>
+<p>所以这个方案，是实现最终一致性的终极解决方案，但是不能保证实时性。</p>
+<p>几种方案比较<br>我们对比上面讨论的 6 种方案：</p>
+<ul>
+<li><p>先写 Redis，再写 MySQL<br>这种方案，我肯定不会用，万一 DB 挂了，你把数据写到缓存，DB 无数据，这个是灾难性的；<br>我之前也见同学这么用过，如果写 DB 失败，对 Redis 进行逆操作，那如果逆操作失败呢，是不是还要搞个重试？</p>
+</li>
+<li><p>先写 MySQL，再写 Redis<br>对于并发量、一致性要求不高的项目，很多就是这么用的，我之前也经常这么搞，但是不建议这么做；<br>当 Redis 瞬间不可用的情况，需要报警出来，然后线下处理。</p>
+</li>
+<li><p>先删除 Redis，再写 MySQL<br>这种方式，我还真没用过，直接忽略吧。</p>
+</li>
+<li><p>先删除 Redis，再写 MySQL，再删除 Redis<br>这种方式虽然可行，但是感觉好复杂，还要搞个消息队列去异步删除 Redis。</p>
+</li>
+<li><p>先写 MySQL，再删除 Redis<br>比较推荐这种方式，删除 Redis 如果失败，可以再多重试几次，否则报警出来；<br>这个方案，是实时性中最好的方案，在一些高并发场景中，推荐这种。</p>
+</li>
+<li><p>先写 MySQL，通过 Binlog，异步更新 Redis<br>对于异地容灾、数据汇总等，建议会用这种方式，比如 binlog + kafka，数据的一致性也可以达到秒级；<br>纯粹的高并发场景，不建议用这种方案，比如抢购、秒杀等。</p>
+</li>
+</ul>
+<p>个人结论：</p>
+<p>实时一致性方案：采用“先写 MySQL，再删除 Redis”的策略，这种情况虽然也会存在两者不一致，但是需要满足的条件有点苛刻，所以是满足实时性条件下，能尽量满足一致性的最优解。</p>
+<p>最终一致性方案：采用“先写 MySQL，通过 Binlog，异步更新 Redis”，可以通过 Binlog，结合消息队列异步更新 Redis，是最终一致性的最优解。<br>————————————————<br>版权声明：本文为CSDN博主「Java烟雨」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_70730532/article/details/125870478">https://blog.csdn.net/weixin_70730532/article/details/125870478</a></p>
+<h1 id="第五部分《分布式锁》"><a href="#第五部分《分布式锁》" class="headerlink" title="第五部分《分布式锁》"></a>第五部分《分布式锁》</h1><p>（参考 分布式锁.md-黑马）</p>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/363323742">Zookeeper实现分布式锁 - 知乎 (zhihu.com)</a></p>
 <h2 id="RedLock"><a href="#RedLock" class="headerlink" title="RedLock"></a>RedLock</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/CPLASF_/article/details/121714461">(4条消息) Redis分布式锁之：RedLock_小小少年_的博客-CSDN博客</a></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedissonMultiLock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">RLock</span> &#123;<br>    <span class="hljs-keyword">final</span> List&lt;RLock&gt; locks = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>();<br>    <br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lockInterruptibly</span><span class="hljs-params">(<span class="hljs-type">long</span> leaseTime, TimeUnit unit)</span> <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>        <span class="hljs-comment">// 初始化 waitTime  -- </span><br>        <span class="hljs-comment">// 四种情况：baseWaitTime, 2000ms, [leaseTime / 2, leaseTime], [baseTime, leaseTime];</span><br>        <span class="hljs-comment">// 等待时间 和 释放时间</span><br>        <span class="hljs-type">long</span> <span class="hljs-variable">baseWaitTime</span> <span class="hljs-operator">=</span> (<span class="hljs-type">long</span>)(<span class="hljs-built_in">this</span>.locks.size() * <span class="hljs-number">1500</span>);<br>        <span class="hljs-type">long</span> <span class="hljs-variable">waitTime</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1L</span>;<br>        <span class="hljs-keyword">if</span> (leaseTime == -<span class="hljs-number">1L</span>) &#123;<br>            waitTime = baseWaitTime;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            leaseTime = unit.toMillis(leaseTime);<br>            <span class="hljs-keyword">if</span> (leaseTime &lt;= <span class="hljs-number">2000L</span>) &#123;<br>                waitTime = <span class="hljs-number">2000L</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (leaseTime &lt;= baseWaitTime) &#123;<br>                waitTime = ThreadLocalRandom.current().nextLong(leaseTime / <span class="hljs-number">2L</span>, leaseTime);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                waitTime = ThreadLocalRandom.current().nextLong(baseWaitTime, leaseTime);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">while</span>(!<span class="hljs-built_in">this</span>.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS)) &#123;<br>        &#125;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -486,7 +1255,7 @@
 
 <p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230417141831965.png" srcset="/img/loading.gif" lazyload alt="image-20230417141831965"></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/CPLASF_/article/details/121690952">https://blog.csdn.net/CPLASF_/article/details/121690952</a></p>
-<h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-comment">// 这里是尝试加锁的代码</span><br><span class="hljs-keyword">private</span> &lt;T&gt; RFuture&lt;Long&gt; <span class="hljs-title function_">tryAcquireAsync</span><span class="hljs-params">(<span class="hljs-type">long</span> leaseTime, TimeUnit unit, <span class="hljs-type">long</span> threadId)</span> &#123;<br>    <span class="hljs-comment">// 1.如果指定了超时时间，就进入下面这个分支执行加锁的逻辑</span><br>    <span class="hljs-keyword">if</span> (leaseTime != -<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-keyword">return</span> tryLockInnerAsync(leaseTime, unit, threadId, RedisCommands.EVAL_LONG);<br>    &#125;<br>    <span class="hljs-comment">// 2.如果没有指定超时时间，会进入到这里，默认加锁30S</span><br>    RFuture&lt;Long&gt; ttlRemainingFuture = tryLockInnerAsync(commandExecutor.getConnectionManager().getCfg().getLockWatchdogTimeout(), TimeUnit.MILLISECONDS, threadId, RedisCommands.EVAL_LONG);<br>    ttlRemainingFuture.onComplete((ttlRemaining, e) -&gt; &#123;<br>        <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// lock acquired</span><br>        <span class="hljs-comment">// 3.在加锁成功之后，会开启一个线程，在第10S的时候，进行锁续期</span><br>        <span class="hljs-keyword">if</span> (ttlRemaining == <span class="hljs-literal">null</span>) &#123;<br>            scheduleExpirationRenewal(threadId);<br>        &#125;<br>    &#125;);<br>    <span class="hljs-keyword">return</span> ttlRemainingFuture;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 这里是尝试加锁的代码</span><br><span class="hljs-keyword">private</span> &lt;T&gt; RFuture&lt;Long&gt; <span class="hljs-title function_">tryAcquireAsync</span><span class="hljs-params">(<span class="hljs-type">long</span> leaseTime, TimeUnit unit, <span class="hljs-type">long</span> threadId)</span> &#123;<br>    <span class="hljs-comment">// 1.如果指定了超时时间，就进入下面这个分支执行加锁的逻辑</span><br>    <span class="hljs-keyword">if</span> (leaseTime != -<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-keyword">return</span> tryLockInnerAsync(leaseTime, unit, threadId, RedisCommands.EVAL_LONG);<br>    &#125;<br>    <span class="hljs-comment">// 2.如果没有指定超时时间，会进入到这里，默认加锁30S</span><br>    RFuture&lt;Long&gt; ttlRemainingFuture = tryLockInnerAsync(commandExecutor.getConnectionManager().getCfg().getLockWatchdogTimeout(), TimeUnit.MILLISECONDS, threadId, RedisCommands.EVAL_LONG);<br>    ttlRemainingFuture.onComplete((ttlRemaining, e) -&gt; &#123;<br>        <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// lock acquired</span><br>        <span class="hljs-comment">// 3.在加锁成功之后，会开启一个线程，在第10S的时候，进行锁续期</span><br>        <span class="hljs-keyword">if</span> (ttlRemaining == <span class="hljs-literal">null</span>) &#123;<br>            scheduleExpirationRenewal(threadId);<br>        &#125;<br>    &#125;);<br>    <span class="hljs-keyword">return</span> ttlRemainingFuture;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
@@ -496,6 +1265,140 @@
 <p>先判断key是否存在，如果key不存在，就加锁，并且设置过期时间<br>如果key已经存在，并且当前加锁的key是重入了，那就将key对应的加锁次数加1<br>如果key已存在，并且当前加锁的key和线程和已加锁的不一样，无法重入，那就返回当前key的过期时间</p>
 <h3 id="锁续期"><a href="#锁续期" class="headerlink" title="锁续期"></a>锁续期</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">renewExpiration</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">ExpirationEntry</span> <span class="hljs-variable">ee</span> <span class="hljs-operator">=</span> EXPIRATION_RENEWAL_MAP.get(getEntryName());<br>    <span class="hljs-keyword">if</span> (ee == <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <br>    <span class="hljs-comment">// 锁续期的核心代码，就是下面这个run方法</span><br>    <span class="hljs-type">Timeout</span> <span class="hljs-variable">task</span> <span class="hljs-operator">=</span> commandExecutor.getConnectionManager().newTimeout(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TimerTask</span>() &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">(Timeout timeout)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>            <span class="hljs-type">ExpirationEntry</span> <span class="hljs-variable">ent</span> <span class="hljs-operator">=</span> EXPIRATION_RENEWAL_MAP.get(getEntryName());<br>            <span class="hljs-keyword">if</span> (ent == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-type">Long</span> <span class="hljs-variable">threadId</span> <span class="hljs-operator">=</span> ent.getFirstThreadId();<br>            <span class="hljs-keyword">if</span> (threadId == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-comment">// 上面应该都是一些判断，最终会调用下面这个代码，这里的lua脚本就是续期的</span><br>            RFuture&lt;Boolean&gt; future = renewExpirationAsync(threadId);<br>            future.onComplete((res, e) -&gt; &#123;<br>                <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>                    log.error(<span class="hljs-string">&quot;Can&#x27;t update lock &quot;</span> + getName() + <span class="hljs-string">&quot; expiration&quot;</span>, e);<br>                    <span class="hljs-keyword">return</span>;<br>                &#125;<br>                <br>                <span class="hljs-comment">// 如果续期成功，会循环调用 </span><br>                <span class="hljs-keyword">if</span> (res) &#123;<br>                    <span class="hljs-comment">// reschedule itself</span><br>                    renewExpiration();<br>                &#125;<br>            &#125;);<br>        &#125;<br>        <span class="hljs-comment">// internalLockLeaseTime 这个参数是加锁的时间，默认是30S，这里的意思是，会延迟 30 / 3的时间去执行run方法</span><br>    &#125;, internalLockLeaseTime / <span class="hljs-number">3</span>, TimeUnit.MILLISECONDS);<br>    <br>    ee.setTimeout(task);<br>&#125;<br></code></pre></td></tr></table></figure>
 
+
+
+
+
+
+
+
+
+<h1 id="第六部分《Redis-服务端使用-实战》"><a href="#第六部分《Redis-服务端使用-实战》" class="headerlink" title="第六部分《Redis 服务端使用-实战》"></a>第六部分《Redis 服务端使用-实战》</h1><h2 id="redis-conf"><a href="#redis-conf" class="headerlink" title="redis.conf"></a>redis.conf</h2><p>redis.conf 是 Redis 的配置文件，用于配置 Redis 服务器的各种参数和选项。根据模块功能，redis.conf 可以配置以下内容：</p>
+<ol>
+<li><p>通用配置：</p>
+<ul>
+<li>daemonize：是否以守护进程方式运行 Redis。</li>
+<li>port：Redis 服务器监听的端口号。</li>
+<li>bind：Redis 服务器绑定的 IP 地址。</li>
+<li>timeout：客户端连接超时时间。</li>
+<li>logfile：日志文件路径。</li>
+<li>databases：数据库数量。</li>
+<li>save：持久化配置，用于设置数据自动保存的条件。</li>
+<li>rdbcompression：是否开启 RDB 文件压缩。</li>
+<li>maxclients：最大客户端连接数。</li>
+<li>maxmemory：最大内存限制。</li>
+<li>appendonly：是否开启 AOF 持久化。</li>
+<li>appendfilename：AOF 文件名。</li>
+<li>requirepass：设置连接密码。</li>
+</ul>
+</li>
+<li><p>快照持久化配置：</p>
+<ul>
+<li>save：设置数据自动保存的条件。</li>
+<li>stop-writes-on-bgsave-error：在后台保存出错时是否停止写入操作。</li>
+</ul>
+</li>
+<li><p>AOF 持久化配置：</p>
+<ul>
+<li>appendfsync：AOF 文件同步策略。</li>
+<li>auto-aof-rewrite-percentage：自动触发 AOF 重写的条件。</li>
+<li>auto-aof-rewrite-min-size：自动触发 AOF 重写的条件。</li>
+</ul>
+</li>
+<li><p>主从复制配置：</p>
+<ul>
+<li>slaveof：设置 Redis 服务器的主服务器。</li>
+<li>masterauth：主服务器连接密码。</li>
+<li>slave-serve-stale-data：是否在同步过程中提供旧数据。</li>
+</ul>
+</li>
+<li><p>安全配置：</p>
+<ul>
+<li>requirepass：设置连接密码。</li>
+<li>rename-command：重命名 Redis 命令。</li>
+</ul>
+</li>
+<li><p>客户端配置：</p>
+<ul>
+<li>maxclients：最大客户端连接数。</li>
+<li>maxmemory：最大内存限制。</li>
+</ul>
+</li>
+<li><p>集群配置：</p>
+<ul>
+<li>cluster-enabled：是否开启集群模式。</li>
+<li>cluster-config-file：集群配置文件路径。</li>
+<li>cluster-node-timeout：节点超时时间。</li>
+</ul>
+</li>
+</ol>
+<p>以上是 redis.conf 配置文件按照模块功能划分的一些常见配置选项，具体的配置项还有很多，可以根据实际需求进行配置。如果需要了解更详细的配置信息，可以查阅 Redis 官方文档或者搜索相关资料。</p>
+<p>除了上述提到的模块功能，redis.conf 还可以配置以下模块：</p>
+<ol start="8">
+<li><p>客户端输出缓冲配置：</p>
+<ul>
+<li>client-output-buffer-limit：客户端输出缓冲区限制。</li>
+</ul>
+</li>
+<li><p>网络配置：</p>
+<ul>
+<li>tcp-backlog：TCP 连接的 backlog 队列长度。</li>
+<li>tcp-keepalive：是否开启 TCP keepalive 选项。</li>
+<li>tcp-keepalive-interval：TCP keepalive 检测间隔。</li>
+<li>tcp-keepalive-count：TCP keepalive 失败次数。</li>
+</ul>
+</li>
+<li><p>日志配置：</p>
+<ul>
+<li>syslog-enabled：是否将日志输出到 syslog。</li>
+<li>syslog-ident：syslog 标识符。</li>
+<li>syslog-facility：syslog 设备。</li>
+</ul>
+</li>
+<li><p>限制配置：</p>
+<ul>
+<li>maxmemory-policy：内存达到上限时的策略。</li>
+<li>maxmemory-samples：内存淘汰策略采样数。</li>
+</ul>
+</li>
+<li><p>慢查询日志配置：</p>
+<ul>
+<li>slowlog-log-slower-than：慢查询日志记录的阈值。</li>
+<li>slowlog-max-len：慢查询日志的最大长度。</li>
+</ul>
+</li>
+<li><p>监控配置：</p>
+<ul>
+<li>notify-keyspace-events：订阅键空间通知的事件类型。</li>
+</ul>
+</li>
+<li><p>Lua 脚本配置：</p>
+<ul>
+<li>lua-time-limit：Lua 脚本执行时间限制。</li>
+</ul>
+</li>
+<li><p>安全配置：</p>
+<ul>
+<li>aclfile：访问控制列表文件路径。</li>
+</ul>
+</li>
+</ol>
+<p>这些是 redis.conf 配置文件中的一些常见模块功能，具体的配置选项可以根据实际需求进行设置。如果需要了解更详细的配置信息，可以查阅 Redis 官方文档或者搜索相关资料。</p>
+<h1 id="最后部分《业务场景》"><a href="#最后部分《业务场景》" class="headerlink" title="最后部分《业务场景》"></a>最后部分《业务场景》</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/agonie201218/article/details/123640871">(13条消息) Redis 16 个常见使用场景_redis使用场景_Young丶的博客-CSDN博客</a></p>
+<h2 id="11、点赞、签到、打卡"><a href="#11、点赞、签到、打卡" class="headerlink" title="11、点赞、签到、打卡"></a>11、点赞、签到、打卡</h2><p>用 like:t1001 来维护 t1001 这条微博的所有点赞用户</p>
+<p>点赞了这条微博：sadd like:t1001 u3001<br>取消点赞：srem like:t1001 u3001<br>是否点赞：sismember like:t1001 u3001<br>点赞的所有用户：smembers like:t1001<br>点赞数：scard like:t1001</p>
+<h2 id="16-显示最新的项目列表"><a href="#16-显示最新的项目列表" class="headerlink" title="16 .显示最新的项目列表"></a>16 .显示最新的项目列表</h2><p>比如说，我们的一个Web应用想要列出用户贴出的最新20条评论。在最新的评论边上我们有一个“显示全部”的链接，点击后就可以获得更多的评论。</p>
+<p>每次新评论发表时，我们会将它的ID添加到一个Redis列表。可以限定列表的长度为5000</p>
+<p>LPUSH latest.comments</p>
+<p>在Redis中我们的最新ID使用了常驻缓存，这是一直更新的。但是我们做了限制不能超过5000个ID，因此我们的获取ID函数会一直询问Redis。只有在超出了这个范围的时候，才需要去访问数据库</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_70730532/article/details/125870478">(4条消息) 如何保障 MySQL 和 Redis 的数据一致性？_redis和mysql数据一致性_Java烟雨的博客-CSDN博客</a></p>
+<h2 id="17-HyperLogLog"><a href="#17-HyperLogLog" class="headerlink" title="17.HyperLogLog"></a>17.HyperLogLog</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs cmd">pfadd 添加<br>影响基数估值则返回<span class="hljs-number">1</span>否则返回<span class="hljs-number">0</span>.若key不存在则创建<br>时间复杂度O(<span class="hljs-number">1</span>)<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">1</span><br><span class="hljs-number">2</span><br>pfcount 获得基数值<br>得到基数值，白话就叫做去重值（<span class="hljs-number">1</span>，<span class="hljs-number">1</span>，<span class="hljs-number">2</span>，<span class="hljs-number">2</span>，<span class="hljs-number">3</span>）的插入pfcount得到的是<span class="hljs-number">3</span><br>可一次统计多个key<br>时间复杂度为O(N)，N为key的个数<br>返回值是一个带有 <span class="hljs-number">0</span>.<span class="hljs-number">81</span>% 标准错误（standard error）的近似值.<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m1<br>(integer) <span class="hljs-number">4</span><br><span class="hljs-number">1</span><br><span class="hljs-number">2</span><br><span class="hljs-number">3</span><br><span class="hljs-number">4</span><br>pfmerge 合并多个key<br>取多个key的并集<br>命令只会返回 OK.<br>时间复杂度为O（N）<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m1 <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m1<br>(integer) <span class="hljs-number">4</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfadd m2 <span class="hljs-number">3</span> <span class="hljs-number">3</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">4</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">5</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">6</span> <span class="hljs-number">6</span> <span class="hljs-number">1</span><br>(integer) <span class="hljs-number">1</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount m2<br>(integer) <span class="hljs-number">5</span><br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfmerge mergeDes m1 m2<br>OK<br><span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">6379</span>&gt; pfcount mergeDes<br>(integer) <span class="hljs-number">6</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>应用场景<br>说明：</p>
+<p>基数不大，数据量不大就用不上，会有点大材小用浪费空间<br>有局限性，就是只能统计基数数量，而没办法去知道具体的内容是什么<br>和bitmap相比，属于两种特定统计情况，简单来说，HyperLogLog 去重比 bitmap 方便很多<br>一般可以bitmap和hyperloglog配合使用，bitmap标识哪些用户活跃，hyperloglog计数<br>一般使用：</p>
+<p>统计注册 IP 数<br>统计每日访问 IP 数<br>统计页面实时 UV 数<br>统计在线用户数<br>统计用户每天搜索不同词条的个数</p>
 
                 
               </div>

@@ -1,0 +1,763 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Kubernetes 学习kubectl manualCommand line tool (kubectl) | Kubernetes Kubernetes 网络模型Network：了解K8S的网络通信模型 - 知乎 (zhihu.com) Kubernetes 的网络模型在学习 Kubernetes 的网络之前，要先简单了解一下 Docker 的网络知识。 Docker里面有 null、host">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes 学习">
+<meta property="og:url" content="http://example.com/2023/09/02/%E4%BA%91%E5%8E%9F%E7%94%9F-%E9%83%A8%E7%BD%B2/Kubernetes%20%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Kubernetes 学习kubectl manualCommand line tool (kubectl) | Kubernetes Kubernetes 网络模型Network：了解K8S的网络通信模型 - 知乎 (zhihu.com) Kubernetes 的网络模型在学习 Kubernetes 的网络之前，要先简单了解一下 Docker 的网络知识。 Docker里面有 null、host">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-27f32a87a1ccd871701208eac36c3186_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-d202788ff868e441ee4e32021300611f_1440w.webp">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-0d476c48b0e00feb3d23753f265ee048_1440w.webp">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-68cd5a545de3d2a84258e638bc0200b5_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-a4ad827499d81221969db17c251ff276_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-51d60d1fcf66359f6ef111ce845bf6e3_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-a82e04146fe3a9311c34f5e6a2f6682b_1440w.webp">
+<meta property="article:published_time" content="2023-09-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:53.098Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="云原生">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic3.zhimg.com/80/v2-27f32a87a1ccd871701208eac36c3186_1440w.webp">
+  
+  
+  
+  <title>Kubernetes 学习 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Kubernetes 学习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-02 00:00" pubdate>
+          2023年9月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Kubernetes 学习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Kubernetes-学习"><a href="#Kubernetes-学习" class="headerlink" title="Kubernetes 学习"></a>Kubernetes 学习</h1><h2 id="kubectl-manual"><a href="#kubectl-manual" class="headerlink" title="kubectl manual"></a>kubectl manual</h2><p><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/kubectl/">Command line tool (kubectl) | Kubernetes</a></p>
+<h1 id="Kubernetes-网络模型"><a href="#Kubernetes-网络模型" class="headerlink" title="Kubernetes 网络模型"></a>Kubernetes 网络模型</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/637672338">Network：了解K8S的网络通信模型 - 知乎 (zhihu.com)</a></p>
+<h2 id="Kubernetes-的网络模型"><a href="#Kubernetes-的网络模型" class="headerlink" title="Kubernetes 的网络模型"></a>Kubernetes 的网络模型</h2><p>在学习 Kubernetes 的网络之前，要先简单了解一下 Docker 的网络知识。</p>
+<p>Docker里面有 null、host 和 bridge 三种网络模式。这里有一张图，描述了 Docker 里最常用的 bridge 网络模式：</p>
+<p><img src="https://pic3.zhimg.com/80/v2-27f32a87a1ccd871701208eac36c3186_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Docker 会创建一个名字叫“docker0”的网桥，默认是私有网段“172.17.0.0&#x2F;16”。每个容器都会创建一个虚拟网卡对（veth pair），两个虚拟网卡分别“插”在容器和网桥上，这样容器之间就可以互联互通了。</p>
+<p>Docker 的网络方案简单有效，但问题是它只局限在单机环境里工作，跨主机通信非常困难（需要做端口映射和网络地址转换）。</p>
+<p>针对 Docker 的网络缺陷，Kubernetes 提出了一个自己的网络模型，能够很好地适应集群系统的网络需求，它有下面的这 5 点基本假设：</p>
+<ul>
+<li>• 集群里的每个 Pod 都会有唯一的一个 IP 地址。</li>
+<li>• Pod 里的所有容器共享这个 IP 地址。</li>
+<li>• 集群里的所有 Pod 都属于同一个网段。</li>
+<li>• Pod 直接可以基于 IP 地址直接访问另一个 Pod，不需要做麻烦的网络地址转换（NAT）。</li>
+<li>• 共享namespace : Pod里面的容器共享network namespace (IP and MAC address), 所以这些容器交互可以使用本地回环地址</li>
+</ul>
+<p>以下是Kubernetes 整体的网络模型的示意图：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-d202788ff868e441ee4e32021300611f_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>从上图可以看出网络让 Pod 摆脱了主机的硬限制，是一个“平坦”的网络模型，很好理解，通信自然也非常简单。</p>
+<blockquote>
+<p>因为 Pod 都具有独立的 IP 地址，相当于一台虚拟机，而且直连互通，也就可以很容易地实施域名解析、负载均衡、服务发现等工作。</p>
+</blockquote>
+<p>Kubernetes 整体的网络模型细化来看，可以分为container-to-container的网络访问、Pod-to-Pod的网络访问、Service-to-Pod的网络访问。</p>
+<h2 id="Container-to-container网络模型"><a href="#Container-to-container网络模型" class="headerlink" title="Container-to-container网络模型"></a>Container-to-container网络模型</h2><p><img src="https://pic1.zhimg.com/80/v2-0d476c48b0e00feb3d23753f265ee048_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>容器到容器的网络是通过 Pod 网络命名空间进行的，network namespace 允许您拥有单独的网络接口和路由表，这些接口和路由表与系统的其余部分隔离并独立运行。</p>
+<p>每个 Pod 都有自己的network namespace ，该 Pod 中的容器共享相同的 IP 地址和端口，这些容器之间的所有通信都通过 localhost 进行，因为它们都是同一命名空间的一部分。</p>
+<h2 id="Pod-to-Pod网络模型"><a href="#Pod-to-Pod网络模型" class="headerlink" title="Pod-to-Pod网络模型"></a>Pod-to-Pod网络模型</h2><p>在Kubernetes集群中，每个节点都有一个指定的 Pod IP CIDR 范围，这可确保每个 Pod 都能收到集群中其他 Pod 可以看到的唯一 IP 地址。</p>
+<blockquote>
+<p>创建新的Pod 时，IP 地址永远不会重复，无论你将 Pod 部署在集群中的同一节点还是不同节点上。与容器到容器网络不同，Pod 到 Pod 通信是使用真实 IP 进行的，</p>
+</blockquote>
+<p>如上图所示，要使 Pod 相互通信，流量必须在 Pod 网络命名空间和根网络命名空间之间流动。这是通过虚拟以太网设备或 veth 对（图中的 veth0 到 Pod 命名空间 1 和 veth1 到 Pod 命名空间 2）连接 Pod 命名空间和根命名空间来实现的。</p>
+<p>当数据从 Pod 1 发送到 Pod 2 时，数据流如下：</p>
+<ol>
+<li>\1. Pod 1 流量通过 eth0 流向根网络命名空间的虚拟接口 veth0</li>
+<li>\2. 流量通过 veth0 到达虚拟网桥，虚拟网桥连接到虚拟接口 veth1</li>
+<li>\3. 流量通过虚拟网桥到达 veth1</li>
+<li>\4. 最后，流量通过 veth1 到达 Pod 2 的 eth0 接口</li>
+</ol>
+<h2 id="Service-to-Pod网络模型"><a href="#Service-to-Pod网络模型" class="headerlink" title="Service-to-Pod网络模型"></a>Service-to-Pod网络模型</h2><p>Pod可能需要根据需求进行扩展或缩减，他动态调整的，如果应用程序崩溃或节点故障，可以再次创建它们。这些事件会导致 Pod 的 IP 地址发生变化，这将使网络成为一个挑战。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-68cd5a545de3d2a84258e638bc0200b5_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="Kubernetes-通过使用-Service-来解决了这个问题："><a href="#Kubernetes-通过使用-Service-来解决了这个问题：" class="headerlink" title="Kubernetes 通过使用 Service 来解决了这个问题："></a>Kubernetes 通过使用 Service 来解决了这个问题：</h3><ol>
+<li>\1. 在前端分配一个静态虚拟 IP 地址，以连接与服务service关联的任何后端 Pod</li>
+<li>\2. 将发往此虚拟 IP 的任何流量负载均衡到后端 Pod</li>
+<li>\3. 跟踪 Pod 的 IP 地址，这样即使 Pod IP 地址发生变化，客户端连接到 Pod 也不会有任何问题，因为它们只直接与服务本身的静态虚拟 IP 地址交互</li>
+</ol>
+<h3 id="集群内负载均衡具体有两种方式："><a href="#集群内负载均衡具体有两种方式：" class="headerlink" title="集群内负载均衡具体有两种方式："></a>集群内负载均衡具体有两种方式：</h3><p><strong>IPTABLES</strong>：在这种模式下，kube-proxy 会监视 API server中service和endpoint的变化情况 ，对于每个新服务，它都会生成iptables 规则，这些规则捕获到服务的clusterIP 和端口的流量，然后将流量重定向到服务的后端 Pod，Pod 是随机选择的。</p>
+<blockquote>
+<p>iptabels 模式需要维护大量规则，同时kube-proxy 需要不断刷新规则以确保其准确性。当有大量pod时，数百的规则需要不停刷新，会占用大量主机CPU 资源，甚至在此过程中会使主机卡住。</p>
+</blockquote>
+<p><strong>IPVS</strong>：IPVS建立在Netfilter之上，实现了传输层负载均衡。IPVS 使用 Netfilter 的钩子函数，使用哈希表作为底层数据结构，并在<strong>内核空间</strong>中工作。这意味着 IPVS 模式下的 kube-proxy 比 iptables 模式下的 kube-proxy 以更低的延迟、更高的吞吐量和更好的性能重定向流量。</p>
+<p>ipvs 并不需要为宿主机上的每个pod设置iptables 规则，类似功能的实现在内核上进行，这将降低维护规则的成本</p>
+<blockquote>
+<p>IPVS技术与Netfilter一样，都是工作在<code>内核态</code>，且IPVS是基于Netfilter框架实现的，其可以在数据包到达<code>四层协议栈</code>时对数据包进行处理。</p>
+</blockquote>
+<p>IPVS和<strong>IPTABLES</strong>都是基于netfilter的，两者差别如下：</p>
+<ul>
+<li>• ipvs 为大型集群提供了更好的可扩展性和性能</li>
+<li>• ipvs 支持比 iptables 更复杂的负载均衡算法（最小负载、最少连接、加权等等）</li>
+<li>• ipvs 支持服务器健康检查和连接重试等功能</li>
+</ul>
+<blockquote>
+<p>如果没有加载并启用ipvs模块，或者没有配置ipvs相关配置，则会被降级成iptables模式。</p>
+</blockquote>
+<h2 id="Internet-to-Service-网络模型"><a href="#Internet-to-Service-网络模型" class="headerlink" title="Internet-to-Service 网络模型"></a>Internet-to-Service 网络模型</h2><p>到目前为止，我已经讨论了如何在集群内路由流量，不过，Kubernetes 网络还有另一面，那就是将应用程序暴露给外部网络。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-a4ad827499d81221969db17c251ff276_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Kubernetes service提供了一种访问一组 Pod 的方法，通常使用标签选择器定义。</p>
+<p>这可能是尝试访问群集内其他应用程序的应用程序，也可能允许你向外部世界公开群集中运行的应用程序。Kubernetes Service Types使您能够指定所需的服务类型。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-51d60d1fcf66359f6ef111ce845bf6e3_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>有以下几种ServiceTypes :</p>
+<ul>
+<li>• ClusterIP ：这是默认的服务类型。它使服务只能从群集内部访问，并允许群集中的应用程序相互通信，没有外部访问。</li>
+<li>• LoadBalancer: 此服务类型使用云厂商的负载均衡器在外部公开服务，来自外部负载均衡器的流量将定向到后端 Pod。云厂商决定如何对其进行负载均衡，不涉及公有云的情况无需关注</li>
+<li>• NodePort ：这允许外部流量通过在所有节点上打开特定端口来访问服务。然后，发送到此端口的任何流量都将转发到服务，此模式会在所有的k8s node上开放对应的端口。</li>
+<li>• ExternalName ：这是k8s中一个特殊的service类型，它不需要指定selector去选择哪些pods实例提供服务，而是使用DNS CNAME机制把自己CNAME映射到你指定的另外一个域名上，想当于可以通过DNS域名，访问另外的服务。</li>
+</ul>
+<p>引用stackoverflow的回答，补充解释一下ExternalName service:</p>
+<p><img src="https://pic4.zhimg.com/80/v2-a82e04146fe3a9311c34f5e6a2f6682b_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文的主要内容就到此为止了，这里再简单总结一下：</p>
+<ul>
+<li>• Kubernetes 使用的是“IP-per-pod”网络模型，每个 Pod 都会有唯一的 IP 地址，所以简单易管理；</li>
+<li>• 网络的事情万变不离其宗，都是层层剥离就是收包过程，容器网络也是如此，也是通过类似路由器、交换机、网卡的组件完成网络的数据包的传输</li>
+</ul>
+<p>K8S网络中更细节的内容 <strong>CNI</strong>（Container Networking Interface）下次有空再聊~！</p>
+<h1 id="Linux-命名空间"><a href="#Linux-命名空间" class="headerlink" title="Linux 命名空间"></a>Linux 命名空间</h1><p>Linux的命名空间（Namespace）是一种内核特性，用于实现进程之间的隔离。命名空间可以将一组系统资源封装在一个抽象的环境中，使得在不同的命名空间中运行的进程看起来像在独立的系统中运行一样。</p>
+<p>Linux提供了以下几种命名空间：</p>
+<ol>
+<li><p>PID命名空间（PID Namespace）：隔离进程ID，使得每个命名空间中的进程拥有独立的进程ID空间。</p>
+</li>
+<li><p>Mount命名空间（Mount Namespace）：隔离文件系统挂载点，使得每个命名空间中的进程拥有独立的文件系统视图。</p>
+</li>
+<li><p>UTS命名空间（UTS Namespace）：隔离主机名和域名，使得每个命名空间中的进程拥有独立的主机名和域名。</p>
+</li>
+<li><p>IPC命名空间（IPC Namespace）：隔离System V IPC和POSIX消息队列，使得每个命名空间中的进程拥有独立的进程间通信机制。</p>
+</li>
+<li><p>Network命名空间（Network Namespace）：隔离网络设备、IP地址、路由表、网络命名空间中的进程拥有独立的网络栈。</p>
+</li>
+<li><p>User命名空间（User Namespace）：隔离用户和用户组ID，使得每个命名空间中的进程拥有独立的用户和用户组。</p>
+</li>
+</ol>
+<p>命名空间的工作原理是通过Linux内核提供的clone()系统调用来创建新的命名空间。在创建新的命名空间时，可以选择性地指定要隔离的资源。隔离后，每个命名空间中的进程只能访问和操作自己所属的命名空间中的资源，而无法访问其他命名空间中的资源。</p>
+<p>命名空间的分配是由Linux内核进行管理的。每个命名空间都有一个唯一的标识符，称为命名空间ID。命名空间ID是在命名空间创建时由内核分配的，并且在整个系统中是唯一的。</p>
+<p>命名空间的应用场景非常广泛。它可以用于容器技术（如Docker）中，实现容器之间的隔离；也可以用于虚拟化技术中，实现虚拟机之间的隔离；还可以用于构建安全的沙箱环境，限制进程的权限和资源访问等。</p>
+<p>如果您对命名空间的更详细信息感兴趣，建议参考Linux内核文档或者相关的技术资料。</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gams">UTS是Linux命名空间中的一种，全称为<span class="hljs-string">&quot;Unix Timesharing System&quot;</span>。UTS命名空间用于隔离主机名和域名，使得每个命名空间中的进程拥有独立的主机名和域名。通过UTS命名空间，可以在同一台机器上创建多个具有不同主机名和域名的隔离环境，实现进程之间的隔离和独立运行。<br><br>IPC是Linux命名空间中的另一种，全称为<span class="hljs-string">&quot;Inter-Process Communication&quot;</span>。IPC命名空间用于隔离<span class="hljs-keyword">System</span> V IPC和POSIX消息队列，使得每个命名空间中的进程拥有独立的进程间通信机制。通过IPC命名空间，可以在同一台机器上创建多个具有独立进程间通信机制的隔离环境，实现进程之间的隔离和独立通信。<br><br>需要注意的是，UTS和IPC命名空间是Linux提供的一种隔离机制，用于实现进程之间的隔离和独立运行。它们是Linux命名空间的一部分，用于构建容器、虚拟化等技术，提供更高级别的隔离和资源管理。<br></code></pre></td></tr></table></figure>
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/" class="category-chain-item">云原生</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">#云原生</a>
+      
+        <a href="/tags/Kubernetes/">#Kubernetes</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Kubernetes 学习</div>
+      <div>http://example.com/2023/09/02/云原生-部署/Kubernetes 学习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/09/02/travel-readme/%E9%80%B8%E6%B8%B8%E5%A4%A9%E4%B8%8B--%E4%B8%9A%E5%8A%A1/" title="travel-逸游天下">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">travel-逸游天下</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/27/algorithm/%E7%AE%97%E6%B3%95%E6%8A%80%E8%83%BD%E7%82%B9/" title="算法技能点">
+                        <span class="hidden-mobile">算法技能点</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

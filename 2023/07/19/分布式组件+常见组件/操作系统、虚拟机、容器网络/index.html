@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="操作系统、虚拟机、容器网络虚拟机的网络通信原理引言 从服务器集群到单台服务器(host)，从主机到虚拟机(vm)，从虚拟机到容器组(pod)，从 容器组到单个容器(docker)，从容器到多进程，从进程到多线程，资源(主要指计算、存储和网络)的划分粒度越来越细，这使得资源能做到相互隔离，资源的配置也更加灵活。然而，也随之带来了一系列的技术问题：比如，同宿主上的 vm 是如何通信的？跨 host 间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统、虚拟机、容器网络">
+<meta property="og:url" content="http://example.com/2023/07/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%81%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="操作系统、虚拟机、容器网络虚拟机的网络通信原理引言 从服务器集群到单台服务器(host)，从主机到虚拟机(vm)，从虚拟机到容器组(pod)，从 容器组到单个容器(docker)，从容器到多进程，从进程到多线程，资源(主要指计算、存储和网络)的划分粒度越来越细，这使得资源能做到相互隔离，资源的配置也更加灵活。然而，也随之带来了一系列的技术问题：比如，同宿主上的 vm 是如何通信的？跨 host 间">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-3c4584024508a5632e1932b5e524ecdf_1440w.webp">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-cba959e53f730199ecfb6b001e0497ea_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-f3d48608da3167419b71c740e11d6c37_1440w.webp">
+<meta property="og:image" content="http://static.open-open.com/lib/uploadImg/20150212/20150212091034_634.png">
+<meta property="og:image" content="http://static.open-open.com/lib/uploadImg/20150212/20150212091035_252.png">
+<meta property="og:image" content="http://static.open-open.com/lib/uploadImg/20150212/20150212091035_900.png">
+<meta property="article:published_time" content="2023-07-19T07:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.903Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta property="article:tag" content="云原生">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic4.zhimg.com/80/v2-3c4584024508a5632e1932b5e524ecdf_1440w.webp">
+  
+  
+  
+  <title>操作系统、虚拟机、容器网络 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="操作系统、虚拟机、容器网络"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-19 15:00" pubdate>
+          2023年7月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          61 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">操作系统、虚拟机、容器网络</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="操作系统、虚拟机、容器网络"><a href="#操作系统、虚拟机、容器网络" class="headerlink" title="操作系统、虚拟机、容器网络"></a>操作系统、虚拟机、容器网络</h1><h1 id="虚拟机的网络通信原理"><a href="#虚拟机的网络通信原理" class="headerlink" title="虚拟机的网络通信原理"></a>虚拟机的网络通信原理</h1><p><strong>引言</strong></p>
+<p>从服务器集群到单台服务器(host)，从主机到虚拟机(vm)，从虚拟机到容器组(pod)，从 容器组到单个容器(docker)，从容器到多进程，从进程到多线程，资源(主要指计算、存储和网络)的划分粒度越来越细，这使得资源能做到相互隔离，资源的配置也更加灵活。然而，也随之带来了一系列的技术问题：比如，同宿主上的 vm 是如何通信的？跨 host 间的 vm 是如何通信的？vm 和 host 是如何通信的？进程间、线程间又是如何通信、协作的？等等。今天，我们就来探究一下 linux 系统中虚拟机的网络通信原理。</p>
+<p>一般的技术文章或者书上将 vm 的网络连接方式分为三种：桥接（bridged）、NAT模式和 host-only 模式。然而，这种分类方法并不友好。首先，单从名称看，你还是不知道具体的网络连接方式。其次，NAT 模式和 host-only 模式有区别也有联系，容易混淆。所以，这里我们将 linux 系统中 vm 的网络连接方式分成两大类，分别是<strong>物理网卡模式</strong>和<strong>虚拟网卡模式</strong>。</p>
+<h2 id="物理网卡模式"><a href="#物理网卡模式" class="headerlink" title="物理网卡模式"></a>物理网卡模式</h2><p>物理网卡模式又分为非 NAT 方式和 NAT 方式。</p>
+<ul>
+<li>非 NAT 方式</li>
+</ul>
+<p><img src="https://pic4.zhimg.com/80/v2-3c4584024508a5632e1932b5e524ecdf_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>上图中，主机通过 VMware 虚拟出了 3 台虚拟机，3 台虚拟机直接和虚拟交换机相连，而虚拟交换机则与主机的物理网卡相连。想要理解这种方式则需要明确以下三点：</p>
+<ol>
+<li>虚拟机1、2、3 通过虚拟交换机之间与主机网卡相连，也就是说不需要主机内核参与，只是借用了主机的物理网卡；</li>
+<li>“虚拟交换机”是属于 VMware 的虚拟设备，不属于虚拟机1，也不属于虚拟机2和虚拟机3；</li>
+<li>每台虚拟机也有自己的虚拟网卡，才能与虚拟机交换机通信，图中并没有标出来。</li>
+</ol>
+<ul>
+<li>NAT 方式</li>
+</ul>
+<p><img src="https://pic3.zhimg.com/80/v2-cba959e53f730199ecfb6b001e0497ea_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>我们知道，NAT（network adress treanslate，网络地址转换）能解决私有网络地址不足的问题，在 VM 的通信网络中同样可以利用这一技术。DHCP（Dynamic Host Configuration Protocol，动态主机配置协议）能够给不同的 VM 分配 IP 地址。上图中，vmnet0、NAT、DHCP 都是属于 VMware 的虚拟设备。</p>
+<h2 id="虚拟网卡模式"><a href="#虚拟网卡模式" class="headerlink" title="虚拟网卡模式"></a>虚拟网卡模式</h2><p><img src="https://pic4.zhimg.com/80/v2-f3d48608da3167419b71c740e11d6c37_1440w.webp" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这里，我们介绍另一种 VM 的网络通信方式 - 虚拟网卡模式。VMware 在创建 VM 的时候，同时创建了一个叫“虚拟网卡”的虚拟设备。VMware 管辖下的所有 VM 通过和虚拟交换机相连，虚拟交换机和虚拟网卡连接。理解这种通信方式，需要明确以下一点：</p>
+<ul>
+<li>这种网络对虚拟机来说很封闭，因为 VM 只能连接主机，如果想要和外界通信，需要主机具备路由&#x2F;交换功能，只能通过在主机上安装路由或代理软件实现；</li>
+</ul>
+<p>上文中我们介绍了 Linux 系统中 VM 的两种通信模式：“物理网卡模式”和“虚拟网卡模式”。其实，这两种通信模式还可以对应另外两个别名，分别是“硬直通”和“软交换”，大家喜欢前者还是后者呢？</p>
+<h1 id="Docker学习笔记：Docker-网络配置"><a href="#Docker学习笔记：Docker-网络配置" class="headerlink" title="Docker学习笔记：Docker 网络配置"></a>Docker学习笔记：Docker 网络配置</h1><p><img src="http://static.open-open.com/lib/uploadImg/20150212/20150212091034_634.png" srcset="/img/loading.gif" lazyload alt="非常详细的 Docker 学习笔记"></p>
+<p>图: <a target="_blank" rel="noopener" href="http://www.slideshare.net/janghoonsim/docker-container-and-lightweight-virtualization">Docker - container and lightweight virtualization</a></p>
+<p>Dokcer 通过使用 Linux 桥接提供容器之间的通信，docker0 桥接接口的目的就是方便 Docker 管理。当 Docker daemon 启动时需要做以下操作：</p>
+<ul>
+<li>creates the docker0 bridge if not present<ul>
+<li># 如果 docker0 不存在则创建</li>
+</ul>
+</li>
+<li>searches for an IP address range which doesn’t overlap with an existing route<ul>
+<li># 搜索一个与当前路由不冲突的 ip 段</li>
+</ul>
+</li>
+<li>picks an IP in the selected range<ul>
+<li># 在确定的范围中选择 ip</li>
+</ul>
+</li>
+<li>assigns this IP to the docker0 bridge<ul>
+<li># 绑定 ip 到 docker0</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-1-Docker-四种网络模式"><a href="#6-1-Docker-四种网络模式" class="headerlink" title="6.1 Docker 四种网络模式"></a>6.1 Docker 四种网络模式</h3><p>四种网络模式摘自 <a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/docker-network-and-pipework-open-source-explanation-practice">Docker 网络详解及 pipework 源码解读与实践</a></p>
+<p>docker run 创建 Docker 容器时，可以用 –net 选项指定容器的网络模式，Docker 有以下 4 种网络模式：</p>
+<ul>
+<li>host 模式，使用 –net&#x3D;host 指定。</li>
+<li>container 模式，使用 –net&#x3D;container:NAMEorID 指定。</li>
+<li>none 模式，使用 –net&#x3D;none 指定。</li>
+<li>bridge 模式，使用 –net&#x3D;bridge 指定，默认设置。</li>
+</ul>
+<h4 id="host-模式"><a href="#host-模式" class="headerlink" title="host 模式"></a>host 模式</h4><p>如果启动容器的时候使用 host 模式，那么这个容器将不会获得一个独立的 Network Namespace，而是和宿主机共用一个 Network Namespace。容器将不会虚拟出自己的网卡，配置自己的 IP 等，而是使用宿主机的 IP 和端口。</p>
+<p>例如，我们在 10.10.101.105&#x2F;24 的机器上用 host 模式启动一个含有 web 应用的 Docker 容器，监听 tcp 80 端口。当我们在容器中执行任何类似 ifconfig 命令查看网络环境时，看到的都是宿主机上的信息。而外界访问容器中的应用，则直接使用 10.10.101.105:80 即可，不用任何 NAT 转换，就如直接跑在宿主机中一样。但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。</p>
+<h4 id="container-模式"><a href="#container-模式" class="headerlink" title="container 模式"></a>container 模式</h4><p>这个模式指定新创建的容器和已经存在的一个容器共享一个 Network Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的 IP，而是和一个指定的容器共享 IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过 lo 网卡设备通信。</p>
+<h4 id="none模式"><a href="#none模式" class="headerlink" title="none模式"></a>none模式</h4><p>这个模式和前两个不同。在这种模式下，Docker 容器拥有自己的 Network Namespace，但是，并不为 Docker容器进行任何网络配置。也就是说，这个 Docker 容器没有网卡、IP、路由等信息。需要我们自己为 Docker 容器添加网卡、配置 IP 等。</p>
+<h4 id="bridge模式"><a href="#bridge模式" class="headerlink" title="bridge模式"></a>bridge模式</h4><p><img src="http://static.open-open.com/lib/uploadImg/20150212/20150212091035_252.png" srcset="/img/loading.gif" lazyload alt="非常详细的 Docker 学习笔记"></p>
+<p>图: <a target="_blank" rel="noopener" href="http://www.wickedawesometech.us/2014/07/the-container-world-part-2-networking.html">The Container World | Part 2 Networking</a></p>
+<p>bridge 模式是 Docker 默认的网络设置，此模式会为每一个容器分配 Network Namespace、设置 IP 等，并将一个主机上的 Docker 容器连接到一个虚拟网桥上。当 Docker server 启动时，会在主机上创建一个名为 docker0 的虚拟网桥，此主机上启动的 Docker 容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器就通过交换机连在了一个二层网络中。接下来就要为容器分配 IP 了，Docker 会从 RFC1918 所定义的私有 IP 网段中，选择一个和宿主机不同的IP地址和子网分配给 docker0，连接到 docker0 的容器就从这个子网中选择一个未占用的 IP 使用。如一般 Docker 会使用 172.17.0.0&#x2F;16 这个网段，并将 172.17.42.1&#x2F;16 分配给 docker0 网桥（在主机上使用 ifconfig 命令是可以看到 docker0 的，可以认为它是网桥的管理接口，在宿主机上作为一块虚拟网卡使用）</p>
+<h3 id="6-2-列出当前主机网桥"><a href="#6-2-列出当前主机网桥" class="headerlink" title="6.2 列出当前主机网桥"></a>6.2 列出当前主机网桥</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">$ sudo <span class="hljs-keyword">brctl </span><span class="hljs-keyword">show </span><span class="hljs-comment"># brctl 工具依赖 bridge-utils 软件包 bridge name bridge id STP enabled interfaces</span><br>docker0 <span class="hljs-number">8000</span>.<span class="hljs-number">000000000000</span> no<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-查看当前-docker0-ip"><a href="#6-3-查看当前-docker0-ip" class="headerlink" title="6.3 查看当前 docker0 ip"></a>6.3 查看当前 docker0 ip</h3><figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dns">$ sudo ifconfig docker0<br>docker0 Link encap:Ethernet HWaddr xx:xx:xx:xx:xx:xx<br>inet addr:<span class="hljs-number">172.17.42.1</span> Bcast:<span class="hljs-number">0.0.0.0</span> Mask:<span class="hljs-number">255.255.0.0</span><br></code></pre></td></tr></table></figure>
+
+<p>在容器运行时，每个容器都会分配一个特定的虚拟机口并桥接到 docker0。每个容器都会配置同 docker0 ip 相同网段的专用 ip 地址，docker0 的 IP 地址被用于所有容器的默认网关。</p>
+<h3 id="6-4-运行一个容器"><a href="#6-4-运行一个容器" class="headerlink" title="6.4 运行一个容器"></a>6.4 运行一个容器</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">$ sudo docker <span class="hljs-built_in">run</span> -t -i -d ubuntu /bin/bash<br>52f811c5d3d69edddefc75aff5a4525fc8ba8bcfa1818132f9dc7d4f7c7e78b4 $ sudo brctl show<span class="hljs-built_in"></span><br><span class="hljs-built_in">bridge </span>name<span class="hljs-built_in"> bridge </span>id STP enabled interfaces<br>docker0 8000.fef213db5a66 <span class="hljs-literal">no</span> vethQCDY1N<br></code></pre></td></tr></table></figure>
+
+<p>以上, docker0 扮演着 52f811c5d3d6 container 这个容器的虚拟接口 vethQCDY1N interface 桥接的角色。</p>
+<h4 id="使用特定范围的-IP"><a href="#使用特定范围的-IP" class="headerlink" title="使用特定范围的 IP"></a>使用特定范围的 IP</h4><p>Docker 会尝试寻找没有被主机使用的 ip 段，尽管它适用于大多数情况下，但是它不是万能的，有时候我们还是需要对 ip 进一步规划。Docker 允许你管理 docker0 桥接或者通过-b选项自定义桥接网卡，需要安装bridge-utils软件包。</p>
+<p>基本步骤如下：</p>
+<ul>
+<li>ensure Docker is stopped<ul>
+<li># 确保 docker 的进程是停止的</li>
+</ul>
+</li>
+<li>create your own bridge (bridge0 for example)<ul>
+<li># 创建自定义网桥</li>
+</ul>
+</li>
+<li>assign a specific IP to this bridge<ul>
+<li># 给网桥分配特定的 ip</li>
+</ul>
+</li>
+<li>start Docker with the -b&#x3D;bridge0 parameter<ul>
+<li># 以 -b 的方式指定网桥</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pf"><span class="hljs-comment"># Stopping Docker and removing docker0 $ sudo service docker stop $ sudo ip link set dev docker0 down $ sudo brctl delbr docker0 # Create our own bridge $ sudo brctl addbr bridge0 $ sudo ip addr add 192.168.5.1/24 dev bridge0 $ sudo ip link set dev bridge0 up # Confirming that our bridge is up and running $ ip addr show bridge0</span><br><span class="hljs-number">4</span>: bridge0: <span class="hljs-variable">&lt;BROADCAST,MULTICAST&gt;</span> mtu <span class="hljs-number">1500</span> qdisc noop <span class="hljs-keyword">state</span> UP <span class="hljs-keyword">group</span> <span class="hljs-keyword">default</span><br>    link/ether <span class="hljs-number">66</span>:<span class="hljs-number">38</span>:d0:<span class="hljs-number">0</span>d:<span class="hljs-number">76</span>:<span class="hljs-number">18</span> brd ff:ff:ff:ff:ff:ff<br>    <span class="hljs-keyword">inet</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">5.1</span>/<span class="hljs-number">24</span> scope <span class="hljs-keyword">global</span> bridge0<br>       valid_lft forever preferred_lft forever <span class="hljs-comment"># Tell Docker about it and restart (on Ubuntu) $ echo &#x27;DOCKER_OPTS=&quot;-b=bridge0&quot;&#x27; &gt;&gt; /etc/default/docker $ sudo service docker start</span><br></code></pre></td></tr></table></figure>
+
+<p>参考文档: <a target="_blank" rel="noopener" href="https://docs.docker.com/articles/networking/">Network Configuration</a></p>
+<h3 id="6-5-不同主机间容器通信"><a href="#6-5-不同主机间容器通信" class="headerlink" title="6.5 不同主机间容器通信"></a>6.5 不同主机间容器通信</h3><p>不同容器之间的通信可以借助于 pipework 这个工具：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">$ git clone https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/jpetazzo/</span>pipework.git<br>$ sudo cp -rp pipework<span class="hljs-regexp">/pipework /u</span>sr<span class="hljs-regexp">/local/</span>bin/<br></code></pre></td></tr></table></figure>
+
+<h4 id="安装相应依赖软件"><a href="#安装相应依赖软件" class="headerlink" title="安装相应依赖软件"></a>安装相应依赖软件</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">$ sudo apt-get <span class="hljs-keyword">install </span>iputils-arping <span class="hljs-keyword">bridge-utils </span>-y<br></code></pre></td></tr></table></figure>
+
+<h4 id="桥接网络"><a href="#桥接网络" class="headerlink" title="桥接网络"></a>桥接网络</h4><p>桥接网络可以参考 <a target="_blank" rel="noopener" href="https://github.com/opskumu/Day/blob/master/tips/tips.md">日常问题处理 Tips</a> 关于桥接的配置说明，这里不再赘述。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># brctl show</span><br><span class="hljs-attribute">bridge</span> name     bridge id               STP enabled     interfaces<br><span class="hljs-attribute">br0</span>             <span class="hljs-number">8000</span>.<span class="hljs-number">000</span>c291412cd       no              eth0<br><span class="hljs-attribute">docker0</span>         <span class="hljs-number">8000</span>.<span class="hljs-number">56847</span>afe9799       no              vetheb48029<br></code></pre></td></tr></table></figure>
+
+<p>可以删除 docker0，直接把 docker 的桥接指定为 br0。也可以保留使用默认的配置，这样单主机容器之间的通信可以通过 docker0，而跨主机不同容器之间通过 pipework 新建 docker 容器的网卡桥接到 br0，这样跨主机容器之间就可以通信了。</p>
+<ul>
+<li>ubuntu</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo service docker stop</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo ip <span class="hljs-built_in">link</span> <span class="hljs-built_in">set</span> dev docker0 down</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo brctl delbr docker0</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;DOCKER_OPTS=&quot;-b=br0&quot;&#x27;</span> &gt;&gt; /etc/default/docker</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo service docker start</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>CentOS 7&#x2F;RHEL 7</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo systemctl stop docker</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo ip <span class="hljs-built_in">link</span> <span class="hljs-built_in">set</span> dev docker0 down</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo brctl delbr docker0</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">cat</span> /etc/sysconfig/docker | grep <span class="hljs-string">&#x27;OPTIONS=&#x27;</span></span><br>OPTIONS=--selinux-enabled -b=br0 -H fd://<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo systemctl start docker</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="pipework"><a href="#pipework" class="headerlink" title="pipework"></a>pipework</h4><p><img src="http://static.open-open.com/lib/uploadImg/20150212/20150212091035_900.png" srcset="/img/loading.gif" lazyload alt="非常详细的 Docker 学习笔记"></p>
+<p>不同容器之间的通信可以借助于 pipework 这个工具给 docker 容器新建虚拟网卡并绑定 IP 桥接到 br0</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs stylus">$ git clone https:<span class="hljs-comment">//github.com/jpetazzo/pipework.git</span><br>$ sudo cp -rp pipework/pipework /usr/local/bin/<br>$ pipework <br>Syntax:<br>pipework &lt;hostinterface&gt; <span class="hljs-selector-attr">[-i containerinterface]</span> &lt;guest&gt; &lt;ipaddr&gt;/&lt;subnet&gt;<span class="hljs-selector-attr">[@default_gateway]</span> <span class="hljs-selector-attr">[macaddr]</span><span class="hljs-selector-attr">[@vlan]</span><br>pipework &lt;hostinterface&gt; <span class="hljs-selector-attr">[-i containerinterface]</span> &lt;guest&gt; dhcp <span class="hljs-selector-attr">[macaddr]</span><span class="hljs-selector-attr">[@vlan]</span><br>pipework <span class="hljs-attr">--wait</span> <span class="hljs-selector-attr">[-i containerinterface]</span><br></code></pre></td></tr></table></figure>
+
+<p>如果删除了默认的 docker0 桥接，把 docker 默认桥接指定到了 br0，则最好在创建容器的时候加上–net&#x3D;none，防止自动分配的 IP 在局域网中有冲突。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable">$ </span>sudo docker run --rm -ti --net=none <span class="hljs-symbol">ubuntu:</span><span class="hljs-number">14.04</span> /bin/bash<br>root<span class="hljs-variable">@a46657528059</span><span class="hljs-symbol">:/</span><span class="hljs-comment">#</span><br><span class="hljs-variable">$ </span>                 <span class="hljs-comment"># Ctrl-P + Ctrl-Q 回到宿主机 shell，容器 detach 状态</span><br><span class="hljs-variable">$ </span>sudo docker  ps<br><span class="hljs-variable constant_">CONTAINER</span> <span class="hljs-variable constant_">ID</span>    <span class="hljs-variable constant_">IMAGE</span>          <span class="hljs-variable constant_">COMMAND</span>       <span class="hljs-variable constant_">CREATED</span>         <span class="hljs-variable constant_">STATUS</span>          <span class="hljs-variable constant_">PORTS</span>      <span class="hljs-variable constant_">NAMES</span><br>a46657528059    <span class="hljs-symbol">ubuntu:</span><span class="hljs-number">14.04</span>   <span class="hljs-string">&quot;/bin/bash&quot;</span>   <span class="hljs-number">4</span> minutes ago   <span class="hljs-title class_">Up</span> <span class="hljs-number">4</span> minutes               hungry_lalande<br><span class="hljs-variable">$ </span>sudo pipework br0 -i eth0 a46657528059 <span class="hljs-number">192.168</span>.<span class="hljs-number">115.10</span>/<span class="hljs-number">24</span><span class="hljs-variable">@192</span>.<span class="hljs-number">168.115</span>.<span class="hljs-number">2</span> <br><span class="hljs-comment"># 默认不指定网卡设备名，则默认添加为 eth1</span><br><span class="hljs-comment"># 另外 pipework 不能添加静态路由，如果有需求则可以在 run 的时候加上 --privileged=true 权限在容器中手动添加，</span><br><span class="hljs-comment"># 但这种安全性有缺陷，可以通过 ip netns 操作</span><br><span class="hljs-variable">$ </span>sudo docker attach a46657528059<br>root<span class="hljs-variable">@a46657528059</span><span class="hljs-symbol">:/</span><span class="hljs-comment"># ifconfig eth0</span><br>eth0      <span class="hljs-title class_">Link</span> <span class="hljs-symbol">encap:</span><span class="hljs-title class_">Ethernet</span>  <span class="hljs-title class_">HWaddr</span> <span class="hljs-number">86</span><span class="hljs-symbol">:b6</span><span class="hljs-symbol">:</span>6<span class="hljs-symbol">b:</span><span class="hljs-symbol">e8:</span>2<span class="hljs-symbol">e:</span>4d  <br>          inet <span class="hljs-symbol">addr:</span><span class="hljs-number">192.168</span>.<span class="hljs-number">115.10</span>  <span class="hljs-title class_">Bcast</span><span class="hljs-symbol">:</span><span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>  <span class="hljs-title class_">Mask</span><span class="hljs-symbol">:</span><span class="hljs-number">255.255</span>.<span class="hljs-number">255.0</span><br>          inet6 <span class="hljs-symbol">addr:</span> fe80::84<span class="hljs-symbol">b6:</span>6<span class="hljs-symbol">bff:</span><span class="hljs-symbol">fee8:</span>2e4d/<span class="hljs-number">64</span> <span class="hljs-title class_">Scope</span><span class="hljs-symbol">:Link</span><br>          <span class="hljs-variable constant_">UP</span> <span class="hljs-variable constant_">BROADCAST</span> <span class="hljs-variable constant_">RUNNING</span> <span class="hljs-variable constant_">MULTICAST</span>  <span class="hljs-variable constant_">MTU</span><span class="hljs-symbol">:</span><span class="hljs-number">1500</span>  <span class="hljs-title class_">Metric</span><span class="hljs-symbol">:</span><span class="hljs-number">1</span><br>          <span class="hljs-variable constant_">RX</span> <span class="hljs-symbol">packets:</span><span class="hljs-number">8</span> <span class="hljs-symbol">errors:</span><span class="hljs-number">0</span> <span class="hljs-symbol">dropped:</span><span class="hljs-number">0</span> <span class="hljs-symbol">overruns:</span><span class="hljs-number">0</span> <span class="hljs-symbol">frame:</span><span class="hljs-number">0</span><br>          <span class="hljs-variable constant_">TX</span> <span class="hljs-symbol">packets:</span><span class="hljs-number">9</span> <span class="hljs-symbol">errors:</span><span class="hljs-number">0</span> <span class="hljs-symbol">dropped:</span><span class="hljs-number">0</span> <span class="hljs-symbol">overruns:</span><span class="hljs-number">0</span> <span class="hljs-symbol">carrier:</span><span class="hljs-number">0</span><br>          <span class="hljs-symbol">collisions:</span><span class="hljs-number">0</span> <span class="hljs-symbol">txqueuelen:</span><span class="hljs-number">1000</span> <br>          <span class="hljs-variable constant_">RX</span> <span class="hljs-symbol">bytes:</span><span class="hljs-number">648</span> (<span class="hljs-number">648.0</span> B)  <span class="hljs-variable constant_">TX</span> <span class="hljs-symbol">bytes:</span><span class="hljs-number">690</span> (<span class="hljs-number">690.0</span> B)<br>root<span class="hljs-variable">@a46657528059</span><span class="hljs-symbol">:/</span><span class="hljs-comment"># route -n</span><br><span class="hljs-title class_">Kernel</span> <span class="hljs-variable constant_">IP</span> routing table<br><span class="hljs-title class_">Destination</span>     <span class="hljs-title class_">Gateway</span>         <span class="hljs-title class_">Genmask</span>         <span class="hljs-title class_">Flags</span> <span class="hljs-title class_">Metric</span> <span class="hljs-title class_">Ref</span>    <span class="hljs-title class_">Use</span> <span class="hljs-title class_">Iface</span><br><span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>         <span class="hljs-number">192.168</span>.<span class="hljs-number">115.2</span>   <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>         <span class="hljs-variable constant_">UG</span>    <span class="hljs-number">0</span>      <span class="hljs-number">0</span>        <span class="hljs-number">0</span> eth0<br><span class="hljs-number">192.168</span>.<span class="hljs-number">115.0</span>   <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>         <span class="hljs-number">255.255</span>.<span class="hljs-number">255.0</span>   U     <span class="hljs-number">0</span>      <span class="hljs-number">0</span>        <span class="hljs-number">0</span> eth0<br></code></pre></td></tr></table></figure>
+
+<p>使用ip netns添加静态路由，避免创建容器使用–privileged&#x3D;true选项造成一些不必要的安全问题：</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs tcl">$ docker inspect --<span class="hljs-keyword">format</span>=<span class="hljs-string">&quot;&#123;&#123; .State.Pid &#125;&#125;&quot;</span> a46657528059 # 获取指定容器 <span class="hljs-keyword">pid</span><br><span class="hljs-number">6350</span><br>$ sudo ln -s /<span class="hljs-keyword">proc</span>/6350/ns/net /var/run/netns/6350<br>$<span class="hljs-title"> sudo</span> ip<span class="hljs-title"> netns</span> exec 6350<span class="hljs-title"> ip</span> route<span class="hljs-title"> add</span> 192.168.0.0/16<span class="hljs-title"> dev</span> eth0<span class="hljs-title"> via</span> 192.168.115.2<br>$<span class="hljs-title"> sudo</span> ip<span class="hljs-title"> netns</span> exec 6350<span class="hljs-title"> ip</span> route    # 添加成功<br>192.168.0.0/16<span class="hljs-title"> via</span> 192.168.115.2<span class="hljs-title"> dev</span> eth0 <br>... ...<br></code></pre></td></tr></table></figure>
+
+<p>在其它宿主机进行相应的配置，新建容器并使用 pipework 添加虚拟网卡桥接到 br0，测试通信情况即可。</p>
+<p>另外，pipework 可以创建容器的 vlan 网络，这里不作过多的介绍了，官方文档已经写的很清楚了，可以查看以下两篇文章：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/jpetazzo/pipework">Pipework 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/docker-network-and-pipework-open-source-explanation-practice">Docker 网络详解及 pipework 源码解读与实践</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">#云原生</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>操作系统、虚拟机、容器网络</div>
+      <div>http://example.com/2023/07/19/分布式组件+常见组件/操作系统、虚拟机、容器网络/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Kubernetes/" title="Kubernetes">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Kubernetes</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/18/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/MyKafkaReadme/" title="MyKafkaReadme">
+                        <span class="hidden-mobile">MyKafkaReadme</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

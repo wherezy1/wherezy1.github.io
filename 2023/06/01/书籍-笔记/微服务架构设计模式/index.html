@@ -71,7 +71,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230629225828794.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230629230100383.png">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-11T11:36:36.796Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.881Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="书籍">
 <meta property="article:tag" content="笔记">
@@ -697,14 +697,14 @@
 <p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230620095347031.png" srcset="/img/loading.gif" lazyload alt="image-20230620095347031"></p>
 <h3 id="利与弊"><a href="#利与弊" class="headerlink" title="利与弊"></a>利与弊</h3><p>C Q R S 既 有 利 也 有 弊 。 好 处 如 下:<br>• 在徵服务架构中高效地实现查询。<br>• 高效地实现多种不同的查询类型。<br>• 在基于事件溯源技术的应用程序中实现查询。 • 更进一步地实现问题隔离。</p>
 <p>尽管CQRS 有不少好处，但它也有 一些弊端: 。更加复杂的架构。<br>• 处理数据复制导致的延迟。 让我们从复杂性增加开始看看这些弊端。</p>
-<h1 id="第八章-API-Gateway"><a href="#第八章-API-Gateway" class="headerlink" title="第八章 - API Gateway"></a>第八章 - API Gateway</h1><h2 id="API-网关模式"><a href="#API-网关模式" class="headerlink" title="API 网关模式"></a>API 网关模式</h2><p>请求路由</p>
+<h1 id="第八章-外部API"><a href="#第八章-外部API" class="headerlink" title="第八章 - 外部API"></a>第八章 - 外部API</h1><h2 id="API-网关模式"><a href="#API-网关模式" class="headerlink" title="API 网关模式"></a>API 网关模式</h2><p>请求路由</p>
 <p>api组合</p>
 <p>协议转化</p>
 <p>为每一个客户端提供专有API</p>
 <p>在这个例子中，APIGateway 有三个API模块:<br>• 移动设备API:为FTGO移动客户端实现API。<br>• 浏览器API:为浏览器中运行的JavaScript 应用程序实现API • 公共A PI :为第三方开发人员实现API 。</p>
 <p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230627080319888.png" srcset="/img/loading.gif" lazyload alt="image-20230627080319888"></p>
 <p>实现边缘功能 **</p>
-<h2 id="后端前置模式"><a href="#后端前置模式" class="headerlink" title="后端前置模式"></a>后端前置模式</h2><p>为每种客户端实现单独的API Gateway</p>
+<h2 id="后端前置模式（backend-for-front）"><a href="#后端前置模式（backend-for-front）" class="headerlink" title="后端前置模式（backend for front）"></a>后端前置模式（backend for front）</h2><p>为每种客户端实现单独的API Gateway</p>
 <p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230627080552549.png" srcset="/img/loading.gif" lazyload alt="image-20230627080552549"></p>
 <h2 id="API-Gateway模式优缺点"><a href="#API-Gateway模式优缺点" class="headerlink" title="API Gateway模式优缺点"></a>API Gateway模式优缺点</h2><p>处理局部故障：断路器模式</p>
 <h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="基于图像的API技术（模式驱动的API技术）"><a href="#基于图像的API技术（模式驱动的API技术）" class="headerlink" title="基于图像的API技术（模式驱动的API技术）"></a>基于图像的API技术（模式驱动的API技术）</h3><p>能使客户端控制返回数据- —  Graph QL</p>
@@ -782,7 +782,8 @@
 </ol>
 <h3 id="—处理访问授权"><a href="#—处理访问授权" class="headerlink" title="—处理访问授权"></a>—处理访问授权</h3><p>​	实现访问授权的一个位置是APIGateway。例如 ，它可以将对GET&#x2F;order s&#x2F;1orderId) 的访问限制为消货者和客户服务代表。如果不允许用户访问特定路径，则API Gat e wa y 可以 在将请求转发到服务之前拒绝该请求。与身份验证一样，在API Gateway 中集中实现访问授 权可降低安全漏洞的风险。你可以使用安全框架(如SpringSecurity)在API Gateway中实 现访问授权。<br>​	在API Gateway中实现访问授权的一个弊端是，它有可能产生API Gateway 与服务之间 的耜合，要求它们以同步的方式进行代码更新。而且，API Gateway 通常只能实现对URL路 径的基于角色的访问。由API Gateway 实现对单个领城对象的访问授权通常是不实际的，因 为这需要详细了解服务的领域逻辑。</p>
 <p> 另一个实现访问授权的位置是服务。服务可以对URL和服务方法实现基于角色的访问 授权 。 它 还 可 以 实 现 A C L 来 管 理 对 聚 合 的 访 问 。 例 如 ， 在 O r d e r s e r v i c e 中 可 以 实 现 基 于角色和基于ACL的授权机制，以控制对order 的访问。FTGO应用程序中的其他服务也 可以实现类似的访问授权逻辑</p>
-<h3 id="—使用J-WT传递用户身份和角色"><a href="#—使用J-WT传递用户身份和角色" class="headerlink" title="—使用J WT传递用户身份和角色"></a>—使用J WT传递用户身份和角色</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230627204438275.png" srcset="/img/loading.gif" lazyload alt="image-20230627204438275"><br>图11-4 所示的事件顺序如下:</p>
+<h3 id="—使用J-WT传递用户身份和角色"><a href="#—使用J-WT传递用户身份和角色" class="headerlink" title="—使用J WT传递用户身份和角色"></a>—使用J WT传递用户身份和角色</h3><p><img src="https://raw.githubusercontent.com/wherezy1/PicGOImageShack/main/images/image-20230627204438275.png" srcset="/img/loading.gif" lazyload alt="image-20230627204438275"></p>
+<p>图11-4 所示的事件顺序如下:</p>
 <ol>
 <li>容户端发出请求，使用基本身份验证提供它的凭据。</li>
 <li>APIGateway向OAuth2.0身份验证服务器发出OAuth2.0密码授子(PasswordGrant)<br>请求 (<a target="_blank" rel="noopener" href="http://www.oauth.com/oauth2-servers/access-tokens/password-grant/)%E3%80%82">www.oauth.com/oauth2-servers/access-tokens/password-grant/)。</a></li>
@@ -1102,8 +1103,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E9%9D%A2%E8%AF%95%E9%A2%98/" title="面试题">
-                        <span class="hidden-mobile">面试题</span>
+                      <a href="/2023/06/01/%E4%B9%A6%E7%B1%8D-%E7%AC%94%E8%AE%B0/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" title="凤凰架构">
+                        <span class="hidden-mobile">凤凰架构</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

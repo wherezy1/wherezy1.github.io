@@ -1,0 +1,852 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Kubernetes官方文档：Kubernetes 文档 | Kubernetes 概念金丝雀部署**(Canary Deployment)** 漫谈金丝雀部署(Canary Deployment) - 知乎 (zhihu.com) 学习路线&#x2F;计划如何学习 Kubernetes（完整路线图） - 知乎 (zhihu.com) 如今学习 Kubernetes 似乎变得越来越有必要，Kube">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes">
+<meta property="og:url" content="http://example.com/2023/07/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/Kubernetes/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Kubernetes官方文档：Kubernetes 文档 | Kubernetes 概念金丝雀部署**(Canary Deployment)** 漫谈金丝雀部署(Canary Deployment) - 知乎 (zhihu.com) 学习路线&#x2F;计划如何学习 Kubernetes（完整路线图） - 知乎 (zhihu.com) 如今学习 Kubernetes 似乎变得越来越有必要，Kube">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-19T07:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.898Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式组件">
+<meta property="article:tag" content="云原生">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Kubernetes - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Kubernetes"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-19 15:00" pubdate>
+          2023年7月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Kubernetes</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Kubernetes"><a href="#Kubernetes" class="headerlink" title="Kubernetes"></a>Kubernetes</h1><p>官方文档：<a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/home/">Kubernetes 文档 | Kubernetes</a></p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>金丝雀部署**(Canary Deployment)** <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/401516839">漫谈金丝雀部署(Canary Deployment) - 知乎 (zhihu.com)</a></p>
+<h1 id="学习路线-x2F-计划"><a href="#学习路线-x2F-计划" class="headerlink" title="学习路线&#x2F;计划"></a>学习路线&#x2F;计划</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/590493078">如何学习 Kubernetes（完整路线图） - 知乎 (zhihu.com)</a></p>
+<p>如今学习 Kubernetes 似乎变得越来越有必要，Kubernetes 是一个复杂的容器编排系统，具有陡峭的学习曲线。但是如果有了正确的学习路线和对基本概念的理解，任何开发人员或运维人员都可以学习 Kubernetes。</p>
+<p>在这份 Kubernetes 学习路线规划中，我会聊聊学习 Kubernetes 的先决条件和完整的 <strong>Kubernetes 学习路径</strong>，涵盖了从基础到高级的 Kubernetes 概念。</p>
+<h2 id="一、学习-Kubernetes-的预备知识"><a href="#一、学习-Kubernetes-的预备知识" class="headerlink" title="一、学习 Kubernetes 的预备知识"></a>一、学习 Kubernetes 的预备知识</h2><p>在开始学习 kubernetes 之前，你需要深入了解一些底层技术和概念。</p>
+<ol>
+<li><p><strong>分布式系统：</strong>了解分布式系统基础知识以及它在现代 IT 基础架构中的用例。</p>
+</li>
+<li><p><strong>身份验证和授权</strong>：这是 在IT 中非常基本的一个概念。然而，资历尚浅的工程师往往也没能很好掌握这块知识，所以这块要好好理解学习。</p>
+</li>
+<li><p><strong>键值存储</strong>：这是一种 NoSQL 数据库。你需要了解它的基础知识和用例。</p>
+</li>
+<li><p><strong>API：</strong> Kubernetes 是一个 API 驱动的系统。因此，你需要了解 RESTFUL API。另外，还要尝试了解 gRPC API。</p>
+</li>
+<li><p><strong>YAML</strong>：它是一种数据序列化语言，可用于数据存储和配置文件。它非常容易学习，从 Kubernetes 的角度来看，我们将把它用于配置文件。所以理解 YAML 语法非常重要。</p>
+</li>
+<li><p><strong>容器</strong>：容器是 kubernetes 的基本构建块。Kubernetes 的主要工作是编排容器。你需要学习所有容器基础知识，并具有使用 Docker 或 Podman 等容器工具的实践经验。我还建议阅读有关<a href="https://link.zhihu.com/?target=https://opencontainers.org/">Open container initiative</a>和 Container Runtime Interface (CRI) 的文章</p>
+</li>
+<li><p><strong>服务发现</strong>：这在 Kubernetes 中是很重要的一块。你需要具备<a href="https://link.zhihu.com/?target=https://microservices.io/patterns/client-side-discovery.html">客户端</a>和<a href="https://link.zhihu.com/?target=https://microservices.io/patterns/server-side-discovery.html">服务器端</a>服务发现的基本知识。简而言之就是，在客户端服务发现中，<strong>请求进入服务注册中心</strong>以获取可用于后端服务的端点。在服务器端服务发现中，<strong>请求转到负载均衡器</strong>，负载均衡器使用服务注册表来获取后端服务的结束。</p>
+</li>
+<li><p><strong>网络基础</strong></p>
+</li>
+<li><ol>
+<li>L4 和 L7 层（OSI 层）</li>
+<li>SSL&#x2F;TLS：单向和双向 TLS</li>
+<li>代理人</li>
+<li>域名系统</li>
+<li>IP表</li>
+<li>IPVS</li>
+<li>软件定义网络 (SDN)</li>
+<li>虚拟接口</li>
+<li>覆盖网络</li>
+</ol>
+</li>
+</ol>
+<h2 id="二、学习-Kubernetes-架构"><a href="#二、学习-Kubernetes-架构" class="headerlink" title="二、学习 Kubernetes 架构"></a>二、学习 Kubernetes 架构</h2><p>要弄清 Kubernetes 的架构并非易事。Kubernetes 有许多活动部件，只有了解了这些部件才能深入了解发生在系统表面下的事。而在学习架构时，还会遇到我们在第一节中谈到的那些预备知识。</p>
+<p>Kubernetes 是一整个复杂的系统，学习它的核心架构可能会让人有点不知从何下手。不过，随着实践经验的逐渐累积，你将会更好地理解它的核心架构。</p>
+<p>下面是我的建议。了解 Kubernetes 中所涉及的高级架构和关键组件，如果无法掌握这些知识，你可以花时间对特定主题进行更多的学习，或者在动手实践的同时学习这个概念。</p>
+<p>可以查看<a href="https://link.zhihu.com/?target=https://devopscube.com/kubernetes-architecture-explained/">Kubernetes 架构指南</a>，详细了解所有的 Kubernetes 组件。</p>
+<p>总的来说，你需要学习以下内容：</p>
+<ol>
+<li><strong>控制平面组件：</strong>了解每个组件的作用，如 API 服务器、etcd、调度程序和控制器管理器。</li>
+<li><strong>工作节点组件</strong>：了解 Kube Proxy、Kubelet、Container Runtime</li>
+<li><strong>插件组件：</strong> CoreDNS、网络插件（Calico、weave 等）、Metric Server</li>
+<li><strong>集群高可用性：</strong>大多数组织使用托管 Kubernetes 服务（GKE、EKS、AKS 等）。因此，云提供商负责集群控制平面的高可用性。但是，了解在多区域和区域中扩展集群的高可用性概念非常重要。</li>
+<li><strong>网络设计</strong>：虽然在开放网络中不受限制地设置集群很容易，但在公司网络中却不是那么容易。作为 DevOps 工程师，你应该了解 Kubernetes 网络设计和要求，以便更好地<strong>与网络团队协作</strong>。例如，当我在谷歌云上使用 kubernetes 设置时，我们使用了一个在公司网络中不可路由的 CIDR pod 范围。作为解决方法，我们必须为 pod 网络部署 IP 伪装。</li>
+</ol>
+<h2 id="三、Kubernetes-集群设置"><a href="#三、Kubernetes-集群设置" class="headerlink" title="三、Kubernetes 集群设置"></a>三、Kubernetes 集群设置</h2><p>设置 Kubernetes 集群有很多方式，不妨选择你喜欢的方式。</p>
+<p>以下是我对集群设置的建：。</p>
+<ol>
+<li>**<a href="https://link.zhihu.com/?target=https://github.com/kelseyhightower/kubernetes-the-hard-way">Kubernetes the Hard Way：</a>**我建议你从 Kubernetes the hard way setup 开始。它可以帮助你了解引导 kubernetes 集群所涉及的所有配置。该设置基于谷歌云。</li>
+<li>**<a href="https://link.zhihu.com/?target=https://devopscube.com/setup-kubernetes-cluster-kubeadm/">Kubeadm Cluster Setup</a>**：学习 kubeadm 集群设置可以帮助你<a href="https://link.zhihu.com/?target=https://devopscube.com/best-kubernetes-certifications/">准备Kubernetes 认证</a>。此外，它还可以帮助你使用最佳实践自动化 Kubernetes 集群设置。</li>
+<li><strong><a href="https://link.zhihu.com/?target=https://devopscube.com/kubernetes-minikube-tutorial/">Minikube：</a></strong> 如果你想要一个最小的开发集群设置，minikube 是最好的选择。</li>
+<li><strong><a href="https://link.zhihu.com/?target=https://kind.sigs.k8s.io/">Kind：</a></strong> Kind 是另一种本地开发 Kubernetes 集群设置。</li>
+<li><strong><a href="https://link.zhihu.com/?target=https://github.com/techiescamp/vagrant-kubeadm-kubernetes">Vagrant Automated Kubernetes</a>：</strong>如果你更喜欢基于多虚拟机的本地 Kubernetes 集群设置，你可以尝试使用 Kubeadm 引导集群的自动化 vagrant 设置。</li>
+</ol>
+<p>此外，还可以使用免费的云积分并设置托管 Kubernetes 集群。</p>
+<ol>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/setup-kubernetes-cluster-google-cloud/">GKE</a>（谷歌云——300 美元免费赠金）</li>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/create-aws-eks-cluster-eksctl/">EKS</a>（AWS – 300 美元的免费 POC 积分）</li>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/recommends/digital-ocean-sidebar/">DO Kubernetes</a>（数字海洋——200 美元免费积分）</li>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/recommends/linode-credits/">Linode Kubernetes Engine</a>（Linode Cloud – 100 美元免费积分）</li>
+</ol>
+<h2 id="四、了解-Kubeconfig-文件"><a href="#四、了解-Kubeconfig-文件" class="headerlink" title="四、了解 Kubeconfig 文件"></a>四、了解 Kubeconfig 文件</h2><p>**<code>Kubeconfig</code>**文件是一个 YAML 文件，包含了所有集群信息和连接到集群的凭据。</p>
+<p>作为一名 Devops 工程师，你应该学习使用 Kubeconfig 文件以不同方式连接到 kubernetes 集群。因为你要负责为 CI&#x2F;CD 系统设置集群身份验证，还为开发人员提供集群访问等等。</p>
+<p>所以花一些时间，了解 Kubeconfig 文件结构和相关参数吧。</p>
+<p>请点击查看<a href="https://link.zhihu.com/?target=https://devopscube.com/kubernetes-kubeconfig-file/">完整的 Kubeconfig 文件指南</a>，了解有关 Kubeconfig 文件的所有信息。</p>
+<h2 id="五、了解-Kubernetes-对象和资源"><a href="#五、了解-Kubernetes-对象和资源" class="headerlink" title="五、了解 Kubernetes 对象和资源"></a>五、了解 Kubernetes 对象和资源</h2><p>你会经常遇到“Kubernetes 对象”和“Kubernetes 资源”这两个名称。</p>
+<p>首先，你需要了解 Kubernetes 中对象和资源之间的区别。</p>
+<p>简单来说，<strong>用户在 Kubernetes 中创建并持久化的任何东西都是一个对象</strong>。例如命名空间、pod、Deployment configmap、Secret 等。</p>
+<p>在创建对象之前，我们会用 YAML 或 JSON 格式来表示它。它被称为<strong>对象规范（Spec）</strong>。我们在 Object Spec 上声明对象的所需状态。创建对象后，我们可以使用 Kubectl 或客户端库从 Kubernetes API 检索其详细信息。</p>
+<p>正如我们之前在先决条件部分讨论的那样，Kubernetes 中的一切都是 API。为了创建不同的对象类型，<strong>Kubernetes API 服务器提供了 API 端点</strong>。那些<strong>特定于对象的 api 端点称为资源</strong>。例如，创建 pod 的端点称为<strong>pod 资源</strong>。</p>
+<p>因此，当尝试使用 Kubectl 创建 Kubernetes 对象时，它会将 YAML 规范转换为 JSON 格式并将其发送到 Pod 资源（Pod API 端点）。</p>
+<h2 id="六、了解-Pod-和相关资源"><a href="#六、了解-Pod-和相关资源" class="headerlink" title="六、了解 Pod 和相关资源"></a>六、了解 Pod 和相关资源</h2><p>了解完了 Kubernetes 对象和资源，下一步就可以从原生 Kubernetes 对象 Pod 入手。Pod 是 Kubernetes 的基本构建块。</p>
+<p>你应该了解所有与 <strong>Pod 相关的概念</strong>及其相关对象，如 <strong>Service、Ingress、Persistent Volume、Configmap 和 Secret</strong>。一旦了解了有关 pod 的所有内容，就可以很容易地了解其他依赖于 pod 的对象，如部署、Daemonset 等。</p>
+<p>首先，了解 Pod 对象规范 (YAML)。典型的 Pod YAML 包含以下高级构造：</p>
+<ol>
+<li>Kind 种类</li>
+<li>Metadata 元数据</li>
+<li>Annotations 注释</li>
+<li>Labels 标签</li>
+<li>Selectors 选择器</li>
+</ol>
+<p>对上述内容有了基本的了解后，还要继续进行实践学习。只有亲自实践动手时，对这些概念的了解才会更深入。</p>
+<p>以下是了解 Pod 及其关联对象的<strong>实践小联系：</strong></p>
+<ol>
+<li>部署一个 pod</li>
+<li>在特定工作节点上部署 pod</li>
+<li>向 pod 添加服务</li>
+<li>使用 Nodeport 公开 pod 服务</li>
+<li>使用 Ingress 公开 Pod 服务</li>
+<li>设置 Pod 资源和限制</li>
+<li>使用启动、活动和就绪探测设置 Pod。</li>
+<li>将 Persistent Volume 添加到 pod。</li>
+<li>将 configmap 附加到 pod</li>
+<li>将 Secret 添加到 pod</li>
+<li>多容器 pod（sidecar 容器模式）</li>
+<li>初始化容器</li>
+<li>临时容器</li>
+<li>静态 Pod</li>
+<li>学习对 Pod 进行故障排除</li>
+</ol>
+<p>还有一点点高级 pod 调度概念：</p>
+<ol>
+<li>Pod 抢占和优先级</li>
+<li>Pod 中断预算</li>
+<li>使用节点选择器放置 Pod</li>
+<li>Pod 亲和性和反亲和性</li>
+</ol>
+<h2 id="七、了解-Pod-相关对象"><a href="#七、了解-Pod-相关对象" class="headerlink" title="七、了解 Pod 相关对象"></a>七、了解 Pod 相关对象</h2><p>现在你对 Pod 和独立的 kubernetes 资源有了更好的了解，就可以开始学习依赖于 pod 对象的对象。在学习这一点的过程中，会遇到 HPA（水平 Pod 自动缩放）和 VPA（验证 Pod 自动缩放）等概念</p>
+<ol>
+<li>Replicaset 复制集</li>
+<li>Deployment 部署</li>
+<li>Daemonsets 守护进程</li>
+<li>Statefulset 状态集</li>
+<li>Jobs &amp; Cronjobs</li>
+</ol>
+<h2 id="八、学习入口和入口控制器"><a href="#八、学习入口和入口控制器" class="headerlink" title="八、学习入口和入口控制器"></a>八、学习入口和入口控制器</h2><p>为了将应用程序暴露给外界或最终用户，kubernetes 有一个名为 ingress 的原生对象。</p>
+<p>由于对 Ingress 控制器的了解较少，许多工程师对 Ingress 感到困惑。所以确保你了解 Ingress 和 Ingress 控制器的概念并正确理解它。因为它是将应用程序暴露给外界的基础。</p>
+<p>你可以从以下综合指南开始。</p>
+<ol>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/kubernetes-ingress-tutorial/">Kubernetes Ingress 解释</a></li>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/setup-ingress-kubernetes-nginx-controller/">设置 Nginx 入口控制器</a></li>
+</ol>
+<p>此外，了解<a href="https://link.zhihu.com/?target=https://gateway-api.sigs.k8s.io/">Kubernetes Gateway API</a>。它提供了优于 Ingress 的高级功能。</p>
+<h2 id="九、在-Kubernetes-上部署端到端应用程序"><a href="#九、在-Kubernetes-上部署端到端应用程序" class="headerlink" title="九、在 Kubernetes 上部署端到端应用程序"></a>九、在 Kubernetes 上部署端到端应用程序</h2><p>一旦了解了这些对象的基础知识，就可以尝试在 Kubernetes 上部署端到端应用程序。</p>
+<p>我建议获得一个域名并尝试从头开始设置微服务应用程序并将其托管在域中。</p>
+<p>无需为此开发应用程序。选择任何基于开源微服务的应用程序并进行部署。我的建议是选择开源的基于spring boot的 <a href="https://link.zhihu.com/?target=https://github.com/spring-petclinic/spring-petclinic-microservices">pet clinic microservice application</a></p>
+<p>以下是一些难度较高的练习任务：</p>
+<ol>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/build-docker-image/">为所有服务构建 Docker 镜像</a>。确保优化 Dockerfile 以<a href="https://link.zhihu.com/?target=https://devopscube.com/reduce-docker-image-size/">减小 Docker Image 的大小</a>。</li>
+<li>为所有服务创建清单。（部署、状态集、服务、配置图、机密等）</li>
+<li>暴露服务类型为 ClusterIp 的前端</li>
+<li>部署 Nginx Ingress 控制器并使用服务类型 Loadbalancer 公开它</li>
+<li>将 Loadbalancer IP 映射到域名。</li>
+<li>创建一个带有 DNS 名称的入口对象，后端作为前端服务名称。</li>
+<li>验证应用程序。</li>
+</ol>
+<h2 id="十、了解如何保护-Kubernetes-集群"><a href="#十、了解如何保护-Kubernetes-集群" class="headerlink" title="十、了解如何保护 Kubernetes 集群"></a>十、了解如何保护 Kubernetes 集群</h2><p>安全性是 Kubernetes 很关键的一点。从构建安全的容器镜像开始，有很多方法可以在 Kubernetes 中实施安全最佳实践。</p>
+<p>遵循在 kubernetes 中实现安全性的方法：</p>
+<ol>
+<li>服务帐号</li>
+<li>Pod 安全上下文</li>
+<li>Seccomp 和 AppArmor</li>
+<li>基于角色的访问控制 (RBAC)</li>
+<li>基于属性的访问控制 (ABAC)</li>
+<li>网络政策</li>
+</ol>
+<p>以下是您需要查看的开源工具。</p>
+<ol>
+<li>Open Policy Agent</li>
+<li>Kyverno</li>
+<li>Kube-bench</li>
+<li>Kube-hunter</li>
+<li>Falco</li>
+</ol>
+<h2 id="十一、了解-Kubernetes-配置管理工具"><a href="#十一、了解-Kubernetes-配置管理工具" class="headerlink" title="十一、了解 Kubernetes 配置管理工具"></a>十一、了解 Kubernetes 配置管理工具</h2><p>现在你已经很好地了解了所有 Kubernetes 对象和在 Kubernetes 上部署应用程序，下卖弄可以开始学习 Kubernetes 配置管理工具。</p>
+<p>当开始在组织中处理实时项目时，会看到使用配置管理工具在 Kubernetes 上部署应用程序。</p>
+<p>因为在组织中，有不同的环境，如开发、阶段、预生产和生产。您不能为每个环境创建单独的 YAML 文件并手动管理它们。所以你需要一个系统来有效地管理 Kubernetes YAML 配置。</p>
+<p>以下是用于管理 YAML 的流行且广泛采用的 Kubernetes 工具。</p>
+<ol>
+<li><a href="https://link.zhihu.com/?target=https://devopscube.com/install-configure-helm-kubernetes/">Helm</a></li>
+<li><a href="https://link.zhihu.com/?target=https://kustomize.io/">Kuztomize</a></li>
+</ol>
+<h2 id="十二、了解-Kubernetes-操作符模式"><a href="#十二、了解-Kubernetes-操作符模式" class="headerlink" title="十二、了解 Kubernetes 操作符模式"></a>十二、了解 Kubernetes 操作符模式</h2><p>Kubernetes Operators 是一个高级概念。</p>
+<p>要了解 Operator，首先需要了解以下 Kubernetes 概念：</p>
+<ol>
+<li>Custom resource definitions</li>
+<li>Admission controllers</li>
+<li>Validating &amp; Mutating Webhooks</li>
+</ol>
+<p>要开始使用操作符，你可以尝试在 Kubernetes 上设置以下操作符：</p>
+<ol>
+<li>Prometheus Operator</li>
+<li>MySQL 运算符</li>
+</ol>
+<p>如果你是 Go 开发人员或者想学习扩展&#x2F;自定义 kubernetes，我建议使用 Golang <strong>创建自己的运算符</strong>。</p>
+<h2 id="十三、了解重要的-Kubernetes-配置"><a href="#十三、了解重要的-Kubernetes-配置" class="headerlink" title="十三、了解重要的 Kubernetes 配置"></a>十三、了解重要的 Kubernetes 配置</h2><p>在学习 kubernetes 时，你可能会在开放网络连接中使用集群。因此，大多数任务都可以毫无问题地执行。但是，在公司网络上设置的集群并非如此。</p>
+<p>因此，以下是你应该注意的一些自定义集群配置。</p>
+<ol>
+<li>自定义 DNS 服务器</li>
+<li>自定义镜像注册表</li>
+<li>将日志传送到外部日志系统</li>
+<li>Kubernetes OpenID 连接</li>
+<li>为 PCI 和 PII 工作负载分离和保护节点</li>
+</ol>
+<h2 id="十四、学习-Kubernetes-最佳实践"><a href="#十四、学习-Kubernetes-最佳实践" class="headerlink" title="十四、学习 Kubernetes 最佳实践"></a>十四、学习 Kubernetes 最佳实践</h2><p>以下是可能在最佳实践方面对 Kubernetes 学习过程有所帮助的资源。</p>
+<ol>
+<li><p><strong>12 Factor Apps</strong>：这是一种讨论如何编码、部署和维护基于现代微服务的应用程序的方法。由于 Kubernetes 是一个云原生微服务平台，它是 DevOps 工程师必须了解的概念。因此，当处理实时 kubernetes 项目时，你可以实施这些 12 要素原则。</p>
+</li>
+<li><p><strong>Kubernetes Failure Stories</strong>：Kubernetes 失败故事是一个网站，其中包含一系列讨论 Kubernetes 实施失败的文章。如果您阅读了这些故事，就可以避免在 kubernetes 实施中犯下这些错误。</p>
+</li>
+<li><p><strong>来自组织的案例研究：</strong>花时间研究组织发布的关于 Kubernetes 使用和扩展的用例。你可以从他们那里学到很多东西。以下是一些值得一读的案例研究。</p>
+</li>
+<li><ol>
+<li><a href="https://link.zhihu.com/?target=https://www.youtube.com/watch?v=wjy35HfIP_k">生产日调度 300,000 个 Kubernetes Pod</a></li>
+<li><a href="https://link.zhihu.com/?target=https://openai.com/blog/scaling-kubernetes-to-7500-nodes/">将 Kubernetes 扩展到 7,500 个节点</a></li>
+</ol>
+</li>
+<li></li>
+<li></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/" class="category-chain-item">分布式组件</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6/">#分布式组件</a>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">#云原生</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Kubernetes</div>
+      <div>http://example.com/2023/07/19/分布式组件+常见组件/Kubernetes/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/20/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="分布式锁-尚">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">分布式锁-尚</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%81%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C/" title="操作系统、虚拟机、容器网络">
+                        <span class="hidden-mobile">操作系统、虚拟机、容器网络</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

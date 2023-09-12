@@ -16,12 +16,12 @@
   <meta name="author" content="where">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Flink-应用- 概念深究checkPoint基础概念元数据 检查点元数据信息主要包括：  检查点的ID，用于标识检查点的唯一性。 检查点的触发时间，指的是执行检查点操作的时间点。 Checkpoint状态，指示是否已经完成或取消检查点。 创建检查点时应用程序的并行任务操作符状态。 每个并行任务操作符的私有状态，比如值状态和列表状态等。 快照的状态大小，以字节为单位，用于监视检查点的大小。  流">
+    <meta name="description" content="Flink-应用第一部分 概念深究checkPoint基础概念元数据 检查点元数据信息主要包括：  检查点的ID，用于标识检查点的唯一性。 检查点的触发时间，指的是执行检查点操作的时间点。 Checkpoint状态，指示是否已经完成或取消检查点。 创建检查点时应用程序的并行任务操作符状态。 每个并行任务操作符的私有状态，比如值状态和列表状态等。 快照的状态大小，以字节为单位，用于监视检查点的大小。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink-应用">
 <meta property="og:url" content="http://example.com/2023/06/01/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/Flink%E7%AC%94%E8%AE%B0-%E6%96%B0/index.html">
 <meta property="og:site_name" content="where&#39;s blog">
-<meta property="og:description" content="Flink-应用- 概念深究checkPoint基础概念元数据 检查点元数据信息主要包括：  检查点的ID，用于标识检查点的唯一性。 检查点的触发时间，指的是执行检查点操作的时间点。 Checkpoint状态，指示是否已经完成或取消检查点。 创建检查点时应用程序的并行任务操作符状态。 每个并行任务操作符的私有状态，比如值状态和列表状态等。 快照的状态大小，以字节为单位，用于监视检查点的大小。  流">
+<meta property="og:description" content="Flink-应用第一部分 概念深究checkPoint基础概念元数据 检查点元数据信息主要包括：  检查点的ID，用于标识检查点的唯一性。 检查点的触发时间，指的是执行检查点操作的时间点。 Checkpoint状态，指示是否已经完成或取消检查点。 创建检查点时应用程序的并行任务操作符状态。 每个并行任务操作符的私有状态，比如值状态和列表状态等。 快照的状态大小，以字节为单位，用于监视检查点的大小。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/1902689/1633213582389-2561c5aa-51d9-4952-9856-0100e8f2ecb8.png">
 <meta property="og:image" content="http://flink.apachecn.org/docs/img/tumbling-windows.svg">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://flink.apachecn.org/docs/img/interval-join.svg">
 <meta property="og:image" content="http://flink.apachecn.org/docs/img/times_clocks.svg">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-11T11:36:37.809Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.893Z">
 <meta property="article:author" content="where">
 <meta property="article:tag" content="分布式系统">
 <meta property="article:tag" content="大数据">
@@ -230,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          40k 字
+          45k 字
         
       </span>
     
@@ -241,7 +241,7 @@
         
         
         
-          332 分钟
+          374 分钟
         
       </span>
     
@@ -284,7 +284,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Flink-应用"><a href="#Flink-应用" class="headerlink" title="Flink-应用"></a>Flink-应用</h1><h1 id="概念深究"><a href="#概念深究" class="headerlink" title="- 概念深究"></a>- 概念深究</h1><h2 id="checkPoint"><a href="#checkPoint" class="headerlink" title="checkPoint"></a>checkPoint</h2><h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><p><strong>元数据</strong></p>
+                <h1 id="Flink-应用"><a href="#Flink-应用" class="headerlink" title="Flink-应用"></a>Flink-应用</h1><h1 id="第一部分-概念深究"><a href="#第一部分-概念深究" class="headerlink" title="第一部分 概念深究"></a>第一部分 概念深究</h1><h2 id="checkPoint"><a href="#checkPoint" class="headerlink" title="checkPoint"></a>checkPoint</h2><h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><p><strong>元数据</strong></p>
 <p>检查点元数据信息主要包括：</p>
 <ol>
 <li>检查点的ID，用于标识检查点的唯一性。</li>
@@ -339,7 +339,132 @@
 
 
 
-<h1 id="flink-组件"><a href="#flink-组件" class="headerlink" title="flink 组件"></a>flink 组件</h1><p>job、算子、task</p>
+<h1 id="第一章-flink-组件"><a href="#第一章-flink-组件" class="headerlink" title="第一章 flink 组件"></a>第一章 flink 组件</h1><h2 id="Manager"><a href="#Manager" class="headerlink" title="Manager"></a>Manager</h2><ol>
+<li><p>TaskManager（任务管理器）：</p>
+<ul>
+<li>概念：TaskManager是Flink集群中的工作节点，负责执行具体的任务。</li>
+<li>职责：TaskManager负责接收和执行任务，管理任务的资源，包括CPU、内存和网络等资源。它还负责与JobManager进行通信，接收任务的分配和调度指令，并将任务的执行结果返回给JobManager。</li>
+<li>调度时机：TaskManager在启动时会向ResourceManager注册自己的资源，并等待JobManager的任务分配。</li>
+<li>调度流程：<ol>
+<li>TaskManager向ResourceManager注册自己的资源。</li>
+<li>TaskManager等待JobManager的任务分配。</li>
+<li>JobManager根据作业的拓扑结构和任务之间的依赖关系，将任务分配给TaskManager。</li>
+<li>TaskManager接收到任务后，根据任务的执行逻辑执行计算，并将结果返回给JobManager。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>ResourceManager（资源管理器）：</p>
+<ul>
+<li>概念：ResourceManager是Flink集群中的资源管理组件，负责分配和管理集群中的资源。</li>
+<li>职责：ResourceManager负责接收来自JobManager的作业提交请求，并根据集群的资源情况进行资源分配。它管理集群中的资源池，包括CPU、内存和网络等资源，并根据作业的需求进行动态调整。ResourceManager还负责监控TaskManager的健康状态，以及处理TaskManager的故障和重启。</li>
+<li>调度时机：ResourceManager在Flink集群启动时被启动，负责整个集群的资源管理。</li>
+<li>调度流程：<ol>
+<li>ResourceManager启动，并初始化资源池。</li>
+<li>JobManager提交作业请求给ResourceManager。</li>
+<li>ResourceManager根据作业的资源需求和集群的资源情况，进行资源分配。</li>
+<li>ResourceManager将分配的任务发送给相应的TaskManager。</li>
+<li>ResourceManager监控TaskManager的健康状态，处理故障和重启。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>JobManager（作业管理器）：</p>
+<ul>
+<li>概念：JobManager是Flink集群中的主节点，负责整个作业的管理和调度。</li>
+<li>职责：JobManager负责接收作业提交请求，将作业转换为JobGraph，并进行作业的调度和执行。它还负责管理作业的状态、检查点和故障恢复等功能。</li>
+<li>调度时机：JobManager在Flink集群启动时被启动，负责整个作业的管理和调度。</li>
+<li>调度流程：<ol>
+<li>JobManager启动，并等待作业的提交请求。</li>
+<li>用户提交作业请求给JobManager。</li>
+<li>JobManager将作业转换为JobGraph，包括作业的拓扑结构和任务之间的依赖关系。</li>
+<li>JobManager根据作业的调度策略，将任务分配给TaskManager。</li>
+<li>TaskManager接收到任务后，执行计算，并将结果返回给JobManager。</li>
+<li>JobManager监控作业的执行状态，处理检查点和故障恢复等操作。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p>这些组件共同协作，实现了Flink的分布式流处理和批处理功能。</p>
+<h2 id="其他组件"><a href="#其他组件" class="headerlink" title="其他组件"></a>其他组件</h2><ol>
+<li><p>JobGraph（作业图）：</p>
+<ul>
+<li>概念：JobGraph是一个有向无环图，表示一个Flink作业的拓扑结构和任务之间的依赖关系。</li>
+<li>职责：JobGraph描述了作业中的算子和数据流之间的关系，包括输入输出关系、任务之间的依赖关系等。它是作业提交给JobManager的输入，用于作业的调度和执行。</li>
+<li>调度时机：JobGraph在作业提交时生成，并在作业调度和执行过程中使用。</li>
+</ul>
+</li>
+<li><p>ExecutionGraph（执行图）：</p>
+<ul>
+<li>概念：ExecutionGraph是一个正在执行的Flink作业的有向无环图，包含了作业的执行状态、任务的调度信息和任务之间的依赖关系。</li>
+<li>职责：ExecutionGraph是JobManager根据JobGraph生成的执行计划，用于管理作业的执行过程。它记录了作业的执行状态、任务的调度信息、任务之间的依赖关系等，并负责监控任务的执行状态，处理故障恢复和任务重启等操作。</li>
+<li>调度时机：ExecutionGraph在作业提交后由JobManager生成，并在作业执行过程中使用。</li>
+</ul>
+</li>
+<li><p>Task（任务）：</p>
+<ul>
+<li>概念：Task是Flink作业中的一个执行单元，负责执行具体的计算逻辑。</li>
+<li>职责：Task负责接收输入数据，执行计算逻辑，并产生输出结果。一个作业可以包含多个任务，每个任务负责处理作业的一部分数据。任务之间可以通过网络进行数据交换和通信。</li>
+<li>调度时机：Task在作业执行过程中根据调度策略由TaskManager执行。</li>
+</ul>
+</li>
+<li><p>TaskExecutor（任务执行器）：</p>
+<ul>
+<li>概念：TaskExecutor是运行在TaskManager上的组件，负责接收和执行任务，并管理任务的资源。</li>
+<li>职责：TaskExecutor负责接收来自JobManager的任务分配请求，并根据任务的调度信息执行任务。它管理任务的资源，包括CPU、内存和网络等资源，并负责与其他TaskExecutor进行数据交换和通信。</li>
+<li>调度时机：TaskExecutor在TaskManager启动时被启动，并在整个作业执行过程中持续运行。</li>
+</ul>
+</li>
+<li><p>BlobServer（资源服务器）：</p>
+<ul>
+<li>概念：BlobServer是用于存储和提供作业所需的资源文件，例如JAR包、配置文件等。</li>
+<li>职责：BlobServer负责接收和存储作业提交时所需的资源文件，并提供给TaskExecutor进行下载和使用。它提供了高效的资源分发机制，减少了作业提交和执行的时间。</li>
+<li>调度时机：BlobServer在Flink集群启动时被启动，并在整个作业执行过程中持续运行。</li>
+</ul>
+</li>
+<li><p>CheckpointCoordinator（检查点协调器）：</p>
+<ul>
+<li>概念：CheckpointCoordinator负责管理作业的检查点，以实现容错和恢复。</li>
+<li>职责：CheckpointCoordinator定期触发作业的检查点操作，将作业的状态和数据保存到持久化存储中。在发生故障时，可以使用检查点来恢复作业的状态，保证作业的一致性和可靠性。</li>
+<li>调度时机：CheckpointCoordinator在作业执行过程中负责生成和管理检查点。</li>
+</ul>
+</li>
+<li><p>StateBackend（状态后端）：</p>
+<ul>
+<li>概念：StateBackend用于管理作业的状态，包括算子状态和键值状态。</li>
+<li>职责：StateBackend负责将作业的状态存储在内存或外部存储中，并提供状态的读写接口。它可以根据作业的需求选择不同的存储方式，例如内存、文件系统或分布式存储系统。</li>
+<li>调度时机：StateBackend在作业执行过程中负责管理状态的读写操作。</li>
+</ul>
+</li>
+<li><p>ShuffleManager（洗牌管理器）：</p>
+<ul>
+<li>概念：ShuffleManager负责将数据进行分区和洗牌，以便在任务之间进行数据交换。</li>
+<li>职责：ShuffleManager根据作业的需求，将输入数据进行分区和洗牌，并将洗牌后的数据分发给相应的任务进行计算。它提供了高效的数据交换机制，减少了数据传输的开销。</li>
+<li>调度时机：ShuffleManager在任务执行过程中负责数据的分区和洗牌操作</li>
+</ul>
+</li>
+<li><p>TaskManagerRunner（任务管理器运行器）：</p>
+<ul>
+<li>概念：TaskManagerRunner用于启动和管理TaskManager进程。</li>
+<li>职责：TaskManagerRunner负责启动TaskManager进程，并提供管理和监控TaskManager的功能。它负责与ResourceManager进行通信，接收任务的分配和调度指令，并将任务的执行结果返回给JobManager。</li>
+<li>调度时机：TaskManagerRunner在Flink集群启动时被启动，并在整个作业执行过程中持续运行。</li>
+</ul>
+</li>
+<li><p>ResourceManagerRunner（资源管理器运行器）：</p>
+<ul>
+<li>概念：ResourceManagerRunner用于启动和管理ResourceManager进程。</li>
+<li>职责：ResourceManagerRunner负责启动ResourceManager进程，并提供管理和监控ResourceManager的功能。它负责接收来自JobManager的作业提交请求，并根据集群的资源情况进行资源分配和调度。</li>
+<li>调度时机：ResourceManagerRunner在Flink集群启动时被启动，并在整个作业执行过程中持续运行。</li>
+</ul>
+</li>
+</ol>
+<p>这些组件共同协作，实现了Flink的分布式流处理和批处理功能。在作业执行过程中，JobGraph和ExecutionGraph描述了作业的结构和执行状态，Task和TaskExecutor负责具体的计算和任务执行，BlobServer存储和提供作业所需的资源文件，CheckpointCoordinator管理作业的检查点以实现容错和恢复，StateBackend管理作业的状态，ShuffleManager负责数据的分区和洗牌，TaskManagerRunner和ResourceManagerRunner分别负责启动和管理TaskManager和ResourceManager进程。通过这些组件的协作，Flink能够实现高效的分布式计算和数据处理。</p>
+<h2 id="“单位”"><a href="#“单位”" class="headerlink" title="“单位”"></a>“单位”</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs markdown">在Flink中还有以下关键词：<br><br><span class="hljs-bullet">1.</span> Job（作业）：<br><span class="hljs-bullet">   -</span> 概念：Job是一个用户定义的数据处理任务，由一个或多个算子组成的有向无环图。它是Flink中最高级别的抽象，表示一个完整的数据处理流程。<br><span class="hljs-bullet">   -</span> 场景：Job适用于需要对数据进行复杂的处理和转换的场景，例如数据清洗、数据分析、实时计算等。<br><span class="hljs-bullet">   -</span> 功能：Job定义了数据处理的逻辑和流程，包括输入数据的来源、数据的转换和计算逻辑、输出数据的目的地等。<br><br><span class="hljs-bullet">2.</span> 算子（Operator）：<br><span class="hljs-bullet">   -</span> 概念：算子是作业中的一个基本计算单元，负责对输入数据进行转换和处理。算子可以是数据源（Source）、数据接收器（Sink）或数据转换操作（Transformation）。<br><span class="hljs-bullet">   -</span> 场景：算子适用于对数据进行各种类型的操作，例如过滤、映射、聚合、连接等。<br><span class="hljs-bullet">   -</span> 功能：算子定义了对输入数据的处理逻辑，可以对数据进行转换、过滤、聚合等操作，并将结果发送给下游算子或输出到外部系统。<br><br><span class="hljs-bullet">3.</span> Source（数据源）：<br><span class="hljs-bullet">   -</span> 概念：Source是作业中的一个算子，负责从外部系统读取输入数据并生成数据流。它可以从文件、消息队列、数据库等数据源中读取数据。<br><span class="hljs-bullet">   -</span> 场景：Source适用于需要从外部系统读取数据并进行处理的场景，例如实时流处理、批处理等。<br><span class="hljs-bullet">   -</span> 功能：Source负责读取输入数据，并将数据发送给下游算子进行处理。它可以根据数据源的特性进行数据的分区和并行读取，实现高吞吐量的数据处理。<br><br><span class="hljs-bullet">4.</span> Sink（数据接收器）：<br><span class="hljs-bullet">   -</span> 概念：Sink是作业中的一个算子，负责将计算结果输出到外部系统或存储介质。它可以将数据写入文件、数据库、消息队列等目的地。<br><span class="hljs-bullet">   -</span> 场景：Sink适用于需要将计算结果输出到外部系统或存储介质的场景，例如数据持久化、结果展示、数据传输等。<br><span class="hljs-bullet">   -</span> 功能：Sink接收来自上游算子的计算结果，并将结果写入外部系统或存储介质。它可以根据目的地的特性进行数据的分区和并行写入，实现高吞吐量的数据输出。<br><br><span class="hljs-bullet">5.</span> 依赖（Dependency）：<br><span class="hljs-bullet">   -</span> 概念：依赖表示作业中算子之间的关系，描述了数据流的传递和计算顺序。一个算子的输入数据依赖于其他算子的输出数据。<br><span class="hljs-bullet">   -</span> 场景：依赖用于描述算子之间的数据流和计算顺序，确保数据的正确传递和计算的顺序性。<br><span class="hljs-bullet">   -</span> 功能：依赖定义了算子之间的数据流和计算顺序，确保每个算子在正确的时机接收和处理数据，保证作业的正确性和一致性。<br><br>这些关键词在Flink中扮演着重要的角色。Job表示一个完整的数据处理任务，算子是作业中的基本计算单元，负责数据的转换和处理。Source负责从外部系统读取输入数据，Sink负责将计算结果输出到外部系统。依赖描述了算子之间的关系，确保数据的正确传递和计算的顺序性。通过这些关键词的使用，Flink能够实现灵活、高效的数据处理和计算。<br></code></pre></td></tr></table></figure>
+
+
+
+<p>job、算子、task</p>
 <p>在Flink中，Job、Task和算子的关系如下：</p>
 <ul>
 <li>Job：代表一个完整的数据处理任务，由一系列算子和依赖关系组成。</li>
@@ -359,15 +484,15 @@
 
 
 
-<h1 id="基础API"><a href="#基础API" class="headerlink" title="- 基础API"></a>- 基础API</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>批处理 和 流处理</strong></p>
+<h1 id="第二部分-基础API"><a href="#第二部分-基础API" class="headerlink" title="第二部分 基础API"></a>第二部分 基础API</h1><h1 id="第零部分-概念"><a href="#第零部分-概念" class="headerlink" title="第零部分 概念"></a>第零部分 概念</h1><h2 id="0-1-概述"><a href="#0-1-概述" class="headerlink" title="0.1 概述"></a>0.1 概述</h2><p><strong>批处理 和 流处理</strong></p>
 <p>Flink程序是实现分布式集合转换的常规程序（例如，Filter，映射，更新状态，Join，分组，定义窗口，聚合）。</p>
 <p>集合最初是从源创建的（例如，通过读取文件，kafka主题或从本地的内存中集合）。</p>
 <p>结果通过接收器返回，接收器可以例如将数据写入（分布式）文件或标准输出（例如，命令行终端）。</p>
 <p>Flink程序可以在各种环境中运行，独立运行或嵌入其他程序中。执行可以在本地JVM中执行，也可以在许多计算机的集群上执行。</p>
 <p>根据数据源的类型（即有界或无界源），您可以编写批处理程序或流程序，其中DataSet API用于批处理，DataStream API用于流式处理。本指南将介绍两种API共有的基本概念，但请参阅我们的 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/datastream_api.html">流处理指南</a>和 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/batch/index.html">批处理指南</a>，了解有关使用每个API编写程序的具体信息。</p>
 <p><strong>注：</strong>当显示的API时，如何使用，我们将用实际的例子 <code>StreamingExecutionEnvironment</code>和<code>DataStream</code>API。<code>DataSet</code>API中的概念完全相同，只需替换为<code>ExecutionEnvironment</code>和<code>DataSet</code>。</p>
-<h2 id="DataSet-与-DataStream"><a href="#DataSet-与-DataStream" class="headerlink" title="DataSet 与 DataStream"></a>DataSet 与 DataStream</h2><p>Flink具有特殊类<code>DataSet</code>并<code>DataStream</code>在程序中表示数据。您可以将它们视为可以包含重复项的不可变数据集合。在<code>DataSet</code>数据有限的情况下，对于一个<code>DataStream</code>数据元的数量可以是无界的。</p>
-<h2 id="Flink计划的剖析"><a href="#Flink计划的剖析" class="headerlink" title="Flink计划的剖析"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=flink%E8%AE%A1%E5%88%92%E7%9A%84%E5%89%96%E6%9E%90">Flink计划的剖析</a></h2><p>Flink程序看起来像是转换数据集合的常规程序。每个程序包含相同的基本部分：</p>
+<h2 id="0-2-DataSet-与-DataStream"><a href="#0-2-DataSet-与-DataStream" class="headerlink" title="0.2 DataSet 与 DataStream"></a>0.2 DataSet 与 DataStream</h2><p>Flink具有特殊类<code>DataSet</code>并<code>DataStream</code>在程序中表示数据。您可以将它们视为可以包含重复项的不可变数据集合。在<code>DataSet</code>数据有限的情况下，对于一个<code>DataStream</code>数据元的数量可以是无界的。</p>
+<h2 id="0-3-Flink计划的剖析"><a href="#0-3-Flink计划的剖析" class="headerlink" title="0.3 Flink计划的剖析"></a>0.3 <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=flink%E8%AE%A1%E5%88%92%E7%9A%84%E5%89%96%E6%9E%90">Flink计划的剖析</a></h2><p>Flink程序看起来像是转换数据集合的常规程序。每个程序包含相同的基本部分：</p>
 <ol>
 <li>获得一个<code>execution environment</code>，</li>
 <li>加载&#x2F;创建初始数据，</li>
@@ -375,7 +500,7 @@
 <li>指定放置计算结果的位置，</li>
 <li>触发程序执行</li>
 </ol>
-<h2 id="支持类型"><a href="#支持类型" class="headerlink" title="支持类型"></a>支持类型</h2><h3 id="元组和案例类-–-Tuple"><a href="#元组和案例类-–-Tuple" class="headerlink" title="元组和案例类 – Tuple"></a>元组和案例类 – Tuple</h3><p>元组是包含固定数量的具有各种类型的字段的复合类型。Java API提供<code>Tuple1</code>最多的类<code>Tuple25</code>。元组的每个字段都可以是包含更多元组的任意Flink类型，从而产生嵌套元组。可以使用字段名称直接访问元组的字段<code>tuple.f4</code>，或使用通用getter方法 <code>tuple.getField(int position)</code>。字段索引从0开始。请注意，这与Scala元组形成鲜明对比，但它与Java常规索引更为一致。</p>
+<h2 id="0-4-支持类型"><a href="#0-4-支持类型" class="headerlink" title="0.4 支持类型"></a>0.4 支持类型</h2><h3 id="元组和案例类-–-Tuple"><a href="#元组和案例类-–-Tuple" class="headerlink" title="元组和案例类 – Tuple"></a>元组和案例类 – Tuple</h3><p>元组是包含固定数量的具有各种类型的字段的复合类型。Java API提供<code>Tuple1</code>最多的类<code>Tuple25</code>。元组的每个字段都可以是包含更多元组的任意Flink类型，从而产生嵌套元组。可以使用字段名称直接访问元组的字段<code>tuple.f4</code>，或使用通用getter方法 <code>tuple.getField(int position)</code>。字段索引从0开始。请注意，这与Scala元组形成鲜明对比，但它与Java常规索引更为一致。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">DataStream&lt;Tuple2&lt;String, Integer&gt;&gt; wordCounts = env.fromElements(<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;String, Integer&gt;(<span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-number">1</span>),<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;String, Integer&gt;(<span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-number">2</span>));<br><br>wordCounts.map(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MapFunction</span>&lt;Tuple2&lt;String, Integer&gt;, Integer&gt;() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Integer <span class="hljs-title function_">map</span><span class="hljs-params">(Tuple2&lt;String, Integer&gt; value)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">return</span> value.f1;<br>    &#125;<br>&#125;);<br><br>wordCounts.keyBy(<span class="hljs-number">0</span>); <span class="hljs-comment">// also valid .keyBy(&quot;f0&quot;)</span><br></code></pre></td></tr></table></figure>
 
 
@@ -401,7 +526,7 @@
 <p>Flink带有与基本数据类型对应的预定义值类型。（<code>ByteValue</code>， <code>ShortValue</code>，<code>IntValue</code>，<code>LongValue</code>，<code>FloatValue</code>，<code>DoubleValue</code>，<code>StringValue</code>，<code>CharValue</code>， <code>BooleanValue</code>）。这些Value类型充当基本数据类型的可变变体：它们的值可以被更改，允许程序员重用对象并从垃圾收集器中消除压力。</p>
 <h3 id="Hadoop-Writables"><a href="#Hadoop-Writables" class="headerlink" title="Hadoop Writables"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=hadoop-writables">Hadoop Writables</a></h3><p>您可以使用实现该<code>org.apache.hadoop.Writable</code>接口的类型。<code>write()</code>和<code>readFields()</code>方法中定义的序列化逻辑将用于序列化。</p>
 <h3 id="特殊类型"><a href="#特殊类型" class="headerlink" title="特殊类型"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E7%89%B9%E6%AE%8A%E7%B1%BB%E5%9E%8B">特殊类型</a></h3><p>您可以使用特殊类型，包括Scala的<code>Either</code>，<code>Option</code>和<code>Try</code>。Java API有自己的自定义实现<code>Either</code>。与Scala类似<code>Either</code>，它代表两种可能类型的值，_左_或_右_。 <code>Either</code>可用于错误处理或需要输出两种不同类型记录的 算子。</p>
-<h2 id="累加器和计数器"><a href="#累加器和计数器" class="headerlink" title="累加器和计数器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E7%B4%AF%E5%8A%A0%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8">累加器和计数器</a></h2><p>累加器是具有<strong>添加 算子操作</strong>和<strong>最终累积结果的</strong>简单构造，可在作业结束后使用。</p>
+<h2 id="0-5-累加器和计数器"><a href="#0-5-累加器和计数器" class="headerlink" title="0.5 累加器和计数器"></a>0.5 <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/12?id=%E7%B4%AF%E5%8A%A0%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8">累加器和计数器</a></h2><p>累加器是具有<strong>添加 算子操作</strong>和<strong>最终累积结果的</strong>简单构造，可在作业结束后使用。</p>
 <p>最直接的累加器是一个<strong>计数器</strong>：您可以使用该<code>Accumulator.add(V value)</code>方法递增它 。在工作结束时，Flink将汇总（合并）所有部分结果并将结果发送给客户。在调试过程中，或者如果您想快速了解有关数据的更多信息，累加器非常有用。</p>
 <p>Flink目前有以下<strong>内置累加器</strong>。它们中的每一个都实现了 <a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/Accumulator.java">Accumulator</a> 接口。</p>
 <ul>
@@ -427,7 +552,7 @@
 <p>要实现自己的累加器，只需编写Accumulator接口的实现即可。如果您认为自定义累加器应与Flink一起提供，请随意创建拉取请求。</p>
 <p>您可以选择实现 <a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/Accumulator.java">Accumulator</a> 或<a target="_blank" rel="noopener" href="https://github.com/apache/flink/blob/master//flink-core/src/main/java/org/apache/flink/api/common/accumulators/SimpleAccumulator.java">SimpleAccumulator</a>。</p>
 <p><code>Accumulator&lt;V,R&gt;</code>最灵活：它定义<code>V</code>要添加的值的类型<code>R</code>，以及最终结果的结果类型。例如，对于直方图，<code>V</code>是数字并且<code>R</code>是直方图。<code>SimpleAccumulator</code>适用于两种类型相同的情况，例如计数器。</p>
-<h1 id="DataStreamAPI"><a href="#DataStreamAPI" class="headerlink" title="DataStreamAPI"></a>DataStreamAPI</h1><h1 id="–框架"><a href="#–框架" class="headerlink" title="–框架"></a>–框架</h1><h2 id="数据源-输入"><a href="#数据源-输入" class="headerlink" title="数据源 - 输入"></a>数据源 - 输入</h2><p>调用：StreamExecutionEnvironment.addSource(sourceFunction)</p>
+<h1 id="第一章-DataStreamAPI"><a href="#第一章-DataStreamAPI" class="headerlink" title="第一章 DataStreamAPI"></a>第一章 DataStreamAPI</h1><h1 id="1-1-框架"><a href="#1-1-框架" class="headerlink" title="1.1 框架"></a>1.1 框架</h1><h2 id="数据源-输入"><a href="#数据源-输入" class="headerlink" title="数据源 - 输入"></a>数据源 - 输入</h2><p>调用：StreamExecutionEnvironment.addSource(sourceFunction)</p>
 <p>自定义：addSource() 接口</p>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">源是您的程序从中读取输入的位置。您可以使用将附加源附加到程序<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">StreamExecutionEnvironment</span>.</span></span>add<span class="hljs-constructor">Source(<span class="hljs-params">sourceFunction</span>)</span>。Flink附带了许多预先实现的源函数，但您可以通过实现SourceFunction 非并行源，或通过实现ParallelSourceFunction接口或扩展 RichParallelSourceFunction并行源来编写自己的自定义源。<br></code></pre></td></tr></table></figure>
 
@@ -489,7 +614,7 @@
 
 
 
-<h1 id="–关键词下包含的概念"><a href="#–关键词下包含的概念" class="headerlink" title="–关键词下包含的概念"></a>–关键词下包含的概念</h1><h1 id="—-算子"><a href="#—-算子" class="headerlink" title="— 算子"></a>— 算子</h1><h2 id="视窗-window-窗口"><a href="#视窗-window-窗口" class="headerlink" title="视窗- window - 窗口"></a>视窗- window - 窗口</h2><h3 id="被Keys化与非被Keys化Windows"><a href="#被Keys化与非被Keys化Windows" class="headerlink" title="被Keys化与非被Keys化Windows"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E8%A2%ABkeys%E5%8C%96%E4%B8%8E%E9%9D%9E%E8%A2%ABkeys%E5%8C%96windows">被Keys化与非被Keys化Windows</a></h3><p>要指定的第一件事是您的流是否应该键入。必须在定义窗口之前完成此 算子操作。使用the <code>keyBy(...)</code>将您的无限流分成逻辑被Key化的数据流。如果<code>keyBy(...)</code>未调用，则表示您的流不是被Keys化的。</p>
+<h1 id="1-2关键词下包含的概念"><a href="#1-2关键词下包含的概念" class="headerlink" title="1.2关键词下包含的概念"></a>1.2关键词下包含的概念</h1><h1 id="1-2-1-算子"><a href="#1-2-1-算子" class="headerlink" title="1.2.1 算子"></a>1.2.1 算子</h1><h2 id="视窗-window-窗口"><a href="#视窗-window-窗口" class="headerlink" title="视窗- window - 窗口"></a>视窗- window - 窗口</h2><h3 id="被Keys化与非被Keys化Windows"><a href="#被Keys化与非被Keys化Windows" class="headerlink" title="被Keys化与非被Keys化Windows"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/27?id=%E8%A2%ABkeys%E5%8C%96%E4%B8%8E%E9%9D%9E%E8%A2%ABkeys%E5%8C%96windows">被Keys化与非被Keys化Windows</a></h3><p>要指定的第一件事是您的流是否应该键入。必须在定义窗口之前完成此 算子操作。使用the <code>keyBy(...)</code>将您的无限流分成逻辑被Key化的数据流。如果<code>keyBy(...)</code>未调用，则表示您的流不是被Keys化的。</p>
 <p>对于被Key化的数据流，可以将传入事件的任何属性用作键（<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/api_concepts.html#specifying-keys">此处有</a>更多详细信息）。拥有被Key化的数据流将允许您的窗口计算由多个任务并行执行，因为每个逻辑被Key化的数据流可以独立于其余任务进行处理。引用相同Keys的所有数据元将被发送到同一个并行任务。</p>
 <p>在非被Key化的数据流的情况下，您的原始流将不会被拆分为多个逻辑流，并且所有窗口逻辑将由单个任务执行，_即_并行度为1。</p>
 <p>区别：窗口    可并行 与 不可并行</p>
@@ -666,7 +791,7 @@
 <li>使用其查找&#x2F;查询方法调用阻塞的数据库客户端，直到收到结果为止</li>
 <li>阻止&#x2F;等待<code>asyncInvoke(...)</code>方法内异步客户端返回的future-type对象</li>
 </ul>
-<h1 id="—-活动时间-time"><a href="#—-活动时间-time" class="headerlink" title="— 活动时间 -  time"></a>— 活动时间 -  time</h1><h2 id="事件时间-x2F-处理时间-x2F-摄取时间"><a href="#事件时间-x2F-处理时间-x2F-摄取时间" class="headerlink" title="事件时间&#x2F;处理时间&#x2F;摄取时间"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=%E4%BA%8B%E4%BB%B6%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86%E6%97%B6%E9%97%B4%E6%91%84%E5%8F%96%E6%97%B6%E9%97%B4">事件时间&#x2F;处理时间&#x2F;摄取时间</a></h2><p>Flink 在流处理节目中支持不同的_时间_概念。</p>
+<h1 id="1-2-2-活动时间-time"><a href="#1-2-2-活动时间-time" class="headerlink" title="1.2.2 活动时间 -  time"></a>1.2.2 活动时间 -  time</h1><h2 id="事件时间-x2F-处理时间-x2F-摄取时间"><a href="#事件时间-x2F-处理时间-x2F-摄取时间" class="headerlink" title="事件时间&#x2F;处理时间&#x2F;摄取时间"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=%E4%BA%8B%E4%BB%B6%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86%E6%97%B6%E9%97%B4%E6%91%84%E5%8F%96%E6%97%B6%E9%97%B4">事件时间&#x2F;处理时间&#x2F;摄取时间</a></h2><p>Flink 在流处理节目中支持不同的_时间_概念。</p>
 <p>处理时间（process time）：处理算子时，使用本地 机器的 系统时钟</p>
 <ul>
 <li><p><strong>处理时间：</strong>处理时间是指执行相应 算子操作的机器的系统时间。</p>
@@ -711,7 +836,7 @@
 
 
 
-<h1 id="—-状态和容错-–-status-x2F-fault-tolerant"><a href="#—-状态和容错-–-status-x2F-fault-tolerant" class="headerlink" title="— 状态和容错 – status &#x2F; fault- tolerant"></a>— 状态和容错 – status &#x2F; fault- tolerant</h1><h2 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h2><h2 id="启用和配置检查点"><a href="#启用和配置检查点" class="headerlink" title="启用和配置检查点"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/22?id=%E5%90%AF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E7%82%B9">启用和配置检查点</a></h2><p>默认情况下，禁用检查点。为了使检查点，调用<code>enableCheckpointing(n)</code>上<code>StreamExecutionEnvironment</code>，其中 <em>N</em> 是以毫秒为单位的检查点间隔。</p>
+<h1 id="1-2-3-状态和容错-–-status-x2F-fault-tolerant"><a href="#1-2-3-状态和容错-–-status-x2F-fault-tolerant" class="headerlink" title="1.2.3 状态和容错 – status &#x2F; fault- tolerant"></a>1.2.3 状态和容错 – status &#x2F; fault- tolerant</h1><h2 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h2><h2 id="启用和配置检查点"><a href="#启用和配置检查点" class="headerlink" title="启用和配置检查点"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/22?id=%E5%90%AF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E7%82%B9">启用和配置检查点</a></h2><p>默认情况下，禁用检查点。为了使检查点，调用<code>enableCheckpointing(n)</code>上<code>StreamExecutionEnvironment</code>，其中 <em>N</em> 是以毫秒为单位的检查点间隔。</p>
 <p>检查点的其他参数包括：</p>
 <ul>
 <li><p>_完全一次与至少一次_：您可以选择将模式传递给<code>enableCheckpointing(n)</code>方法，以在两个保证级别之间进行选择。对于大多数应用来说，恰好一次是优选的。至少一次可能与某些超低延迟（始终为几毫秒）的应用程序相关。</p>
@@ -736,7 +861,7 @@
 
 
 
-<h1 id="—-管理状态的自定义序列化"><a href="#—-管理状态的自定义序列化" class="headerlink" title="— 管理状态的自定义序列化"></a>— <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E7%AE%A1%E7%90%86%E7%8A%B6%E6%80%81%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96">管理状态的自定义序列化</a></h1><p>如果您的应用程序使用Flink的托管状态，则可能需要为特殊用例实现自定义序列化逻辑。</p>
+<h1 id="1-2-4-管理状态的自定义序列化"><a href="#1-2-4-管理状态的自定义序列化" class="headerlink" title="1.2.4 管理状态的自定义序列化"></a>1.2.4 <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E7%AE%A1%E7%90%86%E7%8A%B6%E6%80%81%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96">管理状态的自定义序列化</a></h1><p>如果您的应用程序使用Flink的托管状态，则可能需要为特殊用例实现自定义序列化逻辑。</p>
 <p>此页面的目标是需要对其状态使用自定义序列化的用户，包括如何提供自定义序列化程序以及如何处理序列化程序的升级以实现兼容性。如果您只是使用Flink自己的序列化程序，则此页面无关紧要，可以跳过。</p>
 <h3 id="使用自定义序列化器"><a href="#使用自定义序列化器" class="headerlink" title="使用自定义序列化器"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/25?id=%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8">使用自定义序列化器</a></h3><p>如上例所示，当注册托管算子或被Keys化状态时，<code>StateDescriptor</code>需要指定状态名称以及有关状态类型的信息。Flink的<a target="_blank" rel="noopener" href="https://flink.sojb.cn/types_serialization.html">类型序列化框架</a>使用类型信息为 状态创建适当的序列化程序。</p>
 <p>也可以完全绕过这个并让Flink使用您自己的自定义序列化程序来序列化托管状态，只需直接<code>StateDescriptor</code>使用您自己的<code>TypeSerializer</code>实现实例化：</p>
@@ -752,7 +877,7 @@
 
 
 
-<h1 id="—旁路输出"><a href="#—旁路输出" class="headerlink" title="—旁路输出"></a>—<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/42?id=%E6%97%81%E8%B7%AF%E8%BE%93%E5%87%BA">旁路输出</a></h1><p>除了<code>DataStream</code> 算子操作产生的主流之外，您还可以生成任意数量的附加旁路输出结果流。结果流中的数据类型不必与主流中的数据类型匹配，并且不同旁路输出的类型也可以不同。当您希望拆分通常必须复制流的数据流，然后从每个流中过滤掉您不希望拥有的数据时，此 算子操作非常有用。</p>
+<h1 id="1-2-5-旁路输出"><a href="#1-2-5-旁路输出" class="headerlink" title="1.2.5 旁路输出"></a>1.2.5 <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/42?id=%E6%97%81%E8%B7%AF%E8%BE%93%E5%87%BA">旁路输出</a></h1><p>除了<code>DataStream</code> 算子操作产生的主流之外，您还可以生成任意数量的附加旁路输出结果流。结果流中的数据类型不必与主流中的数据类型匹配，并且不同旁路输出的类型也可以不同。当您希望拆分通常必须复制流的数据流，然后从每个流中过滤掉您不希望拥有的数据时，此 算子操作非常有用。</p>
 <p>使用旁路输出时，首先需要定义一个<code>OutputTag</code>用于标识旁路输出流的方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// this needs to be an anonymous inner class, so that we can analyze the type</span><br>OutputTag&lt;String&gt; outputTag = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputTag</span>&lt;String&gt;(<span class="hljs-string">&quot;side-output&quot;</span>) &#123;&#125;;<br></code></pre></td></tr></table></figure>
 
@@ -780,7 +905,7 @@
 
 
 
-<h1 id="—-Stream-Connect"><a href="#—-Stream-Connect" class="headerlink" title="— Stream Connect"></a>— Stream Connect</h1><h2 id="内置连接器"><a href="#内置连接器" class="headerlink" title="内置连接器"></a>内置连接器</h2><p>内置Connector 是 Flink 内置的连接器，用于将 Flink 与外部系统进行集成。 Flink 提供多种内置 Connector，如Kafka、Kinesis、Cassandra、Elasticsearch、JDBC 等。</p>
+<h1 id="1-2-6-Stream-Connect"><a href="#1-2-6-Stream-Connect" class="headerlink" title="1.2.6 Stream Connect"></a>1.2.6 Stream Connect</h1><h2 id="内置连接器"><a href="#内置连接器" class="headerlink" title="内置连接器"></a>内置连接器</h2><p>内置Connector 是 Flink 内置的连接器，用于将 Flink 与外部系统进行集成。 Flink 提供多种内置 Connector，如Kafka、Kinesis、Cassandra、Elasticsearch、JDBC 等。</p>
 <p>这些内置 Connector 都是一些通用的应用程序接口（API）的实现，Flink 用户可以将这些标准的内置 Connector 用于将 Flink 与其他的数据源或数据汇进行无缝集成。利用这些内置 Connector，Flink 用户可以方便地通过API将数据源和数据汇插入到现有的 Flink 应用程序中，而不必编写自己的代码从外部系统中读取或写入数据。</p>
 <p>在 Flink 应用程序中，用户可以使用内置 Connector 根据需要特定于源和汇的属性进行配置。这些 Connector 会自动与 Flink 应用程序中的 State 和 Checkpointing 机制集成，以确保应用程序的一致性和准确性。由于内置 Connector 被广泛使用并得到了社区的强烈支持，因此大多数情况下，Flink 用户可以使用这些内置 Connector 解决数据集成的大多数常见问题，并轻松地将 Flink 与外部系统进行无缝集成和扩展。</p>
 <h3 id="SQL获取内置连接器信息"><a href="#SQL获取内置连接器信息" class="headerlink" title="SQL获取内置连接器信息"></a>SQL获取内置连接器信息</h3><p>如果您想从 SQL 中获取 Flink 内置连接器的信息，可以使用 Flink SQL CLI 工具或通过 Flink WebUI 进行查询。以下是使用 Flink SQL CLI 工具的示例：</p>
@@ -821,15 +946,15 @@
 <li>AWS S3 Connector：用于将 Flink 与 Amazon S3 集成。</li>
 </ul>
 <p>这些内置 Connector 都是标准 API 的实现，可以方便地将 Flink 应用程序与常见的数据源或数据汇集成。有了这些内置 Connector，Flink 用户可以通过 SQL 访问外部系统中的数据，并使用 Flink 提供的强大的数据处理和流处理能力。同时，您也可以通过编写自定义连接器来将 Flink 集成到其他外部系统中，以实现更多的扩展和集成需求。</p>
-<h1 id="DataSet-API"><a href="#DataSet-API" class="headerlink" title="DataSet API"></a>DataSet API</h1><p><strong>大致参照 DataStream API</strong> </p>
+<h1 id="第二章-DataSet-API"><a href="#第二章-DataSet-API" class="headerlink" title="第二章 DataSet API"></a>第二章 DataSet API</h1><p><strong>大致参照 DataStream API</strong> </p>
 <h2 id="示例程序"><a href="#示例程序" class="headerlink" title="示例程序"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/46?id=%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F">示例程序</a></h2><p>以下程序是WordCount的完整工作示例。您可以复制并粘贴代码以在本地运行它。您只需要在项目中包含正确的Flink库（请参见<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/linking_with_flink.html">使用Flink链接</a>）并指定导入。那你就准备好了！</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WordCountExample</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">ExecutionEnvironment</span> <span class="hljs-variable">env</span> <span class="hljs-operator">=</span> ExecutionEnvironment.getExecutionEnvironment();<br><br>        DataSet&lt;String&gt; text = env.fromElements(<br>            <span class="hljs-string">&quot;Who&#x27;s there?&quot;</span>,<br>            <span class="hljs-string">&quot;I think I hear them. Stand, ho! Who&#x27;s there?&quot;</span>);<br><br>        DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; wordCounts = text<br>            .flatMap(<span class="hljs-keyword">new</span> <span class="hljs-title class_">LineSplitter</span>())<br>            .groupBy(<span class="hljs-number">0</span>)<br>            .sum(<span class="hljs-number">1</span>);<br><br>        wordCounts.print();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LineSplitter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">FlatMapFunction</span>&lt;String, Tuple2&lt;String, Integer&gt;&gt; &#123;<br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">flatMap</span><span class="hljs-params">(String line, Collector&lt;Tuple2&lt;String, Integer&gt;&gt; out)</span> &#123;<br>            <span class="hljs-keyword">for</span> (String word : line.split(<span class="hljs-string">&quot; &quot;</span>)) &#123;<br>                out.collect(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Tuple2</span>&lt;String, Integer&gt;(word, <span class="hljs-number">1</span>));<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-<h1 id="–转化"><a href="#–转化" class="headerlink" title="–转化"></a>–转化</h1><p>DataSet -》 DataSet</p>
+<h1 id="2-1-转化"><a href="#2-1-转化" class="headerlink" title="2.1 转化"></a>2.1 转化</h1><p>DataSet -》 DataSet</p>
 <p>参照api文档 ：<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/47">数据集转换 (apachecn.org)</a></p>
-<h1 id="–容错"><a href="#–容错" class="headerlink" title="–容错"></a>–<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E5%AE%B9%E9%94%99">容错</a></h1><p>Flink的容错机制在出现故障时恢复程序并继续执行它们。此类故障包括机器硬件故障，网络故障，瞬态程序故障等。</p>
+<h1 id="2-2-容错"><a href="#2-2-容错" class="headerlink" title="2.2 容错"></a>2.2 <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E5%AE%B9%E9%94%99">容错</a></h1><p>Flink的容错机制在出现故障时恢复程序并继续执行它们。此类故障包括机器硬件故障，网络故障，瞬态程序故障等。</p>
 <h2 id="批处理容错（DataSet-API）"><a href="#批处理容错（DataSet-API）" class="headerlink" title="批处理容错（DataSet API）"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/48?id=%E6%89%B9%E5%A4%84%E7%90%86%E5%AE%B9%E9%94%99%EF%BC%88dataset-api%EF%BC%89">批处理容错（DataSet API）</a></h2><p>_DataSet API中_程序的容错能力通过重试失败的执行来实现。Flink在作业声明为失败之前重试执行的时间可通过_执行重试_参数进行配置。值_0_有效意味着禁用容错。</p>
 <p>要激活容错，请将_执行重试次数_设置为大于零的值。常见的选择是值为3。</p>
 <p>此示例显示如何配置Flink DataSet程序的执行重试。</p>
@@ -846,7 +971,7 @@
 
 
 
-<h1 id="Table-API和SQL"><a href="#Table-API和SQL" class="headerlink" title="Table API和SQL"></a><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/56?id=table-api%E5%92%8Csql">Table API和SQL</a></h1><p>Apache Flink具有两个关系API - Table API和SQL - 用于统一流和批处理。 Table API是Scala和Java语言集成查询API，允许以非常直观的方式组合来自关系 算子的查询，例如选择，过滤和连接。Flink的SQL支持基于实现SQL标准的<a target="_blank" rel="noopener" href="https://calcite.apache.org/">Apache Calcite</a>。无论输入是批输入（DataSet）还是流输入（DataStream），任一接口中指定的查询都具有相同的语义并指定相同的结果。</p>
+<h1 id="第三章-Table-API和SQL"><a href="#第三章-Table-API和SQL" class="headerlink" title="第三章 Table API和SQL"></a>第三章 <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/56?id=table-api%E5%92%8Csql">Table API和SQL</a></h1><p>Apache Flink具有两个关系API - Table API和SQL - 用于统一流和批处理。 Table API是Scala和Java语言集成查询API，允许以非常直观的方式组合来自关系 算子的查询，例如选择，过滤和连接。Flink的SQL支持基于实现SQL标准的<a target="_blank" rel="noopener" href="https://calcite.apache.org/">Apache Calcite</a>。无论输入是批输入（DataSet）还是流输入（DataStream），任一接口中指定的查询都具有相同的语义并指定相同的结果。</p>
 <p>Table API和SQL接口彼此紧密集成，以及Flink的DataStream和DataSet API。您可以轻松地在基于API构建的所有API和库之间切换。例如，您可以使用<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/libs/cep.html">CEP库</a>从DataStream中提取模式，然后使用 Table API分析模式，或者可以在预处理上运行<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/libs/gelly">Gelly图算法</a>之前使用SQL查询扫描，过滤和聚合批处理表数据。</p>
 
                 

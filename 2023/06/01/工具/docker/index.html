@@ -16,23 +16,23 @@
   <meta name="author" content="where">
   <meta name="keywords" content="">
   
-    <meta name="description" content="dockerdocker-composeDockerComposeFile — 构建容器docker run构建容器需要指定如下参数：  镜像名称：指定需要使用的镜像名称，例如 nginx、mysql 等。  容器名称：指定容器运行时的名称，实际上是该容器的一个别名，用于在系统中唯一标识该容器。  挂载目录：将主机文件系统挂载到容器中，用于持久化数据。  端口映射：将容器内部的端口映射到外部主机的">
+    <meta name="description" content="DockerDocker业务容器 配置文件查看是的，通过路径挂载是一种常见的方法来修改Docker容器中的配置文件。通过路径挂载，您可以将宿主机上的配置文件映射到容器内部，从而实现对配置文件的修改。 下面以Redis为例，介绍如何通过路径挂载修改Redis容器的配置文件：  首先，准备好您要修改的Redis配置文件。可以在宿主机上创建一个新的配置文件，或者修改已有的配置文件。  在运行Redis容">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker">
+<meta property="og:title" content="Docker">
 <meta property="og:url" content="http://example.com/2023/06/01/%E5%B7%A5%E5%85%B7/docker/index.html">
 <meta property="og:site_name" content="where&#39;s blog">
-<meta property="og:description" content="dockerdocker-composeDockerComposeFile — 构建容器docker run构建容器需要指定如下参数：  镜像名称：指定需要使用的镜像名称，例如 nginx、mysql 等。  容器名称：指定容器运行时的名称，实际上是该容器的一个别名，用于在系统中唯一标识该容器。  挂载目录：将主机文件系统挂载到容器中，用于持久化数据。  端口映射：将容器内部的端口映射到外部主机的">
+<meta property="og:description" content="DockerDocker业务容器 配置文件查看是的，通过路径挂载是一种常见的方法来修改Docker容器中的配置文件。通过路径挂载，您可以将宿主机上的配置文件映射到容器内部，从而实现对配置文件的修改。 下面以Redis为例，介绍如何通过路径挂载修改Redis容器的配置文件：  首先，准备好您要修改的Redis配置文件。可以在宿主机上创建一个新的配置文件，或者修改已有的配置文件。  在运行Redis容">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-06-22T12:01:40.879Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.910Z">
 <meta property="article:author" content="where">
-<meta property="article:tag" content="容器">
 <meta property="article:tag" content="工具">
+<meta property="article:tag" content="云原生">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>docker - where&#39;s blog</title>
+  <title>Docker - where&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -198,7 +198,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="docker"></span>
+            <span id="subtitle" data-typed-text="Docker"></span>
           
         </div>
 
@@ -221,7 +221,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          14k 字
+          15k 字
         
       </span>
     
@@ -232,7 +232,7 @@
         
         
         
-          118 分钟
+          124 分钟
         
       </span>
     
@@ -270,12 +270,33 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">docker</h1>
+            <h1 style="display: none">Docker</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h1><h1 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h1><h1 id="DockerComposeFile-—-构建容器"><a href="#DockerComposeFile-—-构建容器" class="headerlink" title="DockerComposeFile — 构建容器"></a>DockerComposeFile — 构建容器</h1><h2 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h2><p>构建容器需要指定如下参数：</p>
+                <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><h1 id="Docker业务"><a href="#Docker业务" class="headerlink" title="Docker业务"></a>Docker业务</h1><h2 id="容器-配置文件查看"><a href="#容器-配置文件查看" class="headerlink" title="容器 配置文件查看"></a>容器 配置文件查看</h2><p>是的，通过路径挂载是一种常见的方法来修改Docker容器中的配置文件。通过路径挂载，您可以将宿主机上的配置文件映射到容器内部，从而实现对配置文件的修改。</p>
+<p>下面以Redis为例，介绍如何通过路径挂载修改Redis容器的配置文件：</p>
+<ol>
+<li><p>首先，准备好您要修改的Redis配置文件。可以在宿主机上创建一个新的配置文件，或者修改已有的配置文件。</p>
+</li>
+<li><p>在运行Redis容器时，使用<code>-v</code>参数指定路径挂载的方式将宿主机上的配置文件映射到容器内部。例如：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">docker run -d -p <span class="hljs-number">6379</span>:<span class="hljs-number">6379</span> -v <span class="hljs-regexp">/path/</span>to<span class="hljs-regexp">/redis.conf:/u</span>sr<span class="hljs-regexp">/local/</span>etc<span class="hljs-regexp">/redis/</span>redis.conf --name my-redis redis<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>/path/to/redis.conf</code>是宿主机上的配置文件路径，<code>/usr/local/etc/redis/redis.conf</code>是容器内部的配置文件路径。</p>
+</li>
+<li><p>启动Redis容器后，您可以在宿主机上修改配置文件。任何对宿主机上的配置文件的修改都会反映到容器内部。</p>
+</li>
+<li><p>如果Redis容器已经在运行，您可以使用<code>docker exec</code>命令进入容器内部，并使用编辑器或命令行工具修改容器内部的配置文件。例如：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">docker exec -it my-redis bash<br>vi <span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/etc/</span>redis/redis.conf<br></code></pre></td></tr></table></figure>
+
+<p>修改完配置文件后，重新启动Redis服务使配置生效。</p>
+</li>
+</ol>
+<p>同样的方法也适用于其他容器，如MySQL和Kafka。您可以将宿主机上的配置文件路径映射到容器内部的相应路径，然后在宿主机上修改配置文件。</p>
+<p>请注意，修改容器的配置文件可能需要重启容器或重新加载配置才能生效。具体的操作步骤可能因容器和配置文件而异，建议查阅相关容器的文档或官方指南以获取更详细的信息。</p>
+<p>如果您需要更多帮助或有其他问题，请告诉我。</p>
+<h1 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h1><h1 id="DockerComposeFile-—-构建容器"><a href="#DockerComposeFile-—-构建容器" class="headerlink" title="DockerComposeFile — 构建容器"></a>DockerComposeFile — 构建容器</h1><h2 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h2><p>构建容器需要指定如下参数：</p>
 <ol>
 <li><p>镜像名称：指定需要使用的镜像名称，例如 nginx、mysql 等。</p>
 </li>
@@ -487,9 +508,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E5%AE%B9%E5%99%A8/">#容器</a>
-      
         <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">#云原生</a>
       
     </div>
   
@@ -501,7 +522,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>docker</div>
+      <div>Docker</div>
       <div>http://example.com/2023/06/01/工具/docker/</div>
     </div>
     <div class="license-meta">

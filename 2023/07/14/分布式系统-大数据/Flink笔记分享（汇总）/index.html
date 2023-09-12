@@ -1,0 +1,1164 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Flink笔记分享（汇总）第一部分 基础概念Flink 组件Manager TaskManager\1. TaskManager（任务管理器）：    - 概念：TaskManager是Flink集群中的工作节点，负责执行具体的任务。    - 职责：TaskManager负责接收和执行任务，管理任务的资源，包括CPU、内存和网络等资源。它还负责与JobManager进行通信，接收任务的分配和调度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink笔记分享（汇总）">
+<meta property="og:url" content="http://example.com/2023/07/14/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE/Flink%E7%AC%94%E8%AE%B0%E5%88%86%E4%BA%AB%EF%BC%88%E6%B1%87%E6%80%BB%EF%BC%89/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="Flink笔记分享（汇总）第一部分 基础概念Flink 组件Manager TaskManager\1. TaskManager（任务管理器）：    - 概念：TaskManager是Flink集群中的工作节点，负责执行具体的任务。    - 职责：TaskManager负责接收和执行任务，管理任务的资源，包括CPU、内存和网络等资源。它还负责与JobManager进行通信，接收任务的分配和调度">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_237057_FStNVR8KDnjJPWuz_1689217466?w=637&h=472&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_340321_hykicYyeErf6CLDH_1689219215?w=1160&h=405&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_101187_MaxEkeLHZ3sBsxO8_1689217518?w=864&h=382&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_354444_PNNuPwn3XMq2GBDS_1689217546?w=879&h=476&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_644083_dHAmNIEVvkypNPlb_1689219386?w=841&h=496&type=image/png">
+<meta property="og:image" content="http://flink.apachecn.org/docs/img/times_clocks.svg">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_836605_74AJUZBmyaak_8TV_1689217749?w=1058&h=613&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_476077_ZUR6VykD0BlZ8nFw_1689217863?w=1188&h=622&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_114050_Diw4rDF0gm2pg6zR_1689217672?w=3212&h=1054&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_393261_qn-FibAhCIVrVP6l_1689219166?w=893&h=562&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_258958_a1N0MAPUsMxps7lW_1689219049?w=975&h=432&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_337356_fd1LqOGJEil16Vwh_1689306171?w=851&h=613&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_463326_re3fKPlmhK8Mcz6u_1689306228?w=576&h=397&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_238956_gLevnAjzs6bg1Zcx_1689306237?w=923&h=294&type=image/png">
+<meta property="og:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_912590_UrqYMOpfh3VaOVQF_1689306242?w=923&h=428&type=image/png">
+<meta property="article:published_time" content="2023-07-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:37.894Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="flink">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_237057_FStNVR8KDnjJPWuz_1689217466?w=637&h=472&type=image/png">
+  
+  
+  
+  <title>Flink笔记分享（汇总） - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flink笔记分享（汇总）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-14 00:00" pubdate>
+          2023年7月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          35k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          294 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Flink笔记分享（汇总）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Flink笔记分享（汇总）"><a href="#Flink笔记分享（汇总）" class="headerlink" title="Flink笔记分享（汇总）"></a><strong>Flink笔记分享（汇总）</strong></h1><h1 id="第一部分-基础概念"><a href="#第一部分-基础概念" class="headerlink" title="第一部分 基础概念"></a><strong>第一部分 基础概念</strong></h1><h1 id="Flink-组件"><a href="#Flink-组件" class="headerlink" title="Flink 组件"></a><strong>Flink 组件</strong></h1><h3 id="Manager"><a href="#Manager" class="headerlink" title="Manager"></a><strong>Manager</strong></h3><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_237057_FStNVR8KDnjJPWuz_1689217466?w=637&h=472&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="TaskManager"><a href="#TaskManager" class="headerlink" title="TaskManager"></a><strong>TaskManager</strong></h4><p>\1. TaskManager（任务管理器）：</p>
+<p>   - 概念：TaskManager是Flink集群中的工作节点，负责执行具体的任务。</p>
+<p>   - 职责：TaskManager负责接收和执行任务，管理任务的资源，包括CPU、内存和网络等资源。它还负责与JobManager进行通信，接收任务的分配和调度指令，并将任务的执行结果返回给JobManager。</p>
+<p>   - 调度时机：TaskManager在启动时会向ResourceManager注册自己的资源，并等待JobManager的任务分配。</p>
+<p>   - 调度流程：</p>
+<p>​     \1. TaskManager向ResourceManager注册自己的资源。</p>
+<p>​     \2. TaskManager等待JobManager的任务分配。</p>
+<p>​     \3. JobManager根据作业的拓扑结构和任务之间的依赖关系，将任务分配给TaskManager。</p>
+<p>​     \4. TaskManager接收到任务后，根据任务的执行逻辑执行计算，并将结果返回给JobManager。</p>
+<h5 id="TaskManager-和-slot"><a href="#TaskManager-和-slot" class="headerlink" title="TaskManager 和 slot"></a><strong>TaskManager 和 slot</strong></h5><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_340321_hykicYyeErf6CLDH_1689219215?w=1160&h=405&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​                ● Flink 中每一个 TaskManager 都是一个JVM进程，它可能会在独立的线程上执行一个或多个子任务</p>
+<p>​                ● 为了控制一个 TaskManager 能接收多少个 task， TaskManager 通过 task slot 来进行控制(一个 TaskManager 至少有一个 slot)，slot的数量控制着最大的并行度。</p>
+<p>​                ● 在当前flink中，每个slot的内存是完全隔离开的，相当于彼此之间互不干扰。</p>
+<p>​                ● 尽管slot并不单独分配CPU资源，推荐按照当前TaskManager的CPU核心数量设置slots，这样的话，例如说4核的机器，设置4slot，这样1个slot上一个核心，不用等，相当于独享的状态了。</p>
+<p></p>
+<h4 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h4><p>\2. ResourceManager（资源管理器）：</p>
+<p>   - 概念：ResourceManager是Flink集群中的资源管理组件，负责分配和管理集群中的资源。</p>
+<p>   - 职责：ResourceManager负责接收来自JobManager的作业提交请求，并根据集群的资源情况进行资源分配。它管理集群中的资源池，包括CPU、内存和网络等资源，并根据作业的需求进行动态调整。ResourceManager还负责监控TaskManager的健康状态，以及处理TaskManager的故障和重启。</p>
+<p>   - 调度时机：ResourceManager在Flink集群启动时被启动，负责整个集群的资源管理。</p>
+<p>   - 调度流程：</p>
+<p>​     \1. ResourceManager启动，并初始化资源池。</p>
+<p>​     \2. JobManager提交作业请求给ResourceManager。</p>
+<p>​     \3. ResourceManager根据作业的资源需求和集群的资源情况，进行资源分配。</p>
+<p>​     \4. ResourceManager将分配的任务发送给相应的TaskManager。</p>
+<p>​     \5. ResourceManager监控TaskManager的健康状态，处理故障和重启。</p>
+<h4 id="JobManager"><a href="#JobManager" class="headerlink" title="JobManager"></a><strong>JobManager</strong></h4><p>\3. JobManager（作业管理器）：</p>
+<p>   - 概念：JobManager是Flink集群中的主节点，负责整个作业的管理和调度。</p>
+<p>   - 职责：JobManager负责接收作业提交请求，将作业转换为JobGraph，并进行作业的调度和执行。它还负责管理作业的状态、检查点和故障恢复等功能。</p>
+<p>   - 调度时机：JobManager在Flink集群启动时被启动，负责整个作业的管理和调度。</p>
+<p>   - 调度流程：</p>
+<p>​     \1. JobManager启动，并等待作业的提交请求。</p>
+<p>​     \2. 用户提交作业请求给JobManager。</p>
+<p>​     \3. JobManager将作业转换为JobGraph，包括作业的拓扑结构和任务之间的依赖关系。</p>
+<p>​     \4. JobManager根据作业的调度策略，将任务分配给TaskManager。</p>
+<p>​     \5. TaskManager接收到任务后，执行计算，并将结果返回给JobManager。</p>
+<p>​     \6. JobManager监控作业的执行状态，处理检查点和故障恢复等操作。</p>
+<p>这些组件共同协作，实现了Flink的分布式流处理和批处理功能。</p>
+<h4 id="Slot"><a href="#Slot" class="headerlink" title="Slot"></a><strong>Slot</strong></h4><p>在Flink中，”slot”（槽）是指TaskManager中的资源单位，用于执行任务。每个TaskManager都有一定数量的槽，用于并发执行作业的任务。</p>
+<p>槽的概念和作用如下：</p>
+<p>- 概念：槽是TaskManager中的资源单位，用于执行任务。每个槽可以执行一个任务，一个TaskManager可以拥有多个槽。</p>
+<p>- 场景：槽用于并发执行作业的任务，提高作业的处理能力和吞吐量。通过多个槽的并行执行，可以同时处理多个任务，加快作业的执行速度。</p>
+<p>- 功能：槽负责接收任务的分配请求，并执行任务的计算逻辑。每个槽可以独立执行任务，拥有自己的资源（CPU、内存等），并与其他槽进行数据交换和通信。</p>
+<p>槽的数量由TaskManager的配置决定，可以根据作业的需求进行调整。通过合理配置槽的数量，可以充分利用集群的资源，并提高作业的执行效率。槽的数量也会影响作业的并行度和资源分配，需要根据作业的特点和集群的资源情况进行调优。</p>
+<p>在作业执行过程中，JobManager会将作业的任务分配给TaskManager的槽进行执行。每个槽会执行一个任务，处理一部分数据。通过槽的并行执行，可以实现作业的分布式计算和数据处理。槽的数量和资源分配会影响作业的并行度和性能，需要根据作业的需求和集群的资源情况进行合理配置。</p>
+<h3 id="其他组件"><a href="#其他组件" class="headerlink" title="其他组件"></a><strong>其他组件</strong></h3><h4 id="1-JobGraph（作业图）："><a href="#1-JobGraph（作业图）：" class="headerlink" title="1. JobGraph（作业图）："></a><strong>1. JobGraph（作业图）：</strong></h4><p>   - 概念：JobGraph是一个有向无环图，表示一个Flink作业的拓扑结构和任务之间的依赖关系。</p>
+<p>   - 职责：JobGraph描述了作业中的算子和数据流之间的关系，包括输入输出关系、任务之间的依赖关系等。它是作业提交给JobManager的输入，用于作业的调度和执行。</p>
+<p>   - 调度时机：JobGraph在作业提交时生成，并在作业调度和执行过程中使用。</p>
+<h4 id="2-ExecutionGraph（执行图）："><a href="#2-ExecutionGraph（执行图）：" class="headerlink" title="2. ExecutionGraph（执行图）："></a><strong>2. ExecutionGraph（执行图）：</strong></h4><p>   - 概念：ExecutionGraph是一个正在执行的Flink作业的有向无环图，包含了作业的执行状态、任务的调度信息和任务之间的依赖关系。</p>
+<p>   - 职责：ExecutionGraph是JobManager根据JobGraph生成的执行计划，用于管理作业的执行过程。它记录了作业的执行状态、任务的调度信息、任务之间的依赖关系等，并负责监控任务的执行状态，处理故障恢复和任务重启等操作。</p>
+<p>   - 调度时机：ExecutionGraph在作业提交后由JobManager生成，并在作业执行过程中使用。</p>
+<h4 id="3-Task（任务）："><a href="#3-Task（任务）：" class="headerlink" title="3. Task（任务）："></a><strong>3. Task（任务）：</strong></h4><p>   - 概念：Task是Flink作业中的一个执行单元，负责执行具体的计算逻辑。</p>
+<p>   - 职责：Task负责接收输入数据，执行计算逻辑，并产生输出结果。一个作业可以包含多个任务，每个任务负责处理作业的一部分数据。任务之间可以通过网络进行数据交换和通信。</p>
+<p>   - 调度时机：Task在作业执行过程中根据调度策略由TaskManager执行。</p>
+<h4 id="4-TaskExecutor（任务执行器）："><a href="#4-TaskExecutor（任务执行器）：" class="headerlink" title="4. TaskExecutor（任务执行器）："></a><strong>4. TaskExecutor（任务执行器）：</strong></h4><p>   - 概念：TaskExecutor是运行在TaskManager上的组件，负责接收和执行任务，并管理任务的资源。</p>
+<p>   - 职责：TaskExecutor负责接收来自JobManager的任务分配请求，并根据任务的调度信息执行任务。它管理任务的资源，包括CPU、内存和网络等资源，并负责与其他TaskExecutor进行数据交换和通信。</p>
+<p>   - 调度时机：TaskExecutor在TaskManager启动时被启动，并在整个作业执行过程中持续运行。</p>
+<h4 id="5-BlobServer（资源服务器）："><a href="#5-BlobServer（资源服务器）：" class="headerlink" title="5. BlobServer（资源服务器）："></a><strong>5. BlobServer（资源服务器）：</strong></h4><p>   - 概念：BlobServer是用于存储和提供作业所需的资源文件，例如JAR包、配置文件等。</p>
+<p>   - 职责：BlobServer负责接收和存储作业提交时所需的资源文件，并提供给TaskExecutor进行下载和使用。它提供了高效的资源分发机制，减少了作业提交和执行的时间。</p>
+<p>   - 调度时机：BlobServer在Flink集群启动时被启动，并在整个作业执行过程中持续运行。</p>
+<h4 id="6-CheckpointCoordinator（检查点协调器）："><a href="#6-CheckpointCoordinator（检查点协调器）：" class="headerlink" title="6. CheckpointCoordinator（检查点协调器）："></a><strong>6. CheckpointCoordinator（检查点协调器）：</strong></h4><p>   - 概念：CheckpointCoordinator负责管理作业的检查点，以实现容错和恢复。</p>
+<p>   - 职责：CheckpointCoordinator定期触发作业的检查点操作，将作业的状态和数据保存到持久化存储中。在发生故障时，可以使用检查点来恢复作业的状态，保证作业的一致性和可靠性。</p>
+<p>   - 调度时机：CheckpointCoordinator在作业执行过程中负责生成和管理检查点。</p>
+<h4 id="7-StateBackend（状态后端）："><a href="#7-StateBackend（状态后端）：" class="headerlink" title="7. StateBackend（状态后端）："></a><strong>7. StateBackend（状态后端）：</strong></h4><p>   - 概念：StateBackend用于管理作业的状态，包括算子状态和键值状态。</p>
+<p>   - 职责：StateBackend负责将作业的状态存储在内存或外部存储中，并提供状态的读写接口。它可以根据作业的需求选择不同的存储方式，例如内存、文件系统或分布式存储系统。</p>
+<p>   - 调度时机：StateBackend在作业执行过程中负责管理状态的读写操作。</p>
+<h4 id="8-ShuffleManager（洗牌管理器）："><a href="#8-ShuffleManager（洗牌管理器）：" class="headerlink" title="8. ShuffleManager（洗牌管理器）："></a><strong>8. ShuffleManager（洗牌管理器）：</strong></h4><p>   - 概念：ShuffleManager负责将数据进行分区和洗牌，以便在任务之间进行数据交换。</p>
+<p>   - 职责：ShuffleManager根据作业的需求，将输入数据进行分区和洗牌，并将洗牌后的数据分发给相应的任务进行计算。它提供了高效的数据交换机制，减少了数据传输的开销。</p>
+<p>   - 调度时机：ShuffleManager在任务执行过程中负责数据的分区和洗牌操作</p>
+<h4 id="9-TaskManagerRunner（任务管理器运行器）："><a href="#9-TaskManagerRunner（任务管理器运行器）：" class="headerlink" title="9. TaskManagerRunner（任务管理器运行器）："></a><strong>9. TaskManagerRunner（任务管理器运行器）：</strong></h4><p>   - 概念：TaskManagerRunner用于启动和管理TaskManager进程。</p>
+<p>   - 职责：TaskManagerRunner负责启动TaskManager进程，并提供管理和监控TaskManager的功能。它负责与ResourceManager进行通信，接收任务的分配和调度指令，并将任务的执行结果返回给JobManager。</p>
+<p>   - 调度时机：TaskManagerRunner在Flink集群启动时被启动，并在整个作业执行过程中持续运行。</p>
+<h4 id="10-ResourceManagerRunner（资源管理器运行器）："><a href="#10-ResourceManagerRunner（资源管理器运行器）：" class="headerlink" title="10. ResourceManagerRunner（资源管理器运行器）："></a><strong>10. ResourceManagerRunner（资源管理器运行器）：</strong></h4><p>​    - 概念：ResourceManagerRunner用于启动和管理ResourceManager进程。</p>
+<p>​    - 职责：ResourceManagerRunner负责启动ResourceManager进程，并提供管理和监控ResourceManager的功能。它负责接收来自JobManager的作业提交请求，并根据集群的资源情况进行资源分配和调度。</p>
+<p>​    - 调度时机：ResourceManagerRunner在Flink集群启动时被启动，并在整个作业执行过程中持续运行。</p>
+<p>这些组件共同协作，实现了Flink的分布式流处理和批处理功能。在作业执行过程中，JobGraph和ExecutionGraph描述了作业的结构和执行状态，Task和TaskExecutor负责具体的计算和任务执行，BlobServer存储和提供作业所需的资源文件，CheckpointCoordinator管理作业的检查点以实现容错和恢复，StateBackend管理作业的状态，ShuffleManager负责数据的分区和洗牌，TaskManagerRunner和ResourceManagerRunner分别负责启动和管理TaskManager和ResourceManager进程。通过这些组件的协作，Flink能够实现高效的分布式计算和数据处理。</p>
+<h2 id="最基础”单位“"><a href="#最基础”单位“" class="headerlink" title="最基础”单位“"></a><strong>最基础”单位“</strong></h2><p>在Flink中还有以下关键词：</p>
+<p>\1. Job（作业）：</p>
+<p>   - 概念：Job是一个用户定义的数据处理任务，由一个或多个算子组成的有向无环图。它是Flink中最高级别的抽象，表示一个完整的数据处理流程。</p>
+<p>   - 场景：Job适用于需要对数据进行复杂的处理和转换的场景，例如数据清洗、数据分析、实时计算等。</p>
+<p>   - 功能：Job定义了数据处理的逻辑和流程，包括输入数据的来源、数据的转换和计算逻辑、输出数据的目的地等。</p>
+<p>\2. 算子（Operator）：</p>
+<p>   - 概念：算子是作业中的一个基本计算单元，负责对输入数据进行转换和处理。算子可以是数据源（Source）、数据接收器（Sink）或数据转换操作（Transformation）。</p>
+<p>   - 场景：算子适用于对数据进行各种类型的操作，例如过滤、映射、聚合、连接等。</p>
+<p>   - 功能：算子定义了对输入数据的处理逻辑，可以对数据进行转换、过滤、聚合等操作，并将结果发送给下游算子或输出到外部系统。</p>
+<p>\3. Source（数据源）：</p>
+<p>   - 概念：Source是作业中的一个算子，负责从外部系统读取输入数据并生成数据流。它可以从文件、消息队列、数据库等数据源中读取数据。</p>
+<p>   - 场景：Source适用于需要从外部系统读取数据并进行处理的场景，例如实时流处理、批处理等。</p>
+<p>   - 功能：Source负责读取输入数据，并将数据发送给下游算子进行处理。它可以根据数据源的特性进行数据的分区和并行读取，实现高吞吐量的数据处理。</p>
+<p>\4. Sink（数据接收器）：</p>
+<p>   - 概念：Sink是作业中的一个算子，负责将计算结果输出到外部系统或存储介质。它可以将数据写入文件、数据库、消息队列等目的地。</p>
+<p>   - 场景：Sink适用于需要将计算结果输出到外部系统或存储介质的场景，例如数据持久化、结果展示、数据传输等。</p>
+<p>   - 功能：Sink接收来自上游算子的计算结果，并将结果写入外部系统或存储介质。它可以根据目的地的特性进行数据的分区和并行写入，实现高吞吐量的数据输出。</p>
+<p>\5. 依赖（Dependency）：</p>
+<p>   - 概念：依赖表示作业中算子之间的关系，描述了数据流的传递和计算顺序。一个算子的输入数据依赖于其他算子的输出数据。</p>
+<p>   - 场景：依赖用于描述算子之间的数据流和计算顺序，确保数据的正确传递和计算的顺序性。</p>
+<p>   - 功能：依赖定义了算子之间的数据流和计算顺序，确保每个算子在正确的时机接收和处理数据，保证作业的正确性和一致性。</p>
+<p>\6. 任务（Task）：</p>
+<p>   - 任务是作业的最小执行单位，是将算子分配给具体的计算资源进行执行的实体。</p>
+<p>   - 一个作业可以被分割为多个任务，每个任务负责执行作业中的一个或多个算子。</p>
+<p>   - 任务的并行度决定了一个算子在执行过程中的并发执行数量。</p>
+<p>这些关键词在Flink中扮演着重要的角色。Job表示一个完整的数据处理任务，算子是作业中的基本计算单元，负责数据的转换和处理。Source负责从外部系统读取输入数据，Sink负责将计算结果输出到外部系统。依赖描述了算子之间的关系，确保数据的正确传递和计算的顺序性。通过这些关键词的使用，Flink能够实现灵活、高效的数据处理和计算。</p>
+<h3 id="关系"><a href="#关系" class="headerlink" title="关系"></a><strong>关系</strong></h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs markdown">在Apache Flink中，作业（Job）、算子（Operator）和任务（Task）是三个重要的概念，它们之间存在一定的关系。<br><br><span class="hljs-bullet">1.</span> 作业（Job）：<br><span class="hljs-bullet">   -</span> 作业是用户定义的一个或多个数据处理任务的整体，通常由一个或多个算子组成。<br><span class="hljs-bullet">   -</span> 作业描述了数据处理的逻辑、数据流的传输和转换关系，以及相关的配置信息。<br><span class="hljs-bullet">   -</span> 作业可以包含多个算子，这些算子可以串行或并行执行。<br><br><span class="hljs-bullet">2.</span> 算子（Operator）：<br><span class="hljs-bullet">   -</span> 算子是作业中的一个数据处理单元，负责执行具体的数据转换或计算操作。<br><span class="hljs-bullet">   -</span> 算子可以是数据源（Source）、数据转换（Transformation）或数据汇（Sink）。<br><span class="hljs-bullet">   -</span> 算子可以接收输入数据流，经过处理后产生输出数据流。<br><br><span class="hljs-bullet">3.</span> 任务（Task）：<br><span class="hljs-bullet">   -</span> 任务是作业的最小执行单位，是将算子分配给具体的计算资源进行执行的实体。<br><span class="hljs-bullet">   -</span> 一个作业可以被分割为多个任务，每个任务负责执行作业中的一个或多个算子。<br><span class="hljs-bullet">   -</span> 任务的并行度决定了一个算子在执行过程中的并发执行数量。<br><br>在Flink中，作业被提交到Flink集群上执行。当作业提交后，Flink会根据作业的逻辑和配置信息，将作业拆分为多个任务，并将这些任务分配给可用的计算资源进行执行。每个任务会负责执行作业中的一个或多个算子，并处理输入数据流和输出数据流。<br><br>作业、算子和任务之间的关系可以用以下示意图表示：<br><br><span class="hljs-code">```</span><br><span class="hljs-code">    +------------------+</span><br><span class="hljs-code">    |      Job         |</span><br><span class="hljs-code">    +------------------+</span><br><span class="hljs-code">           |</span><br><span class="hljs-code">           | contains</span><br><span class="hljs-code">           |</span><br><span class="hljs-code">    +------------------+</span><br><span class="hljs-code">    |     Operator     |</span><br><span class="hljs-code">    +------------------+</span><br><span class="hljs-code">           |</span><br><span class="hljs-code">           | consists of</span><br><span class="hljs-code">           |</span><br><span class="hljs-code">    +------------------+</span><br><span class="hljs-code">    |      Task        |</span><br><span class="hljs-code">    +------------------+</span><br><span class="hljs-code">```</span><br><br>总结起来，作业是用户定义的整体数据处理逻辑，由多个算子组成；算子是作业中的数据处理单元，负责具体的数据转换或计算操作；任务是将算子分配给具体的计算资源进行执行的实体。通过这种层次结构，Flink能够将作业的逻辑划分为多个任务，并并行执行，以提高数据处理的效率和性能。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="任务提交流程"><a href="#任务提交流程" class="headerlink" title="任务提交流程"></a><strong>任务提交流程</strong></h1><h2 id="1、单机调度"><a href="#1、单机调度" class="headerlink" title="1、单机调度"></a><strong>1、单机调度</strong></h2><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_101187_MaxEkeLHZ3sBsxO8_1689217518?w=864&h=382&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="2、YARN调度"><a href="#2、YARN调度" class="headerlink" title="2、YARN调度"></a><strong>2、YARN调度</strong></h2><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_354444_PNNuPwn3XMq2GBDS_1689217546?w=879&h=476&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="任务调度流程"><a href="#任务调度流程" class="headerlink" title="任务调度流程"></a><strong>任务调度流程</strong></h2><p>客户端不是运行时和程序执行的一部分，但它用于准备并发送 dataflow(JobGraph)给 Master(JobManager)，然后，客户端断开连接或者维持连接以等待接收计算结果。</p>
+<p>​      当 Flink 集群启动后，首先会启动一个 JobManger 和一个或多个的 TaskManager。由 Client 提交任务给 JobManager，JobManager 再调度任务到各个 TaskManager 去执行，然后 TaskManager 将心跳和统计信息汇报给 JobManager。 TaskManager 之间以流的形式进行数据的传输。上述三者均为独立的 JVM 进程。</p>
+<p>​      Client 为提交 Job 的客户端，可以是运行在任何机器上(与 JobManager 环境 连通即可)。提交 Job 后，Client 可以结束进程(Streaming 的任务)，也可以不结束并等待结果返回。</p>
+<p>​      JobManager 主要负责调度 Job 并协调 Task 做 checkpoint，职责上很像 Storm 的 Nimbus。从 Client 处接收到 Job 和 JAR 包等资源后，会生成优化后的 执行计划，并以 Task 的单元调度到各个 TaskManager 去执行。</p>
+<p>​      TaskManager 在启动的时候就设置好了槽位数(Slot)，每个 slot 能启动一个 Task，Task 为线程。从JobManager 处接收需要部署的 Task，部署启动后，与自己的上游建立 Netty 连接，接收数据并处理。</p>
+<p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_644083_dHAmNIEVvkypNPlb_1689219386?w=841&h=496&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h1 id="流处理、批处理、Table-SQL-x2F-API"><a href="#流处理、批处理、Table-SQL-x2F-API" class="headerlink" title="流处理、批处理、Table SQL&#x2F;API"></a><strong>流处理、批处理、Table SQL&#x2F;API</strong></h1><h2 id="共有概念"><a href="#共有概念" class="headerlink" title="共有概念"></a><strong>共有概念</strong></h2><p>在Apache Flink中，流处理、批处理和Table SQL&#x2F;API之间有一些共有的概念。下面是它们之间共有的概念：</p>
+<p>\1. 数据源（Data Source）：数据源是指从外部系统（如文件、消息队列、数据库等）读取数据的组件。</p>
+<p>\2. 数据接收器（Data Sink）：数据接收器是指将处理结果写入外部系统的组件，如文件、数据库等。</p>
+<p>\3. 转换（Transformation）：转换是指对数据进行转换、过滤、聚合等操作的过程。</p>
+<p>\5. 时间语义（Time Semantics）：时间语义是指在数据处理中对事件时间（Event Time）或处理时间（Processing Time）的处理方式。</p>
+<p>\6. 并行度（Parallelism）：并行度是指任务或操作在集群中同时执行的并发度。可以根据数据规模和计算资源进行调整。</p>
+<p>\7. 状态（State）：状态是用于存储和管理中间结果的机制。它可以用于跟踪窗口的状态、聚合结果等。</p>
+<p>\8. 检查点（Checkpoint）：检查点是用于实现容错机制的机制，可以将任务的状态保存到持久化存储中，以便在发生故障时进行恢复。</p>
+<p>这些共有的概念反映了Flink作为一个统一的流处理和批处理框架的特点。它们为开发人员提供了一致的编程模型和操作方式，使得可以在同一个应用程序中处理实时数据流和有限数据集，并实现高性能的数据处理和分析。</p>
+<h2 id="特有概念"><a href="#特有概念" class="headerlink" title="特有概念"></a><strong>特有概念</strong></h2><p>以下是流处理、批处理和Table SQL&#x2F;API模块中特有的概念的详细说明：</p>
+<p><strong>流处理特有的概念：</strong></p>
+<p>\1. 水位线（Watermark）：水位线用于处理事件时间（Event Time）语义，表示事件流中的事件的时间进度。它用于确定窗口的边界和触发窗口计算。</p>
+<p>\2. 窗口（Window）：窗口是对事件流进行切分和分组的一种方式，用于聚合、计算或其他操作。窗口可以根据时间、数量或其他条件进行定义和触发。</p>
+<p>\3. 处理时间（Processing Time）：处理时间是指数据处理的时间，即数据到达处理器的时间。在流处理中，可以使用处理时间进行时间相关的操作，如窗口计算等。</p>
+<p><strong>批处理特有的概念：</strong></p>
+<p>\1. 数据集（DataSet）：数据集是批处理中的基本数据集合，代表有限的数据集。</p>
+<p>\2. 批处理作业（Batch Job）：批处理作业是对数据集进行离线处理的任务，通常以整个数据集作为一个批次进行处理。</p>
+<p>\3. 迭代（Iteration）：迭代是批处理中用于进行迭代计算的机制，允许多次迭代地处理数据集。</p>
+<p><strong>Table SQL&#x2F;API特有的概念：</strong></p>
+<p>\1. 表（Table）：表是Table SQL和Table API中的核心概念，代表了数据的结构化视图。它可以是从数据源读取的数据集，也可以是经过转换和计算得到的中间结果。</p>
+<p>\2. 查询（Query）：查询是对表进行的操作，包括选择、过滤、聚合等操作。在Table SQL中，查询是使用SQL语句进行的；在Table API中，查询是使用API进行的。</p>
+<p>\3. 字段（Field）：字段是表中的列，代表了数据的属性。可以通过字段名或索引来引用字段。</p>
+<p>以上是流处理、批处理和Table SQL&#x2F;API模块中特有的概念的详细说明。这些特有的概念反映了每个模块的不同特点和目标，以提供适合不同场景和需求的数据处理和查询能力。</p>
+<h1 id="1-1-时间"><a href="#1-1-时间" class="headerlink" title="1.1 时间"></a><strong>1.1 时间</strong></h1><p># 1.2.2 活动时间 -  time</p>
+<h2 id="事件时间-x2F-处理时间-x2F-摄取时间"><a href="#事件时间-x2F-处理时间-x2F-摄取时间" class="headerlink" title="事件时间&#x2F;处理时间&#x2F;摄取时间"></a>事件时间&#x2F;处理时间&#x2F;摄取时间</h2><p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=%E4%BA%8B%E4%BB%B6%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86%E6%97%B6%E9%97%B4%E6%91%84%E5%8F%96%E6%97%B6%E9%97%B4">事件时间&#x2F;处理时间&#x2F;摄取时间</a></p>
+<p>Flink 在流处理节目中支持不同的_时间_概念。</p>
+<h3 id="处理时间"><a href="#处理时间" class="headerlink" title="处理时间"></a><strong>处理时间</strong></h3><p>（process time）：处理算子时，使用本地 机器的 系统时钟</p>
+<p>- <strong>处理时间：</strong>处理时间是指执行相应 算子操作的机器的系统时间。</p>
+<p>  当流程序在处理时间运行时，所有<strong>基于时间的 算子操作（如时间窗口）将使用运行相应算子的机器的系统时钟</strong>。每小时处理时间窗口将包括在系统时钟指示整个小时之间到达特定算子的所有记录。例如，如果应用程序在上午9:15开始运行，则第一个每小时处理时间窗口将包括在上午9:15到上午10:00之间处理的事件，下一个窗口将包括在上午10:00到11:00之间处理的事件，因此上。</p>
+<p>  处理时间是最简单的时间概念，不需要流和机器之间的协调。它提供最佳性能和最低延迟。但是，在分布式和异步环境中，处理时间不提供确定性，因为它容易受到记录到达系统的速度（例如从消息队列）到记录在系统内的算子之间流动的速度的影响。和停电（预定或其他）。</p>
+<h3 id="事件时间"><a href="#事件时间" class="headerlink" title="事件时间"></a><strong>事件时间</strong></h3><p>（event time）： - 配合水位线，管理区间内的事件；可以无序到达</p>
+<p>- <strong>事件时间：</strong>事件时间是每个事件在其生产设备上发生的时间。此时间通常在进入Flink之前嵌入记录中，并且 可以从每个记录中提取该_事件时间戳_。在事件时间，时间的进展取决于数据，而不是任何挂钟**。事件时间程序必须指定如何生成_事件时间水印（水位线）_**，这是表示事件时间进度的机制。该水印机制在<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=event-time-and-watermarks">下面</a>的后面部分中描述。</p>
+<p>  在一个完美的世界中，事件时间处理将产生完全一致和确定的结果，无论事件何时到达，或者它们的排序。但是，除非事件已知按顺序到达（按时间戳），否则事件时间处理会在等待无序事件时产生一些延迟。由于只能等待一段有限的时间，因此限制了确定性事件时间应用程序的可能性。</p>
+<p>  假设所有数据都已到达，事件时间 算子操作将按预期运行，即使在处理无序或延迟事件或重新处理历史数据时也会产生正确且一致的结果。例如，每小时事件时间窗口将包含带有落入该小时的事件时间戳的所有记录，无论它们到达的顺序如何，或者何时处理它们。（有关更多信息，请参阅有关<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/16?id=late-elements">迟发事件</a>的部分。）</p>
+<p>  请注意，有时当事件时间程序实时处理实时数据时，它们将使用一些<em>处理时间</em> 算子操作，以确保它们及时进行。</p>
+<h3 id="摄取时间"><a href="#摄取时间" class="headerlink" title="摄取时间"></a><strong>摄取时间</strong></h3><p>：Data Source生成时的时间</p>
+<p>- <strong>摄取时间（ingestion time）：</strong>摄取时间是事件进入Flink的时间。在源算子处，每个记录将源的当前时间作为时间戳，并且基于时间的 算子操作（如时间窗口）引用该时间戳。</p>
+<p>  _摄取时间_在概念上位于_事件时间_和_处理时间之间_。与_处理时间_相比 ，它稍贵一些，但可以提供更可预测的结果。因为 _摄取时间_使用稳定的时间戳（在源处分配一次），所以对记录的不同窗口 算子操作将引用相同的时间戳，而在_处理时间中，_每个窗口算子可以将记录分配给不同的窗口（基于本地系统时钟和任何运输延误）。</p>
+<p>  与_事件时间_相比，_摄取时间_程序无法处理任何无序事件或后期数据，但程序不必指定如何生成_水印_。</p>
+<p>  在内部，_摄取时间_与_事件时间_非常相似，但具有自动时间戳分配和自动水印生成函数。</p>
+<p><img src="http://flink.apachecn.org/docs/img/times_clocks.svg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="生成"><a href="#生成" class="headerlink" title="生成"></a><strong>生成</strong></h2><h3 id="时间戳分配器-x2F-水印生成器"><a href="#时间戳分配器-x2F-水印生成器" class="headerlink" title="时间戳分配器&#x2F;水印生成器"></a>时间戳分配器&#x2F;水印生成器</h3><p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/17?id=%E6%97%B6%E9%97%B4%E6%88%B3%E5%88%86%E9%85%8D%E5%99%A8%E6%B0%B4%E5%8D%B0%E7%94%9F%E6%88%90%E5%99%A8">时间戳分配器&#x2F;水印生成器</a></p>
+<p>时间戳分配器获取流并生成带有带时间戳数据元和水印的新流。如果原始流已经有时间戳和&#x2F;或水印，则时间戳分配器会覆盖它们。</p>
+<p>时间戳分配器通常在数据源之后立即指定，但并非严格要求这样做。例如，常见的模式是在时间戳分配器之前解析（_MapFunction_）和过滤（_FilterFunction_）。在任何情况下，需要在事件时间的第一个 算子操作之前指定时间戳分配器（例如第一个窗口 算子操作）。作为一种特殊情况，当使用Kafka作为流式传输作业的源时，Flink允许在源（或消费者）本身内指定时间戳分配器&#x2F;水印发射器。有关如何 算子操作的更多信息，请参阅 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/connectors/kafka.html">Kafka Connector文档</a>。</p>
+<p><strong>注意：</strong>本节的其余部分介绍了程序员必须实现的主要接口，以便创建自己的时间戳提取器&#x2F;水印发射器。要查看Flink附带的预先实现的提取器，请参阅 <a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/event_timestamp_extractors.html">预定义的时间戳提取器&#x2F;水印发射器</a>页面。<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/17?id=tab_scala_2">http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/17?id=tab_scala_2</a>)</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs livescript">final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();<br>env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);<br><br>DataStream&lt;MyEvent&gt; stream = env.readFile(<br>        myFormat, myFilePath, FileProcessingMode.PROCESS_CONTINUOUSLY, <span class="hljs-number">100</span>,<br>        FilePathFilter.createDefaultFilter(), typeInfo);<br><br>DataStream&lt;MyEvent&gt; withTimestampsAndWatermarks = stream<br>        .filter( event -&gt; event.severity() == WARNING )<br>        .assignTimestampsAndWatermarks(<span class="hljs-keyword">new</span> MyTimestampsAndWatermarks());<br><br>withTimestampsAndWatermarks<br>        .keyBy<span class="hljs-function"><span class="hljs-params">( (event) -&gt; event.getGroup() )</span></span><br><span class="hljs-function">        .<span class="hljs-title">timeWindow</span><span class="hljs-params">(Time.seconds(<span class="hljs-number">10</span>))</span></span><br><span class="hljs-function">        .<span class="hljs-title">reduce</span><span class="hljs-params">( (a, b) -&gt; a.add(b) )</span></span><br><span class="hljs-function">        .<span class="hljs-title">addSink</span><span class="hljs-params">(...)</span>;</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h3 id="具有递增时间戳的分发者"><a href="#具有递增时间戳的分发者" class="headerlink" title="具有递增时间戳的分发者"></a>具有递增时间戳的分发者</h3><p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=%E5%85%B7%E6%9C%89%E9%80%92%E5%A2%9E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E5%88%86%E5%8F%91%E8%80%85">****</a></p>
+<p>_定期_水印生成的最简单的特殊情况是给定源任务看到的时间戳按升序发生的情况。在这种情况下，当前时间戳始终可以充当水印，因为没有更早的时间戳会到达。</p>
+<p>请注意，_每个并行数据源任务_只需要提升时间戳。例如，如果在特定设置中，一个并行数据源实例读取一个Kafka分区，则只需要在每个Kafka分区中时间戳递增。当并行流被混洗，联合，连接或合并时，Flink的水印合并机制将生成正确的水印。<a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_scala_0">http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_scala_0</a>)</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs aspectj">DataStream&lt;MyEvent&gt; stream = ...<br><br>DataStream&lt;MyEvent&gt; withTimestampsAndWatermarks =<br>    stream.assignTimestampsAndWatermarks(<span class="hljs-keyword">new</span> AscendingTimestampExtractor&lt;MyEvent&gt;() &#123;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">extractAscendingTimestamp</span><span class="hljs-params">(MyEvent element)</span> </span>&#123;<br>            <span class="hljs-function"><span class="hljs-keyword">return</span> element.<span class="hljs-title">getCreationTime</span><span class="hljs-params">()</span></span>;<br>        &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<p>### <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=%E5%85%81%E8%AE%B8%E5%9B%BA%E5%AE%9A%E6%95%B0%E9%87%8F%E7%9A%84%E8%BF%9F%E5%88%B0%E7%9A%84%E5%88%86%E9%85%8D%E8%80%85"><strong>允许固定数量的迟到的分配者</strong></a></p>
+<p>定期水印生成的另一个例子是当水印滞后于在流中看到的最大（事件 - 时间）时间戳一段固定的时间。这种情况涵盖了预先知道流中可能遇到的最大延迟的情况，例如，当创建包含时间戳在固定时间段内扩展的数据元的自定义源以进行测试时。对于这些情况，Flink提供了<code>BoundedOutOfOrdernessTimestampExtractor</code>作为参数的参数<code>maxOutOfOrderness</code>，即在计算给定窗口的最终结果时，在忽略数据元之前允许数据元延迟的最长时间。延迟对应于结果<code>t - t_w</code>，其中<code>t</code>是数据元的（事件 - 时间）时间戳，以及<code>t_w</code>前一个水印的时间戳。如果<code>lateness &gt; 0</code>然后，该数据元被认为是迟到的，并且在计算其对应窗口的作业结果时默认被忽略。有关 使用延迟数据元的更多信息，请参阅有关<a target="_blank" rel="noopener" href="https://flink.sojb.cn/dev/stream/operators/windows.html#allowed-lateness">允许延迟</a>的文档。</p>
+<p>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_java_1"><strong>Java</strong></a></p>
+<p>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/18?id=tab_scala_1"><strong>Scala</strong></a></p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs aspectj">DataStream&lt;MyEvent&gt; stream = ...<br><br>DataStream&lt;MyEvent&gt; withTimestampsAndWatermarks =<br>    stream.assignTimestampsAndWatermarks(<span class="hljs-keyword">new</span> BoundedOutOfOrdernessTimestampExtractor&lt;MyEvent&gt;(Time.seconds(<span class="hljs-number">10</span>)) &#123;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">extractTimestamp</span><span class="hljs-params">(MyEvent element)</span> </span>&#123;<br>            <span class="hljs-function"><span class="hljs-keyword">return</span> element.<span class="hljs-title">getCreationTime</span><span class="hljs-params">()</span></span>;<br>        &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="1-2-状态-x2F-一致性模型-State"><a href="#1-2-状态-x2F-一致性模型-State" class="headerlink" title="1.2 状态 &#x2F; 一致性模型- State"></a><strong>1.2 状态 &#x2F; 一致性模型- State</strong></h1><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_836605_74AJUZBmyaak_8TV_1689217749?w=1058&h=613&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_476077_ZUR6VykD0BlZ8nFw_1689217863?w=1188&h=622&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs markdown">Flink的状态包含以下几种语义，每种语义都有不同的概念和特点：<br><br><span class="hljs-bullet">1.</span> 键控状态（Keyed State）：键控状态是与特定键关联的状态，其中键是根据应用程序的逻辑进行定义的。键控状态在流处理中用于存储和访问与特定键相关的数据。例如，在流处理中，可以使用键控状态来跟踪每个用户的状态信息。键控状态是Flink中最常用的状态类型之一。<br><br><span class="hljs-bullet">2.</span> 算子状态（Operator State）：算子状态是与算子（Operator）关联的状态，用于存储和访问算子的中间结果和状态信息。算子状态在流处理中用于在算子之间传递数据和状态。例如，在窗口操作中，可以使用算子状态来存储窗口的中间结果。算子状态是在算子级别上共享和管理的。<br><br><span class="hljs-bullet">3.</span> 保存点状态（Savepoint State）：保存点状态是应用程序的整体状态，包含了所有任务的状态信息。保存点状态是通过创建保存点（Savepoint）来持久化应用程序的状态，并在需要时进行恢复。保存点状态用于应用程序的升级、故障恢复和状态迁移等场景。<br><br><span class="hljs-bullet">4.</span> 一致性时间（Event Time）：一致性时间是用于处理事件流的时间概念，在流处理中用于确定事件的顺序和时间窗口的范围。一致性时间可以通过水位线（Watermark）来引入，用于处理乱序事件和处理延迟。<br><br><span class="hljs-bullet">5.</span> 状态后端（State Backend）：状态后端是Flink用于存储和管理状态的组件。状态后端可以将状态存储在内存、文件系统或远程存储中，以满足不同的性能和可靠性需求。常见的状态后端包括内存状态后端、文件系统状态后端和RocksDB状态后端。<br><br><span class="hljs-bullet">6.</span> 状态一致性（State Consistency）：状态一致性是指在分布式环境下，多个任务或算子之间的状态保持一致的特性。Flink通过检查点机制来实现状态的一致性，即在检查点过程中将所有任务的状态同时保存，以保证状态的一致性。<br><br>这些状态语义在Flink中都有着重要的作用。键控状态和算子状态用于在流处理中存储和访问数据和状态信息，而保存点状态用于持久化应用程序的整体状态。一致性时间则用于处理事件流的时间概念，确保事件的顺序和窗口的正确计算。<br><br>需要根据具体的应用场景和需求选择适合的状态语义，并合理使用Flink提供的状态管理机制，以实现高效、可靠和一致的数据处理<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="状态类型（键控-x2F-算子）"><a href="#状态类型（键控-x2F-算子）" class="headerlink" title="状态类型（键控&#x2F;算子）"></a><strong>状态类型（键控&#x2F;算子）</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs markdown">2023/7/14 10:41:38<br>键控状态（Keyed State）和算子状态（Operator State）是Flink中用于存储和访问状态信息的两种重要的状态类型。它们在流处理中具有不同的概念和特点。<br><br><span class="hljs-bullet">1.</span> 键控状态（Keyed State）：<br><span class="hljs-bullet">   -</span> 概念：键控状态是与特定键关联的状态，其中键是根据应用程序的逻辑进行定义的。键控状态在流处理中用于存储和访问与特定键相关的数据。每个并行任务都会维护自己的键控状态，其中键的范围由并行任务的子任务负责管理。<br><span class="hljs-bullet">   -</span> 特点：<br><span class="hljs-bullet">     -</span> 与特定键关联：键控状态是与特定键相关联的，可以根据应用程序的逻辑定义键的含义。例如，在用户行为分析中，可以使用用户ID作为键来跟踪每个用户的状态信息。<br><span class="hljs-bullet">     -</span> 高效的状态访问：键控状态提供了高效的状态访问机制，可以根据键直接访问和更新相应的状态。这样可以避免全局状态的扫描和搜索，提高状态访问的效率。<br><span class="hljs-bullet">     -</span> 状态分区和负载均衡：Flink会根据键的哈希值将键控状态进行分区，并将不同的键分配给不同的并行任务处理。这样可以实现状态的分布式存储和负载均衡，提高并行处理的效率。<br><br><span class="hljs-bullet">2.</span> 算子状态（Operator State）：<br><span class="hljs-bullet">   -</span> 概念：算子状态是与算子（Operator）关联的状态，用于存储和访问算子的中间结果和状态信息。算子状态在流处理中用于在算子之间传递数据和状态。每个并行任务都会维护自己的算子状态，其中算子状态的范围由并行任务的子任务负责管理。<br><span class="hljs-bullet">   -</span> 特点：<br><span class="hljs-bullet">     -</span> 与算子关联：算子状态是与算子直接关联的，用于存储算子的中间结果和状态信息。例如，在窗口操作中，可以使用算子状态来存储窗口的中间结果，以便后续的计算和输出。<br><span class="hljs-bullet">     -</span> 共享和管理：算子状态是在算子级别上共享和管理的，可以被同一个算子的不同子任务访问和更新。这样可以实现算子之间的状态传递和数据交换，提高数据处理的效率。<br><span class="hljs-bullet">     -</span> 状态分区和负载均衡：Flink会根据算子的并行度将算子状态进行分区，并将不同的分区分配给不同的并行任务处理。这样可以实现状态的分布式存储和负载均衡，提高并行处理的效率。<br><br>键控状态和算子状态是Flink中常用的状态类型，用于存储和访问数据和状态信息。它们在流处理中起着重要的作用，可以实现状态的高效管理和数据处理。根据具体的应用场景和需求，可以选择适合的状态类型，并合理使用Flink提供的状态管理机制。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a><strong>检查点</strong></h2><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">检查点（<span class="hljs-keyword">Checkpoint</span>）是Flink中实现容错机制的重要概念之一。它是对应用程序的一次全局状态的快照，包含了所有任务的状态信息。检查点的目的是保证应用程序的数据一致性和可靠性，以防止数据丢失和保证恢复的正确性。<br><br>检查点的概念介绍如下：<br><br><span class="hljs-number">1.</span> 容错机制：在分布式流处理中，由于各种原因（例如机器故障、网络故障等），任务可能会失败或数据丢失。为了保证数据的一致性和可靠性，Flink引入了容错机制。检查点是容错机制的核心组成部分之一。<br><br><span class="hljs-number">2.</span> 全局状态快照：检查点是对应用程序的一次全局状态的快照。它包含了所有任务的状态信息，包括键控状态和算子状态等。通过检查点，Flink可以将应用程序的状态持久化到可靠的存储介质中，以保证数据的可靠性和持久性。<br><br><span class="hljs-number">3.</span> 异步持久化：在检查点过程中，Flink会将应用程序的状态数据异步地持久化到可靠的存储介质中，例如分布式文件系统或对象存储。这样可以避免对应用程序的处理速度造成太大的影响。<br><br><span class="hljs-number">4.</span> 一致性保证：在进行检查点时，Flink会先暂停所有任务的数据处理，并将所有任务的状态同时保存到检查点中。这样可以保证检查点的一致性，即所有任务的状态都是在同一个时间点进行保存的。<br><br><span class="hljs-number">5.</span> 容错恢复：当发生故障时，Flink可以使用最近的检查点将应用程序的状态恢复到故障发生前的状态。恢复过程包括将检查点中的状态数据加载到任务中，并重新启动任务进行数据处理。<br><br>通过检查点机制，Flink可以实现应用程序的容错能力，保证数据的一致性和可靠性。检查点可以用于故障恢复、应用程序升级、测试和调试等场景。同时，Flink还提供了灵活的配置选项，可以根据需求设置检查点的频率和持久化方式，以平衡容错性和性能的需求。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>## <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/22?id=%E5%90%AF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E7%82%B9">启用和配置检查点</a></p>
+<p>默认情况下，禁用检查点。为了使检查点，调用<code>enableCheckpointing(n)</code>上<code>StreamExecutionEnvironment</code>，其中 <em>N</em> 是以毫秒为单位的检查点间隔。</p>
+<p>检查点的其他参数包括：</p>
+<p>- _完全一次与至少一次_：您可以选择将模式传递给<code>enableCheckpointing(n)</code>方法，以在两个保证级别之间进行选择。对于大多数应用来说，恰好一次是优选的。至少一次可能与某些超低延迟（始终为几毫秒）的应用程序相关。</p>
+<p>- _checkpoint timeout（检查点超时）_：如果当前检查点未完成，则中止检查点的时间。</p>
+<p>- _检查点之间的最短时间_：为确保流应用程序在检查点之间取得一定进展，可以定义检查点之间需要经过多长时间。如果将此值设置为例如_5000_，则无论检查点持续时间和检查点间隔如何，下一个检查点将在上一个检查点完成后的5秒内启动。请注意，这意味着检查点间隔永远不会小于此参数。</p>
+<p>  通过定义“检查点之间的时间”而不是检查点间隔来配置应用程序通常更容易，因为“检查点之间的时间”不易受检查点有时需要比平均时间更长的事实的影响（例如，如果目标存储系统暂时很慢）。</p>
+<p>  请注意，此值还表示并发检查点的数量为_一_。</p>
+<p>- _并发检查点数_：默认情况下，当一个检查点仍处于运行状态时，系统不会触发另一个检查点。这可确保拓扑不会在检查点上花费太多时间，也不会在处理流方面取得进展。可以允许多个重叠检查点，这对于具有特定处理延迟的管道（例如，因为函数调用需要一些时间来响应的外部服务）而感兴趣，但是仍然希望执行非常频繁的检查点（100毫秒） ）在失败时重新处理很少。</p>
+<p>  当定义检查点之间的最短时间时，不能使用此选项。</p>
+<p>- _外部化检查点_：您可以将_外围检查点_配置为外部持久化。外部化检查点将其元数据写入持久存储，并且在作业失败时_不会_自动清除。这样，如果您的工作失败，您将有一个检查点可以从中-recovery。<a target="_blank" rel="noopener" href="https://flink.sojb.cn/ops/state/checkpoints.html#externalized-checkpoints">有关外部化检查点</a>的<a target="_blank" rel="noopener" href="https://flink.sojb.cn/ops/state/checkpoints.html#externalized-checkpoints">部署说明中</a>有更多详细信息。</p>
+<p>- _关于检查点错误的失败&#x2F;继续任务_：这确定如果在执行任务的检查点过程中发生错误，任务是否将失败。这是默认行为。或者，当禁用此选项时，任务将简单地拒绝检查点协调器的检查点并继续运行。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">StreamExecutionEnvironment env = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">StreamExecutionEnvironment</span>.</span></span>get<span class="hljs-constructor">ExecutionEnvironment()</span>;<br><br><span class="hljs-comment">// start a checkpoint every 1000 ms</span><br>env.enable<span class="hljs-constructor">Checkpointing(1000)</span>;<br><br><span class="hljs-comment">// advanced options:</span><br><br><span class="hljs-comment">// set mode to exactly-once (this is the default)</span><br>env.get<span class="hljs-constructor">CheckpointConfig()</span>.set<span class="hljs-constructor">CheckpointingMode(CheckpointingMode.EXACTLY_ONCE)</span>;<br><br><span class="hljs-comment">// make sure 500 ms of progress happen between checkpoints</span><br>env.get<span class="hljs-constructor">CheckpointConfig()</span>.set<span class="hljs-constructor">MinPauseBetweenCheckpoints(500)</span>;<br><br><span class="hljs-comment">// checkpoints have to complete within one minute, or are discarded</span><br>env.get<span class="hljs-constructor">CheckpointConfig()</span>.set<span class="hljs-constructor">CheckpointTimeout(60000)</span>;<br><br><span class="hljs-comment">// allow only one checkpoint to be in progress at the same time</span><br>env.get<span class="hljs-constructor">CheckpointConfig()</span>.set<span class="hljs-constructor">MaxConcurrentCheckpoints(1)</span>;<br><br><span class="hljs-comment">// enable externalized checkpoints which are retained after job cancellation</span><br>env.get<span class="hljs-constructor">CheckpointConfig()</span>.enable<span class="hljs-constructor">ExternalizedCheckpoints(ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)</span>;<br>```<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="保存点"><a href="#保存点" class="headerlink" title="保存点"></a><strong>保存点</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs markdown">保存点的基本概念和优点如下：<br><br><span class="hljs-bullet">1.</span> 基本概念：保存点是应用程序的状态的一致性快照，包含了所有任务的状态信息。它可以用于应用程序的升级、故障恢复、测试和调试等场景。<br><br><span class="hljs-bullet">2.</span> 优点：<br><span class="hljs-bullet">   -</span> 可靠性：保存点将应用程序的状态持久化到可靠的存储介质中，保证了数据的可靠性和持久性。<br><span class="hljs-bullet">   -</span> 一致性：保存点是在应用程序的整个状态一致性的基础上创建的，保证了状态的一致性。<br><span class="hljs-bullet">   -</span> 可恢复性：保存点可以用于应用程序的故障恢复，将应用程序的状态恢复到保存点所代表的时间点。<br><span class="hljs-bullet">   -</span> 版本管理：Flink支持多个保存点版本的管理，可以创建多个不同的保存点，并在需要时选择特定的保存点版本进行恢复。<br><br>总之，保存点是Flink中用于持久化应用程序状态的机制，具有可靠性、一致性、可恢复性和版本管理等优点，可以用于应用程序的升级、故障恢复、测试和调试等场景。<br><br>启动保存点的步骤如下：<br><br><span class="hljs-bullet">1.</span> 使用命令行工具或API将应用程序提交到Flink集群。<br><br><span class="hljs-bullet">2.</span> 在运行中的应用程序上调用<span class="hljs-code">`savepoint`</span>命令或API，指定保存点的目标路径。<br><br><span class="hljs-bullet">3.</span> Flink将应用程序的状态保存到指定的路径中，生成一个保存点。<br><br><span class="hljs-bullet">4.</span> 可以在需要时使用保存点来恢复应用程序的状态。<br><br>保存点（Savepoint）在Flink中具有以下作用和特点：<br><br><span class="hljs-bullet">1.</span> 应用程序升级：保存点可以用于应用程序的升级。在进行应用程序升级时，可以先创建一个保存点，然后将应用程序停止并进行升级。升级完成后，可以使用保存点将应用程序的状态恢复到升级前的状态，从而避免数据丢失和重新计算。<br><br><span class="hljs-bullet">2.</span> 故障恢复：保存点可以用于应对应用程序的故障。当应用程序发生故障时，可以使用保存点将应用程序的状态恢复到保存点所代表的时间点，从而继续处理数据，避免数据丢失。<br><br><span class="hljs-bullet">3.</span> 测试和调试：保存点可以用于测试和调试应用程序。通过创建保存点，可以在应用程序运行过程中暂停和恢复状态，以便进行调试和验证。<br><br>与检查点（Checkpoint）相比，保存点具有以下区别：<br><br><span class="hljs-bullet">1.</span> 范围：检查点是对应用程序的一次全局状态快照，包含了所有任务的状态信息。而保存点是在应用程序的整个状态一致性的基础上创建的，包含了所有任务的状态。<br><br><span class="hljs-bullet">2.</span> 生命周期：检查点是定期创建的，用于实现故障恢复和容错机制。而保存点是手动创建的，用于特定的场景，如应用程序升级或测试调试。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="状态后端"><a href="#状态后端" class="headerlink" title="状态后端"></a><strong>状态后端</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs markdown">Flink的状态后端（State Backend）是用于存储和管理Flink应用程序的状态数据的组件。状态后端负责将应用程序的状态持久化到可靠的存储介质，并在需要时恢复状态。<br><br>Flink提供了多种类型的状态后端，可以根据应用程序的需求选择合适的后端：<br><br><span class="hljs-bullet">1.</span> MemoryStateBackend：将状态存储在内存中，适用于开发和调试阶段，但不适合生产环境，因为状态不会持久化。<br><br><span class="hljs-bullet">2.</span> FsStateBackend：将状态存储在分布式文件系统（如HDFS）中，可以提供持久化和容错的状态存储，适用于生产环境。<br><br><span class="hljs-bullet">3.</span> RocksDBStateBackend：将状态存储在RocksDB中，RocksDB是一个高性能、可持久化的键值存储引擎，适用于大规模状态和高性能的需求。<br><br><span class="hljs-bullet">4.</span> 自定义状态后端：除了上述内置的状态后端，Flink还提供了自定义状态后端的能力，可以根据特定的需求实现自定义的状态存储和管理逻辑。<br><br>不同的状态后端在性能、可靠性和可扩展性方面有所不同，选择合适的状态后端取决于应用程序的需求和部署环境。在配置Flink应用程序时，可以通过配置文件或编程方式指定所使用的状态后端。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a><strong>一致性模型</strong></h2><h3 id="结果保障"><a href="#结果保障" class="headerlink" title="结果保障"></a><strong>结果保障</strong></h3><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">Flink</span>是一个流处理框架，它提供了不同的一致性模型来保证数据的一致性和正确性。以下是<span class="hljs-variable">Flink</span>中常见的一致性模型以及它们的概念、实现方式、实现难度分析和适用场景：<br><br><span class="hljs-number">1.</span> <span class="hljs-variable">Exactly</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义：<br>   <span class="hljs-operator">-</span> 概念：<span class="hljs-variable">Exactly</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义要求系统能够确保每个事件仅被处理一次，且处理结果能够准确地反映在输出中。这意味着无论在发生故障、重启或者重试时，系统都能够保证事件的处理结果是一致的。<br>   <span class="hljs-operator">-</span> 实现方式：<span class="hljs-variable">Flink</span>通过在数据源和数据接收器之间插入可重播日志（<span class="hljs-variable">Replayable</span> <span class="hljs-built_in">Log</span>）来实现<span class="hljs-variable">Exactly</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义。<span class="hljs-variable">Flink</span>会将事件和操作的元数据写入日志中，并通过检查点（<span class="hljs-variable">Checkpoint</span>）机制来实现故障恢复和重播。<br>   <span class="hljs-operator">-</span> 实现难度分析：实现<span class="hljs-variable">Exactly</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义需要解决故障恢复、重播和状态管理等问题，对系统的性能和可靠性有较高的要求，实现难度较大。<br>   <span class="hljs-operator">-</span> 适用场景：适用于对数据的一致性和准确性要求非常高的场景，例如金融交易、电信网络等。<br><br><span class="hljs-number">2.</span> <span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-variable">Least</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义：<br>   <span class="hljs-operator">-</span> 概念：<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-variable">Least</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义要求系统能够确保每个事件至少被处理一次，即事件不会丢失。虽然可能会产生重复的事件处理，但可以通过去重机制来消除重复结果。<br>   <span class="hljs-operator">-</span> 实现方式：<span class="hljs-variable">Flink</span>通过检查点机制和重播日志来实现<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-variable">Least</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义。<span class="hljs-variable">Flink</span>会定期生成检查点，并将事件和操作的元数据写入日志中，以便在故障发生时进行恢复和重播。<br>   <span class="hljs-operator">-</span> 实现难度分析：实现<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-variable">Least</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义相对较容易，主要需要解决故障恢复和重播的问题，可以通过去重机制来消除重复结果。<br>   <span class="hljs-operator">-</span> 适用场景：适用于对数据的一致性要求较高，但对重复结果可以进行处理的场景，例如日志分析、实时计算等。<br><br><span class="hljs-number">3.</span> <span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-built_in">Most</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义：<br>   <span class="hljs-operator">-</span> 概念：<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-built_in">Most</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义要求系统尽最大努力地处理每个事件，但允许事件的丢失。系统不会进行任何重试或者故障恢复机制，可能会导致事件的不完整处理。<br>   <span class="hljs-operator">-</span> 实现方式：<span class="hljs-variable">Flink</span>在默认情况下提供<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-built_in">Most</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义，即不进行任何特殊处理。事件会根据流处理的进度进行处理，但在发生故障或者重启时可能会丢失一些事件。<br>   <span class="hljs-operator">-</span> 实现难度分析：实现<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-built_in">Most</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义相对较简单，不需要进行故障恢复和重播的处理，但可能会导致事件的丢失。<br>   <span class="hljs-operator">-</span> 适用场景：适用于对数据的一致性要求相对较低，可以容忍一定程度的事件丢失的场景，例如实时监控、日志传输等。<br><br><span class="hljs-variable">Flink</span>的一致性模型可以根据业务需求和数据特点进行选择和配置。<span class="hljs-variable">Exactly</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义提供了最高的一致性和准确性，但对系统的性能和可靠性要求较高；<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-variable">Least</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义提供了较高的一致性和可靠性，但可能会产生重复结果；<span class="hljs-variable">At</span><span class="hljs-operator">-</span><span class="hljs-built_in">Most</span><span class="hljs-operator">-</span><span class="hljs-built_in">Once</span>语义提供了较低的一致性和可靠性，但可以提高系统的性能和吞吐量。具体选择哪种一致性模型取决于业务需求和数据处理的特点。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h1 id="1-3-事件-Event"><a href="#1-3-事件-Event" class="headerlink" title="1.3 事件 - Event"></a><strong>1.3 事件 - Event</strong></h1><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_114050_Diw4rDF0gm2pg6zR_1689217672?w=3212&h=1054&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">在Flink中，事件（Event）是流处理的基本单位，表示流中的一个数据元素。事件可以是任何具体的数据对象，例如传感器数据、日志记录、交易信息等。事件在流处理中被处理、转换和分析，以生成最终的结果。<br><br>事件的生成和创建是由数据源（Source）负责的。数据源是Flink作业（Job）中的一个组件，用于从外部数据源（如Kafka、消息队列、文件等）读取事件数据，并将其转换为Flink内部的数据流。数据源根据配置或者特定的逻辑来生成事件，并将事件发送到Flink的任务（Task）中进行处理。<br><br>在Flink中，一个作业（Job）可以由多个任务（Task）组成，每个任务负责处理数据流的一个分区。任务是Flink作业的并发执行单元，它会从数据源接收事件，并通过一系列的算子（Operator）对事件进行转换和处理。算子可以是各种操作，例如过滤、映射、聚合、连接等，用于对事件进行处理和计算。<br><br>事件与作业、任务和算子之间的关系如下：<br><span class="hljs-bullet">- </span>事件是作业的输入数据，通过数据源生成并发送到作业中进行处理。<br><span class="hljs-bullet">- </span>作业由多个任务组成，每个任务处理数据流的一个分区，负责接收和处理事件。<br><span class="hljs-bullet">- </span>任务通过一系列的算子对事件进行转换和处理，算子可以是数据转换、聚合、过滤等操作。<br><br>事件在Flink中作为数据流的基本单位，通过作业、任务和算子进行处理和转换，最终生成结果或输出到外部系统。事件的生成和处理是Flink作业执行的核心过程，它们共同构成了流处理的基本流程。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h1 id="1-4-并行度"><a href="#1-4-并行度" class="headerlink" title="1.4 并行度"></a><strong>1.4 并行度</strong></h1><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_393261_qn-FibAhCIVrVP6l_1689219166?w=893&h=562&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>一个特定算子的子任务(subtask)的个数被称之为其并行度(parallelism)。</p>
+<p>一般情况下，一个流程序的并行度，可以认为就是其所有算子中最大的并行度。一个程序中，不同的算子可能具有不同的并行度。</p>
+<h2 id="并行子任务的分配"><a href="#并行子任务的分配" class="headerlink" title="并行子任务的分配"></a><strong>并行子任务的分配</strong></h2><p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_258958_a1N0MAPUsMxps7lW_1689219049?w=975&h=432&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>A4代表，A任务设置了4个并行度。上面的JobGraph只需要4个slot就能执行起来。</p>
+<p>所以，算子里面最大的并行度代表着我们当前需要的slot的数量，也就是我们当前同一时间内，正在并行执行的线程数。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs markdown">在Flink中，并行度是指作业中并行执行任务的数量。并行度可以在作业级别、算子级别和任务级别进行设置。下面将详细介绍并行度的概念、与Task Manager的关系、与算子的关系以及与Slot分配的关系，并说明如何合理设置并行度以及其好处。<br><br><span class="hljs-bullet">1.</span> 概念：<br><span class="hljs-bullet">   -</span> 并行度是指作业中并行执行任务的数量。<br><span class="hljs-bullet">   -</span> 作业级别的并行度是指整个作业中并行执行任务的数量。<br><span class="hljs-bullet">   -</span> 算子级别的并行度是指每个算子中并行执行任务的数量。<br><span class="hljs-bullet">   -</span> 任务级别的并行度是指每个任务（Task）中并行执行子任务的数量。<br><br><span class="hljs-bullet">2.</span> 与Task Manager的关系：<br><span class="hljs-bullet">   -</span> Task Manager是Flink中的执行引擎，负责执行任务。<br><span class="hljs-bullet">   -</span> 并行度决定了作业需要多少个Task Manager来执行任务。<br><span class="hljs-bullet">   -</span> 作业级别的并行度决定了需要多少个Task Manager来执行整个作业。<br><span class="hljs-bullet">   -</span> 算子级别的并行度决定了每个算子需要多少个Task Manager来执行任务。<br><br><span class="hljs-bullet">3.</span> 与算子的关系：<br><span class="hljs-bullet">   -</span> 算子级别的并行度决定了每个算子中并行执行任务的数量。<br><span class="hljs-bullet">   -</span> 算子级别的并行度可以根据数据的分布和计算的复杂度来设置。<br><span class="hljs-bullet">   -</span> 较高的算子并行度可以提高计算的并行度和吞吐量，但需要更多的资源。<br><br><span class="hljs-bullet">4.</span> 与Slot分配的关系：<br><span class="hljs-bullet">   -</span> Slot是Task Manager中的资源单元，用于执行任务。<br><span class="hljs-bullet">   -</span> 每个Task Manager拥有一定数量的Slot。<br><span class="hljs-bullet">   -</span> Slot的数量决定了可以并行执行的任务数量。<br><span class="hljs-bullet">   -</span> 并行度不能超过Slot的数量，否则会导致任务无法执行。<br><br><span class="hljs-bullet">5.</span> 如何合理设置并行度：<br><span class="hljs-bullet">   -</span> 根据数据的分布和计算的复杂度来设置算子级别的并行度。<br><span class="hljs-bullet">   -</span> 考虑系统的资源情况，确保并行度不超过Slot的数量。<br><span class="hljs-bullet">   -</span> 可以通过监控和调优来动态调整并行度，以达到最佳的性能和资源利用率。<br><br><span class="hljs-bullet">6.</span> 好处：<br><span class="hljs-bullet">   -</span> 合理设置并行度可以提高作业的整体性能和吞吐量。<br><span class="hljs-bullet">   -</span> 并行度越高，任务可以同时处理更多的数据，加快计算速度。<br><span class="hljs-bullet">   -</span> 并行度越高，可以更好地利用集群中的资源，提高资源利用率。<br><br>总之，合理设置并行度可以根据数据的分布、计算的复杂度和系统的资源情况来决定。通过提高并行度，可以提高作业的整体性能和吞吐量，并更好地利用集群中的资源。同时，通过监控和调优，可以动态调整并行度，以达到最佳的性能和资源利用率。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="三种并行度"><a href="#三种并行度" class="headerlink" title="三种并行度"></a><strong>三种并行度</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> 任务的并行度（Task Parallelism）：<br><span class="hljs-bullet">   -</span> 任务的并行度指的是在一个作业中可以同时执行的任务数量。<br><span class="hljs-bullet">   -</span> 任务的并行度可以由作业调度器或任务调度器来控制，根据系统资源和任务的依赖关系动态分配任务给可用的计算资源。<br><span class="hljs-bullet">   -</span> 任务的并行度可以影响作业的整体执行时间和系统的资源利用率。<br><br><span class="hljs-bullet">2.</span> 算子的并行度（Operator Parallelism）：<br><span class="hljs-bullet">   -</span> 算子的并行度指的是在一个算子（或操作）中可以同时执行的任务数量。<br><span class="hljs-bullet">   -</span> 算子的并行度可以由并行计算框架或任务调度器来控制，根据算子的计算逻辑和数据分布情况将任务分配给可用的计算资源。<br><span class="hljs-bullet">   -</span> 算子的并行度可以影响算子的计算速度和系统的资源利用率。<br><br><span class="hljs-bullet">3.</span> 作业的并行度（Job Parallelism）：<br><span class="hljs-bullet">   -</span> 作业的并行度指的是在整个作业中可以同时执行的任务数量。<br><span class="hljs-bullet">   -</span> 作业的并行度可以由作业调度器或任务调度器来控制，根据作业的任务依赖关系和系统资源情况来分配任务给可用的计算资源。<br><span class="hljs-bullet">   -</span> 作业的并行度可以影响整个作业的执行时间和系统的资源利用率。<br><br>并行度的具体取值通常取决于可用的计算资源，如CPU核心数、计算节点数或任务槽（slot）的数量。任务槽是一种资源分配单位，可以理解为可用的计算资源的数量。任务的并行度可以根据任务槽的数量来决定，即一个任务槽对应一个任务的执行。<br><br>需要注意的是，并行度的设置需要根据具体的应用场景和系统资源来进行调优，以达到最佳的性能和资源利用率。过低的并行度可能导致资源浪费，而过高的并行度可能导致资源竞争和性能下降。因此，合理设置并行度是并行计算中的重要考虑因素之一。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a><strong>使用</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs markdown">并行执行策略适用于以下情况：<br><br><span class="hljs-bullet">1.</span> 数据量大：当处理的数据量较大时，使用并行执行策略可以将任务分配给多个计算资源并行处理，从而提高处理速度和吞吐量。<br><br><span class="hljs-bullet">2.</span> 计算密集型任务：对于需要进行大量计算的任务，使用并行执行策略可以将计算任务分解为多个子任务并行执行，加快计算速度。<br><br><span class="hljs-bullet">3.</span> 数据分片处理：当需要对数据进行分片处理时，可以使用并行执行策略将数据分配给多个任务并行处理，提高处理效率。<br><br><span class="hljs-bullet">4.</span> 实时处理：对于需要实时处理数据的场景，使用并行执行策略可以将数据流分发给多个任务并行处理，实现高吞吐量和低延迟。<br><br>为了保证并行执行的结果一致性，可以采取以下策略：<br><br><span class="hljs-bullet">1.</span> 数据分区：将输入数据按照一定的规则进行分区，确保相同的数据分发到同一个任务中进行处理，以保证相同的输入数据得到相同的处理结果。<br><br><span class="hljs-bullet">2.</span> 任务间通信：在任务之间进行通信，将需要共享的数据或状态进行传递，以保证任务之间的一致性。可以使用消息队列、共享内存或者分布式存储等方式进行任务间通信。<br><br><span class="hljs-bullet">3.</span> 一致性协议：使用一致性协议来保证并行执行的结果一致性。例如，使用分布式事务或者一致性哈希算法来实现数据的一致性。<br><br><span class="hljs-bullet">4.</span> 故障处理：当发生故障或者任务失败时，需要有故障恢复机制来保证任务的一致性。可以使用检查点机制和故障恢复策略来处理任务的故障。<br><br>总结起来，为了保证并行执行的结果一致性，需要在数据分区、任务间通信、一致性协议和故障处理等方面进行设计和实现。同时，合理设置并行度和监控任务的执行情况，进行调优和优化，以达到一致性和性能的平衡。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<h1 id="第二部分-DataStream-API"><a href="#第二部分-DataStream-API" class="headerlink" title="第二部分 DataStream API"></a><strong>第二部分 DataStream API</strong></h1><h1 id="2-1-基础概念"><a href="#2-1-基础概念" class="headerlink" title="2.1 基础概念"></a><strong>2.1 基础概念</strong></h1><h2 id="水位线"><a href="#水位线" class="headerlink" title="水位线"></a><strong>水位线</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs markdown">水位线（Watermark）是流处理中用于处理事件时间的重要概念之一。它用于确定事件流的进展和触发窗口计算的时机。下面对水位线的概念、作用、调度时机以及与事件配合达到的效果进行详细介绍：<br><br><span class="hljs-bullet">1.</span> 概念：<br><span class="hljs-bullet">   -</span> 水位线是一种特殊的事件，用于表示事件时间流的进展。它是事件时间的上界，表示在某个时间点之前的事件已经全部到达。<br><span class="hljs-bullet">   -</span> 水位线可以理解为事件时间的推进标记，告诉系统在某个时间点之前的事件已经全部到达，不会再有更早的事件出现。<br><br><span class="hljs-bullet">2.</span> 作用：<br><span class="hljs-bullet">   -</span> 确定事件的顺序：水位线用于确定事件的顺序，即哪些事件是早于水位线的，哪些事件是晚于水位线的。<br><span class="hljs-bullet">   -</span> 触发窗口计算：水位线用于触发窗口的计算。当水位线达到或超过窗口的结束时间时，Flink会触发窗口的计算和处理。<br><br><span class="hljs-bullet">3.</span> 调度时机：<br><span class="hljs-bullet">   -</span> 水位线的调度时机取决于事件流中的事件时间。一般来说，水位线应该是根据事件时间的进展来生成的，而不是根据处理时间。<br><span class="hljs-bullet">   -</span> 在Flink中，水位线的生成可以通过自定义WatermarkGenerator或使用内置的时间戳分配器（Timestamp Assigner）来实现。水位线的生成可以是周期性的、基于事件的或基于数据源的。<br><br><span class="hljs-bullet">4.</span> 与事件配合达到的效果：<br><span class="hljs-bullet">   -</span> 乱序事件处理：通过水位线，Flink可以判断事件是否乱序。如果有迟到的事件到达，即晚于水位线的事件，可以根据业务逻辑进行处理，例如丢弃、延迟处理或更新结果。<br><span class="hljs-bullet">   -</span> 窗口计算的触发：水位线用于触发窗口的计算。当水位线达到或超过窗口的结束时间时，Flink会触发窗口的计算和处理，确保窗口的计算是基于完整的事件数据进行的。<br><br>通过合理设置水位线的生成和调度，可以实现准确的事件时间处理和窗口计算。水位线的生成需要根据具体的业务逻辑和数据特点进行调整，以保证事件的顺序和窗口的正确性。同时，水位线的生成和调度也需要考虑系统的性能和延迟要求，以达到最佳的处理效果。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs markdown">确保全局水位线的一致性通常需要第三方协同。在分布式流处理中，不同的任务可能会生成不同的水位线，而全局水位线的一致性对于正确触发窗口计算和保证结果的准确性至关重要。为了实现全局水位线的一致性，可以采用以下几种方法：<br><br><span class="hljs-bullet">1.</span> 协调者任务（Coordinator Task）：可以设计一个特殊的任务作为协调者，负责生成全局水位线并向其他任务广播。协调者任务会收集所有任务生成的水位线，并根据一定的策略计算出全局水位线，然后将全局水位线广播给其他任务。<br><br><span class="hljs-bullet">2.</span> 第三方存储：可以使用第三方的可靠存储系统（如分布式文件系统、数据库等）来存储全局水位线。每个任务在生成水位线时，将水位线写入到指定的存储位置，其他任务则从该存储位置读取全局水位线。<br><br><span class="hljs-bullet">3.</span> 基于消息队列的协同：可以使用消息队列作为协同机制，每个任务在生成水位线时，将水位线作为消息发送到消息队列中，其他任务则从消息队列中订阅并获取全局水位线。<br><br>以上方法都需要确保协调者任务、第三方存储或消息队列的可靠性和一致性，以保证全局水位线的正确性。同时，还需要考虑网络延迟和数据传输的效率，以避免全局水位线的滞后或不一致。<br><br>通过使用第三方协同机制，可以实现全局水位线的一致性，确保正确触发窗口计算和保证结果的准确性。这对于处理乱序事件和保证窗口计算的正确性非常重要。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="窗口"><a href="#窗口" class="headerlink" title="窗口"></a><strong>窗口</strong></h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs markdown">窗口（Window）是流处理中对一组事件进行分组和聚合的方式。窗口可以根据事件时间或处理时间来定义，常见的窗口类型包括固定窗口、滑动窗口和会话窗口。以下是对这些窗口概念的详细介绍、区别、优缺点和使用场景，以及定义窗口的时机：<br><br><span class="hljs-bullet">1.</span> 固定窗口（Fixed Windows）：<br><span class="hljs-bullet">   -</span> 概念：固定窗口将事件流划分为固定大小的时间段，每个窗口包含在该时间段内的所有事件。例如，每5分钟生成一个固定窗口，包含在这5分钟内到达的所有事件。<br><span class="hljs-bullet">   -</span> 区别：固定窗口的大小是固定的，不会随着时间的推移而改变。每个事件只属于一个固定窗口，不会同时属于多个窗口。<br><span class="hljs-bullet">   -</span> 优点：固定窗口简单直观，适用于对数据进行周期性聚合和统计的场景。<br><span class="hljs-bullet">   -</span> 缺点：固定窗口可能导致事件在窗口边界上的重复计算，不适用于处理乱序事件。<br><span class="hljs-bullet">   -</span> 使用场景：适用于周期性统计和聚合的场景，例如每分钟计算一次交易总额。<br><br><span class="hljs-bullet">2.</span> 滑动窗口（Sliding Windows）：<br><span class="hljs-bullet">   -</span> 概念：滑动窗口将事件流划分为固定大小的时间段，并且窗口之间可以有重叠。例如，每5分钟生成一个大小为10分钟的滑动窗口，窗口之间每次滑动5分钟。<br><span class="hljs-bullet">   -</span> 区别：滑动窗口的大小和滑动步长可以自定义，窗口之间可以有重叠。每个事件可以属于多个滑动窗口，滑动窗口可以更好地处理乱序事件。<br><span class="hljs-bullet">   -</span> 优点：滑动窗口可以更灵活地处理事件流中的乱序事件，提供更精确的结果计算。<br><span class="hljs-bullet">   -</span> 缺点：滑动窗口需要更多的计算资源和存储空间，窗口之间的重叠可能导致重复计算。<br><span class="hljs-bullet">   -</span> 使用场景：适用于需要考虑事件的顺序和处理乱序事件的场景，例如实时推荐系统。<br><br><span class="hljs-bullet">3.</span> 会话窗口（Session Windows）：<br><span class="hljs-bullet">   -</span> 概念：会话窗口根据事件之间的时间间隔来划分窗口，当事件之间的间隔超过一定的阈值时，会话窗口会结束。例如，当两个事件之间的时间间隔超过30分钟时，会话窗口会结束。<br><span class="hljs-bullet">   -</span> 区别：会话窗口不需要固定的窗口大小，而是根据事件之间的时间间隔来动态划分窗口。每个事件可以属于多个会话窗口，会话窗口适用于处理不规则的事件流。<br><span class="hljs-bullet">   -</span> 优点：会话窗口可以根据事件之间的时间间隔来动态划分窗口，适用于处理不规则的事件流。<br><span class="hljs-bullet">   -</span> 缺点：会话窗口的定义相对复杂，需要根据业务逻辑和事件间隔来设置合适的阈值。<br><span class="hljs-bullet">   -</span> 使用场景：适用于处理不规则事件流，例如用户会话分析和异常检测。<br><br>定义窗口的时机取决于具体的需求和业务逻辑。一般来说，可以在数据源的时间戳分配器（Timestamp Assigner）中定义事件的时间戳，并在后续的算子中指定窗口的类型和大小。窗口的时机可以是基于事件时间的水位线（Watermark）到达窗口边界时触发，或者根据处理时间的时钟周期来触发。具体的窗口定义和触发时机需要根据业务需求和数据特点进行调整和优化。<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h2><h3 id="数据源-输入"><a href="#数据源-输入" class="headerlink" title="数据源 - 输入"></a><strong>数据源</strong> <strong>-</strong> <strong>输入</strong></h3><p>调用：StreamExecutionEnvironment.addSource(sourceFunction)</p>
+<p>自定义：addSource() 接口</p>
+<p>`&#96;&#96;</p>
+<p>源是您的程序从中读取输入的位置。您可以使用将附加源附加到程序StreamExecutionEnvironment.addSource(sourceFunction)。Flink附带了许多预先实现的源函数，但您可以通过实现SourceFunction 非并行源，或通过实现ParallelSourceFunction接口或扩展 RichParallelSourceFunction并行源来编写自己的自定义源。</p>
+<p>`&#96;&#96;</p>
+<h3 id="DataStream-转换-操作"><a href="#DataStream-转换-操作" class="headerlink" title="DataStream****转换 - 操作"></a><strong>DataStream****转换</strong> <strong>-</strong> <strong>操作</strong></h3><p>算子的转化：算子将一个或多个DataStream转换为新的DataStream。程序可以将多个转换组合成复杂的数据流拓扑。</p>
+<p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/26">算子 (apachecn.org)</a></p>
+<p>转化方式：参见链接 （map、）</p>
+<h3 id="数据接收-输出"><a href="#数据接收-输出" class="headerlink" title="数据接收 - 输出"></a><strong>数据接收</strong> <strong>-</strong> <strong>输出</strong></h3><p>调用：数据接收器使用DataStream并将它们转发到文件，套接字，外部系统或打印它们。Flink带有各种内置输出格式，这些格式封装在DataStreams上的 算子操作后面:</p>
+<p>- <code>writeAsText()</code>&#x2F; <code>TextOutputFormat</code>- 按字符串顺序写入数据元。通过调用每个数据元的_toString（）_方法获得字符串。</p>
+<p>- <code>writeAsCsv(...)</code>&#x2F; <code>CsvOutputFormat</code>- 将元组写为逗号分隔值文件。行和字段分隔符是可配置的。每个字段的值来自对象的_toString（）_方法。</p>
+<p>- <code>print()</code>&#x2F; <code>printToErr()</code> - 在标准输出&#x2F;标准错误流上打印每个数据元的_toString（）_值。可选地，可以提供前缀（msg），其前缀为输出。这有助于区分不同的_打印_调用。如果并行度大于1，则输出也将与生成输出的任务的标识符一起添加。</p>
+<p>- <code>writeUsingOutputFormat()</code>&#x2F; <code>FileOutputFormat</code>- 自定义文件输出的方法和基类。支持自定义对象到字节的转换。</p>
+<p>- <code>writeToSocket</code> - 根据a将数据元写入套接字 <code>SerializationSchema</code></p>
+<p>- <code>addSink</code> - 调用自定义接收器函数。Flink捆绑了其他系统（如Apache Kafka）的连接器，这些系统实现为接收器函数。</p>
+<p>自定义：addSink() 接口</p>
+<h3 id="—–其他操作——"><a href="#—–其他操作——" class="headerlink" title="—–其他操作——-"></a><strong>—–其他操作——-</strong></h3><h3 id="控制延迟"><a href="#控制延迟" class="headerlink" title="控制延迟"></a><strong>控制延迟</strong></h3><p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E6%8E%A7%E5%88%B6%E5%BB%B6%E8%BF%9F">控制延迟</a></p>
+<p>目的：控制吞吐量 和 延迟</p>
+<p>默认情况下，数据元不会逐个传输到网络上（这会导致不必要的网络流量），但会被缓冲。可以在Flink配置文件中设置缓冲区的大小（实际在计算机之间传输）。虽然此方法适用于优化吞吐量，但当传入流速度不够快时，可能会导致延迟问题。要控制吞吐量和延迟，您可以<code>env.setBufferTimeout(timeoutMillis)</code>在运行环境（或单个 算子）上使用以设置缓冲区填充的最长等待时间。在此之后，即使缓冲区未满，也会自动发送缓冲区。此超时的默认值为100毫秒。</p>
+<p>用法：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">LocalStreamEnvironment env = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">StreamExecutionEnvironment</span>.</span></span>create<span class="hljs-constructor">LocalEnvironment()</span>;<br>env.set<span class="hljs-constructor">BufferTimeout(<span class="hljs-params">timeoutMillis</span>)</span>;<br><br>env.generate<span class="hljs-constructor">Sequence(1,10)</span>.map(<span class="hljs-keyword">new</span> <span class="hljs-constructor">MyMapper()</span>).set<span class="hljs-constructor">BufferTimeout(<span class="hljs-params">timeoutMillis</span>)</span>;<br>```<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<h3 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a><strong>迭代</strong></h3><p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E8%BF%AD%E4%BB%A3">迭代</a> - 迭代器</p>
+<pre><code class="hljs"> 迭代流程序实现步进函数并将其嵌入到`IterativeStream`。由于DataStream程序可能永远不会完成，因此没有最大迭代次数。相反，您需要指定流的哪个部分反馈到迭代，哪个部分使用`split`转换或转发到下游`filter`。在这里，我们展示了使用过滤器的示例。首先，我们定义一个`IterativeStream`.
+</code></pre>
+<p>例如，这里是从一系列整数中连续减去1直到它们达到零的程序：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs gradle">DataStream&lt;<span class="hljs-keyword">Long</span>&gt; someIntegers = env.generateSequence(<span class="hljs-number">0</span>, <span class="hljs-number">1000</span>);<br><br>IterativeStream&lt;<span class="hljs-keyword">Long</span>&gt; iteration = someIntegers.iterate();<br><br>DataStream&lt;<span class="hljs-keyword">Long</span>&gt; minusOne = iteration.map(<span class="hljs-keyword">new</span> MapFunction&lt;<span class="hljs-keyword">Long</span>, <span class="hljs-keyword">Long</span>&gt;() &#123;<br>  @Override<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">Long</span> map(<span class="hljs-keyword">Long</span> value) <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-keyword">return</span> value - <span class="hljs-number">1</span> ;<br>  &#125;<br>&#125;);<br><br>DataStream&lt;<span class="hljs-keyword">Long</span>&gt; stillGreaterThanZero = minusOne.filter(<span class="hljs-keyword">new</span> FilterFunction&lt;<span class="hljs-keyword">Long</span>&gt;() &#123;<br>  @Override<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> filter(<span class="hljs-keyword">Long</span> value) <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-keyword">return</span> (value &gt; <span class="hljs-number">0</span>);<br>  &#125;<br>&#125;);<br><br>iteration.closeWith(stillGreaterThanZero);<br><br>DataStream&lt;<span class="hljs-keyword">Long</span>&gt; lessThanZero = minusOne.filter(<span class="hljs-keyword">new</span> FilterFunction&lt;<span class="hljs-keyword">Long</span>&gt;() &#123;<br>  @Override<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> filter(<span class="hljs-keyword">Long</span> value) <span class="hljs-keyword">throws</span> Exception &#123;<br>    <span class="hljs-keyword">return</span> (value &lt;= <span class="hljs-number">0</span>);<br>  &#125;<br>&#125;);<br>```<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h4 id="收集数据源"><a href="#收集数据源" class="headerlink" title="收集数据源"></a><strong>收集数据源</strong></h4><p> <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E6%94%B6%E9%9B%86%E6%95%B0%E6%8D%AE%E6%BA%90">收集数据源</a></p>
+<p>即：形如。<strong>List&lt;Tuple2&lt;String, Integer&gt;&gt;</strong>  等特殊集合类型，转为 <strong>DataStream</strong></p>
+<p>Flink提供了特殊的数据源，这些数据源由Java集合支持，以方便测试。一旦程序经过测试，源和接收器可以很容易地被读取&#x2F;写入外部系统的源和接收器替换。</p>
+<p>集合数据源可以使用如下：</p>
+<p>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_java_6"><strong>Java</strong></a></p>
+<p>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_scala_6"><strong>Scala</strong></a></p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs lasso">final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();<br><br><span class="hljs-comment">// Create a DataStream from a list of elements</span><br>DataStream&lt;<span class="hljs-built_in">Integer</span>&gt; myInts = env.fromElements(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>);<br><br><span class="hljs-comment">// Create a DataStream from any Java collection</span><br><span class="hljs-built_in">List</span>&lt;Tuple2&lt;<span class="hljs-built_in">String</span>, <span class="hljs-built_in">Integer</span>&gt;&gt; <span class="hljs-built_in">data</span> = <span class="hljs-params">...</span><br>DataStream&lt;Tuple2&lt;<span class="hljs-built_in">String</span>, <span class="hljs-built_in">Integer</span>&gt;&gt; myTuples = env.fromCollection(<span class="hljs-built_in">data</span>);<br><br><span class="hljs-comment">// Create a DataStream from an Iterator</span><br>Iterator&lt;Long&gt; longIt = <span class="hljs-params">...</span><br>DataStream&lt;Long&gt; myLongs = env.fromCollection(longIt, Long.class);<br><span class="hljs-string">``</span><span class="hljs-string">`</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h4 id="迭代器数据接收器"><a href="#迭代器数据接收器" class="headerlink" title="迭代器数据接收器"></a><strong>迭代器数据接收器</strong></h4><p><a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%95%B0%E6%8D%AE%E6%8E%A5%E6%94%B6%E5%99%A8">迭代器数据接收器</a></p>
+<p>Flink还提供了一个接收器，用于收集DataStream结果以进行测试和调试。它可以使用如下：</p>
+<p>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_java_7"><strong>Java</strong></a></p>
+<p>- <a target="_blank" rel="noopener" href="http://flink.apachecn.org/#/docs/1.7-SNAPSHOT/15?id=tab_scala_7"><strong>Scala</strong></a></p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs lasso"><span class="hljs-keyword">import</span> org.apache.flink.streaming.experimental.DataStreamUtils<br><br>DataStream&lt;Tuple2&lt;<span class="hljs-built_in">String</span>, <span class="hljs-built_in">Integer</span>&gt;&gt; myResult = <span class="hljs-params">...</span><br>Iterator&lt;Tuple2&lt;<span class="hljs-built_in">String</span>, <span class="hljs-built_in">Integer</span>&gt;&gt; myOutput = DataStreamUtils.collect(myResult)<br><span class="hljs-string">``</span><span class="hljs-string">`</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="2-2-Stream-Connect"><a href="#2-2-Stream-Connect" class="headerlink" title="2.2 Stream Connect"></a><strong>2.2 Stream Connect</strong></h1><h2 id="内置连接器"><a href="#内置连接器" class="headerlink" title="内置连接器"></a><strong>内置连接器</strong></h2><p>内置Connector 是 Flink 内置的连接器，用于将 Flink 与外部系统进行集成。 Flink 提供多种内置 Connector，如Kafka、Kinesis、Cassandra、Elasticsearch、JDBC 等。</p>
+<p>这些内置 Connector 都是一些通用的应用程序接口（API）的实现，Flink 用户可以将这些标准的内置 Connector 用于将 Flink 与其他的数据源或数据汇进行无缝集成。利用这些内置 Connector，Flink 用户可以方便地通过API将数据源和数据汇插入到现有的 Flink 应用程序中，而不必编写自己的代码从外部系统中读取或写入数据。</p>
+<p>在 Flink 应用程序中，用户可以使用内置 Connector 根据需要特定于源和汇的属性进行配置。这些 Connector 会自动与 Flink 应用程序中的 State 和 Checkpointing 机制集成，以确保应用程序的一致性和准确性。由于内置 Connector 被广泛使用并得到了社区的强烈支持，因此大多数情况下，Flink 用户可以使用这些内置 Connector 解决数据集成的大多数常见问题，并轻松地将 Flink 与外部系统进行无缝集成和扩展。</p>
+<h3 id="SQL获取内置连接器信息"><a href="#SQL获取内置连接器信息" class="headerlink" title="SQL获取内置连接器信息"></a><strong>SQL获取内置连接器信息</strong></h3><p>如果您想从 SQL 中获取 Flink 内置连接器的信息，可以使用 Flink SQL CLI 工具或通过 Flink WebUI 进行查询。以下是使用 Flink SQL CLI 工具的示例：</p>
+<p>​            \1.     启动 Flink SQL CLI 工具。您可以通过以下命令启动 Flink SQL CLI 工具：</p>
+<p>.&#x2F;bin&#x2F;sql-client.sh embedded -l &#x2F;path&#x2F;to&#x2F;log注意：将上述命令中的&#x2F;path&#x2F;to&#x2F;log替换为您希望日志文件所在的路径。</p>
+<p>​            \2.     一旦连接成功，在 Flink SQL CLI 工具中，您可以使用以下命令获取当前可用的内置 Connector 列表：</p>
+<p>SHOW CATALOGS;这将显示所有可用的 Flink 连接器和目录信息。如果使用内置连接器，则应看到以下目录之一：</p>
+<p>​            a.     default_catalog：用于默认目录；</p>
+<p>​            b.     kafka：用于 Apache Kafka 连接器；</p>
+<p>​            c.     elasticsearch：用于 Elasticsearch 连接器；</p>
+<p>​            d.     jdbc：用于 JDBC 连接器；</p>
+<p>​            e.     cassandra：用于 Cassandra 连接器；</p>
+<p>​            f.     kinesis：用于 Amazon Kinesis 连接器；</p>
+<p>​            \3.     如果要获取特定内置 Connector 的信息，请使用以下命令：</p>
+<p>SHOW TABLES IN <catalogname>;注意：将上述命令中的<catalogname>替换为您要查询的目录的名称。</p>
+<p>例如，在 Kafka Connector 中，您可以使用以下命令查看所有可用的主题列表：</p>
+<p>SHOW TABLES IN kafka;这些步骤可以让您通过 Flink SQL CLI 工具获取当前可用的 Flink 内置 Connector 的信息，并查询特定内置 Connector 的详细信息。同时，您也可以通过 Flink WebUI 进行查询，从“Catalog Management”页面查看内置连接器的信息。</p>
+<h3 id="Flink支持的内置连接器"><a href="#Flink支持的内置连接器" class="headerlink" title="Flink支持的内置连接器"></a><strong>Flink支持的内置连接器</strong></h3><p>，Flink 还提供了多种内置 Connector，以下是 Flink 中常用的一些内置连接器：</p>
+<p>​                ● Kinesis Connector：用于将 Flink 与 Amazon Kinesis 集成。</p>
+<p>​                ● Elasticsearch Connector：用于将 Flink 与 Elasticsearch 集成。</p>
+<p>​                ● Cassandra Connector：用于将 Flink 与 Cassandra 集成。</p>
+<p>​                ● JDBC Connector：用于将 Flink 与关系型数据库（如 MySQL、PostgreSQL）集成。</p>
+<p>​                ● HBase Connector：用于将 Flink 与 HBase 集成。</p>
+<p>​                ● AWS S3 Connector：用于将 Flink 与 Amazon S3 集成。</p>
+<p>这些内置 Connector 都是标准 API 的实现，可以方便地将 Flink 应用程序与常见的数据源或数据汇集成。有了这些内置 Connector，Flink 用户可以通过 SQL 访问外部系统中的数据，并使用 Flink 提供的强大的数据处理和流处理能力。同时，您也可以通过编写自定义连接器来将 Flink 集成到其他外部系统中，以实现更多的扩展和集成需求。</p>
+<h1 id="第三部分-Flink架构"><a href="#第三部分-Flink架构" class="headerlink" title="第三部分 Flink架构"></a><strong>第三部分 Flink架构</strong></h1><h2 id="集群剖析"><a href="#集群剖析" class="headerlink" title="集群剖析"></a><strong>集群剖析</strong></h2><p>Flink 运行时由两种类型的进程组成：一个 <em>JobManager</em> 和一个或者多个 <em>TaskManager</em>。</p>
+<p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_337356_fd1LqOGJEil16Vwh_1689306171?w=851&h=613&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="JobManager-1"><a href="#JobManager-1" class="headerlink" title="JobManager #"></a><strong>JobManager</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#jobmanager"><strong>#</strong></a></h3><p><em>JobManager</em> 具有许多与协调 Flink 应用程序的分布式执行有关的职责：它决定何时调度下一个 task（或一组 task）、对完成的 task 或执行失败做出反应、协调 checkpoint、并且协调从失败中恢复等等。这个进程由三个不同的组件组成：</p>
+<p>​                ● <strong>ResourceManager</strong></p>
+<p><em>ResourceManager</em> 负责 Flink 集群中的资源提供、回收、分配 - 它管理 <strong>task slots</strong>，这是 Flink 集群中资源调度的单位（请参考<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#taskmanagers">TaskManagers</a>）。Flink 为不同的环境和资源提供者（例如 YARN、Kubernetes 和 standalone 部署）实现了对应的 ResourceManager。在 standalone 设置中，ResourceManager 只能分配可用 TaskManager 的 slots，而不能自行启动新的 TaskManager。</p>
+<p>​                ● <strong>Dispatcher</strong></p>
+<p><em>Dispatcher</em> 提供了一个 REST 接口，用来提交 Flink 应用程序执行，并为每个提交的作业启动一个新的 JobMaster。它还运行 Flink WebUI 用来提供作业执行信息。</p>
+<p>​                ● <strong>JobMaster</strong></p>
+<p><em>JobMaster</em> 负责管理单个<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#logical-graph">JobGraph</a>的执行。Flink 集群中可以同时运行多个作业，每个作业都有自己的 JobMaster。</p>
+<p>始终至少有一个 JobManager。高可用（HA）设置中可能有多个 JobManager，其中一个始终是 <em>leader</em>，其他的则是 <em>standby</em>（请参考 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/deployment/ha/overview/">概览 | Apache Flink</a>）。</p>
+<h3 id="TaskManagers"><a href="#TaskManagers" class="headerlink" title="TaskManagers #"></a><strong>TaskManagers</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#taskmanagers"><strong>#</strong></a></h3><p><em>TaskManager</em>（也称为 <em>worker</em>）执行作业流的 task，并且缓存和交换数据流。</p>
+<p>必须始终至少有一个 TaskManager。在 TaskManager 中资源调度的最小单位是 task <em>slot</em>。TaskManager 中 task slot 的数量表示并发处理 task 的数量。请注意一个 task slot 中可以执行多个算子（请参考<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#tasks-and-operator-chains">Tasks 和算子链</a>）。</p>
+<h2 id="Tasks-和算子链"><a href="#Tasks-和算子链" class="headerlink" title="Tasks 和算子链 #"></a><strong>Tasks 和算子链</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#tasks-%E5%92%8C%E7%AE%97%E5%AD%90%E9%93%BE"><strong>#</strong></a></h2><p>对于分布式执行，Flink 将算子的 subtasks <em>链接</em>成 <em>tasks</em>。每个 task 由一个线程执行。将算子链接成 task 是个有用的优化：它减少线程间切换、缓冲的开销，并且减少延迟的同时增加整体吞吐量。链行为是可以配置的；请参考<a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/datastream/operators/overview/#task-chaining-and-resource-groups">链文档</a>以获取详细信息。</p>
+<p>下图中样例数据流用 5 个 subtask 执行，因此有 5 个并行线程。</p>
+<p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_463326_re3fKPlmhK8Mcz6u_1689306228?w=576&h=397&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="Task-Slots-和资源"><a href="#Task-Slots-和资源" class="headerlink" title="Task Slots 和资源 #"></a><strong>Task Slots 和资源</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#task-slots-%E5%92%8C%E8%B5%84%E6%BA%90"><strong>#</strong></a></h2><p>每个 worker（TaskManager）都是一个 <em>JVM 进程</em>，可以在单独的线程中执行一个或多个 subtask。为了控制一个 TaskManager 中接受多少个 task，就有了所谓的 <strong>task slots</strong>（至少一个）。</p>
+<p>每个 <em>task slot</em> 代表 TaskManager 中资源的固定子集。例如，具有 3 个 slot 的 TaskManager，会将其托管内存 1&#x2F;3 用于每个 slot。分配资源意味着 subtask 不会与其他作业的 subtask 竞争托管内存，而是具有一定数量的保留托管内存。注意此处没有 CPU 隔离；当前 slot 仅分离 task 的托管内存。</p>
+<p>通过调整 task slot 的数量，用户可以定义 subtask 如何互相隔离。每个 TaskManager 有一个 slot，这意味着每个 task 组都在单独的 JVM 中运行（例如，可以在单独的容器中启动）。具有多个 slot 意味着更多 subtask 共享同一 JVM。同一 JVM 中的 task 共享 TCP 连接（通过多路复用）和心跳信息。它们还可以共享数据集和数据结构，从而减少了每个 task 的开销。</p>
+<p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_238956_gLevnAjzs6bg1Zcx_1689306237?w=923&h=294&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>默认情况下，Flink 允许 subtask 共享 slot，即便它们是不同的 task 的 subtask，只要是来自于同一作业即可。结果就是一个 slot 可以持有整个作业管道。允许 <em>slot 共享</em>有两个主要优点：</p>
+<p>​                ● Flink 集群所需的 task slot 和作业中使用的最大并行度恰好一样。无需计算程序总共包含多少个 task（具有不同并行度）。</p>
+<p>​                ● 容易获得更好的资源利用。如果没有 slot 共享，非密集 subtask（<em>source&#x2F;map()<em>）将阻塞和密集型 subtask（</em>window</em>） 一样多的资源。通过 slot 共享，我们示例中的基本并行度从 2 增加到 6，可以充分利用分配的资源，同时确保繁重的 subtask 在 TaskManager 之间公平分配。</p>
+<p><img src="https://wdoc-76491.picgzc.qpic.cn/MTY4ODg1NTAwMDQ1OTQwMg_912590_UrqYMOpfh3VaOVQF_1689306242?w=923&h=428&type=image/png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="Flink-应用程序执行"><a href="#Flink-应用程序执行" class="headerlink" title="Flink 应用程序执行 #"></a><strong>Flink 应用程序执行</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C"><strong>#</strong></a></h2><p><em>Flink 应用程序</em> 是从其 main() 方法产生的一个或多个 Flink 作业的任何用户程序。这些作业的执行可以在本地 JVM（LocalEnvironment）中进行，或具有多台机器的集群的远程设置（RemoteEnvironment）中进行。对于每个程序，ExecutionEnvironment 提供了一些方法来控制作业执行（例如设置并行度）并与外界交互（请参考 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/dev/datastream/overview/#anatomy-of-a-flink-program">Flink 程序剖析</a> ）。</p>
+<p>Flink 应用程序的作业可以被提交到长期运行的 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#flink-session-cluster">Flink Session 集群</a>、专用的 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#flink-job-cluster">Flink Job 集群</a> 或 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/glossary/#flink-application-cluster">Flink Application 集群</a>。这些选项之间的差异主要与集群的生命周期和资源隔离保证有关。</p>
+<h3 id="Flink-Session-集群"><a href="#Flink-Session-集群" class="headerlink" title="Flink Session 集群 #"></a><strong>Flink Session 集群</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-session-%E9%9B%86%E7%BE%A4"><strong>#</strong></a></h3><p>​                ● <strong>集群生命周期</strong>：在 Flink Session 集群中，客户端连接到一个预先存在的、长期运行的集群，该集群可以接受多个作业提交。即使所有作业完成后，集群（和 JobManager）仍将继续运行直到手动停止 session 为止。因此，Flink Session 集群的寿命不受任何 Flink 作业寿命的约束。</p>
+<p>​                ● <strong>资源隔离</strong>：TaskManager slot 由 ResourceManager 在提交作业时分配，并在作业完成时释放。由于所有作业都共享同一集群，因此在集群资源方面存在一些竞争 — 例如提交工作阶段的网络带宽。此共享设置的局限性在于，如果 TaskManager 崩溃，则在此 TaskManager 上运行 task 的所有作业都将失败；类似的，如果 JobManager 上发生一些致命错误，它将影响集群中正在运行的所有作业。</p>
+<p>​                ● <strong>其他注意事项</strong>：拥有一个预先存在的集群可以节省大量时间申请资源和启动 TaskManager。有种场景很重要，作业执行时间短并且启动时间长会对端到端的用户体验产生负面的影响 — 就像对简短查询的交互式分析一样，希望作业可以使用现有资源快速执行计算。</p>
+<p>以前，Flink Session 集群也被称为 <em>session 模式</em>下的 Flink 集群。</p>
+<h3 id="Flink-Job-集群"><a href="#Flink-Job-集群" class="headerlink" title="Flink Job 集群 #"></a><strong>Flink Job 集群</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-job-%E9%9B%86%E7%BE%A4"><strong>#</strong></a></h3><p>​                ● <strong>集群生命周期</strong>：在 Flink Job 集群中，可用的集群管理器（例如 YARN）用于为每个提交的作业启动一个集群，并且该集群仅可用于该作业。在这里，客户端首先从集群管理器请求资源启动 JobManager，然后将作业提交给在这个进程中运行的 Dispatcher。然后根据作业的资源请求惰性的分配 TaskManager。一旦作业完成，Flink Job 集群将被拆除。</p>
+<p>​                ● <strong>资源隔离</strong>：JobManager 中的致命错误仅影响在 Flink Job 集群中运行的一个作业。</p>
+<p>​                ● <strong>其他注意事项</strong>：由于 ResourceManager 必须应用并等待外部资源管理组件来启动 TaskManager 进程和分配资源，因此 Flink Job 集群更适合长期运行、具有高稳定性要求且对较长的启动时间不敏感的大型作业。</p>
+<p>以前，Flink Job 集群也被称为 <em>job (or per-job) 模式</em>下的 Flink 集群。</p>
+<p>Kubernetes 不支持 Flink Job 集群。 请参考 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/deployment/resource-providers/standalone/kubernetes/#per-job-cluster-mode">Standalone Kubernetes</a> 和 <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/deployment/resource-providers/native_kubernetes/#per-job-cluster-mode">Native Kubernetes</a>。</p>
+<h3 id="Flink-Application-集群"><a href="#Flink-Application-集群" class="headerlink" title="Flink Application 集群 #"></a><strong>Flink Application 集群</strong> <a target="_blank" rel="noopener" href="https://nightlies.apache.org/flink/flink-docs-release-1.17/zh/docs/concepts/flink-architecture/#flink-application-%E9%9B%86%E7%BE%A4"><strong>#</strong></a></h3><p>​                ● <strong>集群生命周期</strong>：Flink Application 集群是专用的 Flink 集群，仅从 Flink 应用程序执行作业，并且 main()方法在集群上而不是客户端上运行。提交作业是一个单步骤过程：无需先启动 Flink 集群，然后将作业提交到现有的 session 集群；相反，将应用程序逻辑和依赖打包成一个可执行的作业 JAR 中，并且集群入口（ApplicationClusterEntryPoint）负责调用 main()方法来提取 JobGraph。例如，这允许你像在 Kubernetes 上部署任何其他应用程序一样部署 Flink 应用程序。因此，Flink Application 集群的寿命与 Flink 应用程序的寿命有关。</p>
+<p>​                ● <strong>资源隔离</strong>：在 Flink Application 集群中，ResourceManager 和 Dispatcher 作用于单个的 Flink 应用程序，相比于 Flink Session 集群，它提供了更好的隔离。</p>
+<p>Flink Job 集群可以看做是 Flink Application 集群”客户端运行“的替代方案。</p>
+<h2 id="Flink-的数据传输"><a href="#Flink-的数据传输" class="headerlink" title="Flink 的数据传输"></a><strong>Flink 的数据传输</strong></h2><h3 id="TaskManager（slot槽）之间的数据接收和数据发送"><a href="#TaskManager（slot槽）之间的数据接收和数据发送" class="headerlink" title="TaskManager（slot槽）之间的数据接收和数据发送"></a><strong>TaskManager（slot槽）之间的数据接收和数据发送</strong></h3><p>发送端：将数据发送到接收端</p>
+<p>接收端：接受数据</p>
+<p>接收端和发送端端并行度应该相同</p>
+<h3 id="基于信用值的流量控制"><a href="#基于信用值的流量控制" class="headerlink" title="基于信用值的流量控制"></a><strong>基于信用值的流量控制</strong></h3><p>作用：提高吞吐量和利用率，减少等待时间（低延迟 、高吞吐）</p>
+<p>接收端 – 发送信用值</p>
+<p>发送端 – 发送积压量</p>
+<p>发送端在<strong>信用值</strong>范围内，尽可能多的发送</p>
+<p>接收端在<strong>积压量</strong>中选择策略修改信用值的优先级</p>
+<h3 id="任务链接"><a href="#任务链接" class="headerlink" title="任务链接"></a><strong>任务链接</strong></h3><p>将满足要求的算计（同一个机器-本地通信，相同并行度），即可压缩上下游调用关系（融合为一个任务）</p>
+<h2 id="Job、Job-Instance、task"><a href="#Job、Job-Instance、task" class="headerlink" title="Job、Job Instance、task"></a><strong>Job、Job Instance、task</strong></h2><p>在Flink中，主要有如下三个概念：Job、JobInstance和Task，它们所代表的含义分别如下：</p>
+<p>* Job：表示应用程序的一次执行，是一个与Flink集群交互的最高级别的概念，代表了一个拓扑图，并包括了所有需要运行的Task以及它们之间的数据流。Job拥有一个唯一标识，可以通过该标识来查询和管理这个Job以及它的执行状态。</p>
+<p>* JobInstance：一个Job实例表示一个具体的Job执行实例，它包含了Job的配置、Task的初始化状态等信息。当Job提交到Flink集群后，会创建一个JobInstance并为其分配资源，该JobInstance会运行相应的Task并在完成后报告其状态。</p>
+<p>* Task：表示一个作业中的任务，它是Flink中的最小执行单元。每个Task都处理一个数据分区（Partition）并通过网络传输与其它任务交换数据（Flink中的Shuffle）。一个Job由多个Task组成。一个JobInstance中的任务可以根据需要动态的进行上下扩展。</p>
+<p>简而言之，Job是一次作业的最高级别的概念，代表了数据流拓扑，而JobInstance则是具体的Job执行实例，它的配置和状态信息都存储在Flink的JobManager中，可以用于管理和监控Job的执行状态。Task是在作业执行时是真正进行计算的最小执行单元，每个Task都是同构的，负责处理数据的一部分并互相协作完成作业的结果。</p>
+<p>需要注意的是，JobInstance是在Job被提交后到集群处理之前创建的，当Job执行完成后，JobInstance会被销毁。而Task则是在JobInstance的生命周期内，根据不同的需要进行动态创建和销毁。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">分布式系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/%E5%A4%A7%E6%95%B0%E6%8D%AE/" class="category-chain-item">大数据</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">#分布式系统</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">#大数据</a>
+      
+        <a href="/tags/flink/">#flink</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flink笔记分享（汇总）</div>
+      <div>http://example.com/2023/07/14/分布式系统-大数据/Flink笔记分享（汇总）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/15/%E4%B8%9A%E5%8A%A1/%E7%9B%B4%E6%92%AD%E4%B8%9A%E5%8A%A1/" title="直播业务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">直播业务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/08/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6+%E5%B8%B8%E8%A7%81%E7%BB%84%E4%BB%B6/%E5%A4%8D%E5%88%B6%E3%80%81%E5%A4%87%E4%BB%BD%E3%80%81%E9%9B%86%E7%BE%A4%E6%A6%82%E8%BF%B0/" title="复制、备份、集群概述">
+                        <span class="hidden-mobile">复制、备份、集群概述</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

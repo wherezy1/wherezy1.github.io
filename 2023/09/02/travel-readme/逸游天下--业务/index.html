@@ -1,0 +1,1083 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="where">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="travel-逸游天下———-第二部分《DDD – 设计表》———采用领域驱动模型对表进行重新的设计。 2.1 设计步骤： 描述 业务（描述项目的背景）  统一语言 （对于关键词，像SPU、SKU 进行统一）  价值需求分析 （这个项目的前景、针对人群，为什么要做）  业务需求分析 （）  识别限界上下文及其映射 （模块-微服务- 限界上下文、 调用关系 - 映射）  领域分析模型（领域对象）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="travel-逸游天下">
+<meta property="og:url" content="http://example.com/2023/09/02/travel-readme/%E9%80%B8%E6%B8%B8%E5%A4%A9%E4%B8%8B--%E4%B8%9A%E5%8A%A1/index.html">
+<meta property="og:site_name" content="where&#39;s blog">
+<meta property="og:description" content="travel-逸游天下———-第二部分《DDD – 设计表》———采用领域驱动模型对表进行重新的设计。 2.1 设计步骤： 描述 业务（描述项目的背景）  统一语言 （对于关键词，像SPU、SKU 进行统一）  价值需求分析 （这个项目的前景、针对人群，为什么要做）  业务需求分析 （）  识别限界上下文及其映射 （模块-微服务- 限界上下文、 调用关系 - 映射）  领域分析模型（领域对象）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/b84b9576749d45449200513229c7069c.png">
+<meta property="article:published_time" content="2023-09-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-12T01:06:53.085Z">
+<meta property="article:author" content="where">
+<meta property="article:tag" content="业务">
+<meta property="article:tag" content="项目">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/b84b9576749d45449200513229c7069c.png">
+  
+  
+  
+  <title>travel-逸游天下 - where&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="travel-逸游天下"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-02 00:00" pubdate>
+          2023年9月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          22k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          180 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">travel-逸游天下</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="travel-逸游天下"><a href="#travel-逸游天下" class="headerlink" title="travel-逸游天下"></a>travel-逸游天下</h1><h1 id="———-第二部分《DDD-–-设计表》———"><a href="#———-第二部分《DDD-–-设计表》———" class="headerlink" title="———-第二部分《DDD – 设计表》———"></a>———-第二部分《DDD – 设计表》———</h1><p>采用领域驱动模型对表进行重新的设计。</p>
+<h1 id="2-1-设计步骤："><a href="#2-1-设计步骤：" class="headerlink" title="2.1 设计步骤："></a>2.1 设计步骤：</h1><ul>
+<li><p>描述 业务（描述项目的背景）</p>
+</li>
+<li><p>统一语言 （对于关键词，像SPU、SKU 进行统一）</p>
+</li>
+<li><p>价值需求分析 （这个项目的前景、针对人群，为什么要做）</p>
+</li>
+<li><p>业务需求分析 （）</p>
+</li>
+<li><p>识别限界上下文及其映射 （模块-微服务- 限界上下文、 调用关系 - 映射）</p>
+</li>
+<li><p>领域分析模型（领域对象）</p>
+</li>
+<li><p>领域设计聚合 （聚合的设计）</p>
+</li>
+<li><p>服务设计 （领域服务 和 应用服务）<br>根据上下文，进行领域服务的设计。<br>上下文 -》 应用服务 -〉 领域服务 -》数据库操作（基础设施层）</p>
+</li>
+<li><p>领域实现 建模</p>
+<ul>
+<li>面向服务行为，比如基于 RPC，称为提供者（Provider）；</li>
+<li>面向服务资源，比如基于 REST，称为资源（Resource）；</li>
+<li>面向事件，比如基于消息中间件，称为订阅者（Subscriber）；</li>
+<li>面向视图模型，比如基于 MVC的page，称为控制器（Controller）；</li>
+</ul>
+<p>测试驱动开发 ：要求开发者在进行逻辑实现前，优先进行测试用例的编写，<strong>站在调用者角度而非实现者角度</strong>去思考接口。</p>
+</li>
+<li><p>分层架构</p>
+</li>
+</ul>
+<h2 id="10、代码骨架"><a href="#10、代码骨架" class="headerlink" title="10、代码骨架"></a>10、代码骨架</h2><h4 id="用户接口层"><a href="#用户接口层" class="headerlink" title="用户接口层"></a>用户接口层</h4><p>用户接口层的核心职能：协议转换和适配、鉴权、参数校验和异常处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">├── controller                        <span class="hljs-comment">//面向视图模型&amp;资源</span><br>│   ├── ResultController.java<br>│   ├── assembler                     <span class="hljs-comment">// 装配器，将VO转换为DTO</span><br>│   │   └── ResultAssembler.java<br>│   └── vo                            <span class="hljs-comment">// VO(View Object)对象</span><br>│       ├── EnterResultRequest.java<br>│       └── ResponseVO.java<br>├── provider                          <span class="hljs-comment">// 面向服务行为,比如dubbo RPC</span><br>├── subscriber                        <span class="hljs-comment">// 面向事件 ，比如 rocketmq的客户端程序</span><br>└── task                              <span class="hljs-comment">// 面向策略 ，比如 xxl-job的调度任务</span><br>    └── TotalResultTask.java<br><span class="hljs-number">1234567891011</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>应用层的核心职能：编排领域服务、事务管理、发布应用事件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java">├── assembler                         <span class="hljs-comment">// 装配器，将DTO转换为DO</span><br>│   ├── ResultAssembler.java<br>│   └── TotalResultAssembler.java<br>├── dto                               <span class="hljs-comment">// DTO(Data Transfer Object)对象</span><br>│   ├── cmd                           <span class="hljs-comment">// 命令相关的DTO对象</span><br>│   │   ├── ComputeTotalResultCmd.java<br>│   │   ├── EnterResultCmd.java<br>│   │   └── ModifyResultCmd.java<br>│   ├── event                         <span class="hljs-comment">// 应用事件相关的DTO对象, subscriber负责接收</span><br>│   └── qry                           <span class="hljs-comment">// 查询相关的DTO对象</span><br>└── service                           <span class="hljs-comment">// 应用服务</span><br>    ├── ResultApplicationService.java<br>    ├── event                         <span class="hljs-comment">// 应用事件，用于发布</span><br>    └── adapter                       <span class="hljs-comment">// 防腐层适配器接口</span><br><span class="hljs-number">1234567891011121314</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="领域层"><a href="#领域层" class="headerlink" title="领域层"></a>领域层</h4><p>代码组织以聚合为基本单元。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java">├── result                            <span class="hljs-comment">// 成绩聚合</span><br>│   ├── entity                        <span class="hljs-comment">// 成绩聚合内的实体</span><br>│   │   └── Result.java<br>│   ├── service                       <span class="hljs-comment">// 领域服务</span><br>│   │   ├── ResultDomainService.java<br>│   │   ├── event                     <span class="hljs-comment">// 领域事件</span><br>│   │   ├── adapter                   <span class="hljs-comment">// 防腐层适配器接口</span><br>│   │   ├── factory                   <span class="hljs-comment">// 工厂</span><br>│   │   └── repository                <span class="hljs-comment">// 资源库</span><br>│   │       └── ResultRepository.java<br>│   └── valueobject                   <span class="hljs-comment">// 成绩聚合的值对象</span><br>│       ├── GPA.java<br>│       ├── ResultUK.java<br>│       ├── SchoolYear.java<br>│       └── Semester.java<br>└── totalresult                       <span class="hljs-comment">// 总成绩聚合</span><br>    ├── ... 这段有点长，其代码结构与成绩聚合一致，因此省略 ...<br><br><span class="hljs-number">1234567891011121314151617</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="基础设施实现层"><a href="#基础设施实现层" class="headerlink" title="基础设施实现层"></a>基础设施实现层</h4><p>该层主要提供领域层接口（资源库、防腐层接口）和应用层接口（防腐层接口）的实现。</p>
+<p>代码组织基本以聚合为基本单元。对于应用层的防腐层接口，则直接以 application 作为包名组织。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">├── application                       <span class="hljs-comment">// 应用层相关实现</span><br>│   └── adapter                       <span class="hljs-comment">// 防腐层适配器接口实现</span><br>│       ├── facade                    <span class="hljs-comment">// 外观接口</span><br>│       └── translator                <span class="hljs-comment">// 转换器，DO -&gt; DTO</span><br>├── result                            <span class="hljs-comment">// 成绩聚合相关实现</span><br>│   ├── adapter<br>│   │   ├── facade<br>│   │   └── translator<br>│   └── repository                    <span class="hljs-comment">// 成绩聚合资源库接口实现</span><br>│       └── ResultRepositoryImpl.java<br>└── totalresult                       <span class="hljs-comment">// 总成绩聚合相关实现</span><br>    ├── adapter<br>    │   ├── CourseAdapterImpl.java<br>    │   ├── facade<br>    │   └── translator<br>    └── repository<br>        └── TotalResultRepositoryImpl.java<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+<p>示例SMS 的限界上下文可划分为：</p>
+<p>成绩上下文<br>课程上下文<br>审批上下文<br>权限上下文<br>邮件上下文<br>上下文及其映射是啥呢？</p>
+<p>咱们都是开发，按照开发的概念来理解吧。</p>
+<p>假设一个界限上下文，对应一个微服务。</p>
+<p>那么上面就是 5个微服务，微服务之间是 rpc 调用。这种服务的发布，和调用，就是 上下文的映射。</p>
+<p><img src="https://img-blog.csdnimg.cn/b84b9576749d45449200513229c7069c.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h1 id="2-1-逸游天下-DDD"><a href="#2-1-逸游天下-DDD" class="headerlink" title="2.1 逸游天下-DDD"></a>2.1 逸游天下-DDD</h1><h2 id="业务描述"><a href="#业务描述" class="headerlink" title="业务描述"></a>业务描述</h2><p>为了打造一个</p>
+<h1 id="——–第一部分《数据库表驱动设计》——"><a href="#——–第一部分《数据库表驱动设计》——" class="headerlink" title="——–第一部分《数据库表驱动设计》——-"></a>——–第一部分《数据库表驱动设计》——-</h1><p>基于业务实现数据库表设计，</p>
+<p>1、模块划分； 2、需求设计； 3、数据库表设计; 4、具体业务逻辑分析；</p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/leifengyang/gulimall">leifengyang&#x2F;gulimall - 码云 - 开源中国 (gitee.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/lemon_wan/gulimall?_from=gitee_search">gulimall: gulimall（谷粒商城）【笔记全，资料全，代码全，集群篇已完成】gulimall谷粒商城项目由雷丰阳老师教学 (gitee.com)</a></p>
+<h1 id="需求分析-业务逻辑"><a href="#需求分析-业务逻辑" class="headerlink" title="需求分析 + 业务逻辑"></a>需求分析 + 业务逻辑</h1><h2 id="鉴权模块"><a href="#鉴权模块" class="headerlink" title="鉴权模块"></a>鉴权模块</h2><p>如何进行分库分表下的RBAC模型设计，并能够</p>
+<p>一般鉴权方式：携带用于的角色信息</p>
+<p>此处鉴权方式：更具用户id进行权限验证，+ 权限查询</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">分库分表之下方案一：鉴权模块与用户模块共享一个数据库 （天才）<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="自定义认证方式–手机号-x2F-短信认证"><a href="#自定义认证方式–手机号-x2F-短信认证" class="headerlink" title="自定义认证方式–手机号&#x2F;短信认证"></a>自定义认证方式–手机号&#x2F;短信认证</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_22178703/article/details/100417192">(13条消息) Spring Security 解析(四) ——短信登录开发_BUG9_的博客-CSDN博客</a></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-number">1</span>、自定义filter（这个filter 的父类为 <span class="hljs-type">AbstractAuthenticationProcessingFilter</span>，不需要doFilter() ）<br>	，封装 authentication 参数<br>	- 自定义attemptAuthentication<br>	- <span class="hljs-type">UsernamePasswordAuthenticationToken</span> authRequest = <span class="hljs-keyword">new</span> <span class="hljs-type">UsernamePasswordAuthenticationToken</span>(username, password);<br>    <span class="hljs-keyword">this</span>.setDetails(request, authRequest);<br>    <span class="hljs-comment">// 调用Manager的 authenticate()方法进行校验，</span><br>    <span class="hljs-comment">// 返回校验后的完整Authentication对象 ---或者自定义AbstractAuthenticationToken -- Token</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getAuthenticationManager().authenticate(authRequest);<br><span class="hljs-number">2</span>、自定义 <span class="hljs-type">AuthenticationManager</span> ： support方法、authenticate方法自定义认证方式<br>	- <br><span class="hljs-number">3</span>、（不一定要）自定义service方法，loadxxx() xx<br><span class="hljs-number">4</span>、自定义<span class="hljs-type">AuthenticationToken</span> --》 <span class="hljs-type">Authentication</span><br>public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SmsCodeAuthenticationToken</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractAuthenticationToken</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Object</span> principal;<br>&#125;<br><br><br>http security 配置，配置对应的路径，进入对应的filter<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="整合第三方授权–QQ"><a href="#整合第三方授权–QQ" class="headerlink" title="整合第三方授权–QQ"></a>整合第三方授权–QQ</h3><p>resource owner（user）、authentication server（qq）、resource server （qq）、client（travel）</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs perl">一、<br>请求时携带关键参数：<br><span class="hljs-number">1</span>、travel的 接收返回值code的 回调地址<br><span class="hljs-number">2</span>、<span class="hljs-keyword">qq</span> 的 appId、appKey ： travel去 <span class="hljs-keyword">qq</span>申请开发应用的认证；<br><span class="hljs-number">3</span>、跳转到<span class="hljs-keyword">qq</span>进行 认证的地址：travel跳转到<span class="hljs-keyword">qq</span>的页面，让resource owner安全认证（后面涉及到<span class="hljs-keyword">qq</span>的 认证授权方式 -- 授权码模式）<br><br>响应的关键参数：<br><span class="hljs-number">1</span>、code ： 授权码 -- <span class="hljs-keyword">qq</span> 认证通过后分发<br>二、<br>携带code 获取 token，<br>三、<br>携带token 访问API获取用户开放信息<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="用户模块"><a href="#用户模块" class="headerlink" title="用户模块"></a>用户模块</h2><p>用户种类：游客、普通用户、商家、管理员（库存管理员，商品管理员，积分策略管理员（商家与积分关系） – 策略模式，秒杀管理员）</p>
+<p>用户权限验证：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">```<br><br><br><br>用户登录 ： 普通登录，短信登录，（自定义认证方式）用户第三方登录：微博/微信/qq登录  – oauth2（授权方式采用 Oauth2 框架自带的）<br><br></code></pre></td></tr></table></figure>
+<p>Oauth2实现鉴权服务器，配合api网关实现接口级权限验证功能。</p>
+<p>spring security的验证方式，实现三种登录方式：UsernamePasswordFilter，SmsFilter，ThirdPartLoginFilter</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs"><br>用户注册：<br><br></code></pre></td></tr></table></figure>
+<p>几种需要跳转注册页面的逻辑： — 弹出用户未登录提示框，是否需要跳转登录页面<br>1、在上方登录失败，返回用户未注册时；<br>2、访问某些需要登录权限的api – 生成订单，收藏，</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs"><br><br><br>用户积分管理 ， 用户积分获取详情信息 <br><br></code></pre></td></tr></table></figure>
+<p>与具体业务想关联，存放在具体业务中 – 其实与用户信息关系不大</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><br><br><br>用户收藏列表信息， 用户收藏 – 商品<span class="hljs-regexp">/店铺/</span>文章/景点<br><br></code></pre></td></tr></table></figure>
+<p>业务逻辑：用户如何查收藏列表：用户个人中心 -&gt; 收藏列表 -&gt; 根据用户id查询表，获取收藏列表id -&gt; 通过id查询收藏信息（每个信息都有两种展示状态 粗略 &#x2F; 详情） -&gt; 先暂时粗略 -&gt; 再展示详情 -&gt; 跳转到详情页(如何跳转：完整路径跳转-&gt; 详情页展示逻辑)<br>问题：高效-&gt;将收藏列表id与收藏信息放在一个库下，就只用联表查询，不需要网络传输</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs"><br>用户获取点赞记录<br><br><br><br>用户浏览历史信息； — 同上<br><br>用户个人信息的CRUD <br><br><br><br>用户会话状态 – 用户登录状态保持 <br><br></code></pre></td></tr></table></figure>
+<p> 分布式session。+ JWT 方案对比：<br> 首先确定一点 — 这个项目采用JWT 做为回话保持的方案，不需要多余的开发步骤，而且适合分布式场景下的登录在 后台服务器传递</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs"><br><br><br>用户收货地址管理 – 订单生成<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>## 网关模块<br><br>限流<br><br></code></pre></td></tr></table></figure>
+<p>局部限流：对单一接口限流，通过消息队列限流<br>整体限流：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>### 分析<br><br>Galileo 就是一个 API组合器 + 路由转发<br><br></code></pre></td></tr></table></figure>
+<p>API 网关 &#x3D;&#x3D; 路由 + 额外职责：安全、认证、授权、限流、监控、缓存 （特殊：后端前置-为每一个客户端设计一个API网关）</p>
+<p>路由：router &#x3D;&#x3D; predict、filter、host 等规则 路由，可以添加负载均衡算法，完善路由功能</p>
+<p>额外职责：<br>1、API组合器<br>2、客户端 – API版本管理<br>3、认证 授权 &#x3D;&#x3D;&#x3D; 作为本项目重要职责之一，统一认证、授权转发，能够减少服务端的 RPC调用<br>4、协议转化 （暂时不知）<br>5、负载均衡 &#x3D;&#x3D;&#x3D;&#x3D; filter转发，与路由规则相互配合<br>6、限流  &#x3D;&#x3D;&#x3D;&#x3D; sentinel 总体限流，单个服务的特殊限流<br>7、熔断降级 &#x3D;&#x3D;&#x3D; Hystrix、<br> – 断路器：CircuitBreaker 【 <a target="_blank" rel="noopener" href="https://blog.csdn.net/boling_cavalry/article/details/119849436">https://blog.csdn.net/boling_cavalry/article/details/119849436</a> 】<br> – 降级<br> 8、API版本控制 如何实现？<br> 9、后端前置模式（BFF）<br> 10、监控– 可观测性 &#x3D;&#x3D;&#x3D;&#x3D; Spring Actuator</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>### 监控 -- Actuator<br><br><br><br><br><br><br><br>### 后端前置 (BFF)<br><br></code></pre></td></tr></table></figure>
+<p>API网关的”BFF”（Backends for Frontends）是一种设计模式，用于为不同的前端应用程序提供定制化的后端服务。BFF模式的核心思想是将后端服务的功能和数据按照前端应用程序的需求进行拆分和组合，以提供更高效、更灵活的服务。</p>
+<p>具体来说，BFF模式的实现通常包括以下几个步骤：</p>
+<ol>
+<li><p>根据前端应用程序的需求，确定需要提供的功能和数据。不同的前端应用程序可能有不同的需求，因此可以根据具体情况来确定需要提供的后端服务功能和数据。</p>
+</li>
+<li><p>在API网关中创建相应的BFF服务。API网关可以根据前端应用程序的需求，创建一个或多个BFF服务。每个BFF服务可以对应一个前端应用程序或一组具有相似需求的前端应用程序。</p>
+</li>
+<li><p>在BFF服务中聚合和转换后端服务的数据。BFF服务可以通过调用一个或多个后端服务的API来获取所需的数据，并进行聚合和转换，以适应前端应用程序的需求。这样可以避免前端应用程序需要多次请求后端服务，提高性能和效率。</p>
+</li>
+<li><p>提供定制化的API接口给前端应用程序。BFF服务可以根据前端应用程序的需求，提供定制化的API接口。这些接口可以根据前端应用程序的数据模型和业务逻辑进行设计，以提供更简洁、更直观的接口给前端应用程序使用。</p>
+</li>
+</ol>
+<p>通过使用BFF模式，API网关可以为不同的前端应用程序提供定制化的后端服务，减少前后端之间的通信次数和数据传输量，提高系统的性能和响应速度。同时，BFF模式还可以提供更好的灵活性和可维护性，使得前端和后端的开发团队可以更独立地进行开发和维护。</p>
+<p>如果您需要更详细的信息或示例，请提供更具体的问题或查询。</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><br><br><br>这个不是<span class="hljs-keyword">BFF</span><br><span class="hljs-keyword"></span><br></code></pre></td></tr></table></figure>
+<p>API网关可以通过实现后端前置功能来提供一些额外的功能和增强服务的能力。后端前置功能是指在请求到达后端服务之前，在API网关层面对请求进行处理、转换或增强的功能。下面是后端前置功能的一些好处、特点和优势：</p>
+<ol>
+<li><p>集中化处理：API网关作为系统的入口，可以集中处理所有的请求，统一管理和处理请求的逻辑。通过在API网关中实现后端前置功能，可以将一些通用的处理逻辑集中在网关层面，避免在每个后端服务中重复实现。</p>
+</li>
+<li><p>安全性增强：API网关可以在请求到达后端服务之前进行安全性检查和认证授权，以保护后端服务免受恶意请求和未经授权的访问。例如，可以在API网关中实现身份验证、访问控制、API密钥管理等功能，确保只有经过验证和授权的请求才能访问后端服务。</p>
+</li>
+<li><p>请求转换和协议适配：API网关可以将不同的请求转换为后端服务所需的格式和协议。例如，可以将RESTful请求转换为SOAP请求，或者将HTTP请求转换为消息队列的消息。这样可以解耦前端和后端服务之间的协议差异，提高系统的灵活性和可扩展性。</p>
+</li>
+<li><p>缓存和性能优化：API网关可以实现请求的缓存功能，将经常请求的数据缓存在网关层面，减少对后端服务的请求次数，提高系统的性能和响应速度。同时，可以通过在网关层面进行请求的聚合和优化，减少网络传输和后端服务的负载，提高系统的吞吐量和并发能力。</p>
+</li>
+<li><p>监控和日志记录：API网关可以对请求进行监控和日志记录，收集关键指标和日志信息，用于系统的监控、故障排查和性能优化。通过在网关层面进行统一的监控和日志记录，可以方便地追踪请求的流程和性能指标，提高系统的可观察性和故障排查的效率。</p>
+</li>
+</ol>
+<p>总的来说，后端前置功能通过在API网关层面实现一些通用的处理逻辑和增强功能，可以提高系统的安全性、性能、灵活性和可观察性，同时减轻后端服务的负担，提高整个系统的稳定性和可靠性。</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>### 熔断、降级方案<br><br>熔断：Request 请求处理 <br><br>降级：Response 响应处理<br><br></code></pre></td></tr></table></figure>
+<p>API网关的熔断和降级是常见的微服务架构中的重要组件，用于提高系统的稳定性和可靠性。下面是熔断和降级的一些常见实现策略：</p>
+<p>熔断实现策略：</p>
+<ol>
+<li>错误阈值熔断：设置一个错误阈值，当接口的错误率超过阈值时，触发熔断机制，暂时停止对该接口的请求。可以通过监控接口的错误率来动态调整阈值。</li>
+<li>超时熔断：设置一个超时时间，当接口的响应时间超过该时间时，触发熔断机制，暂时停止对该接口的请求。可以通过监控接口的响应时间来动态调整超时时间。</li>
+<li>异常熔断：当接口返回特定的异常码或异常信息时，触发熔断机制，暂时停止对该接口的请求。可以根据接口的具体业务逻辑来定义异常条件。</li>
+</ol>
+<p>降级实现策略：</p>
+<ol>
+<li>限流降级：设置一个请求的并发数限制，当并发请求数超过限制时，对部分请求进行降级处理，返回预先定义的默认响应或错误信息。</li>
+<li>功能降级：根据业务优先级，对某些功能进行降级处理，例如关闭某些不重要的功能模块或减少某些功能的复杂度，以保证核心功能的稳定性。</li>
+<li>数据降级：当底层服务不可用时，可以返回缓存的旧数据或默认数据，以保证用户的基本体验。</li>
+</ol>
+<p>需要注意的是，熔断和降级策略的具体实现方式会根据不同的API网关或框架而有所差异。一些常见的API网关，如Netflix的Zuul、Spring Cloud Gateway和Kong等，提供了内置的熔断和降级功能，可以通过配置文件或代码来实现相应的策略。</p>
+<p>如果您正在使用特定的API网关或框架，建议查阅其官方文档或相关的技术资料，以了解如何在该网关或框架中实现熔断和降级策略。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><br><br>API网关可以通过以下方式实现降级功能：<br><br><span class="hljs-bullet">1.</span> 响应缓存：API网关可以缓存一些常用的响应结果，当后端服务不可用或响应时间过长时，可以直接返回缓存的响应结果，避免对后端服务的请求。<br><br><span class="hljs-bullet">2.</span> 静态响应：API网关可以配置一些静态的响应结果，当后端服务不可用时，可以直接返回预先定义好的静态响应，以提供基本的功能或错误提示。<br><br><span class="hljs-bullet">3.</span> 降级服务：API网关可以配置一个备用的降级服务，当后端服务不可用时，可以将请求转发到降级服务，提供基本的功能或错误处理。<br><br><span class="hljs-bullet">4.</span> 错误处理：API网关可以捕获后端服务的错误响应，并根据配置的规则进行处理。例如，可以返回自定义的错误信息或重试请求。<br><br>熔断和降级是两个相关但不同的概念：<br><br><span class="hljs-bullet">1.</span> 熔断（Circuit Breaker）：熔断是一种保护机制，用于防止故障的扩散和影响整个系统。当后端服务出现故障或响应时间过长时，熔断器会打开，停止向该服务发送请求，并快速失败。熔断器会在一段时间后尝试重新请求后端服务，如果请求成功，则关闭熔断器，恢复正常的请求流量。<br><br><span class="hljs-bullet">2.</span> 降级（Fallback）：降级是一种应对后端服务不可用或性能下降的策略。当后端服务不可用或响应时间过长时，API网关可以返回预先定义好的静态响应或转发请求到降级服务，提供基本的功能或错误处理。降级可以保证系统的基本功能可用，但可能会损失一些高级功能或数据。<br><br>区别：<br><span class="hljs-bullet">-</span> 熔断是一种保护机制，用于防止故障的扩散和影响整个系统，而降级是一种应对后端服务不可用或性能下降的策略。<br><span class="hljs-bullet">-</span> 熔断是在请求级别上进行的，当后端服务出现故障或响应时间过长时，熔断器会停止向该服务发送请求，并快速失败。而降级是在响应级别上进行的，当后端服务不可用时，API网关会返回预先定义好的静态响应或转发请求到降级服务。<br><span class="hljs-bullet">-</span> 熔断是一种自动的机制，根据后端服务的状态自动打开或关闭熔断器。而降级是一种手动配置的策略，需要预先定义好降级的响应或配置降级服务。<br><br>需要根据具体的系统需求和架构选择合适的降级策略，以确保系统的可用性和性能。<br><br><br><br><br><br><span class="hljs-section">### API 版本控制方案</span><br><br></code></pre></td></tr></table></figure>
+<p>API网关可以通过以下方式实现API版本控制：</p>
+<ol>
+<li><p>URL路径版本控制：在API网关中，可以通过在URL路径中包含版本号来实现版本控制。例如，可以将不同版本的API分别映射到不同的URL路径上，如<code>/v1/users</code>和<code>/v2/users</code>。API网关根据请求的URL路径将请求路由到相应的API版本。</p>
+</li>
+<li><p>请求头版本控制：另一种常见的方式是使用请求头来指定API的版本。在请求头中添加一个自定义的头部字段，如<code>X-API-Version</code>，并将版本号作为字段的值。API网关根据请求头中的版本信息将请求路由到相应的API版本。</p>
+</li>
+<li><p>查询参数版本控制：还可以使用查询参数来指定API的版本。在URL中添加一个查询参数，如<code>?version=1</code>，将版本号作为参数的值。API网关根据查询参数中的版本信息将请求路由到相应的API版本。</p>
+</li>
+<li><p>请求体版本控制：在某些情况下，可以使用请求体中的数据来指定API的版本。例如，可以在请求体中添加一个字段来指定版本号，并根据请求体中的版本信息将请求路由到相应的API版本。</p>
+</li>
+</ol>
+<p>无论使用哪种方式，API网关都需要根据请求中的版本信息将请求路由到正确的API版本。这可以通过配置路由规则、使用路由表或使用API网关的路由功能来实现。同时，API网关还可以提供版本管理和控制的功能，如灰度发布、版本迁移等，以便更好地管理和控制API的版本。</p>
+<p>需要注意的是，在实现API版本控制时，应考虑向后兼容性和版本迁移的问题，以确保系统的稳定性和可维护性。同时，还应与团队和开发者进行良好的沟通，明确版本控制的策略和规范，以便统一管理和使用API的不同版本。</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>### 基础功能汇总<br><br></code></pre></td></tr></table></figure>
+<p>微服务架构的API网关可以实现以下功能：</p>
+<ol>
+<li><p>路由和转发：API网关作为系统的入口，可以根据请求的URL路径和HTTP方法将请求路由到相应的微服务实例。它可以根据配置规则将请求转发到不同的微服务，实现请求的分发和路由功能。</p>
+</li>
+<li><p>负载均衡：API网关可以通过负载均衡算法将请求均匀地分发到多个微服务实例上，以提高系统的性能和可靠性。它可以根据实时的负载情况动态调整请求的分发策略，实现负载均衡功能。</p>
+</li>
+<li><p>认证和授权：API网关可以集中处理认证和授权逻辑，对请求进行身份验证和权限验证。它可以与身份提供者（如OAuth、LDAP等）进行集成，验证请求的身份和权限，并根据配置规则决定是否允许请求访问相应的微服务。</p>
+</li>
+<li><p>安全性和防护：API网关可以提供一些安全性和防护功能，如请求的合法性检查、防止恶意请求、防止DDoS攻击等。它可以对请求进行过滤和验证，确保只有合法的请求能够访问微服务。</p>
+</li>
+<li><p>缓存和性能优化：API网关可以缓存一些常用的请求结果，以减少对后端微服务的请求次数，提高系统的性能和响应速度。它可以根据配置规则对请求进行缓存策略的管理和控制。</p>
+</li>
+<li><p>日志和监控：API网关可以记录请求和响应的日志信息，并提供监控和统计功能。它可以收集和分析请求的数据，监控系统的性能和可用性，并提供实时的监控指标和报警功能。</p>
+</li>
+<li><p>API版本控制：API网关可以支持对不同版本的API进行管理和控制。它可以根据请求中的版本信息，将请求路由到相应的API版本，实现对API版本的控制和管理。</p>
+</li>
+<li><p>降级和容错：API网关可以根据后端微服务的状态和负载情况，进行降级和容错处理。当某个微服务不可用或负载过高时，它可以根据配置规则进行降级处理，返回默认值或错误信息，以保证系统的可用性。</p>
+</li>
+</ol>
+<p>API网关作为微服务架构的入口和门面，承担了很多重要的功能。它可以提供统一的接口和管理，简化了客户端和微服务之间的通信和交互，提高了系统的可维护性和可扩展性。</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>## 缓存的设计<br><br>需要用到缓存的地方<br><br></code></pre></td></tr></table></figure>
+<p>1、快速响应点赞的 点赞数的更改和查询：（对于一个文章，有点赞数、浏览量、收藏数、&#x3D;&#x3D;&#x3D; 可以采用 hash 结构）<br>2、秒杀商品的缓存问题：秒杀商品数据需要快速响应、快速修改问题，所以采用缓存 （一个秒杀场次 + 秒杀商品id 对应 一个商品信息）</p>
+<p>3、购物车缓存问题；</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>设计Redis Key-Value 关系，最重要的一点就是 ：多对多、还是 一对多的关系，对于特别对象（HyperLogLog、BloomFilter）只需要参照对象特性和使用特性 进行使用。<br><br><br><br>### 缓存需要考虑的问题<br><br></code></pre></td></tr></table></figure>
+<p>1、数据看 与 缓存 一致性问题：缓存双删、先删缓存再删数据看、先修改数据库再删缓存</p>
+<ul>
+<li>采用：先修改数据库再删缓存 – 保证缓存不会存在过时数据<br>2、缓存同步问题：<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br><br><br>## 购物车模块<br><br>未登录的游客购物车， 临时购物车合并，<br><br>购物车信息获取 – 商品模块，<br><br><br><br>## 店铺模块<br><br>商家（另外一种用户）创建店铺，进行一类商品的售卖和管理<br><br>店铺商品管理<br><br><br><br><br><br>## 商品模块<br><br>商品上架、下架； — 商家负责商品上架下架（商品管理员负责审核商品）<br><br>商品展示 – 展示信息，spu、sku问题，粗略展示 / 详情展示<br><br>商品搜索 – 搜索条件，分类查询、关键词查询、<br><br>商品收藏，统计收藏用户数量 – 用户收藏商品记录保存，<br><br><br><br>## 文章/帖子模块（商品评论）<br><br>商品评论管理，<br><br>评论内容 – 登陆后评论，购买后评价，<br><br>商品评分，<br><br>评论、点赞、转发（尝试整合第三方转发功能）<br><br>帖子点赞数统计<br><br>帖子点赞<br><br><br><br>后续更新计划：可以发出视频<br><br><br><br>### 文档模型 - 存储文章<br><br></code></pre></td></tr></table></figure>
+自己采用的方案：<br>用户信息：<br>1、将用户信息的Id进行单独文档存储 （考虑同步更新问题 –废弃）<br>2、存储用户信息Id，但是需要远程调用 用户信息（如何优化问题，暂时可以用 – 废弃）（RPC调用 损失一半性能）<br>3、存储用户信息，但是每次对比当前用户信息 修改时间，如果修改时间不一致，则（后端&#x2F;前端）发送更新文章用户信息请求。（需要完善）</li>
+<li>完善：采用 消息队列，当用户信息修改就发送 事件，更新 文章信息 （废弃 – 过于复杂，且文章不止一篇，更新操作过于离谱）<br>4、redis 缓存单独存储用户登录信息、每次去缓存中读取相关信息（可行 – 需要关注同时在线人数问题）<br>5、</li>
+</ul>
+<p>点赞信息；<br>1、单独存储文章 点赞、收藏、浏览 数据信息，文档中存储 id进行查询<br>2、redis 进行缓存（考虑一致性 和 同步问题 – 可行）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs"><br><br><br></code></pre></td></tr></table></figure>
+<p>对于像点赞数、阅读量和作者相关信息这样的实时变更信息，可以考虑以下几种存储方式：</p>
+<ol>
+<li><p>在文档内作为字段存储：可以将点赞数、阅读量和作者相关信息作为文档的字段存储在文档内部。这样可以将相关信息与文章内容一起存储，方便查询和展示。但是，频繁的更新操作可能会导致整个文档的读取和写入，对性能产生一定影响。</p>
+</li>
+<li><p>单独存储为独立文档：可以将点赞数、阅读量和作者相关信息存储为独立的文档，与文章文档进行关联。这样可以将实时变更的信息与文章内容分离，减少对整个文档的读取和写入操作。但是，需要进行额外的关联查询，增加了一定的复杂性。</p>
+</li>
+<li><p>使用缓存：可以将点赞数、阅读量和作者相关信息存储在缓存中，如Redis。通过缓存可以提高读取和更新的性能，减少对数据库的访问。但是，需要考虑缓存与数据库之间的一致性和同步问题。</p>
+</li>
+</ol>
+<p>在存储文章的细节方面，可以考虑包含以下信息：</p>
+<ul>
+<li>文章ID：用于唯一标识文章。</li>
+<li>标题：文章的标题。</li>
+<li>作者ID：文章的作者ID，用于关联作者信息。</li>
+<li>发布日期：文章的发布日期。</li>
+<li>内容：文章的正文内容。</li>
+<li>标签：文章的标签，用于分类和检索。</li>
+<li>点赞数：文章的点赞数。</li>
+<li>阅读量：文章的阅读量。</li>
+<li>评论：文章的评论内容，包括评论者、评论时间、评论内容等。</li>
+</ul>
+<p>需要根据具体的业务需求和性能要求来确定存储的细节。同时，可以根据实际情况进行性能测试和评估，选择合适的存储方式和数据模型。</p>
+<hr>
+<p>针对存储用户信息的问题，有两种方案可以考虑优化：</p>
+<ol>
+<li><p>缓存用户信息：可以使用缓存技术，如Redis，将用户信息缓存起来。当需要获取用户信息时，首先从缓存中查询，如果缓存中不存在，则再进行远程调用获取用户信息，并将获取到的用户信息存储到缓存中。这样可以减少对远程调用的频率，提高读取用户信息的性能。</p>
+</li>
+<li><p>异步更新用户信息：可以使用消息队列或异步任务来处理用户信息的更新。当用户信息发生变化时，后端或前端可以发送一个更新用户信息的消息或任务，然后由后台任务异步处理更新操作。这样可以避免每次对比用户信息的修改时间，减少对用户信息的频繁读取和更新请求。</p>
+</li>
+</ol>
+<p>需要注意的是，以上方案仅提供了一些优化思路，具体的实现方式需要根据系统架构和业务需求进行调整。同时，还需要考虑缓存与数据库之间的一致性和同步问题，以及异步更新操作的可靠性和处理速度。</p>
+<p>对于存储用户信息的方案，可以考虑存储以下信息：</p>
+<ul>
+<li>用户ID：用于唯一标识用户。</li>
+<li>用户名：用户的用户名。</li>
+<li>邮箱：用户的邮箱地址。</li>
+<li>头像：用户的头像图片地址。</li>
+<li>注册时间：用户的注册时间。</li>
+<li>最后登录时间：用户的最后登录时间。</li>
+<li>其他个人信息：根据业务需求，可以存储其他用户相关的信息，如性别、年龄、地址等。</li>
+</ul>
+<p>需要根据具体的业务需求和隐私安全考虑，确定存储的用户信息。同时，需要根据系统的实际情况进行性能测试和评估，选择合适的存储和优化方案。</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>## 评论模块（帖子评论）<br><br>### 评论<br><br>评论帖子，评论评论 – 区别：位于一级评论，二级评论<br><br>评论区设计：按时间排序，按点赞数排序<br><br></code></pre></td></tr></table></figure>
+<p>问题一：评论表设计方案<br>1、评论 &#x2F; 回复表<br>2、统一评论表<br>3、评论表（维持评论布局和关系）  + 内容表 – 管理评论内容展示（可以比被应用，转发，）<br>内容：评论文章&#x2F;商品Id、评论id、被评论（文章&#x2F;人）id、</p>
+<p>考虑问题：<br>1、评论的布局、搜索问题：按照 时间 结构搜索 + 按照bilibili – 同一个根评论搜索<br>算法问题：sort -<br>2、评论人信息： member信息 — 需要展示<br>3、评论内容信息： context</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs"><br><br><br>评论reply <br><br></code></pre></td></tr></table></figure>
+<p>1、parentId – 当前回复的人 Id   @xxx<br>2、rootId – 当前回复内容根   （没有回复别人，回复文章的人 没有rootId，可以当作别人的rootId）<br>3、replyId – 评论<br>4、context ID 内容</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs maxima"><br><br><br><br><br>评论内容<span class="hljs-built_in">context</span>  <br><br></code></pre></td></tr></table></figure>
+<p>1、内容<br>2、被评论人 信息 @XXX  - 通过id 获取<br>2、跳转路径</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>###  点赞<br><br>评论点赞数统计 、 评论点赞<br><br></code></pre></td></tr></table></figure>
+<p>1、点赞功能设计：使用缓存减少数据库查询次数，应对快速响应问题<br>    方案一：从文章角度<br>        判断点赞状态：redis设计 hset key(articeId) userid1,userid2, userid3 — 利用set特性，快速判断点赞状态<br>        获取点赞数：hmember 获取当前点赞数<br>    方案二：从用户角度<br>        判断点赞状态：redis设计：hset key(userId) articeIdid1,articeIdid2,articeIdid3….<br>        用于快速判断当前用户的点赞信息（受到在线用户数量的影响）</p>
+<pre><code class="hljs">方案三：用户 + 系统
+    点赞数统计 + bitMap判断
+方案二 可以用来帮助用户快速判断当前点赞信息，便于前端展示渲染
+方案三 补充部分：可以用于快速统计点赞信息，以及判断
+</code></pre>
+<p>2、如何快速判断用户时候已经点赞问题： （bloom filter – 存在则一定为true，不存在可能为true）<br>    方案一：从文章角度，布隆过滤器（Bloom Filter）<br>    方案二：从用户角度，用户每次访问时，将当前用户的点赞记录存入bloom filter，用户判断某些文章是否已经点赞&#x2F;收藏等 需要显示操作<br>    （只存储点赞&#x2F;收藏状态和数据）<br>    布隆过滤器设计：(收藏&#x2F;点赞)key(userId)  articleId, </p>
+<p>3、保证点赞数持久化存储：<br>当前帖子的数据库需要存储点赞数，使用xxl-job分布式定时框架，定时刷新</p>
+<p>总结：<br>选取方案二。<br>原因：<br>    对于当前系统而言，用户为访问当前系统的最小颗粒度；文章锁包含的用户点赞数据过于冗杂，且不满足当前用户访问需求；如果我们要判断用户是否点赞文章，需要存储所有文章的点赞用户的布隆过滤器数据，冗余度太高；<br>    使用方案二，我们只关注当前用户的点赞状态，当前用户点赞文章数量也比较少，存在时间也是有用户登录查询阶段，当系统访问量不高的时候，redis存储数据为用户级别；而且redis存储数据能够针对的对当前用户进行定制化处理，减少荣誉查询和无关数据的存储。<br>业务流程：<br>用户登录 -&gt; 缓存用户点赞&#x2F;收藏文章id （分散在各个模块，需要消息队列处理） -&gt; 当用户访问文章获取状态的时候，先查询布隆过滤器 -&gt; 如果布隆过滤器中没有，则查询数据库 -&gt;</p>
+<p>更改：选取方案三 &#x3D;&#x3D; 方案二 set。+ bitmap<br>优点：1、用户文章访问状态的快速响应、  – 用户角度<br>        2、bitmap快速判断是否点在，进行自增、文章存储 位图信息，可以快速判断用户是否可以点赞 – 文章角度<br>好像功能冗余：二选一？</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs awk"><br><br><br><br><br><br><br><span class="hljs-comment">## 订单模块</span><br><br>![在这里插入图片描述](https:<span class="hljs-regexp">//img</span>-blog.csdnimg.cn<span class="hljs-regexp">/5b3b81bac3ba4c899ca964edb9b3ad19.png?x-oss-process=image/</span>watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBASEdXNjg5,size_20,color_FFFFFF,t_70,g_se,x_16<span class="hljs-comment">#pic_center)</span><br><br>订单生成（幂等性处理） — 费用计算：邮费-地址，优惠计算，<br><br><br><br><span class="hljs-comment">### RabbitMQ 的消息队列 - 事务 - 订单</span><br><br></code></pre></td></tr></table></figure>
+<p>业务：订单下单-支付</p>
+<ul>
+<li>秒杀业务订单，先下单（锁库存），再支付</li>
+<li>正常订单：<br>  参考淘宝–<br>  1、结算 &#x3D;&#x3D; （cart模块）<br>  2、提交订单（锁定库存）（库存- stock模块）<br>  2.0 获取商品信息（product 模块） + 收货地址（member模块）<br>  2.1 获取优惠券、优惠信息（coupon模块） + 计算价格（order模块）<br>  2.2 未提交，不付款（订单- order模块）<br>  3、同步付款–成功 （订单模块）<br>  4、异步付款：30min过期<br>  4.1 解锁库存<br>  4.2 修改订单状态<br>  5、不付款，订单结束</li>
+</ul>
+<p>消息队列设计：</p>
+<p>消息有哪些？<br>1、支付消息</p>
+<ul>
+<li>支付成功，发送消息 &#x3D;&#x3D;》扣除库存</li>
+<li>支付失败消息 &#x3D;&#x3D;》</li>
+<li>支付超时消息 &#x3D;&#x3D;》 恢复锁定库存<br>（如果支付成功后，支付超时；所以恢复库存的时候需要判断）</li>
+</ul>
+<p>消息如何流转？<br>1、支付成功消息 – 目的：扣减库存 、修改订单状态</p>
+<ul>
+<li>谁发送：order- 订单模块负责控制 支付功能</li>
+<li>流转规则：一个发送，一个监听</li>
+<li>谁接受：<br>   order：修改订单状态–同步修改，所以可以不用发送消息<br>   ware：扣减锁定库存（修改状态） – 同步修改，可以不用发送消息<br>（不需要 消息队列）</li>
+</ul>
+<p> 	</p>
+<p>2、支付超时消息： – 目的：解锁库存，修改订单状态</p>
+<ul>
+<li>谁发送：order-创建订单成功之后，</li>
+<li>流转规则：（创建）发送延迟消息（死信队列）</li>
+<li>谁接收：<br>  ware - 库存解锁<br>  order - 订单状态修改（异步修改30min）</li>
+</ul>
+<p>3、如何解决问题：虽然 支付成功，但是 支付超时<br>3.1 先支付，再超时</p>
+<ul>
+<li>支付超时主要是 库存和订单 状态修改</li>
+<li>如果先支付成功，则<br>  订单状态已经修改<br>  库存状态，延迟修改 &#x3D;&#x3D; 改为同步修改</li>
+</ul>
+<p>3.2 先超时，再支付</p>
+<ul>
+<li>由于超时 使用消息队列 修改状态，有一定延迟，则可能虽然超时，但是支付成功～</li>
+<li>如何解决？<br> order模块：- 支付的时候检查时间问题，如果已经超时就默认更新 订单状态<br>              - 然后，当消息到达，保证订单状态的幂等性；<br>  ware模块：不用处理～～<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>### 考虑问题<br><br></code></pre></td></tr></table></figure>
+在商品订单生成过程中，需要注意以下几个问题，以确保业务的安全性和完整性：</li>
+</ul>
+<ol>
+<li><p>并发冲突：在高并发场景下，多个用户同时提交订单可能会导致并发冲突。为了解决这个问题，可以使用乐观锁或悲观锁来控制并发访问，保证订单生成的原子性和一致性。</p>
+</li>
+<li><p>库存扣减：在生成订单之前，需要进行库存扣减操作。为了避免超卖问题，可以在扣减库存之前先检查库存数量，确保库存充足。可以使用数据库事务来保证库存扣减和订单生成的原子性。</p>
+</li>
+<li><p>幂等性设计：为了避免重复生成订单，需要设计幂等性机制。可以通过生成唯一的订单号或使用分布式锁等方式来保证订单生成操作的幂等性。</p>
+</li>
+<li><p>价格校验：在生成订单之前，需要校验商品的价格是否与用户提交的价格一致。防止用户通过篡改价格等方式进行恶意操作。</p>
+</li>
+<li><p>用户身份验证：在生成订单之前，需要对用户进行身份验证，确保只有合法的用户才能生成订单。可以使用用户认证和授权机制来验证用户身份。</p>
+</li>
+<li><p>订单状态管理：生成订单后，需要对订单状态进行管理。包括订单的支付状态、配送状态等。可以使用状态机来管理订单的状态转换，确保订单状态的一致性和可追溯性。</p>
+</li>
+<li><p>异常处理：在订单生成过程中，可能会出现各种异常情况，如库存不足、支付失败等。需要对这些异常情况进行合理的处理，包括给用户友好的提示、进行日志记录等。</p>
+</li>
+<li><p>数据安全性：订单中可能包含用户的敏感信息，如姓名、地址、手机号码等。需要对这些信息进行合理的加密和保护，确保数据的安全性。</p>
+</li>
+<li><p>业务监控和告警：为了及时发现和解决订单生成过程中的问题，可以设置业务监控和告警机制。监控订单生成的关键指标，如订单生成速度、成功率等，及时发现异常情况并进行处理。</p>
+</li>
+</ol>
+<p>以上是在商品订单生成过程中需要注意的一些问题，具体的实现方式和技术选择可以根据项目需求和团队技术栈进行决策。如果需要更详细的信息，可以使用搜索引擎进行进一步的调研。</p>
+<p>在商品订单生成过程中，还有一些其他需要注意的问题：</p>
+<ol start="10">
+<li><p>平台费用计算：如果平台需要收取一定的手续费或服务费，需要在订单生成过程中计算并记录相应的费用。</p>
+</li>
+<li><p>优惠券和促销活动：如果用户使用了优惠券或参与了促销活动，需要在订单生成过程中计算并应用相应的优惠或折扣。</p>
+</li>
+<li><p>支付方式选择：在生成订单后，用户需要选择支付方式进行支付。需要提供多种支付方式的选择，并确保支付流程的安全性和稳定性。</p>
+</li>
+<li><p>配送方式选择：根据用户的选择，提供多种配送方式供用户选择，并记录用户的配送方式以便后续处理。</p>
+</li>
+<li><p>订单确认和通知：在生成订单后，需要向用户发送订单确认信息，并提供订单详情和支付方式等相关信息。可以通过短信、邮件、推送等方式进行通知。</p>
+</li>
+<li><p>订单超时处理：如果用户在一定时间内未完成支付，需要对订单进行超时处理，释放库存并取消订单。</p>
+</li>
+<li><p>订单退款和售后：在订单生成后，用户可能需要进行退款或售后操作。需要提供相应的退款和售后流程，并记录相关信息以便后续处理。</p>
+</li>
+<li><p>数据统计和分析：对生成的订单数据进行统计和分析，包括订单数量、销售额、用户行为等，以便进行业务分析和决策。</p>
+</li>
+<li><p>日志记录和审计：对订单生成过程中的关键操作进行日志记录，包括用户操作、系统异常等，以便进行审计和故障排查。</p>
+</li>
+</ol>
+<p>以上是在商品订单生成过程中需要注意的一些问题，具体的实现方式和技术选择可以根据项目需求和团队技术栈进行决策。如果需要更详细的信息，可以使用搜索引擎进行进一步的调研。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs"><br><br><br><br><br>创建订单 - 锁定库存，优惠计算、邮费计算、支付优惠（忽略）<br><br></code></pre></td></tr></table></figure>
+<p>库存锁定– 发送需要锁定商品信息 -&gt; wms模块api -&gt; 判断是否锁定库存成功 （涉及到分布式事务一致性问题）<br>邮费计算 – 需要获取用户的收获地址之后再进行计算 -&gt; 策略者模式，计算邮费<br>优惠计算 – 每个商品的优惠信息不一样， cms优惠模块保存商品优惠信息，在用户查看、添加购物车、支付阶段可能优惠信息有所变化， 需要实时查询；发送商品信息 -&gt; cms根据策略计算优惠价格，并返回详情信息 -&gt; oms订单模块记录商品价格详细 ： 原件、成交价（活动价）、优惠卷信息、优惠价格均摊、结算价 (都是单价)</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs awk"><br>![img](https:<span class="hljs-regexp">//</span>pic4.zhimg.com<span class="hljs-regexp">/80/</span>v2-<span class="hljs-number">9580</span>bfa3a2adcdef3e21c399ac344133_1440w.webp)<br><br>![img](https:<span class="hljs-regexp">//</span>pic3.zhimg.com<span class="hljs-regexp">/80/</span>v2-da8b2230cd3c76f7e6d6400156b213f6_1440w.webp)<br><br>超时关单<br><br>支付订单 - <br><br><br><br>订单退款 – 退一件，全退、<br><br>[做电商: 必须知道这些订单退款逻辑 （附流程图） | 人人都是产品经理 (woshipm.com)](https:<span class="hljs-regexp">//</span>www.woshipm.com<span class="hljs-regexp">/pd/</span><span class="hljs-number">5134731</span>.html)<br><br><br><br><span class="hljs-comment">## 优惠模块</span><br><br><span class="hljs-comment">### 优惠</span><br><br>[一文搞懂电商订单价格计算逻辑 - 知乎 (zhihu.com)](https:<span class="hljs-regexp">//</span>zhuanlan.zhihu.com<span class="hljs-regexp">/p/</span><span class="hljs-number">89951053</span>)<br><br></code></pre></td></tr></table></figure>
+<p>策略者模式 – 每种优惠卷的算法策略不同，需要进行退款方式也不同</p>
+<p>计算优惠，记录优惠价平摊（用于退款），退款方式 – 退一个、退一群</p>
+<p>优惠券叠加 – 同类只能选一个，不同类选多个</p>
+<p>无法平摊优惠价问题：（3.33333 -&gt; 3.33，最后补上）<br>总会遇见无法平均分摊的问题、方法只有一个就是全部商品退款完毕的的时候把无法分摊的几分钱补上、</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-strong">**营销优惠 + 支付优惠**</span><br><br>营销优惠：优惠卷， 秒杀（活动价）<br><br>支付优惠：根据不同平台的优惠策略（淘宝–淘宝币，京东 – 京东豆，会员优惠，购买补贴淘宝币  —-=== 暂时不考虑）<br><br><br><br>营销优惠：商家的每个商品的优惠策略进行设置 – 满减，商品优惠卷发放，活动价设置<br><br><br><br>支付优惠：又是一套优惠策略 – 例如：用户购买返积分策略，积分抵消支付价格策略<br><br><br><br><span class="hljs-section">### 秒杀</span><br><br>秒杀活动管理  – <br><br>1、用户可以提前订阅秒杀活动、<br><br>2、管理员上架秒杀活动- 秒杀场次（每日几场，每场开始结束时间）<br><br>3、商家基于秒杀活动 - 上架秒杀商品 （需要记录秒杀优惠信息，支付时可以选择<span class="hljs-strong">**营销优惠**</span> – 获取用户的优惠券计算价格）<br><br>获取秒杀信息<br><br><br><br><br><br><span class="hljs-section">## 秒杀模块</span><br><br>[<span class="hljs-string">万字超详解秒杀系统！ - 知乎 (zhihu.com)</span>](<span class="hljs-link">https://zhuanlan.zhihu.com/p/433618121</span>)<br><br><br><br><span class="hljs-section">### 分布式锁</span><br><br><span class="hljs-code">`这里的问题（业务）：保存在redis 中，能够通过 lua 脚本实现原子操作`</span><br><br>1、检测用户秒杀个数 问题<br><br><span class="hljs-bullet">-</span> --限制单个用户 可以在 redis + lua 的脚本中实现判断逻辑，比如 redis hash 判断当前用户是否购买超过个数，超过就直接 return，没有超过就 扣减 （适合单机）<br><span class="hljs-bullet">-</span> redis + lua 如何实现分布式锁 == redisson 客户端 整合 redis集群，想所有节点发送 lua 脚本，实现reids + lua脚本的分布式方式，能够满足 业务需求<br><br>（<span class="hljs-strong">**很巧妙的方案**</span>）<br><br>2、直接使用分布式锁 <br><br><span class="hljs-bullet">-</span> 锁定的粒度问题<br><br><br><br><span class="hljs-code">`对于业务 不在redis中的`</span><br><br>1、只能用分布式锁保证了 --- 具体业务具体分析<br><br><br><br><br><br><span class="hljs-section">### 定时上架 秒杀商品</span><br><br>问题描述：分布式情况可能出现多个service 同时进行商品上架，<span class="hljs-strong">**一个商品被上架多次**</span><br><br></code></pre></td></tr></table></figure>
+<p>思路：<br>如何保证一个商品被上架一次，如何保证<br>解决：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br><br><br>### 秒杀商品信息<br><br></code></pre></td></tr></table></figure>
+<p>1、</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs css"><br><br><br>（秒杀模块 只负责秒杀逻辑，优惠逻辑以及秒杀商品入数据库<span class="hljs-selector-attr">[上架]</span>、锁定库存逻辑 都在优惠模块<br><br>秒杀模块直接获取优惠模块保存的秒杀信息，上架到Redis）<br><br>直接生成秒杀订单，快速响应 – 只记录秒杀商品临时信息<br><br>秒杀商品管理  —- 商家设置秒杀商品，选择场次、数量、商品、原来价格、优惠价格 / 优惠折扣<br><br></code></pre></td></tr></table></figure>
+<p>商家进入后台管理系统，将</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs"><br><br><br>商品上架 — 后台倒计时秒杀商品，定期扫描秒杀商品进行后台上架 – 缓存预热<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br>### 问题分析<br><br></code></pre></td></tr></table></figure>
+<p>秒杀商品的实现涉及到多个方面的考虑和设计，下面逐一介绍相关内容：</p>
+<ol>
+<li><p>提前上架：为了确保秒杀活动的顺利进行，需要提前将秒杀商品上架，使用户可以在秒杀开始前浏览和选择商品。</p>
+</li>
+<li><p>秒杀逻辑：秒杀逻辑包括用户提交秒杀请求、库存扣减、生成订单等步骤。在秒杀开始时，用户可以提交秒杀请求，服务器接收请求后进行库存扣减，如果库存足够，则生成订单；如果库存不足，则返回秒杀失败的信息。</p>
+</li>
+<li><p>幂等性设计：为了避免重复秒杀和重复扣减库存的问题，需要设计幂等性机制。可以通过生成唯一的秒杀订单号或使用分布式锁等方式来保证秒杀操作的幂等性。</p>
+</li>
+<li><p>防抖功能：为了防止用户频繁点击秒杀按钮导致的恶意请求和服务器压力过大，可以在前端实现防抖功能，限制用户在一段时间内只能提交一次秒杀请求。</p>
+</li>
+<li><p>Token校验URL：为了防止恶意请求和保护秒杀接口的安全性，可以使用Token校验URL的方式来限制只有具有有效Token的请求才能进行秒杀操作。</p>
+</li>
+<li><p>超卖问题：秒杀活动可能会面临超卖问题，即库存不足的情况下仍然接受了多个用户的秒杀请求。为了解决这个问题，可以在秒杀请求到达服务器时进行库存检查，并在库存不足时返回秒杀失败的信息。</p>
+</li>
+<li><p>快速响应：秒杀活动通常会吸引大量用户参与，为了保证用户体验，服务器需要快速响应秒杀请求，避免因请求过多而导致的延迟和堵塞。</p>
+</li>
+<li><p>限流：为了保护服务器的稳定性和防止恶意攻击，可以实现限流机制，限制单位时间内的秒杀请求数量，防止服务器过载。</p>
+</li>
+<li><p>及时告知秒杀结束：在秒杀活动结束时，需要及时向用户告知秒杀已结束的信息，避免用户继续提交秒杀请求。</p>
+</li>
+</ol>
+<p>以上是秒杀商品实现中的一些关键考虑和设计，具体的实现方式和技术选择可以根据项目需求和团队技术栈进行决策。如果需要更详细的信息，可以使用搜索引擎进行进一步的调研。<br>除了上述提到的问题，秒杀业务还需要考虑以下几个方面的问题：</p>
+<ol start="10">
+<li><p>秒杀商品的数量限制：为了控制秒杀活动的规模和保证用户的公平性，可以设置每个用户在秒杀活动中可以购买的商品数量限制。</p>
+</li>
+<li><p>秒杀活动的时间限制：需要确定秒杀活动的开始时间和结束时间，并在活动结束后禁止用户继续提交秒杀请求。</p>
+</li>
+<li><p>秒杀商品的展示和推广：为了吸引用户参与秒杀活动，需要在前端页面中展示秒杀商品的信息，并进行相应的推广和宣传。</p>
+</li>
+<li><p>秒杀订单的处理：生成秒杀订单后，需要及时处理订单，包括订单支付、订单配送等环节。同时，需要考虑订单的售后服务和退款处理。</p>
+</li>
+<li><p>秒杀活动的监控和统计：需要对秒杀活动进行监控和统计，包括用户参与人数、秒杀成功率、服务器负载等指标，以便进行活动优化和性能调优。</p>
+</li>
+<li><p>秒杀活动的安全性：为了防止恶意攻击和作弊行为，需要加强秒杀活动的安全性，如防止重放攻击、验证码验证等。</p>
+</li>
+<li><p>秒杀活动的营销策略：可以结合秒杀活动进行一些营销策略，如限时折扣、优惠券发放等，以提高用户参与度和购买意愿。</p>
+</li>
+<li><p>秒杀活动的容错处理：在秒杀活动中，可能会出现各种异常情况，如网络故障、系统崩溃等。需要进行容错处理，保证系统的稳定性和可用性。</p>
+</li>
+<li><p>秒杀活动的后续分析和总结：秒杀活动结束后，需要对活动进行分析和总结，包括活动效果评估、用户反馈收集等，以便进行改进和优化。</p>
+</li>
+</ol>
+<p>以上是秒杀业务中需要考虑的一些问题，具体的实现方式和技术选择可以根据项目需求和团队技术栈进行决策。如果需要更详细的信息，可以使用搜索引擎进行进一步的调研</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs awk"><br><br><br><br><br><br><br><span class="hljs-comment">## 库存模块</span><br><br>锁定库存<br><br>库存回滚<br><br>商品库存CRUD<br><br><br><br><span class="hljs-comment">## 积分模块</span><br><br>商品积分信息管理，– 为每个商品分配积分<br><br>用户积分信息管理 – 用户积分信息CRUD<br><br>额外积分获取管理 – 通过其他方式（奖励）获取积分<br><br><br><br><span class="hljs-comment">## 搜索模块= ElasticSearch + MySQL</span><br><br><span class="hljs-number">1</span>、关键词提醒 -- 输入关键词的时候异步搜索 ES 获取完整检索词 <br><br><span class="hljs-number">2</span>、文章上传 + 检索 功能 ？？？ 文章是否需要用ES进行检索问题<br><br><span class="hljs-number">3</span>、商品上传 检索功能<br><br><span class="hljs-number">4</span>、ES实现聚合搜索 — 文章 <span class="hljs-regexp">//</span> 商品 <span class="hljs-regexp">//</span> 用户 <span class="hljs-regexp">//</span> xxx等需要ES进行检索时 ： 只用输入一次关键词，后面可以直接切换 tag进行再次检索<br><br></code></pre></td></tr></table></figure>
+<p>分析：如何通过设计模式更加高效的实现该操作？<br>1、搜索方式有 ES + MySQL两种，所以搜索需要抽象为接口方法<br>2、更加tag选择搜索的业务逻辑<br>3、通用ES进行搜索的时候，tag可以作为搜索条件进行检索的过滤问题<br>4、好像没了</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br># 数据库表设计<br><br>## 新思路<br><br>参考Oceanus设计，将id设计为自增，单独一个serialId 作为唯一标识<br><br><br><br><br><br><br><br>四件套：id， create_time, deleta_statue, updata_time<br><br>**根据需求进行设计**<br><br>## 用户模块<br><br>### 用户表<br><br>属性：role,  username, nickname，性别，头像，<br><br>用于存储用户的基本信息：<br><br></code></pre></td></tr></table></figure>
+<p>分析：在</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>### 用户地址表<br><br>用户存储用户地址<br><br><br><br><br><br><br><br>**用户收藏表 – 商品/店铺/文章/景点**<br><br><span class="hljs-number">1</span>、（在对应收藏信息下建表）<br><br><span class="hljs-number">2</span>、根据领域模型设计，关系表按照业务划分，属于用户的业务，与文章、商品无关，则放在当前用户模块<br><br><br><br>## 店铺模块<br><br>### 店铺信息表<br><br>包含店铺名，定位，自我介绍等等完整的店铺详情信息<br><br><br><br><br><br><br><br>## 商品模块<br><br>### 用户商品收藏表<br><br>用于存储用户收藏商品id 与 用户id 关系表，也能快速统计当前商品的收藏数量<br><br><br><br>### 店铺商品关系表<br><br>根据店铺，获取商品信息 – 感觉应该放在商品库中<span class="hljs-number">9</span><br><br><br><br>### SPU 和 SKU<br><br>SPU : iPhone <span class="hljs-number">12</span>、Samsung Galaxy <br><br>SKU：白色 <span class="hljs-number">12</span>G + <span class="hljs-number">512</span>G 的 iPhone <span class="hljs-number">12</span>、黑色 <span class="hljs-number">6</span>G + <span class="hljs-number">256</span> G 的 iPhone <span class="hljs-number">12</span>、<br><br></code></pre></td></tr></table></figure>
+<p>在电子商务领域，SKU和SPU是常用的商品标识概念。</p>
+<ol>
+<li>SKU（Stock Keeping Unit）：SKU是库存单位的缩写，用于唯一标识一个具体的商品。每个SKU通常对应着一个具体的产品变体，它可以包含一组唯一的属性和特征，如颜色、尺寸、款式等。SKU是用于库存管理和销售跟踪的重要标识。</li>
+</ol>
+<p>举例说明：<br>假设有一家服装店，他们销售一款T恤衫，这款T恤衫有不同的颜色和尺码可选。对于每个颜色和尺码的组合，可以为其分配一个唯一的SKU。例如，红色XL尺码的T恤衫可以分配一个SKU为”TS001-RD-XL”，蓝色M尺码的T恤衫可以分配一个SKU为”TS001-BL-M”。每个SKU都代表着不同的产品变体。</p>
+<ol start="2">
+<li>SPU（Standard Product Unit）：SPU是标准产品单元的缩写，用于标识一组具有相同功能和属性的商品。SPU通常是指一种产品的基本型号或基准型号，它可以包含多个SKU。SPU用于商品分类、展示和描述，方便消费者对商品进行比较和选择。</li>
+</ol>
+<p>举例说明：<br>继续以服装为例，假设这家服装店还销售其他款式的T恤衫，如短袖、长袖、印花等。这些不同款式的T恤衫可以被归类为同一个SPU，例如”TS001”。每个SPU代表着一种基本款式的T恤衫，而不同的SKU则代表着不同的颜色和尺码的变体。</p>
+<p>举例来说，假设有一家电子产品商店，他们销售手机。不同品牌和型号的手机可以被归类为不同的SPU。例如，iPhone 12、Samsung Galaxy S21和Huawei P40可以分别作为不同的SPU。每个SPU代表着一种手机的基本型号，它们具有相似的功能和属性。</p>
+<p>在电商平台上，通常以SPU为单位进行商品展示和描述，而SKU则用于具体的库存管理和销售跟踪。通过SPU和SKU的组合，可以实现对商品的灵活管理和销售。</p>
+<p>总结：<br>SKU是用于唯一标识具体商品变体的库存单位，而SPU是用于标识一组具有相同功能和属性的商品的标准产品单元。SKU用于库存管理和销售跟踪，而SPU用于商品分类和展示。</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><br><br><br><br>## 点赞/收藏/踩 – 状态模块<br><br>### 商品/店铺收藏关系表<br><br>### 用户文章收藏关系表<br><br>### 用户文章点赞关系表<br><br>### 用户评论点赞关系表<br><br>存储用户于文章的关系，点赞/收藏等操作状态  – 只存储有关系数据，没有关系不存储<br><br></code></pre></td></tr></table></figure>
+<p>问题：各种关系 —- 收藏文章 为 文章模块数据， 帖子为文章&#x2F;评论文章，评论就是评论</p>
+<p>点赞对象：文章，评论，帖子，<br>收藏对象：一类：店铺，商品；二类：文章，帖子<br>理清对象关系：用于设计redis<br>需要判断是否点赞，是否收藏，分为两种redis的（布隆过滤器 – 数据量不大，不用bloom filter）进行设计</p>
+<p>方案一；√ — 简单，易管理<br>表的存放位置；<br>    收藏：文章收藏关系表 – 为文章模块的库，商品收藏关系表 – 为商品模块库，店铺收藏关系表 – 为店铺模块库;<br>    点赞；文章点赞关系表 – 为文章模块的库，评论点赞关系表 – 为评论模块的库<br>    用户收藏布隆过滤器<br>    用户点赞布隆过滤器<br>通过消息队列进行调度 文章， 商品，店铺，评论模块</p>
+<p>方案二：比较麻烦<br>表存放位置；<br>    单独抽象一个模块，用于关系关系状态表示；<br>流程：<br>展示流程：每次查询布隆过滤器也能获取对应的状态数据 -&gt; 通过状态数据修改返回状态 -&gt; 前端通过状态展示信息<br>添加流程：需要添加关系表 -&gt; 判断bloom filter是否存在对应关系 -&gt; 存在，添加失败；不存在，修改数据库信息，添加redis，添加bloom filter；<br>删除流程：删除添加关系表 -&gt; 判断bloom filter是否存在对应关系 -&gt; 存在，删除bloom filter，删除redis，删除数据库；不存在，修改失败</p>
+<pre><code class="hljs">
+
+
+
+
+
+
+# 收获记录
+
+## 一：sss
+
+收藏表存放位置：与收藏的信息表存放在一个库里
+
+总结：将于具体业务模块关联的信息表/ 关系表，一律存放在业务模块的数据库表中，减少网路通讯的影响。
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%B8%9A%E5%8A%A1/">#业务</a>
+      
+        <a href="/tags/%E9%A1%B9%E7%9B%AE/">#项目</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>travel-逸游天下</div>
+      <div>http://example.com/2023/09/02/travel-readme/逸游天下--业务/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>where</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/09/02/travel-readme/%E9%87%8D%E7%82%B9%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0%E9%80%BB%E8%BE%91/" title="travel-逻辑">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">travel-逻辑</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/02/%E4%BA%91%E5%8E%9F%E7%94%9F-%E9%83%A8%E7%BD%B2/Kubernetes%20%E5%AD%A6%E4%B9%A0/" title="Kubernetes 学习">
+                        <span class="hidden-mobile">Kubernetes 学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
